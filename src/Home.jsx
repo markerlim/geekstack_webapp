@@ -3,6 +3,7 @@ import Feed from "./components/Feed";
 import Rightbar from "./components/Rightbar"
 import Navbar from "./components/Navbar"
 import Add from "./components/Add"
+import Cardlist from "./components/Cardlist"
 import { Box, Stack, ThemeProvider, createTheme } from "@mui/material"
 import { useState } from "react";
 
@@ -20,7 +21,7 @@ const Home = () => {
                 <Navbar/>
                 <Stack direction="row" spacing={2} justifyContent={"space-between"}>
                     <Sidebar setMode={setMode} mode={mode}/>
-                    <Feed/>
+                    <Cardlist/>
                     <Rightbar />
                 </Stack>
                 <Add/>

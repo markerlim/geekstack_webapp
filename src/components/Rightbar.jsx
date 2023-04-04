@@ -10,7 +10,7 @@ const Rightbar = () => {
                 <Build />
             </Fab>
         </Tooltip>
-        <Box bgcolor="purple"flex={3} p={2} sx={{display:{xs:"none",sm:"block"}}}>
+        <Box bgcolor="purple"flex={2} p={2} sx={{display:{xs:"none",sm:"block"},height:"100vh"}}>
             <Box position="fixed">
                 <Typography variant="h6">Deckbuilder</Typography>
             </Box>
