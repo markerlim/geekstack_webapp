@@ -1,15 +1,18 @@
 import React from "react";
 import SingleCard from "./SingleCard";
-import { Box } from "@mui/material";
-import Grid2 from '@mui/material/Unstable_Grid2';
+import { Box, Grid } from "@mui/material";
 
 const Cardlist = () => {
  
     return (
-        <Box flex={5} p={2} sx={{display:"flex",justifyContent:"center",flexDirection:"row",gap:10}}>
-            <SingleCard/>
-            <SingleCard/>
-            <SingleCard/>
+        <Box flex={8} p={2}>
+            <Grid container spacing={2} display={{justifyContent:"center"}}>
+            {Array.from(Array(6)).map((_, index) => (
+                <Grid item key={index}>
+                <SingleCard/>
+                </Grid>
+            ))}
+            </Grid>
         </Box>
     )
 }
