@@ -34,7 +34,7 @@ const Navbar = () => {
     return(
         <AppBar position="sticky">
             <StyledToolbar>
-                <Typography variant="h6" sx={{display:{xs:"none",sm:"block"}}}>Geek Stack</Typography>
+                <Typography variant="h6" sx={{display:{xs:"none",sm:"block"},fontWeight:"900"}}>GEEK STACK</Typography>
                 <Style sx={{display:{xs:"block",sm:"none"}}}/>
                 <Search>
                     <InputBase placeholder='search..'/>
