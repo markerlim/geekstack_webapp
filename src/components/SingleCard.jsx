@@ -22,27 +22,28 @@ const SingleCard = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box width={500} height={400} bgcolor="white" p={3} borderRadius={5} sx={{display:'flex',flexDirection:'row',gap:5}}>
+                <Box width={500} height={600} bgcolor="white" p={3} borderRadius={5} sx={{display:'flex',flexDirection:'column',gap:3}}>
                     <Box><img loading="lazy" src="/Images/UAPR_CGH-1-035.png" 
                     draggable="false" alt="test" style={{width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black"}}
-                    /></Box>
+                    />
+                    </Box>
                     <Box>
                         <List>
                             <ListItem disablePadding>
-                                <ListItemText primary="Cardname"/>
+                                <ListItemText primary="Cardname:" secondary="Suzaku" style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
                             </ListItem>
                             <ListItem disablePadding>
-                                <ListItemText primary="Card No."/>
+                                <ListItemText primary="Card No.:" secondary="CGH-1-035" style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
                             </ListItem>
                             <ListItem disablePadding>
-                                <ListItemText primary="Color"/>
+                                <ListItemText primary="Color:" secondary="Green" style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
                             </ListItem>
                             <ListItem disablePadding>
-                                <ListItemText primary="Effect"/>
+                                <ListItemText primary="Effect:" secondary="<img src=> Draw 1" style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
                             </ListItem>
                             <ListItem disablePadding>
-                                <ListItemText primary="Trigger"/>
-                            </ListItem>
+                                <ListItemText primary="Trigger:" secondary="<img src=> Play a card from your hand that has 2 or less energy and 1 or less action point" style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
+                            </ListItem>     
                         </List>
                     </Box>
                 </Box>
