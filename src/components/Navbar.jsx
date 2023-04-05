@@ -1,6 +1,8 @@
 import {AppBar, styled, Toolbar, Typography, Box, InputBase, Badge, Avatar, Menu, MenuItem} from '@mui/material'
 import React, { useState } from 'react'
 import { Style, Mail, Notifications } from '@mui/icons-material'
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
 
 const StyledToolbar = styled(Toolbar)({
     display:'flex',
@@ -70,7 +72,7 @@ const Navbar = () => {
             >
                 <MenuItem >Profile</MenuItem>
                 <MenuItem >My account</MenuItem>
-                <MenuItem >Logout</MenuItem>
+                <MenuItem onClick={()=>signOut(auth)} >Logout</MenuItem>
             </Menu>
         </AppBar>
     );
