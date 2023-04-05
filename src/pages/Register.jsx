@@ -2,12 +2,14 @@
 import { People } from "@mui/icons-material";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { auth,storage,db}  from "../Firebase"
-import {doc,setDoc}  from "firebase/firestore"
+import { auth,storage,db}  from "../Firebase";
+import {doc,setDoc}  from "firebase/firestore";
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const[err,setErr]=useState(false)
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
@@ -39,6 +41,10 @@ const Register = () => {
                         email,
                         photoURL: downloadURL,
                     });
+
+                    await setDoc(doc(db,"userChats",res.user.uid),{})
+                    navigate("/");
+
                 });
             }
             );
@@ -65,8 +71,7 @@ const Register = () => {
                     <button>Sign Up</button>
                     {err && <span>Something went wrong</span>}
                 </form>
-                <p>Do you have an account? Login
-                </p>
+                <p>Do you have an account? <Link to="/Login">Login</Link></p>
             </div>
         </div>
     )
