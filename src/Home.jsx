@@ -1,8 +1,8 @@
 import Sidebar from "./components/Sidebar";
-import Rightbar from "./components/Rightbar"
-import Navbar from "./components/Navbar"
-import Add from "./components/Add"
-import Cardlist from "./components/Cardlist"
+import Rightbar from "./components/Rightbar";
+import Navbar from "./components/Navbar";
+import Add from "./components/Add";
+import CardRef from "./components/CardRef";
 import { Box, Stack, ThemeProvider, createTheme } from "@mui/material"
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ const Home = () => {
                 <Navbar/>
                 <Stack direction="row" spacing={2} justifyContent={"space-between"}>
                     <Sidebar setMode={setMode} mode={mode}/>
-                    <Cardlist/>
+                    <Box flex={8} p={2}><CardRef/></Box>
                     <Rightbar />
                 </Stack>
                 <Add/>
