@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from "react";
 import {db} from "../Firebase";
 import {collection, getDocs} from "firebase/firestore";
-import { Box, Button, Dialog, DialogActions, Grid, List, ListItem, ListItemText} from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
 
 
 
-const CardRef = () => {
+const DBCardRef = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
+    const [counter,setCounter] = useState(0);
 
-    const handleOpenModal = () => {
+    function handleContextMenu(event){
+        event.preventDefault();
         setOpenModal(true);
-    };
+    }
 
     const handleCloseModal = () => {
         setOpenModal(false);
+    };
+//adding of card
+    const increase = () =>{
+        setCounter(count => count + 1)
+    };
+//taking away of card
+    const decrease = () =>{
+        setCounter(count => count - 1);
     };
 
     useEffect(()=>{
@@ -33,10 +44,15 @@ const CardRef = () => {
         <Grid container spacing={2}  justifyContent="center">
             {documents.map((document) => (
             <Grid item key={document.cardId}>
-                <Box onClick={handleOpenModal}>
+                <Box onContextMenu={handleContextMenu} >
                     <img loading="lazy" src={document.image} 
                     draggable="false" alt="test" style={{width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black",cursor:"pointer"}}
                     />
+                    <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
+                        <div component={Button} onClick={decrease}><RemoveCircle/></div>
+                        <span>{counter}</span>
+                        <div component={Button} onClick={increase}><AddCircle/></div>
+                    </Box>
                 </Box>
             </Grid>
             ))}
@@ -76,4 +92,4 @@ const CardRef = () => {
     );
 }
 
-export default CardRef
+export default DBCardRef

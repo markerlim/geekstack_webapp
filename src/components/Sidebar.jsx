@@ -1,15 +1,16 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Switch} from '@mui/material'
 import { Build, Group, Home, ModeNight, People, Settings } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 
 const Sidebar = ({mode,setMode}) => {
     return(
-        <Box flex={2} p={2} sx={{display:{xs:"none",sm:"block"}}}>
+        <Box flex={2} p={2} sx={{display:{xs:"none",sm:"block"},height:"100vh"}}>
             <Box position="fixed">
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton component="a" href="#home">
+                        <ListItemButton component={Link} href="#home" to="/">
                         <ListItemIcon>
                             <Home />
                         </ListItemIcon>
@@ -25,7 +26,7 @@ const Sidebar = ({mode,setMode}) => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component="a" href="#cards">
+                        <ListItemButton component={Link} href="#cards" to="/deckbuilder">
                         <ListItemIcon>
                             <Build />
                         </ListItemIcon>
@@ -33,7 +34,7 @@ const Sidebar = ({mode,setMode}) => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component="a" href="#community">
+                        <ListItemButton component={Link} href="#community" to="/community">
                         <ListItemIcon>
                             <Group />
                         </ListItemIcon>

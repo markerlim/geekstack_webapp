@@ -21,7 +21,6 @@ const Home = () => {
                 <Stack direction="row" spacing={2} justifyContent={"space-between"}>
                     <Sidebar setMode={setMode} mode={mode}/>
                     <Box flex={8} p={2}><CardRef/></Box>
-                    <Rightbar />
                 </Stack>
                 <Add/>
             </Box>
