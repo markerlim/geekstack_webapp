@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import {db} from "../Firebase";
 import {collection, getDocs} from "firebase/firestore";
-import { Box, Button, Dialog, DialogActions, Grid, List, ListItem, ListItemText} from "@mui/material";
-
-
+import { Box, Grid, useMediaQuery} from "@mui/material";
+import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
+import {CardModal} from "./CardModal"
 
 const CardRef = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (document) => {
+        setSelectedCard(document);
         setOpenModal(true);
-    };
+    }
 
     const handleCloseModal = () => {
+        setSelectedCard(null);
         setOpenModal(false);
     };
 
@@ -25,53 +28,43 @@ const CardRef = () => {
                 documentsArray.push(doc.data());
             });
             setDocuments(documentsArray);
+
+            //Set the fetched data in local storage
+            setToLocalStorage("documents", documentsArray); 
         };
-        fetchDocuments();
-    },[db]);
+
+        //Check if the data exists in local storage
+        const localDocuments = getFromLocalStorage("documents");
+        if(localDocuments){
+            setDocuments(localDocuments);
+        }else{
+            fetchDocuments();
+        }
+    },[]);
 
     return (
         <Grid container spacing={2}  justifyContent="center">
             {documents.map((document) => (
             <Grid item key={document.cardId}>
-                <Box onClick={handleOpenModal}>
+                <Box onClick={()=> handleOpenModal(document)} >
                     <img loading="lazy" src={document.image} 
-                    draggable="false" alt="test" style={{width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black",cursor:"pointer"}}
+                    draggable="false" alt="test" style={{
+                        width:"200px",
+                        height:"281.235px",
+                        gap:1,
+                        borderRadius: "5%",
+                        border: "2px solid black",cursor:"pointer"}}
                     />
                 </Box>
             </Grid>
             ))}
-            {documents.map((document) => (
-            <Dialog open={openModal} onClose={handleCloseModal}>
-            <Box width={500} height={600} bgcolor="primary" p={3} borderRadius={5} sx={{display:'flex',flexDirection:'column',gap:3}}>
-                    <Box><img loading="lazy" src={document.image}  
-                    draggable="false" alt="test" style={{width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black"}}
-                    />
-                    </Box>
-                    <Box>
-                        <List>
-                            <ListItem disablePadding>
-                                <ListItemText primary="Cardname:" secondary={document.cardName}  style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemText primary="Card No.:" secondary={document.cardId}  style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemText primary="Color:" secondary={document.color}  style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemText primary="Effect:" secondary={document.effect}  style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemText primary="Trigger:" secondary={document.trigger}  style={{display:'flex',flexDirection:"row",gap:3,alignItems:'center'}}/>
-                            </ListItem>     
-                        </List>
-                    </Box>
-                </Box>
-            <DialogActions>
-                <Button onClick={handleCloseModal}>Close</Button>
-            </DialogActions>
-            </Dialog>
-            ))}
+            {selectedCard && (
+                <CardModal
+                    open={openModal}
+                    onClose={handleCloseModal}
+                    selectedCard={selectedCard}
+                />
+            )}
       </Grid>
     );
 }

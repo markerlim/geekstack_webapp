@@ -1,12 +1,14 @@
-import {AppBar, styled, Toolbar, Typography, Box, InputBase, Badge, Avatar, Menu, MenuItem} from '@mui/material'
+import {AppBar, styled, Toolbar, Typography, Box, InputBase, Avatar, Menu, MenuItem} from '@mui/material'
 import React, { useContext, useState } from 'react'
-import { Style, Mail, Notifications } from '@mui/icons-material'
+import { Style} from '@mui/icons-material'
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)({
     display:'flex',
+    backgroundColor:"#240052",
     justifyContent:'space-between',
 });
 
@@ -45,12 +47,6 @@ const Navbar = () => {
                     <InputBase placeholder='search..'/>
                     </Search>
                 <Icons>
-                    <Badge badgeContent={4}  color="error">
-                        <Mail />
-                    </Badge>
-                    <Badge badgeContent={2}  color="error">
-                        <Notifications />
-                    </Badge>
                     <Avatar sx={{width:30, height:30}} src={currentUser.photoURL}
                     onClick={e=>setOpen(true)}/>
                     <span onClick={e=>setOpen(true)}>{currentUser.displayName}</span>
@@ -76,7 +72,7 @@ const Navbar = () => {
             >
                 <MenuItem >Profile</MenuItem>
                 <MenuItem >My account</MenuItem>
-                <MenuItem onClick={()=>signOut(auth)}>Logout</MenuItem>
+                <MenuItem component={Link} onClick={()=>signOut(auth)} to="/login">Logout</MenuItem>
             </Menu>
         </AppBar>
     );

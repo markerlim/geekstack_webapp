@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DBCardRef from "../components/DBCardRef";
 import Add from "../components/Add";
-import Rightbar from "../components/Rightbar";
+import TestRightbar from "../components/TestRightbar";
 
 const Deckbuilder = () =>{
     const [mode,setMode] = useState("light")
@@ -21,7 +21,7 @@ const Deckbuilder = () =>{
                   <Stack direction="row" spacing={2} justifyContent={"space-between"}>
                       <Sidebar setMode={setMode} mode={mode}/>
                       <Box flex={8} p={2}><DBCardRef/></Box>
-                      <Rightbar/>
+                      <TestRightbar/>
                   </Stack>
                   <Add/>
               </Box>

@@ -1,5 +1,4 @@
 import Sidebar from "./components/Sidebar";
-import Rightbar from "./components/Rightbar";
 import Navbar from "./components/Navbar";
 import Add from "./components/Add";
 import CardRef from "./components/CardRef";
