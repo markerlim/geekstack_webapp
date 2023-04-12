@@ -34,7 +34,6 @@ function App() {
   };
 
   return (
-    <CardStateProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" />
@@ -45,7 +44,6 @@ function App() {
           <Route path="deckbuilder" element={<Deckbuilder />} />
         </Routes>
       </BrowserRouter>
-    </CardStateProvider>
   );
 }
 

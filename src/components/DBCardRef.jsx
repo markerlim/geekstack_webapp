@@ -6,14 +6,14 @@ import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStor
 import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { UAButtons } from "./UnionArenaButtonFilter";
+import { useCardState } from "../context/useCardState";
 
 const DBCardRef = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [booster, setBooster] = useState("");
-    const [countArray, setCountArray] = useState([]);
-    const [filteredCards, setFilteredCards] = useState([]);
+    const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -32,31 +32,35 @@ const DBCardRef = () => {
     const MAX_COUNT = 4;
 
     const updateFilteredCards = (updatedCountArray) => {
-        const newFilteredCards = documents.filter((doc, index) => updatedCountArray[index] > 0);
+        const newFilteredCards = documents.filter((doc) => updatedCountArray[doc.cardId] > 0)
+            .map((doc) => ({ ...doc, count: updatedCountArray[doc.cardId] }));
         setFilteredCards(newFilteredCards);
-        setToLocalStorage("filteredCards", newFilteredCards); // Save filtered cards in local storage
+        setToLocalStorage("filteredCards", newFilteredCards);
     };
 
-    const increase = (index) => {
+    const increase = (cardId) => {
         setCountArray((prevCountArray) => {
-            const newArray = [...prevCountArray];
-            if (newArray[index] < MAX_COUNT) {
-                newArray[index] = (newArray[index] || 0) + 1;
+            const newArray = { ...prevCountArray };
+            if (!newArray[cardId]) {
+                newArray[cardId] = 0;
+            }
+            if (newArray[cardId] < MAX_COUNT) {
+                newArray[cardId]++;
             }
             setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray); // Call updateFilteredCards with the updated countArray
+            updateFilteredCards(newArray);
             return newArray;
         });
     };
 
-    const decrease = (index) => {
+    const decrease = (cardId) => {
         setCountArray((prevCountArray) => {
-            const newArray = [...prevCountArray];
-            if (newArray[index] > 0) {
-                newArray[index] = newArray[index] - 1;
+            const newArray = { ...prevCountArray };
+            if (newArray[cardId] > 0) {
+                newArray[cardId]--;
             }
             setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray); // Call updateFilteredCards with the updated countArray
+            updateFilteredCards(newArray);
             return newArray;
         });
     };
@@ -83,14 +87,19 @@ const DBCardRef = () => {
     }, [booster]);
 
     useEffect(() => {
-        setCountArray(new Array(documents.length).fill(0));
+        const initialCountArray = documents.reduce((accumulator, document) => {
+            accumulator[document.cardId] = 0;
+            return accumulator;
+        }, {});
+    
+        setCountArray(initialCountArray);
     }, [documents]);
 
 
     return (
         <div>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap" flex={8} p={2} marginTop={2} marginBottom={4}>
-                <Box position={"fixed"}>
+            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap"flex={8} p={2} marginTop={2} marginBottom={4}>
+                <Box position={"fixed"} flexShrink={3}>
                     <UAButtons
                         handleBoosterChange={handleBoosterChange}
                         boosterNames={["UABT01", "UABT02", "UABT03", "UAST01", "UAST02", "UAST03"]}
@@ -105,9 +114,13 @@ const DBCardRef = () => {
                                 draggable="false" alt="test" style={{ width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
                             />
                             <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
-                                <div component={Button} onClick={() => decrease(index)}><RemoveCircle /></div>
-                                <span>{countArray[index]}</span>
-                                <div component={Button} onClick={() => increase(index)}><AddCircle /></div>
+                                <div component={Button} onClick={() => decrease(document.cardId)}>
+                                    <RemoveCircle />
+                                </div>
+                                <span>{countArray[document.cardId] || 0}</span>
+                                <div component={Button} onClick={() => increase(document.cardId)}>
+                                    <AddCircle />
+                                </div>
                             </Box>
                         </Box>
                     </Grid>

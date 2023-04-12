@@ -7,7 +7,7 @@ import { getFromLocalStorage, setToLocalStorage } from "./LocalStorage/localStor
 
 const RightBar = () => {
     const { filteredCards, setFilteredCards, countArray, setCountArray } =
-    useCardState();
+        useCardState();
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
 
@@ -23,15 +23,54 @@ const RightBar = () => {
 
     const MAX_COUNT = 4;
 
+    // Function to update countArray based on filteredCards
+    const updateCountArray = (cardId, count, callback) => {
+        setCountArray((prevCountArray) => {
+            const updatedCountArray = { ...prevCountArray, [cardId]: count };
+            setToLocalStorage("countArray", updatedCountArray);
+
+            // Call the callback function with the updated count array
+            if (callback) {
+                callback(updatedCountArray);
+            }
+
+            return updatedCountArray;
+        });
+    };
+
+    // Function to increase card count
+    const increase = (cardId) => {
+        const count = countArray[cardId] || 0;
+
+        if (count < MAX_COUNT) {
+            updateCountArray(cardId, count + 1, (updatedCountArray) => {
+                const index = filteredCards.findIndex((item) => item.cardId === cardId);
+                updateFilteredCards(index, updatedCountArray);
+            });
+        }
+    };
+
+    // Function to decrease card count
+    const decrease = (cardId) => {
+        const count = countArray[cardId] || 0;
+
+        if (count > 0) {
+            updateCountArray(cardId, count - 1, (updatedCountArray) => {
+                const index = filteredCards.findIndex((item) => item.cardId === cardId);
+                updateFilteredCards(index, updatedCountArray);
+            });
+        }
+    };
+
     // Function to update filtered cards array
     const updateFilteredCards = (index, updatedCountArray) => {
         setFilteredCards((prevFilteredCards) => {
             const newFilteredCards = [...prevFilteredCards];
             const card = {
                 ...filteredCards[index],
-                count: updatedCountArray[index],
+                count: updatedCountArray[filteredCards[index].cardId],
             };
-            if (updatedCountArray[index] > 0) {
+            if (updatedCountArray[filteredCards[index].cardId] > 0) {
                 const existingIndex = newFilteredCards.findIndex(
                     (item) => item.cardId === card.cardId
                 );
@@ -53,41 +92,7 @@ const RightBar = () => {
         });
     };
 
-    // Function to increase card count
-    const increase = (index) => {
-        const cardId = filteredCards[index].cardId;
-        const cardIndex = filteredCards.findIndex((item) => item.cardId === cardId);
-        const count = filteredCards[cardIndex].count;
-
-        setCountArray((prevCountArray) => {
-            const newArray = [...prevCountArray];
-            if (count < MAX_COUNT) {
-                newArray[cardIndex] = count + 1;
-                setToLocalStorage("countArray", newArray);
-                updateFilteredCards(index, newArray); // Pass the updated countArray
-                return newArray;
-            }
-            return prevCountArray;
-        });
-    };
-
-    // Function to decrease card count
-    const decrease = (index) => {
-        const cardId = filteredCards[index].cardId;
-        const cardIndex = filteredCards.findIndex((item) => item.cardId === cardId);
-        const count = filteredCards[cardIndex].count;
-
-        setCountArray((prevCountArray) => {
-            const newArray = [...prevCountArray];
-            if (count > 0) {
-                newArray[cardIndex] = count - 1;
-                setToLocalStorage("countArray", newArray);
-                updateFilteredCards(index, newArray); // Pass the updated countArray
-                return newArray;
-            }
-            return prevCountArray;
-        });
-    };
+    // ...
 
     useEffect(() => {
         const initCountArray = () => {
@@ -100,7 +105,7 @@ const RightBar = () => {
             if (localCountArray) {
                 setCountArray(localCountArray);
             } else {
-                const newCountArray = filteredCards.map((card) => card.count || 0);
+                const newCountArray = {};
                 setCountArray(newCountArray);
                 setToLocalStorage("countArray", newCountArray);
             }
@@ -109,60 +114,60 @@ const RightBar = () => {
         initCountArray();
     }, []);
 
-
-
+    // ...
 
     return (
         <Grid container spacing={2} justifyContent="center">
             {filteredCards.map((document, index) => (
                 <Grid item key={document.cardId}>
-                    {countArray[index] === 0 && (
-                        <Box
-                            onContextMenu={(event) => {
-                                event.preventDefault();
-                                handleOpenModal(document);
+                    <Box
+                        onContextMenu={(event) => {
+                            event.preventDefault();
+                            handleOpenModal(document);
+                        }}
+                    >
+                        <img
+                            loading="lazy"
+                            src={document.image}
+                            draggable="false"
+                            alt="test"
+                            style={{
+                                width: "200px",
+                                height: "281.235px",
+                                borderRadius: "5%",
+                                border: "2px solid black",
+                                cursor: "pointer",
                             }}
+                        />
+                        <Box
+                            display={"flex"}
+                            flexDirection={"row"}
+                            gap={3}
+                            alignItems={"center"}
+                            justifyContent={"center"}
                         >
-                            <img
-                                loading="lazy"
-                                src={document.image}
-                                draggable="false"
-                                alt="test"
-                                style={{
-                                    width: "200px",
-                                    height: "281.235px",
-                                    borderRadius: "5%",
-                                    border: "2px solid black",
-                                    cursor: "pointer",
-                                }}
-                            />
-                            <Box
-                                display={"flex"}
-                                flexDirection={"row"}
-                                gap={3}
-                                alignItems={"center"}
-                                justifyContent={"center"}
-                            >
-                                <div component={Button} onClick={() => decrease(index)}>
-                                    <RemoveCircle />
-                                </div>
-                                <span>{countArray[index]}</span>
-                                <div component={Button} onClick={() => increase(index)}>
-                                    <AddCircle />
-                                </div>
-                            </Box>
+                            <Button onClick={() => decrease(document.cardId)}>
+                                <RemoveCircle />
+                            </Button>
+                            <span>{countArray[document.cardId] || 0}</span>
+                            <Button onClick={() => increase(document.cardId)}>
+                                <AddCircle />
+                            </Button>
                         </Box>
-                    )}
+                    </Box>
                 </Grid>
-            ))}
-            {selectedCard && (
-                <CardModal
-                    open={openModal}
-                    onClose={handleCloseModal}
-                    selectedCard={selectedCard}
-                />
-            )}
-        </Grid>
+            ))
+            }
+            {
+                selectedCard && (
+                    <CardModal
+                        open={openModal}
+                        onClose={handleCloseModal}
+                        selectedCard={selectedCard}
+                    />
+                )
+            }
+        </Grid >
     );
 };
 

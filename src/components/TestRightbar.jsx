@@ -1,57 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Button, Dialog, DialogActions, Grid, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { Box, Button, Grid } from "@mui/material";
 import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
+import { CardModal } from "./CardModal";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { useCardState } from "../context/useCardState";
 
-const TestRightbar = () => {
+const TestRightBar = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-    const [countArray, setCountArray] = useState(() => {
-        const storedCountArray = getFromLocalStorage("countArray");
-        return storedCountArray ? storedCountArray : new Array(documents.length).fill(0);
-    });
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [booster, setBooster] = useState("");
+    const [totalCount, setTotalCount] = useState(0);
+    const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
 
-    useEffect(() => {
-        const storedCountArray = getFromLocalStorage("countArray");
-        if (storedCountArray) {
-            setCountArray(storedCountArray);
-        }
-    }, []);
-    
-    function handleContextMenu(event) {
-        event.preventDefault();
+    const handleOpenModal = (document) => {
+        setSelectedCard(document);
         setOpenModal(true);
     }
 
     const handleCloseModal = () => {
+        setSelectedCard(null);
         setOpenModal(false);
     };
+
+    const handleBoosterChange = (newBooster) => {
+        setBooster(newBooster);
+    };
+
     const MAX_COUNT = 4;
 
-    //adding of card
-    const increase = (index) => {
-        setCountArray(prevCountArray => {
-            const newArray = [...prevCountArray];
-            if (newArray[index] < MAX_COUNT) {
-                newArray[index] = newArray[index] ? newArray[index] + 1 : 1;
+    const updateFilteredCards = (updatedCountArray) => {
+        const newFilteredCards = documents.filter((doc) => updatedCountArray[doc.cardId] > 0)
+            .map((doc) => ({ ...doc, count: updatedCountArray[doc.cardId] }));
+        setFilteredCards(newFilteredCards);
+        setToLocalStorage("filteredCards", newFilteredCards);
+    };
+
+    const increase = (cardId) => {
+        setCountArray((prevCountArray) => {
+            const newArray = { ...prevCountArray };
+            if (!newArray[cardId]) {
+                newArray[cardId] = 0;
+            }
+            if (newArray[cardId] < MAX_COUNT) {
+                newArray[cardId]++;
             }
             setToLocalStorage("countArray", newArray);
+            updateFilteredCards(newArray);
             return newArray;
         });
     };
-    //taking away of card
-    const decrease = (index) => {
-        setCountArray(prevCountArray => {
-            const newArray = [...prevCountArray];
-            if (newArray[index] > 0) {
-                newArray[index] = newArray[index] ? newArray[index] - 1 : 0;
+
+    const decrease = (cardId) => {
+        setCountArray((prevCountArray) => {
+            const newArray = { ...prevCountArray };
+            if (newArray[cardId] > 0) {
+                newArray[cardId]--;
             }
             setToLocalStorage("countArray", newArray);
+            updateFilteredCards(newArray);
             return newArray;
         });
     };
+
     useEffect(() => {
         const fetchDocuments = async () => {
             const querySnapshot = await getDocs(collection(db, "unionarenatcg"));
@@ -59,73 +72,72 @@ const TestRightbar = () => {
             querySnapshot.forEach((doc) => {
                 documentsArray.push(doc.data());
             });
-            setDocuments(documentsArray);
-
-            //Set the fetched data in local storage
             setToLocalStorage("documents", documentsArray);
-
-            //Update countArray with new length
-            setCountArray(Array(documentsArray.length).fill(0));
         };
-        
 
-    }, []);
+        const localDocuments = getFromLocalStorage("documents");
+        if (localDocuments) {
+            const filteredDocuments = booster
+                ? localDocuments.filter((doc) => doc.booster === booster)
+                : localDocuments;
+            setDocuments(filteredDocuments);
+        } else {
+            fetchDocuments();
+        }
+    }, [booster]);
+
+    useEffect(() => {
+        const initialCountArray = documents.reduce((accumulator, document) => {
+            accumulator[document.cardId] = 0;
+            return accumulator;
+        }, {});
+
+        setCountArray(initialCountArray);
+    }, [documents]);
+
+    useEffect(() => {
+        const newTotalCount = Object.values(countArray).reduce((accumulator, count) => accumulator + count, 0);
+        setTotalCount(newTotalCount);
+    }, [countArray]);
 
     return (
-        <Box flex={8} p={2} sx={{ display: { xs: "none", sm: "block" }, height: "100vh" }}>
-            <Box position="fixed" bgcolor="purple" sx={{display:{height:"100vh"}}}> 
-                <Typography variant='h6' marginTop={2} marginLeft={1} marginBottom={3}>Deckbuilder</Typography>
-                <Grid container spacing={2} justifyContent="center">
-                    {documents.map((document, index) => (
+        <div>
+            <div style={{backgroundColor:"#121212",color:"white",padding:6,position:"fixed"}}>
+                DECKBUILDER
+                Total Count: <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>{totalCount}</span>
+            </div>
+            <Grid container spacing={2} justifyContent="center">
+                {documents.map((document, index) => (
+                    countArray[document.cardId] > 0 && (
                         <Grid item key={document.cardId}>
-                            <Box onContextMenu={handleContextMenu} >
+                            <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
                                 <img loading="lazy" src={document.image}
                                     draggable="false" alt="test" style={{ width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
                                 />
                                 <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
-                                    <div component={Button} onClick={() => decrease(index)}><RemoveCircle /></div>
-                                    <span>{countArray[index]}</span>
-                                    <div component={Button} onClick={() => increase(index)}><AddCircle /></div>
+                                    <div component={Button} onClick={() => decrease(document.cardId)}>
+                                        <RemoveCircle />
+                                    </div>
+                                    <span>{countArray[document.cardId] || 0}</span>
+                                    <div component={Button} onClick={() => increase(document.cardId)}>
+                                        <AddCircle />
+                                    </div>
                                 </Box>
                             </Box>
                         </Grid>
-                    ))}
-                    {documents.map((document, index) => (
-                        <Dialog open={openModal} onClose={handleCloseModal}>
-                            <Box width={500} height={600} bgcolor="primary" p={3} borderRadius={5} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                                <Box><img loading="lazy" src={document.image}
-                                    draggable="false" alt="test" style={{ width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black" }}
-                                />
-                                </Box>
-                                <Box>
-                                    <List>
-                                        <ListItem disablePadding>
-                                            <ListItemText primary="Cardname:" secondary={document.cardName} style={{ display: 'flex', flexDirection: "row", gap: 3, alignItems: 'center' }} />
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemText primary="Card No.:" secondary={document.cardId} style={{ display: 'flex', flexDirection: "row", gap: 3, alignItems: 'center' }} />
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemText primary="Color:" secondary={document.color} style={{ display: 'flex', flexDirection: "row", gap: 3, alignItems: 'center' }} />
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemText primary="Effect:" secondary={document.effect} style={{ display: 'flex', flexDirection: "row", gap: 3, alignItems: 'center' }} />
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemText primary="Trigger:" secondary={document.trigger} style={{ display: 'flex', flexDirection: "row", gap: 3, alignItems: 'center' }} />
-                                        </ListItem>
-                                    </List>
-                                </Box>
-                            </Box>
-                            <DialogActions>
-                                <Button onClick={handleCloseModal}>Close</Button>
-                            </DialogActions>
-                        </Dialog>
-                    ))}
-                </Grid>
-            </Box>
-        </Box>
+                    )
+                ))}
+                {selectedCard && (
+                    <CardModal
+                        open={openModal}
+                        onClose={handleCloseModal}
+                        selectedCard={selectedCard}
+                    />
+                )}
+            </Grid>
+        </div>
     );
+
 }
 
-export default TestRightbar
+export default TestRightBar

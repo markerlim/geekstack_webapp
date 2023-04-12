@@ -1,30 +1,32 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { getFromLocalStorage } from '../components/LocalStorage/localStorageHelper';
+import React, { createContext, useContext, useState } from 'react';
 
+// Create the context
 const CardStateContext = createContext();
 
-export const CardStateProvider = ({ children }) => {
-  const [filteredCards, setFilteredCards] = useState([]);
-  const [countArray, setCountArray] = useState([]);
-
-  useEffect(() => {
-    const localDocuments = getFromLocalStorage("documents");
-    if (localDocuments) {
-      setCountArray(new Array(localDocuments.length).fill(0));
-    }
-  }, []);
-
-  return (
-    <CardStateContext.Provider value={{ filteredCards, setFilteredCards, countArray, setCountArray }}>
-      {children}
-    </CardStateContext.Provider>
-  );
-};
-
+// Custom hook to use CardState
 export const useCardState = () => {
   const context = useContext(CardStateContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useCardState must be used within a CardStateProvider');
   }
   return context;
+};
+
+// CardStateProvider component
+export const CardStateProvider = ({ children }) => {
+  const [filteredCards, setFilteredCards] = useState([]);
+  const [countArray, setCountArray] = useState({});
+
+  const value = {
+    filteredCards,
+    setFilteredCards,
+    countArray,
+    setCountArray,
+  };
+
+  return (
+    <CardStateContext.Provider value={value}>
+      {children}
+    </CardStateContext.Provider>
+  );
 };
