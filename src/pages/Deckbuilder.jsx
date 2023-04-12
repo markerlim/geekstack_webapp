@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DBCardRef from "../components/DBCardRef";
 import Add from "../components/Add";
-import RightBar from "../components/Rightbar";
 import TestRightBar from "../components/TestRightbar";
 import { CardStateProvider } from "../context/useCardState";
 

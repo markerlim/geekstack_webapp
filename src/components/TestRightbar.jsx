@@ -6,6 +6,8 @@ import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStor
 import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle, Save } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
+import ExpandableFunctions from "./DBExpandedFunc";
+import DeckBuilderBar from "./DeckBuilderBar";
 
 const TestRightBar = () => {
     const [documents, setDocuments] = useState([]);
@@ -102,10 +104,8 @@ const TestRightBar = () => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ backgroundColor: "#121212", color: "white", padding: 20, position: "fixed", width: "100%" }}>
-                DECKBUILDER
-                Total Count: <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>{totalCount}</span>
-            </div>
+            <DeckBuilderBar/>
+            <ExpandableFunctions/>
             <Grid container spacing={2} justifyContent="center">
                 {documents.map((document, index) => (
                     countArray[document.cardId] > 0 && (
@@ -135,11 +135,6 @@ const TestRightBar = () => {
                     />
                 )}
             </Grid>
-            <Tooltip title="Save Deck" sx={{ position: "fixed", bottom: 20, right: { xs: "calc(50% - 25px)", md: 30 } }}>
-                <Fab color="primary" aria-label="add">
-                    <Save />
-                </Fab>
-            </Tooltip>
         </div>
     );
 

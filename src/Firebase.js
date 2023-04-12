@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth} from "firebase/auth"
-import { getFirestore} from "firebase/firestore"
+import { collection, doc, getFirestore, writeBatch } from "firebase/firestore"
 import {getStorage} from"firebase/storage"
 
 const firebaseConfig = {
@@ -20,3 +20,20 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+const updateDocuments = async (path, documents) => {
+  const docRef = doc(db, path);
+  const batch = writeBatch(db);
+
+  documents.forEach((document) => {
+    const docId = document.cardId;
+    const docData = { count: document.count };
+    const subCollectionRef = collection(docRef, "cards");
+    const subDocRef = doc(subCollectionRef, docId);
+    batch.set(subDocRef, docData, { merge: true });
+  });
+
+  await batch.commit();
+};
+
+export { updateDocuments };
