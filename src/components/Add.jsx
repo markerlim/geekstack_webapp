@@ -1,5 +1,5 @@
 import {Box, Fab, Modal, Tooltip, styled } from '@mui/material'
-import {Build} from'@mui/icons-material'
+import {Build, CreditScore} from'@mui/icons-material'
 import React from 'react'
 import { useState } from 'react'
 
@@ -25,7 +25,7 @@ const Add = () => {
             aria-describedby="modal-modal-description"
         >
             <Box width={400} height={200} bgcolor="white" p={3} borderRadius={5}>
-                hello
+                <CreditScore/>
             </Box>
         </StyledModal>
         </>

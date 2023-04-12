@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Fab, Grid, Tooltip } from "@mui/material";
 import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { AddCircle, RemoveCircle, Save } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 
 const TestRightBar = () => {
@@ -101,8 +101,8 @@ const TestRightBar = () => {
     }, [countArray]);
 
     return (
-        <div>
-            <div style={{backgroundColor:"#121212",color:"white",padding:6,position:"fixed"}}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ backgroundColor: "#121212", color: "white", padding: 20, position: "fixed", width: "100%" }}>
                 DECKBUILDER
                 Total Count: <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>{totalCount}</span>
             </div>
@@ -135,6 +135,11 @@ const TestRightBar = () => {
                     />
                 )}
             </Grid>
+            <Tooltip title="Save Deck" sx={{ position: "fixed", bottom: 20, right: { xs: "calc(50% - 25px)", md: 30 } }}>
+                <Fab color="primary" aria-label="add">
+                    <Save />
+                </Fab>
+            </Tooltip>
         </div>
     );
 
