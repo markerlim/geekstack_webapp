@@ -19,7 +19,7 @@ const Home = () => {
                 <Navbar/>
                 <Stack direction="row" spacing={2} justifyContent={"space-between"}>
                     <Sidebar setMode={setMode} mode={mode}/>
-                    <Box flex={8} p={2}><CardRef/></Box>
+                    <Box flexGrow={8} p={2}><CardRef/></Box>
                 </Stack>
                 <Add/>
             </Box>

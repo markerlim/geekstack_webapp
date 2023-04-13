@@ -6,15 +6,14 @@ import { Link } from 'react-router-dom'
 
 const Sidebar = ({mode,setMode}) => {
     return(
-        <Box flex={2} p={2} sx={{display:{xs:"none",sm:"block"},height:"100vh"}}>
-            <Box position="fixed">
+        <Box flex={2} p={0} sx={{display:{xs:"none",sm:"block"},height:"100vh"}}>
+            <Box position="fixed" >
                 <List>
                     <ListItem disablePadding>
                         <ListItemButton component={Link} href="#home" to="/">
                         <ListItemIcon>
-                            <Home />
+                            <Home alt="home" />
                         </ListItemIcon>
-                        <ListItemText primary="Home"/>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -22,7 +21,6 @@ const Sidebar = ({mode,setMode}) => {
                         <ListItemIcon>
                             <People />
                         </ListItemIcon>
-                        <ListItemText primary="Profile" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -30,7 +28,6 @@ const Sidebar = ({mode,setMode}) => {
                         <ListItemIcon>
                             <Build />
                         </ListItemIcon>
-                        <ListItemText primary="Deckbuilder" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -38,7 +35,6 @@ const Sidebar = ({mode,setMode}) => {
                         <ListItemIcon>
                             <Group />
                         </ListItemIcon>
-                        <ListItemText primary="Community" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -46,16 +42,11 @@ const Sidebar = ({mode,setMode}) => {
                         <ListItemIcon>
                             <Settings />
                         </ListItemIcon>
-                        <ListItemText primary="Settings" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component="a" href="#settings">
-                        <ListItemIcon>
-                            <ModeNight />
-                        </ListItemIcon>
-                            <Switch onChange={e=>setMode(mode === "light" ? "dark" : "light")}/>
-                        </ListItemButton>
+                        <ModeNight/>
+                        <Switch onChange={e=>setMode(mode === "light" ? "dark" : "light")}/>
                     </ListItem>
                 </List>
             </Box>

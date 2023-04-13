@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Button, Fab, Grid, Tooltip } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
-import { AddCircle, RemoveCircle, Save } from "@mui/icons-material";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import ExpandableFunctions from "./DBExpandedFunc";
 import DeckBuilderBar from "./DeckBuilderBar";
+import {ResponsiveImage} from "./ResponsiveImage";
 
 const TestRightBar = () => {
     const [documents, setDocuments] = useState([]);
@@ -104,15 +105,21 @@ const TestRightBar = () => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <DeckBuilderBar/>
-            <ExpandableFunctions/>
+            <Box display="flex" justifyContent="center" flexGrow={1} marginTop={0}>
+                <DeckBuilderBar style={{ width: "35%" }} />
+            </Box>
+
+            <ExpandableFunctions />
             <Grid container spacing={2} justifyContent="center">
                 {documents.map((document, index) => (
                     countArray[document.cardId] > 0 && (
                         <Grid item key={document.cardId}>
                             <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
-                                <img loading="lazy" src={document.image}
-                                    draggable="false" alt="test" style={{ width: "200px", height: "281.235px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
+                                <ResponsiveImage
+                                    loading="lazy"
+                                    src={document.image}
+                                    draggable="false"
+                                    alt="test"
                                 />
                                 <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
                                     <div component={Button} onClick={() => decrease(document.cardId)}>

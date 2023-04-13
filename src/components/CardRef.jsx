@@ -5,32 +5,13 @@ import { Box, Grid } from "@mui/material";
 import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal"
 import { UAButtons } from "./UnionArenaButtonFilter";
+import {ResponsiveImage} from "./ResponsiveImage";
 
 const CardRef = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [booster, setBooster] = useState("");
-
-    const handleResize = () => {
-        setImageStyle(getImageStyle());
-    };
-
-    const getImageStyle = () => {
-        const screenWidth = window.innerWidth;
-
-        if (screenWidth >= 992) {
-            return { width: "200px", height: "281.235px" };
-        } else if (screenWidth >= 768) {
-            return { width: "150px", height: "210.92625px" };
-        } else if (screenWidth >= 576) {
-            return { width: "100px", height: "140.6175px" };
-        } else {
-            return { width: "100px", height: "140.6175px" }; // Default for smaller screens
-        }
-    };
-
-    const [imageStyle, setImageStyle] = useState(getImageStyle());
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -67,13 +48,6 @@ const CardRef = () => {
         }
     }, [booster]);
 
-    useEffect(() => {
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
 
     return (
         <div>
@@ -89,14 +63,11 @@ const CardRef = () => {
                 {documents.map((document) => (
                     <Grid item key={document.cardId}>
                         <Box onClick={() => handleOpenModal(document)} >
-                            <img loading="lazy" src={document.image}
-                                draggable="false" alt="test"
-                                style={{
-                                    ...imageStyle,
-                                    borderRadius: "5%",
-                                    border: "2px solid black",
-                                    cursor: "pointer",
-                                }}
+                            <ResponsiveImage
+                                loading="lazy"
+                                src={document.image}
+                                draggable="false"
+                                alt="test"
                             />
                         </Box>
                     </Grid>

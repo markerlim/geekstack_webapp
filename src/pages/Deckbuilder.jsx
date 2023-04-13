@@ -15,13 +15,13 @@ const Deckbuilder = () => {
     }
   })
   return (
-    <div>
+    <div style={{ width: "100%", height: "100vh", overflow: "auto" }}>
       <ThemeProvider theme={darkTheme}>
         <Box bgcolor={"background.default"} color={"text.primary"}>
           <Navbar />
           <CardStateProvider>
             <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-              <Sidebar setMode={setMode} mode={mode} />
+              <Box flex={1} p={2}><Sidebar setMode={setMode} mode={mode} /></Box>
               <Box flex={8} p={2}><DBCardRef /></Box>
               <Box flex={8} p={2} bgcolor={"purple"}><TestRightBar /></Box>
             </Stack>

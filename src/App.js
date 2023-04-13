@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { AuthContext } from "./context/AuthContext";
 import Deckbuilder from "./pages/Deckbuilder";
 import Community from "./pages/Community";
-import { CardStateProvider } from './context/useCardState';
 import { setToLocalStorage } from "./components/LocalStorage/localStorageHelper";
 
 function App() {
