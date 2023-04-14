@@ -3,13 +3,14 @@ import { Box, Button, ButtonGroup, TextField, Tooltip } from "@mui/material";
 import { Delete, Save } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
-import { updateDocuments } from "../Firebase";
+import { db, updateDocuments } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 
 const DeckBuilderBar = (props) => {
@@ -30,8 +31,8 @@ const DeckBuilderBar = (props) => {
     0
   );
 
-  const handleSaveClick = async () => {
-    if (totalCount < 50) {
+  const handleSaveClick = async (proceed = false) => {
+    if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
       return;
     }
@@ -42,38 +43,46 @@ const DeckBuilderBar = (props) => {
 
     const uid = currentUser.uid;
 
-    // Splice filteredCards into individual unique cards based on cardId
-    const uniqueCards = filteredCards.map((card) => ({
-      ...card,
-    }));
+    const deckInfo = {
+      deckName: deckName,
+      // Add any other information about the deck as required
+    };
 
     try {
-      await updateDocuments(`users/${uid}/decks/${deckName}`, uniqueCards);
+      // Create a document for the deck with the specified name and deck info
+      await setDoc(doc(db, `users/${uid}/decks`, deckName), deckInfo);
+
+      // Add the unique cards to a subcollection called "cards"
+      const cardsCollectionRef = collection(
+        db,
+        `users/${uid}/decks/${deckName}/cards`
+      );
+
+      await Promise.all(
+        filteredCards.map(async (card) => {
+          const cardData = {
+            booster: card.booster,
+            cardId: card.cardId,
+            cardName: card.cardName,
+            color: card.color,
+            effect: card.effect,
+            image: card.image,
+            trigger: card.trigger,
+            count: countArray[card.cardId] || 0,
+          };
+          await setDoc(doc(cardsCollectionRef, card.cardId), cardData);
+        })
+      );
+
       console.log("Data saved successfully!");
     } catch (error) {
       console.error("Error saving data: ", error);
     }
   };
 
-  const handleProceedSave = async () => {
+  const handleProceedSave = () => {
+    handleSaveClick(true);
     setShowConfirmDialog(false);
-
-    if (!currentUser) {
-      return;
-    }
-
-    const uid = currentUser.uid;
-
-    const uniqueCards = filteredCards.map((card) => ({
-      ...card,
-    }));
-
-    try {
-      await updateDocuments(`users/${uid}/decks/${deckName}`, uniqueCards);
-      console.log("Data saved successfully!");
-    } catch (error) {
-      console.error("Error saving data: ", error);
-    }
   };
 
   return (
@@ -92,7 +101,8 @@ const DeckBuilderBar = (props) => {
       p={2}
     >
       <Box display={"flex"} flexDirection={"row"} sx={{ flex: "1 1 auto" }}>
-        <Box><h2 style={{ margin: 0 }}>DECKBUILDER</h2>
+        <Box>
+          <h2 style={{ margin: 0 }}>DECKBUILDER</h2>
           <TextField
             label="Deck Name"
             variant="outlined"
@@ -139,7 +149,7 @@ const DeckBuilderBar = (props) => {
         <Button>
           <Tooltip
             components={Button}
-            onClick={handleSaveClick}
+            onClick={() => handleSaveClick(false)}
             title="Save"
             p={1}
             sx={{ color: "#121212" }}
@@ -162,13 +172,14 @@ const DeckBuilderBar = (props) => {
           <Button onClick={() => setShowConfirmDialog(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleProceedSave} color="primary" autoFocus>
+          <Button onClick={() => handleProceedSave()} color="primary" autoFocus>
             Save
           </Button>
         </DialogActions>
       </Dialog>
     </Box>
   );
+
 };
 
 export default DeckBuilderBar;

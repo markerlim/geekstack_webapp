@@ -21,7 +21,7 @@ const Deckbuilder = () => {
           <Navbar />
           <CardStateProvider>
             <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-              <Box flex={1} p={2}><Sidebar setMode={setMode} mode={mode} /></Box>
+              <Box flex={1}><Sidebar setMode={setMode} mode={mode} /></Box>
               <Box flex={8} p={2}><DBCardRef /></Box>
               <Box flex={8} p={2} bgcolor={"purple"}><TestRightBar /></Box>
             </Stack>

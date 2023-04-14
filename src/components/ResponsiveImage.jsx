@@ -5,7 +5,7 @@ const ResponsiveImage = ({ src, alt, ...props }) => {
     const screenWidth = window.innerWidth;
 
     if (screenWidth >= 1000) {
-      return { width: "200px", height: "281.235px" };
+      return { width: "150px", height: "210.92625px" };
     } else {
       return { width: "100px", height: "140.6175px" }; // Default for smaller screens
     }
