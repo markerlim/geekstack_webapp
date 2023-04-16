@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, Grid } from "@mui/material";
@@ -13,7 +13,6 @@ const DBCardRef = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [booster, setBooster] = useState("");
     const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
 
     const handleOpenModal = (document) => {
@@ -24,10 +23,6 @@ const DBCardRef = () => {
     const handleCloseModal = () => {
         setSelectedCard(null);
         setOpenModal(false);
-    };
-
-    const handleBoosterChange = (newBooster) => {
-        setBooster(newBooster);
     };
 
     const MAX_COUNT = 4;
@@ -73,19 +68,18 @@ const DBCardRef = () => {
             querySnapshot.forEach((doc) => {
                 documentsArray.push(doc.data());
             });
+            setDocuments(documentsArray);
             setToLocalStorage("documents", documentsArray);
         };
-
+    
         const localDocuments = getFromLocalStorage("documents");
         if (localDocuments) {
-            const filteredDocuments = booster
-                ? localDocuments.filter((doc) => doc.booster === booster)
-                : localDocuments;
-            setDocuments(filteredDocuments);
+            setDocuments(localDocuments);
         } else {
             fetchDocuments();
         }
-    }, [booster]);
+    }, []);
+    
 
     useEffect(() => {
         const initialCountArray = documents.reduce((accumulator, document) => {
@@ -98,14 +92,6 @@ const DBCardRef = () => {
 
     return (
         <div>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap" flexShrink={"3"} flex={8} p={2} marginTop={2} marginBottom={4}>
-                <Box position={"fixed"}>
-                    <UAButtons
-                        handleBoosterChange={handleBoosterChange}
-                        boosterNames={["UABT01", "UABT02", "UABT03", "UAST01", "UAST02", "UAST03"]}
-                    />
-                </Box>
-            </Box>
             <Grid container spacing={2} justifyContent="center">
                 {documents.map((document, index) => (
                     <Grid item key={document.cardId}>

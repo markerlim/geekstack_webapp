@@ -34,9 +34,10 @@ const UserBox = styled(Box)(({theme}) =>({
         display:"none"
     }
 }));
-const Navbar = () => {
+
+const Navbar = (handleSearchInputChange) => {
     const [open, setOpen] = useState(false)
-    const {currentUser} =useContext(AuthContext)
+    const {currentUser} =useContext(AuthContext)    
 
     return(
         <AppBar position="sticky">

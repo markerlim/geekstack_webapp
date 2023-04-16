@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Box, Button, ButtonGroup, TextField, Tooltip } from "@mui/material";
-import { Delete, Save } from "@mui/icons-material";
+import { Delete, Save, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
-import { db, updateDocuments } from "../Firebase";
+import { db, } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { collection, doc, setDoc } from "firebase/firestore";
+import FullScreenDialog from "./FullScreenDialog";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 
 const DeckBuilderBar = (props) => {
@@ -18,7 +19,9 @@ const DeckBuilderBar = (props) => {
   const { countArray, setCountArray, filteredCards } = useCardState();
   const [deckName, setDeckName] = useState("myDeckId");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
+  const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false); // State to manage the visibility of the DeckLoader modal
+  const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
+  const [loadedDeckUid, setLoadedDeckUid] = useState(null);
 
   const handleClearClick = () => {
     setCountArray({});
@@ -36,28 +39,53 @@ const DeckBuilderBar = (props) => {
       setShowConfirmDialog(true);
       return;
     }
-
+  
     if (!currentUser) {
       return;
     }
-
+  
     const uid = currentUser.uid;
-
-    const deckInfo = {
-      deckName: deckName,
-      // Add any other information about the deck as required
-    };
-
+  
     try {
-      // Create a document for the deck with the specified name and deck info
-      await setDoc(doc(db, `users/${uid}/decks`, deckName), deckInfo);
-
+      let deckUid;
+      if (!isUpdatingExistingDeck) {
+        const userDocRef = doc(db, "users", uid);
+  
+        // Get the decksCounter from the user document
+        const userDocSnapshot = await getDoc(userDocRef);
+        const decksCounter = userDocSnapshot.get("decksCounter") || 0;
+  
+        // Update the decksCounter for the user
+        await updateDoc(userDocRef, { decksCounter: decksCounter + 1 });
+  
+        // Generate a new deckuid based on the updated decksCounter
+        deckUid = `deckuid${String(decksCounter + 1).padStart(10, "0")}`;
+      } else {
+        deckUid = loadedDeckUid; // Use the loadedDeckUid when updating an existing deck
+      }
+  
+      const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
+  
+      const deckInfo = {
+        deckName: deckName,
+        deckuid: deckUid,
+        // Add any other information about the deck as required
+      };
+  
+      if (!isUpdatingExistingDeck) {
+        // Create a document for the deck with the new name and deck info
+        await setDoc(deckDocRef, deckInfo);
+      } else {
+        // Update the deck name in the existing document
+        await updateDoc(deckDocRef, { deckName: deckName });
+      }
+  
       // Add the unique cards to a subcollection called "cards"
       const cardsCollectionRef = collection(
         db,
-        `users/${uid}/decks/${deckName}/cards`
+        `users/${uid}/decks/${deckUid}/cards`
       );
-
+  
       await Promise.all(
         filteredCards.map(async (card) => {
           const cardData = {
@@ -73,17 +101,32 @@ const DeckBuilderBar = (props) => {
           await setDoc(doc(cardsCollectionRef, card.cardId), cardData);
         })
       );
-
+  
       console.log("Data saved successfully!");
     } catch (error) {
       console.error("Error saving data: ", error);
     }
   };
+  
 
   const handleProceedSave = () => {
     handleSaveClick(true);
     setShowConfirmDialog(false);
   };
+
+  const handleLoadDeckClick = () => {
+    setShowDeckLoaderModal(true); // Open the DeckLoader modal
+  };
+
+  const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName) => {
+    // Handle the deck loaded from DeckLoader
+    // You can update the DeckBuilderBar state here based on the loadedDeck data
+    setDeckName(loadedDeckName);
+    setLoadedDeckUid(loadedDeckUid); // Update the loadedDeckUid
+    setIsUpdatingExistingDeck(true); //Update the previousDeckName
+    setShowDeckLoaderModal(false); // Close the DeckLoader modal
+  };
+
 
   return (
     <Box
@@ -146,6 +189,11 @@ const DeckBuilderBar = (props) => {
             <Delete />
           </Tooltip>
         </Button>
+        <Tooltip title="Load Deck">
+          <Button onClick={handleLoadDeckClick} sx={{ color: "#121212" }}>
+            <SystemUpdateAlt/>
+          </Button>
+        </Tooltip>
         <Button>
           <Tooltip
             components={Button}
@@ -177,6 +225,11 @@ const DeckBuilderBar = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <FullScreenDialog
+        open={showDeckLoaderModal}
+        handleClose={() => setShowDeckLoaderModal(false)}
+        handleDeckLoaded={(deckName, deckUid, loadedDeckName) => handleDeckLoaded(deckName, deckUid, loadedDeckName)}
+      />
     </Box>
   );
 

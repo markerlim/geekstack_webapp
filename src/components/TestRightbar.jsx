@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, Grid } from "@mui/material";
@@ -6,17 +6,16 @@ import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStor
 import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
-import ExpandableFunctions from "./DBExpandedFunc";
 import DeckBuilderBar from "./DeckBuilderBar";
-import {ResponsiveImage} from "./ResponsiveImage";
+import { ResponsiveImage } from "./ResponsiveImage";
 
 const TestRightBar = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [booster, setBooster] = useState("");
     const [totalCount, setTotalCount] = useState(0);
     const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
+
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -26,10 +25,6 @@ const TestRightBar = () => {
     const handleCloseModal = () => {
         setSelectedCard(null);
         setOpenModal(false);
-    };
-
-    const handleBoosterChange = (newBooster) => {
-        setBooster(newBooster);
     };
 
     const MAX_COUNT = 4;
@@ -68,6 +63,27 @@ const TestRightBar = () => {
         });
     };
 
+
+    const handleLocalStorageUpdate = (event) => {
+        if (event.key === "filteredCards") {
+            const newFilteredCards = JSON.parse(event.newValue);
+            setFilteredCards(newFilteredCards);
+        }
+        if (event.key === "countArray") {
+            const newCountArray = JSON.parse(event.newValue);
+            setCountArray(newCountArray);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("storage", handleLocalStorageUpdate);
+
+        return () => {
+            window.removeEventListener("storage", handleLocalStorageUpdate);
+        };
+    }, []);
+
+
     useEffect(() => {
         const fetchDocuments = async () => {
             const querySnapshot = await getDocs(collection(db, "unionarenatcg"));
@@ -76,18 +92,30 @@ const TestRightBar = () => {
                 documentsArray.push(doc.data());
             });
             setToLocalStorage("documents", documentsArray);
+
+            // Initialize countArray with all cardIds and a count of zero
+            const initialCountArray = documentsArray.reduce((accumulator, document) => {
+                accumulator[document.cardId] = 0;
+                return accumulator;
+            }, {});
+
+            setCountArray(prevCountArray => {
+                // If countArray is empty, set it to initialCountArray
+                if (Object.keys(prevCountArray).length === 0) {
+                    return initialCountArray;
+                }
+                return prevCountArray;
+            });
         };
 
         const localDocuments = getFromLocalStorage("documents");
         if (localDocuments) {
-            const filteredDocuments = booster
-                ? localDocuments.filter((doc) => doc.booster === booster)
-                : localDocuments;
-            setDocuments(filteredDocuments);
+            setDocuments(localDocuments);
         } else {
             fetchDocuments();
         }
-    }, [booster]);
+    }, []);
+
 
     useEffect(() => {
         const initialCountArray = documents.reduce((accumulator, document) => {
@@ -105,43 +133,43 @@ const TestRightBar = () => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Box display="flex" justifyContent="center" flexGrow={1} marginTop={0}>
-                <DeckBuilderBar style={{ width: "35%" }} />
+            <Box sx={{ flex: "1 1 auto" }}>
+                <DeckBuilderBar style={{ width: "45%" }} />
             </Box>
-
-            <ExpandableFunctions />
-            <Grid container spacing={2} justifyContent="center">
-                {documents.map((document, index) => (
-                    countArray[document.cardId] > 0 && (
-                        <Grid item key={document.cardId}>
-                            <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
-                                <ResponsiveImage
-                                    loading="lazy"
-                                    src={document.image}
-                                    draggable="false"
-                                    alt="test"
-                                />
-                                <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
-                                    <div component={Button} onClick={() => decrease(document.cardId)}>
-                                        <RemoveCircle />
-                                    </div>
-                                    <span>{countArray[document.cardId] || 0}</span>
-                                    <div component={Button} onClick={() => increase(document.cardId)}>
-                                        <AddCircle />
-                                    </div>
+            <Box mt={12}>
+                <Grid container spacing={2} justifyContent="center">
+                    {documents.map((document, index) => (
+                        countArray[document.cardId] > 0 && (
+                            <Grid item key={document.cardId}>
+                                <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
+                                    <ResponsiveImage
+                                        loading="lazy"
+                                        src={document.image}
+                                        draggable="false"
+                                        alt="test"
+                                    />
+                                    <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
+                                        <div component={Button} onClick={() => decrease(document.cardId)}>
+                                            <RemoveCircle />
+                                        </div>
+                                        <span>{countArray[document.cardId] || 0}</span>
+                                        <div component={Button} onClick={() => increase(document.cardId)}>
+                                            <AddCircle />
+                                        </div>
+                                    </Box>
                                 </Box>
-                            </Box>
-                        </Grid>
-                    )
-                ))}
-                {selectedCard && (
-                    <CardModal
-                        open={openModal}
-                        onClose={handleCloseModal}
-                        selectedCard={selectedCard}
-                    />
-                )}
-            </Grid>
+                            </Grid>
+                        )
+                    ))}
+                    {selectedCard && (
+                        <CardModal
+                            open={openModal}
+                            onClose={handleCloseModal}
+                            selectedCard={selectedCard}
+                        />
+                    )}
+                </Grid>
+            </Box>
         </div>
     );
 
