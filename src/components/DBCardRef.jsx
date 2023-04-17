@@ -103,11 +103,11 @@ const DBCardRef = () => {
                                 alt="test"
                             />
                             <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
-                                <div component={Button} onClick={() => decrease(document.cardId)}>
+                                <div component={Button} onClick={() => decrease(document.cardId)} style={{cursor:"pointer"}}>
                                     <RemoveCircle />
                                 </div>
                                 <span>{countArray[document.cardId] || 0}</span>
-                                <div component={Button} onClick={() => increase(document.cardId)}>
+                                <div component={Button} onClick={() => increase(document.cardId)} style={{cursor:"pointer"}}>
                                     <AddCircle />
                                 </div>
                             </Box>

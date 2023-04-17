@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, ButtonGroup, TextField, Tooltip } from "@mui/material";
+import { Box, Button, ButtonGroup, Grid, TextField, Tooltip } from "@mui/material";
 import { Delete, Save, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
@@ -39,39 +39,39 @@ const DeckBuilderBar = (props) => {
       setShowConfirmDialog(true);
       return;
     }
-  
+
     if (!currentUser) {
       return;
     }
-  
+
     const uid = currentUser.uid;
-  
+
     try {
       let deckUid;
       if (!isUpdatingExistingDeck) {
         const userDocRef = doc(db, "users", uid);
-  
+
         // Get the decksCounter from the user document
         const userDocSnapshot = await getDoc(userDocRef);
         const decksCounter = userDocSnapshot.get("decksCounter") || 0;
-  
+
         // Update the decksCounter for the user
         await updateDoc(userDocRef, { decksCounter: decksCounter + 1 });
-  
+
         // Generate a new deckuid based on the updated decksCounter
         deckUid = `deckuid${String(decksCounter + 1).padStart(10, "0")}`;
       } else {
         deckUid = loadedDeckUid; // Use the loadedDeckUid when updating an existing deck
       }
-  
+
       const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
-  
+
       const deckInfo = {
         deckName: deckName,
         deckuid: deckUid,
         // Add any other information about the deck as required
       };
-  
+
       if (!isUpdatingExistingDeck) {
         // Create a document for the deck with the new name and deck info
         await setDoc(deckDocRef, deckInfo);
@@ -79,13 +79,13 @@ const DeckBuilderBar = (props) => {
         // Update the deck name in the existing document
         await updateDoc(deckDocRef, { deckName: deckName });
       }
-  
+
       // Add the unique cards to a subcollection called "cards"
       const cardsCollectionRef = collection(
         db,
         `users/${uid}/decks/${deckUid}/cards`
       );
-  
+
       await Promise.all(
         filteredCards.map(async (card) => {
           const cardData = {
@@ -101,13 +101,13 @@ const DeckBuilderBar = (props) => {
           await setDoc(doc(cardsCollectionRef, card.cardId), cardData);
         })
       );
-  
+
       console.log("Data saved successfully!");
     } catch (error) {
       console.error("Error saving data: ", error);
     }
   };
-  
+
 
   const handleProceedSave = () => {
     handleSaveClick(true);
@@ -136,76 +136,85 @@ const DeckBuilderBar = (props) => {
         alignItems: "center",
         bgcolor: "#f2f3f8",
         color: "#121212",
-        top: 55,
         position: "fixed",
         zIndex: 1,
         ...props.style,
       }}
       p={2}
     >
-      <Box display={"flex"} flexDirection={"row"} sx={{ flex: "1 1 auto" }}>
-        <Box>
-          <h2 style={{ margin: 0 }}>DECKBUILDER</h2>
-          <TextField
-            label="Deck Name"
-            variant="outlined"
-            size="small"
-            value={deckName}
-            onChange={(event) => setDeckName(event.target.value)}
-            inputProps={{ style: { color: '#121212' } }}
-            sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
-          />
-        </Box>
-        <Box>
-          Total Count:{" "}
-          <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
-            {totalCount}/50
-          </span>
-          <br />
-          <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
-          <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-            {totalCount}/4
-          </span>
-          <br />
-          <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
-          <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-            {totalCount}/4
-          </span>
-          <br />
-          <img src="/icons/TFINAL.png" alt="Final:" />{" "}
-          <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-            {totalCount}/4
-          </span>
-        </Box>
+      <Box display={"flex"} flexDirection={"row"} gap={2} sx={{ flex: "1 1 auto" }}>
+        <Grid container rowSpacing={1} columnSpacing={1}>
+          <Grid item xs={2}>
+            <TextField
+              label="Deck Name"
+              variant="outlined"
+              size="small"
+              value={deckName}
+              onChange={(event) => setDeckName(event.target.value)}
+              inputProps={{ style: { color: '#121212' } }}
+              sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Grid container rowSpacing={1} columnSpacing={0}>
+              <Grid item xs={5}>
+                <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
+                <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
+                  {totalCount}/50
+                </span>
+              </Grid>
+              <Grid item xs={5}>
+                <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
+                <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
+                  {totalCount}/4
+                </span>
+              </Grid>
+              <Grid item xs={5}>
+                <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
+                <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
+                  {totalCount}/4
+                </span>
+              </Grid>
+              <Grid item xs={5}>
+                <img src="/icons/TFINAL.png" alt="Final:" />{" "}
+                <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
+                  {totalCount}/4
+                </span>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={1}>
+            <ButtonGroup size="small" aria-label="small button group">
+              <Button>
+                <Tooltip
+                  onClick={handleClearClick}
+                  title="Clear"
+                  p={1}
+                  sx={{ color: "#121212" }}
+                >
+                  <Delete />
+                </Tooltip>
+              </Button>
+              <Tooltip title="Load Deck">
+                <Button onClick={handleLoadDeckClick} sx={{ color: "#121212" }}>
+                  <SystemUpdateAlt />
+                </Button>
+              </Tooltip>
+              <Button>
+                <Tooltip
+                  components={Button}
+                  onClick={() => handleSaveClick(false)}
+                  title="Save"
+                  p={1}
+                  sx={{ color: "#121212" }}
+                >
+                  <Save />
+                </Tooltip>
+              </Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
       </Box>
-      <ButtonGroup size="large" aria-label="small button group">
-        <Button>
-          <Tooltip
-            onClick={handleClearClick}
-            title="Clear"
-            p={1}
-            sx={{ color: "#121212" }}
-          >
-            <Delete />
-          </Tooltip>
-        </Button>
-        <Tooltip title="Load Deck">
-          <Button onClick={handleLoadDeckClick} sx={{ color: "#121212" }}>
-            <SystemUpdateAlt/>
-          </Button>
-        </Tooltip>
-        <Button>
-          <Tooltip
-            components={Button}
-            onClick={() => handleSaveClick(false)}
-            title="Save"
-            p={1}
-            sx={{ color: "#121212" }}
-          >
-            <Save />
-          </Tooltip>
-        </Button>
-      </ButtonGroup>
       <Dialog
         open={showConfirmDialog}
         onClose={() => setShowConfirmDialog(false)}

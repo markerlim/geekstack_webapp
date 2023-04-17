@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, Grid } from "@mui/material";
@@ -6,7 +6,6 @@ import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStor
 import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
-import DeckBuilderBar from "./DeckBuilderBar";
 import { ResponsiveImage } from "./ResponsiveImage";
 
 const TestRightBar = () => {
@@ -132,47 +131,43 @@ const TestRightBar = () => {
     }, [countArray]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-            <Box sx={{ flex: "1 1 auto" }}>
-                <DeckBuilderBar style={{ width: "45%" }} />
-            </Box>
-            <Box mt={12}>
-                <Grid container spacing={2} justifyContent="center">
-                    {documents.map((document, index) => (
-                        countArray[document.cardId] > 0 && (
-                            <Grid item key={document.cardId}>
-                                <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
-                                    <ResponsiveImage
-                                        loading="lazy"
-                                        src={document.image}
-                                        draggable="false"
-                                        alt="test"
-                                    />
-                                    <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
-                                        <div component={Button} onClick={() => decrease(document.cardId)}>
-                                            <RemoveCircle />
-                                        </div>
-                                        <span>{countArray[document.cardId] || 0}</span>
-                                        <div component={Button} onClick={() => increase(document.cardId)}>
-                                            <AddCircle />
-                                        </div>
-                                    </Box>
-                                </Box>
-                            </Grid>
-                        )
-                    ))}
-                    {selectedCard && (
-                        <CardModal
-                            open={openModal}
-                            onClose={handleCloseModal}
-                            selectedCard={selectedCard}
-                        />
-                    )}
+        <div style={{ display: "flex", flexDirection: "column"}}>
+                <Grid style={{ overflowY: "auto", height: "85vh" }}>
+                        <Grid container spacing={2} justifyContent="center"positon>
+                            {documents.map((document) => (
+                                countArray[document.cardId] > 0 && (
+                                    <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
+                                        <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
+                                            <ResponsiveImage
+                                                loading="lazy"
+                                                src={document.image}
+                                                draggable="false"
+                                                alt="test"
+                                            />
+                                            <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
+                                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
+                                                    <RemoveCircle />
+                                                </div>
+                                                <span>{countArray[document.cardId] || 0}</span>
+                                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
+                                                    <AddCircle />
+                                                </div>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                )
+                            ))}
+                            {selectedCard && (
+                                <CardModal
+                                    open={openModal}
+                                    onClose={handleCloseModal}
+                                    selectedCard={selectedCard}
+                                />
+                            )}
+                        </Grid>
                 </Grid>
-            </Box>
         </div>
     );
-
 }
 
 export default TestRightBar
