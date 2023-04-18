@@ -1,59 +1,48 @@
 import React from 'react'
-import { Box, List, ListItem, ListItemButton, ListItemIcon, Switch} from '@mui/material'
-import { AccountBox, Group, Home, Inventory, ModeNight, Settings, Style } from '@mui/icons-material'
+import { Box, List, ListItem, ListItemButton, ListItemIcon} from '@mui/material'
+import { Group, Home, Inventory, Settings, Style } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
-const Sidebar = ({mode,setMode}) => {
+const Sidebar = () => {
     return(
-        <Box flex={2} p={0} sx={{display:{xs:"none",sm:"block"},height:"100vh"}}>
+        <Box flex={2} p={0}  sx={{display:{xs:"none",sm:"block"},height:"100vh"}}>
             <Box position="fixed" >
-                <List>
+                <List >
                     <ListItem disablePadding>
                         <ListItemButton component={Link} href="#home" to="/">
-                        <ListItemIcon>
-                            <Home alt="home" />
-                        </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton component="a" href="#profile">
-                        <ListItemIcon>
-                            <AccountBox />
+                        <ListItemIcon >
+                            <Home sx={{color:"#f2f3f8"}} alt="home" />
                         </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton component={Link} href="#cards" to="/deckbuilder">
                         <ListItemIcon>
-                            <Style />
+                            <Style sx={{color:"#f2f3f8"}} alt="deckbuilder" />
                         </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton component={Link} href="#decks" to="/deckviewer">
                         <ListItemIcon>
-                            <Inventory />
+                            <Inventory sx={{color:"#f2f3f8"}} alt="deck views"/>
                         </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton component={Link} href="#community" to="/community">
                         <ListItemIcon>
-                            <Group />
+                            <Group sx={{color:"#f2f3f8"}} alt="community"/>
                         </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#settings">
                         <ListItemIcon>
-                            <Settings />
+                            <Settings sx={{color:"#f2f3f8"}} alt="settings" />
                         </ListItemIcon>
                         </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ModeNight/>
-                        <Switch onChange={e=>setMode(mode === "light" ? "dark" : "light")}/>
                     </ListItem>
                 </List>
             </Box>

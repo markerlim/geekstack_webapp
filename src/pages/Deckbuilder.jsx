@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Stack, ThemeProvider, createTheme } from "@mui/material"
+import React from "react";
+import { Box, Stack } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DBCardRef from "../components/DBCardRef";
@@ -9,31 +9,24 @@ import { CardStateProvider } from "../context/useCardState";
 import DeckBuilderBar from "../components/DeckBuilderBar";
 
 const Deckbuilder = () => {
-  const [mode, setMode] = useState("light")
-  const darkTheme = createTheme({
-    palette: {
-      mode: mode
-    }
-  })
   return (
-    <div style={{ width: "100%", height: "100vh", overflow: "auto" }}>
-      <ThemeProvider theme={darkTheme}>
-        <Box bgcolor={"background.default"} color={"text.primary"}>
-          <Navbar />
-          <CardStateProvider>
-            <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-              <Box flex={1}><Sidebar setMode={setMode} mode={mode} /></Box>
-              <Box flex={8} p={2}><DBCardRef /></Box>
-              <Box flex={8} bgcolor={"purple"}>
-                <DeckBuilderBar style={{ width: "100%"}} />
-                <TestRightBar/>
-              </Box>
-            </Stack>
-          </CardStateProvider>
-          <Add />
-        </Box>
-      </ThemeProvider>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Box bgcolor={"#121212"} color={"#f2f3f8"} sx={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
+        <Navbar />
+        <CardStateProvider>
+          <Box sx={{ display: "flex", flexDirection: "row", flex: 1, height: '100%' }}>
+            <Box flex={1}><Sidebar /></Box>
+            <Box flex={6} p={2} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar"><DBCardRef /></Box>
+            <Box flex={6} bgcolor={"purple"} sx={{ height: '100%' }}>
+              <DeckBuilderBar style={{ width: "100%" }} />
+              <TestRightBar />
+            </Box>
+          </Box>
+        </CardStateProvider>
+        <Add />
+      </Box>
     </div>
+
   );
 }
 

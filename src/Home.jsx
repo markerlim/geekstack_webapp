@@ -23,10 +23,10 @@ const Home = () => {
   return (
     <div>
       <ThemeProvider theme={darkTheme}>
-        <Box bgcolor={"background.default"} color={"text.primary"}>
+        <Box bgcolor={"#121212"} color={"#f2f3f8"}>
           <Navbar handleSearchInputChange={handleSearchInputChange} />
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-            <Box flex={2} p={2}><Sidebar setMode={setMode} mode={mode} /></Box>
+            <Box flex={2}><Sidebar setMode={setMode} mode={mode} /></Box>
             <Box flex={17} p={2}><CardRef searchQuery={searchQuery} /></Box>
           </Stack>
           <Add />

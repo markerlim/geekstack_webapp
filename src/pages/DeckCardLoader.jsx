@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
-import { Box, Grid, Stack, ThemeProvider, createTheme } from "@mui/material";
+import { Box, Grid, Stack} from "@mui/material";
 import { ResponsiveImage } from "../components/ResponsiveImage";
 import { CardModal } from "../components/CardModal";
 import Navbar from "../components/Navbar";
@@ -17,13 +17,6 @@ const DeckCardLoader = () => {
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-
-  const [mode, setMode] = useState("light")
-  const darkTheme = createTheme({
-    palette: {
-      mode: mode
-    }
-  })
   
   useEffect(() => {
     const fetchCards = async () => {
@@ -66,11 +59,10 @@ const DeckCardLoader = () => {
 
   return (
     <div>
-      <ThemeProvider theme={darkTheme}>
-        <Box bgcolor={"background.default"} color={"text.primary"}>
+        <Box bgcolor={"#121212"} color={"#f2f3f8"}>
           <Navbar />
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-            <Sidebar setMode={setMode} mode={mode} />
+            <Sidebar/>
             <Box flex={8} p={2}>
               <Grid container spacing={2} justifyContent="center">
                 {cards.map((card) => (
@@ -97,7 +89,6 @@ const DeckCardLoader = () => {
             </Box>
           </Stack>
         </Box>
-      </ThemeProvider>
     </div>
   );
 };

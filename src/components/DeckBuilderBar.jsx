@@ -12,6 +12,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FullScreenDialog from "./FullScreenDialog";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 
 
 const DeckBuilderBar = (props) => {
@@ -22,6 +25,8 @@ const DeckBuilderBar = (props) => {
   const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false); // State to manage the visibility of the DeckLoader modal
   const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
   const [loadedDeckUid, setLoadedDeckUid] = useState(null);
+  const [saveStatus, setSaveStatus] = useState(null);
+
 
   const handleClearClick = () => {
     setCountArray({});
@@ -103,8 +108,16 @@ const DeckBuilderBar = (props) => {
       );
 
       console.log("Data saved successfully!");
+      setSaveStatus("success");
+
+      // Reset the component state
+      handleClearClick();
+      setDeckName("myDeckId");
+      setIsUpdatingExistingDeck(false);
+      setLoadedDeckUid(null);
     } catch (error) {
       console.error("Error saving data: ", error);
+      setSaveStatus("error");
     }
   };
 
@@ -136,7 +149,6 @@ const DeckBuilderBar = (props) => {
         alignItems: "center",
         bgcolor: "#f2f3f8",
         color: "#121212",
-        position: "fixed",
         zIndex: 1,
         ...props.style,
       }}
@@ -144,7 +156,7 @@ const DeckBuilderBar = (props) => {
     >
       <Box display={"flex"} flexDirection={"row"} gap={2} sx={{ flex: "1 1 auto" }}>
         <Grid container rowSpacing={1} columnSpacing={1}>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <TextField
               label="Deck Name"
               variant="outlined"
@@ -155,7 +167,7 @@ const DeckBuilderBar = (props) => {
               sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={5}>
             <Grid container rowSpacing={1} columnSpacing={0}>
               <Grid item xs={5}>
                 <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
@@ -183,7 +195,7 @@ const DeckBuilderBar = (props) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={4}>
             <ButtonGroup size="small" aria-label="small button group">
               <Button>
                 <Tooltip
@@ -239,6 +251,16 @@ const DeckBuilderBar = (props) => {
         handleClose={() => setShowDeckLoaderModal(false)}
         handleDeckLoaded={(deckName, deckUid, loadedDeckName) => handleDeckLoaded(deckName, deckUid, loadedDeckName)}
       />
+      <Snackbar
+        open={saveStatus === "success"}
+        autoHideDuration={6000}
+        onClose={() => setSaveStatus(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={() => setSaveStatus(null)} severity="success" sx={{ width: '100%' }}>
+          Deck saved successfully!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 
