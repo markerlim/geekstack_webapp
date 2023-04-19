@@ -4,14 +4,12 @@ import { collection, getDocs } from "firebase/firestore";
 import { Box, Grid } from "@mui/material";
 import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal"
-import { UAButtons } from "./UnionArenaButtonFilter";
 import {ResponsiveImage} from "./ResponsiveImage";
 
 const CardRef = () => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [booster, setBooster] = useState("");
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -23,10 +21,6 @@ const CardRef = () => {
         setOpenModal(false);
     };
 
-    const handleBoosterChange = (newBooster) => {
-        setBooster(newBooster);
-    };
-
     useEffect(() => {
         const fetchDocuments = async () => {
             const querySnapshot = await getDocs(collection(db, "unionarenatcg"));
@@ -34,31 +28,21 @@ const CardRef = () => {
             querySnapshot.forEach((doc) => {
                 documentsArray.push(doc.data());
             });
+            setDocuments(documentsArray);
             setToLocalStorage("documents", documentsArray);
         };
-
+    
         const localDocuments = getFromLocalStorage("documents");
         if (localDocuments) {
-            const filteredDocuments = booster
-                ? localDocuments.filter((doc) => doc.booster === booster)
-                : localDocuments;
-            setDocuments(filteredDocuments);
+            setDocuments(localDocuments);
         } else {
             fetchDocuments();
         }
-    }, [booster]);
+    }, []);
 
 
     return (
         <div>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap" marginTop={2} marginBottom={4}>
-                <Box position={"fixed"}>
-                    <UAButtons
-                        handleBoosterChange={handleBoosterChange}
-                        boosterNames={["UABT01", "UABT02", "UABT03", "UAST01", "UAST02", "UAST03"]}
-                    />
-                </Box>
-            </Box>
             <Grid container spacing={2} justifyContent="center">
                 {documents.map((document) => (
                     <Grid item key={document.cardId}>

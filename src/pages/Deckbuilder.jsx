@@ -25,7 +25,7 @@ const Deckbuilder = () => {
               <br></br>
               <br></br>
               <br></br>
-              <br></br>
+              <br></br>  
             </Box>
             <Hidden only={['sm', 'md', 'lg', 'xl']}><DeckBuilderBarMobile /></Hidden>
             <Hidden only={['xs']}>

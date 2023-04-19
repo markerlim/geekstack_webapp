@@ -39,6 +39,31 @@ const DeckBuilderBar = (props) => {
     0
   );
 
+  // Filter the cards based on the triggerState that are color
+  const colorCards = filteredCards.filter(card => card.triggerState === "Color");
+
+  const colorCount = colorCards.reduce(
+    (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
+    0
+  );
+
+  // Filter the cards based on the triggerState that are color
+  const specialCards = filteredCards.filter(card => card.triggerState === "Special");
+
+  const specialCount = specialCards.reduce(
+    (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
+    0
+  );
+
+  // Filter the cards based on the triggerState that are color
+  const finalCards = filteredCards.filter(card => card.triggerState === "Final");
+
+  const finalCount = finalCards.reduce(
+    (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
+    0
+  );
+
+
   const handleSaveClick = async (proceed = false) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
@@ -74,6 +99,9 @@ const DeckBuilderBar = (props) => {
       const deckInfo = {
         deckName: deckName,
         deckuid: deckUid,
+        colorCount: colorCount,
+        specialCount: specialCount,
+        finalCount: finalCount,
         // Add any other information about the deck as required
       };
 
@@ -82,7 +110,7 @@ const DeckBuilderBar = (props) => {
         await setDoc(deckDocRef, deckInfo);
       } else {
         // Update the deck name in the existing document
-        await updateDoc(deckDocRef, { deckName: deckName });
+        await updateDoc(deckDocRef, { deckName: deckName,...deckInfo });
       }
 
       // Add the unique cards to a subcollection called "cards"
@@ -177,20 +205,20 @@ const DeckBuilderBar = (props) => {
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
-                <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-                  {totalCount}/4
+                <span style={{ color: colorCount > 4 ? "red" : "inherit" }}>
+                  {colorCount}/4
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
-                <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-                  {totalCount}/4
+                <span style={{ color: specialCount > 4 ? "red" : "inherit" }}>
+                  {specialCount}/4
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TFINAL.png" alt="Final:" />{" "}
-                <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-                  {totalCount}/4
+                <span style={{ color: finalCount > 4 ? "red" : "inherit" }}>
+                  {finalCount}/4
                 </span>
               </Grid>
             </Grid>

@@ -25,6 +25,9 @@ const DeckLoader = () => {
             id: doc.id,
             name: data.deckName,
             description: data.description,
+            colorCount: data.colorCount,
+            specialCount: data.specialCount,
+            finalCount: data.finalCount,
             ...data,
           });
         });
