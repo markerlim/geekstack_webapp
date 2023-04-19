@@ -7,6 +7,9 @@ import Add from "../components/Add";
 import TestRightBar from "../components/TestRightbar";
 import { CardStateProvider } from "../context/useCardState";
 import DeckBuilderBar from "../components/DeckBuilderBar";
+import DeckBuilderBarMobile from "../components/DeckBuilderBarMobile";
+import { Hidden } from "@mui/material";
+
 
 const Deckbuilder = () => {
   return (
@@ -16,11 +19,25 @@ const Deckbuilder = () => {
         <CardStateProvider>
           <Box sx={{ display: "flex", flexDirection: "row", flex: 1, height: '100%' }}>
             <Box flex={1}><Sidebar /></Box>
-            <Box flex={6} p={2} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar"><DBCardRef /></Box>
-            <Box flex={6} bgcolor={"purple"} sx={{ height: '100%' }}>
-              <DeckBuilderBar style={{ width: "100%" }} />
-              <TestRightBar />
+            <Box flex={6} p={2} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
+              <DBCardRef />
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
             </Box>
+            <Hidden only={['sm', 'md', 'lg', 'xl']}><DeckBuilderBarMobile /></Hidden>
+            <Hidden only={['xs']}>
+              <Box flex={6} bgcolor={"purple"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
+                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky" }} />
+                <TestRightBar />
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+              </Box>
+            </Hidden>
           </Box>
         </CardStateProvider>
         <Add />
