@@ -2,18 +2,13 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Add from "./components/Add";
 import CardRef from "./components/CardRef";
-import { Box, Stack, ThemeProvider, createTheme } from "@mui/material"
+import BottomNav from "./components/BottomNav"
+import { Box, Hidden, Stack, ThemeProvider, createTheme } from "@mui/material"
 import { useState } from "react";
 
 const Home = () => {
-  const [mode, setMode] = useState("light")
   // Add the searchQuery state here
   const [searchQuery, setSearchQuery] = useState("");
-  const darkTheme = createTheme({
-    palette: {
-      mode: mode
-    }
-  })
 
   // Add the handleSearchInputChange function here
   const handleSearchInputChange = (event) => {
@@ -22,16 +17,24 @@ const Home = () => {
 
   return (
     <div>
-      <ThemeProvider theme={darkTheme}>
         <Box bgcolor={"#121212"} color={"#f2f3f8"}>
           <Navbar handleSearchInputChange={handleSearchInputChange} />
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-            <Box flex={2}><Sidebar setMode={setMode} mode={mode} /></Box>
+            <Box flex={2} sx={{display:{xs:"none",sm:"block"}}}><Sidebar /></Box>
             <Box flex={17} p={2}><CardRef searchQuery={searchQuery} /></Box>
+            <Hidden only={['sm', 'md', 'lg', 'xl']}>
+                <Box>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                </Box>
+              </Hidden>
           </Stack>
-          <Add />
+          <Box flex={2} sx={{display:{xs:"block",sm:"none"}}}><BottomNav/></Box>
         </Box>
-      </ThemeProvider>
     </div>
   );
 }

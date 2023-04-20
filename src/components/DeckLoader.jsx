@@ -28,6 +28,7 @@ const DeckLoader = () => {
             colorCount: data.colorCount,
             specialCount: data.specialCount,
             finalCount: data.finalCount,
+            image: data.image,
             ...data,
           });
         });
@@ -68,7 +69,7 @@ const DeckLoader = () => {
             }}
           >
             <img
-              src="/images/Alice.png"
+              src={deck.image}
               alt={deck.name}
               style={{ width: "140%", height: "auto" }}
             />

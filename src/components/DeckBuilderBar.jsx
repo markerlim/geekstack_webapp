@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, ButtonGroup, Grid, TextField, Tooltip } from "@mui/material";
 import { Delete, Save, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
@@ -14,7 +14,7 @@ import FullScreenDialog from "./FullScreenDialog";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-
+import ImagePickerModal from "./ImagePickerModal";
 
 
 const DeckBuilderBar = (props) => {
@@ -26,12 +26,32 @@ const DeckBuilderBar = (props) => {
   const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
   const [loadedDeckUid, setLoadedDeckUid] = useState(null);
   const [saveStatus, setSaveStatus] = useState(null);
+  const [showImagePickerModal, setShowImagePickerModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
 
+
+  const images = [
+    "/images/Alice.png",
+    "/images/Renee.png",
+    "/images/deckimage.jpg",
+    "/images/deckimage1.jpg",
+    "/images/deckimage2.jpg",
+    "/images/deckimage3.jpg",
+    "/images/deckimage4.jpg",
+    "/images/deckimage5.jpg",
+    "/images/deckimage6.jpg",
+    "/images/deckimage7.jpg",
+    "/images/deckimage8.jpg",
+  ];
 
   const handleClearClick = () => {
     setCountArray({});
     setToLocalStorage("countArray", {});
     setToLocalStorage("filteredCards", []);
+    setLoadedDeckUid(null); // Clear the loadedDeckUid
+    setIsUpdatingExistingDeck(false); // Set isUpdatingExistingDeck to false
+    setSelectedImage(null);
   };
 
   const totalCount = Object.values(countArray).reduce(
@@ -73,7 +93,10 @@ const DeckBuilderBar = (props) => {
     if (!currentUser) {
       return;
     }
-
+    if (!selectedImage) {
+      setShowImagePickerModal(true);
+      return;
+    }
     const uid = currentUser.uid;
 
     try {
@@ -102,6 +125,7 @@ const DeckBuilderBar = (props) => {
         colorCount: colorCount,
         specialCount: specialCount,
         finalCount: finalCount,
+        image: selectedImage,
         // Add any other information about the deck as required
       };
 
@@ -110,7 +134,7 @@ const DeckBuilderBar = (props) => {
         await setDoc(deckDocRef, deckInfo);
       } else {
         // Update the deck name in the existing document
-        await updateDoc(deckDocRef, { deckName: deckName,...deckInfo });
+        await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
       }
 
       // Add the unique cards to a subcollection called "cards"
@@ -143,6 +167,7 @@ const DeckBuilderBar = (props) => {
       setDeckName("myDeckId");
       setIsUpdatingExistingDeck(false);
       setLoadedDeckUid(null);
+      setShouldSaveDeck(false); // Reset shouldSaveDeck to false
     } catch (error) {
       console.error("Error saving data: ", error);
       setSaveStatus("error");
@@ -151,6 +176,7 @@ const DeckBuilderBar = (props) => {
 
 
   const handleProceedSave = () => {
+    setShouldSaveDeck(true);
     handleSaveClick(true);
     setShowConfirmDialog(false);
   };
@@ -168,6 +194,16 @@ const DeckBuilderBar = (props) => {
     setShowDeckLoaderModal(false); // Close the DeckLoader modal
   };
 
+  useEffect(() => {
+    if (selectedImage && shouldSaveDeck) {
+      handleSaveClick(true);
+      setShouldSaveDeck(false);
+    }
+    if (selectedImage && totalCount) {
+      handleSaveClick(true);
+      setShouldSaveDeck(false);
+    }
+  }, [selectedImage, shouldSaveDeck, handleSaveClick]);
 
   return (
     <Box
@@ -289,6 +325,15 @@ const DeckBuilderBar = (props) => {
           Deck saved successfully!
         </Alert>
       </Snackbar>
+      <ImagePickerModal
+        open={showImagePickerModal}
+        handleClose={() => setShowImagePickerModal(false)}
+        images={images}
+        handleImageSelected={(image) => {
+          setSelectedImage(image);
+          setShowImagePickerModal(false); // Close the ImagePickerModal upon selection
+        }}
+      />
     </Box>
   );
 

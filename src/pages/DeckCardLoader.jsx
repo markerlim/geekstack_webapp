@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
-import { Box, Grid, Stack} from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import { ResponsiveImage } from "../components/ResponsiveImage";
 import { CardModal } from "../components/CardModal";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import BottomNav from "../components/BottomNav";
 
 const DeckCardLoader = () => {
   const { currentUser } = useAuth();
@@ -17,7 +18,7 @@ const DeckCardLoader = () => {
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  
+
   useEffect(() => {
     const fetchCards = async () => {
       if (!currentUser) {
@@ -50,45 +51,46 @@ const DeckCardLoader = () => {
     setSelectedCard(selectedCardData);
     setOpenModal(true);
   };
-  
+
   const handleCloseModal = () => {
     setSelectedCard(null);
     setOpenModal(false);
   };
-  
+
 
   return (
     <div>
-        <Box bgcolor={"#121212"} color={"#f2f3f8"}>
-          <Navbar />
-          <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-            <Sidebar/>
-            <Box flex={8} p={2}>
-              <Grid container spacing={2} justifyContent="center">
-                {cards.map((card) => (
-                  <Grid item key={card.id}>
-                    <Box display={"flex"} flexDirection={"column"} sx={{textAlign:"center"}} onClick={() => handleOpenModal(card)}>
-                      <ResponsiveImage
-                        loading="lazy"
-                        src={card.image}
-                        draggable="false"
-                        alt={card.front}
-                      />
-                      <span>{card.count}</span>
-                    </Box>
-                  </Grid>
-                ))}
-                {selectedCard && (
-                  <CardModal
-                    open={openModal}
-                    onClose={handleCloseModal}
-                    selectedCard={selectedCard}
-                  />
-                )}
-              </Grid>
-            </Box>
-          </Stack>
-        </Box>
+      <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+        <Navbar />
+        <Stack direction="row" spacing={2} justifyContent={"space-between"}>
+          <Box flex={2} sx={{ display: { xs: "none", sm: "block" } }}><Sidebar /></Box>
+          <Box flex={8} p={2}>
+            <Grid container spacing={2} justifyContent="center">
+              {cards.map((card) => (
+                <Grid item key={card.id}>
+                  <Box display={"flex"} flexDirection={"column"} sx={{ textAlign: "center" }} onClick={() => handleOpenModal(card)}>
+                    <ResponsiveImage
+                      loading="lazy"
+                      src={card.image}
+                      draggable="false"
+                      alt={card.front}
+                    />
+                    <span>{card.count}</span>
+                  </Box>
+                </Grid>
+              ))}
+              {selectedCard && (
+                <CardModal
+                  open={openModal}
+                  onClose={handleCloseModal}
+                  selectedCard={selectedCard}
+                />
+              )}
+            </Grid>
+          </Box>
+        </Stack>
+        <Box flex={2} sx={{ display: { xs: "block", sm: "none" } }}><BottomNav /></Box>
+      </Box>
     </div>
   );
 };

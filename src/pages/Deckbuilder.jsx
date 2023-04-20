@@ -3,7 +3,7 @@ import { Box, Stack } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DBCardRef from "../components/DBCardRef";
-import Add from "../components/Add";
+import BottomNav from "../components/BottomNav"
 import TestRightBar from "../components/TestRightbar";
 import { CardStateProvider } from "../context/useCardState";
 import DeckBuilderBar from "../components/DeckBuilderBar";
@@ -18,14 +18,22 @@ const Deckbuilder = () => {
         <Navbar />
         <CardStateProvider>
           <Box sx={{ display: "flex", flexDirection: "row", flex: 1, height: '100%' }}>
-            <Box flex={1}><Sidebar /></Box>
+            <Box flex={1} sx={{ display: { xs: "none", sm: "block" } }}><Sidebar /></Box>
             <Box flex={6} p={2} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
               <DBCardRef />
               <br></br>
               <br></br>
               <br></br>
               <br></br>
-              <br></br>  
+              <br></br>
+              <Hidden only={['sm', 'md', 'lg', 'xl']}>
+                <Box>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                </Box>
+              </Hidden>
             </Box>
             <Hidden only={['sm', 'md', 'lg', 'xl']}><DeckBuilderBarMobile /></Hidden>
             <Hidden only={['xs']}>
@@ -38,9 +46,17 @@ const Deckbuilder = () => {
                 <br></br>
               </Box>
             </Hidden>
+            <Hidden only={['sm', 'md', 'lg', 'xl']}>
+                <Box>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                </Box>
+              </Hidden>
           </Box>
         </CardStateProvider>
-        <Add />
+        <Box sx={{ display: { xs: "block", sm: "none" } }}><BottomNav /></Box>
       </Box>
     </div>
 

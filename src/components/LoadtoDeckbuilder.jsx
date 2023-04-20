@@ -66,6 +66,10 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
           id: doc.id,
           name: data.deckName,
           description: data.description,
+          colorCount: data.colorCount,
+          specialCount: data.specialCount,
+          finalCount: data.finalCount,
+          image: data.image,
           ...data,
         });
       });
@@ -109,7 +113,7 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
             }}
           >
             <img
-              src="/images/Alice.png"
+              src={deck.image}
               alt={deck.name}
               style={{ width: "140%", height: "auto" }}
             />
