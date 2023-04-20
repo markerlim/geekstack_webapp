@@ -18,9 +18,9 @@ const Sidebar = () => {
     return(
         <Box flex={2} p={0} sx={{
             display: { xs: 'block', sm: 'none' },
-            height: '5vh',
+            height: '60px',
             position: { xs: 'fixed', sm: 'static' },
-            bottom: { xs: 0, sm: 'auto' },
+            bottom: 0,
             width: '100%',
             justifyContent: 'space-evenly',
             bgcolor: 'primary.main',

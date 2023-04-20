@@ -7,6 +7,8 @@ import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
+import { Snackbar, Alert } from "@mui/material";
+
 
 const TestRightBar = () => {
     const [documents, setDocuments] = useState([]);
@@ -14,6 +16,8 @@ const TestRightBar = () => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [totalCount, setTotalCount] = useState(0);
     const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
 
 
     const handleOpenModal = (document) => {
@@ -74,6 +78,24 @@ const TestRightBar = () => {
         }
     };
 
+    const areCardsFromSameAnime = (cards) => {
+        if (cards.length === 0) {
+            return true;
+        }
+
+        const firstAnime = cards[0].anime;
+        return cards.every((card) => card.anime === firstAnime);
+    };
+
+    useEffect(() => {
+        if (!areCardsFromSameAnime(filteredCards)) {
+            setSnackbarOpen(true);
+        } else {
+            setSnackbarOpen(false);
+        }
+    }, [filteredCards]);
+
+
     useEffect(() => {
         window.addEventListener("storage", handleLocalStorageUpdate);
 
@@ -131,41 +153,51 @@ const TestRightBar = () => {
     }, [countArray]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column"}}>
-                <Grid style={{ overflowY: "auto", height: "100%" }}>
-                        <Grid container spacing={2} justifyContent="center">
-                            {documents.map((document) => (
-                                countArray[document.cardId] > 0 && (
-                                    <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
-                                        <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
-                                            <ResponsiveImage
-                                                loading="lazy"
-                                                src={document.image}
-                                                draggable="false"
-                                                alt="test"
-                                            />
-                                            <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
-                                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
-                                                    <RemoveCircle />
-                                                </div>
-                                                <span>{countArray[document.cardId] || 0}</span>
-                                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
-                                                    <AddCircle />
-                                                </div>
-                                            </Box>
-                                        </Box>
-                                    </Grid>
-                                )
-                            ))}
-                            {selectedCard && (
-                                <CardModal
-                                    open={openModal}
-                                    onClose={handleCloseModal}
-                                    selectedCard={selectedCard}
-                                />
-                            )}
-                        </Grid>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+            <Grid style={{ overflowY: "auto", height: "100%" }}>
+                <Grid container spacing={2} justifyContent="center">
+                    {documents.map((document) => (
+                        countArray[document.cardId] > 0 && (
+                            <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
+                                <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
+                                    <ResponsiveImage
+                                        loading="lazy"
+                                        src={document.image}
+                                        draggable="false"
+                                        alt="test"
+                                    />
+                                    <Box display={"flex"} flexDirection={"row"} gap={3} alignItems={"center"} justifyContent={"center"}>
+                                        <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
+                                            <RemoveCircle />
+                                        </div>
+                                        <span>{countArray[document.cardId] || 0}</span>
+                                        <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
+                                            <AddCircle />
+                                        </div>
+                                    </Box>
+                                </Box>
+                            </Grid>
+                        )
+                    ))}
+                    {selectedCard && (
+                        <CardModal
+                            open={openModal}
+                            onClose={handleCloseModal}
+                            selectedCard={selectedCard}
+                        />
+                    )}
                 </Grid>
+            </Grid>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert onClose={() => setSnackbarOpen(false)} severity="warning" sx={{ width: "100%" }}>
+                    Please ensure all cards are from the same anime.
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

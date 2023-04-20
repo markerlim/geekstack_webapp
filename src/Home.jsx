@@ -1,6 +1,5 @@
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
-import Add from "./components/Add";
 import CardRef from "./components/CardRef";
 import BottomNav from "./components/BottomNav"
 import { Box, Hidden, Stack, ThemeProvider, createTheme } from "@mui/material"

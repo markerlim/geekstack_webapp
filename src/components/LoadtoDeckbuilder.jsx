@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../Firebase";
-import { Box, ButtonBase } from "@mui/material";
+import { Box, Button, ButtonBase } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import { useCardState } from "../context/useCardState";
 
@@ -42,7 +42,6 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
         newFilteredCards.push(card);
       }
     });
-
     // Update CardState with the new countArray and filteredCards values
     setCountArray(newCountArray);
     setFilteredCards(newFilteredCards);
@@ -50,6 +49,14 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
     onDeckLoaded(deck.id, deck.deckuid, deck.name);
   };
 
+  const handleDeleteDeck = async (deckId) => {
+    try {
+      await deleteDoc(doc(db, `users/${currentUser.uid}/decks`, deckId));
+      setDecks(decks.filter((deck) => deck.id !== deckId));
+    } catch (error) {
+      console.error("Error deleting deck: ", error);
+    }
+  };
 
   useEffect(() => {
     const fetchDecks = async () => {
@@ -87,6 +94,7 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
         alignItems: "center",
         flexWrap: "wrap",
         color: "#121212",
+        overflowY: "auto",
         position: "fixed",
         padding: 2,
       }}
@@ -120,7 +128,16 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
             <p style={{ margin: 0 }}>{deck.description}</p>
           </ButtonBase>
           <h3 style={{ margin: "0.5rem 0", color: "primary" }}>{deck.name}</h3>
+          <Button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleDeleteDeck(deck.id);
+            }}
+          >
+            Delete
+          </Button>
         </Box>
+
       ))}
     </Box>
   );
