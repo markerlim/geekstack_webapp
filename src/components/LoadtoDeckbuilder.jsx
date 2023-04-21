@@ -95,7 +95,6 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
         flexWrap: "wrap",
         color: "#121212",
         overflowY: "auto",
-        position: "fixed",
         padding: 2,
       }}
     >

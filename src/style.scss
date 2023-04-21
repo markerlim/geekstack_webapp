@@ -70,3 +70,7 @@
   scrollbar-width: none;
 }
 
+.custom-placeholder .MuiSelect-select.MuiSelect-select::placeholder {
+    width: 200px; /* Increase this value to adjust the width of the placeholder */
+}
+

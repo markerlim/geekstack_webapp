@@ -61,12 +61,27 @@ const CardRef = () => {
 
     return (
         <div>
-            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2}}>
-                <FormControl sx={{ minWidth: 100, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px" }}>
-                    {!boosterFilter && <InputLabel>Booster</InputLabel>}
-                    <Select
+            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2 }}>
+                <FormControl sx={{
+                    width: 80, height: 40, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px",
+                    '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
+                        width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
+                    },
+                }}>
+                    <Select disableUnderline
+                        sx={{
+                            width: 80, height: 40, paddingLeft: 1, paddingRight: 1,
+                            '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
+                                width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
+                            },
+                            '& .MuiSelect-icon': {
+                                display: 'none',
+                            },
+                        }}
                         value={boosterFilter}
                         onChange={(event) => setBoosterFilter(event.target.value)}
+                        displayEmpty // Add this prop to display the placeholder when the value is empty
+                        renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -79,11 +94,26 @@ const CardRef = () => {
                         <MenuItem value="UA03ST">UA03ST</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{ minWidth: 100, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px" }}>
-                    {!colorFilter && <InputLabel>Color</InputLabel>}
-                    <Select
+                <FormControl sx={{
+                    width: 80, height: 40, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px",
+                    '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
+                        width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
+                    },
+                }}>
+                    <Select disableUnderline
+                        sx={{
+                            width: 80, height: 40, fontSize: 15, paddingLeft:1,paddingRight:1,
+                            '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
+                                width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
+                            },
+                            '& .MuiSelect-icon': {
+                                display: 'none',
+                            },
+                        }}
                         value={colorFilter}
                         onChange={(event) => setColorFilter(event.target.value)}
+                        displayEmpty // Add this prop to display the placeholder when the value is empty
+                        renderValue={(selectedValue) => selectedValue || 'Color'}
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -95,11 +125,26 @@ const CardRef = () => {
                         <MenuItem value="Purple">Purple</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{ minWidth: 100, backgroundColor: "#f2f3f8", borderRadius: "5px" }}>
-                    {!animeFilter && <InputLabel>Anime</InputLabel>}
-                    <Select
+                <FormControl sx={{
+                    width: 80, height: 40, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px"
+                    , '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
+                        width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
+                    },
+                }}>
+                    <Select disableUnderline
+                        sx={{
+                            width: 80, height: 40, fontSize: 15, paddingLeft:1,paddingRight:1,
+                            '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
+                                width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
+                            },
+                            '& .MuiSelect-icon': {
+                                display: 'none',
+                            },
+                        }}
                         value={animeFilter}
                         onChange={(event) => setAnimeFilter(event.target.value)}
+                        displayEmpty // Add this prop to display the placeholder when the value is empty
+                        renderValue={(selectedValue) => selectedValue || 'Anime'}
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -110,15 +155,20 @@ const CardRef = () => {
                     </Select>
                 </FormControl>
                 <Button
-                    variant="contained"
-                    sx={{ marginLeft: 2, backgroundColor:"#f2f3f8", color:"#240052",
-                    '&:hover': {
-                        backgroundColor: "#240052", // Change this to the desired hover background color
-                        color: "#f2f3f8", // Change this to the desired hover text color if needed
-                      },}}
+                    sx={{
+                        minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                        width: 30, // Change this value to adjust the width
+                        padding: 1, // Adjust the padding as needed 
+                        backgroundColor: "#f2f3f8",
+                        color: "#240052",
+                        '&:hover': {
+                            backgroundColor: "#240052", // Change this to the desired hover background color
+                            color: "#f2f3f8", // Change this to the desired hover text color if needed
+                        },
+                    }}
                     onClick={resetFilters}
                 >
-                    <Refresh/>
+                    <Refresh sx={{ fontSize: 15 }} />
                 </Button>
             </Box>
 

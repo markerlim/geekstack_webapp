@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Stack } from "@mui/material"
+import { Box, Collapse, useMediaQuery } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DBCardRef from "../components/DBCardRef";
@@ -12,13 +12,23 @@ import { Hidden } from "@mui/material";
 
 
 const Deckbuilder = () => {
+  const isMobile = useMediaQuery(theme => theme.breakpoints.down('md'));
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box bgcolor={"#121212"} color={"#f2f3f8"} sx={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
         <Navbar />
+        <Box sx={{ display: { xs: "block", sm : "block", md: "none" } }}><BottomNav /></Box>
         <CardStateProvider>
-          <Box sx={{ display: "flex", flexDirection: "row", flex: 1, height: '100%' }}>
-            <Box flex={1} sx={{ display: { xs: "none", sm: "block" } }}><Sidebar /></Box>
+          <Box sx={{ display: "flex", flexDirection: {xs:"column", sm: "column", md: "row" }, flex: 1, height: '100%' }}>
+            <Box flex={1} sx={{ display: { xs: "none", sm:"none", md: "block" } }}><Sidebar /></Box>
+            <Hidden only={['md', 'lg', 'xl']}>
+              <Box flex={6} bgcolor={"purple"} sx={{ overflowY: 'auto', height: '50%', width: '100%' }} className="hide-scrollbar">
+                <DeckBuilderBarMobile style={{ width: "100%",marginTop:10, position: "sticky" }} />
+                <TestRightBar />
+                <br></br>
+                <br></br>
+              </Box>
+            </Hidden>
             <Box flex={6} p={2} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
               <DBCardRef />
               <br></br>
@@ -26,7 +36,7 @@ const Deckbuilder = () => {
               <br></br>
               <br></br>
               <br></br>
-              <Hidden only={['sm', 'md', 'lg', 'xl']}>
+              <Hidden only={['md', 'lg', 'xl']}>
                 <Box>
                   <br></br>
                   <br></br>
@@ -35,8 +45,7 @@ const Deckbuilder = () => {
                 </Box>
               </Hidden>
             </Box>
-            <Hidden only={['sm', 'md', 'lg', 'xl']}><DeckBuilderBarMobile /></Hidden>
-            <Hidden only={['xs']}>
+            <Hidden only={['xs', 'sm']}>
               <Box flex={6} bgcolor={"purple"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
                 <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky" }} />
                 <TestRightBar />
@@ -46,17 +55,16 @@ const Deckbuilder = () => {
                 <br></br>
               </Box>
             </Hidden>
-            <Hidden only={['sm', 'md', 'lg', 'xl']}>
-                <Box>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                </Box>
-              </Hidden>
+            <Hidden only={['md', 'lg', 'xl']}>
+              <Box>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+              </Box>
+            </Hidden>
           </Box>
         </CardStateProvider>
-        <Box sx={{ display: { xs: "block", sm: "none" } }}><BottomNav /></Box>
       </Box>
     </div>
 

@@ -17,15 +17,15 @@ const BottomNav = () => {
 const Sidebar = () => {
     return(
         <Box flex={2} p={0} sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', sm: 'block', md:'none' },
             height: '60px',
             position: { xs: 'fixed', sm: 'static' },
-            bottom: 0,
             width: '100%',
             justifyContent: 'space-evenly',
-            bgcolor: 'primary.main',
+            bgcolor: 'white',
             color: 'primary.contrastText',
             boxShadow: { xs: 1, sm: 0 },
+            bottom:0,
             zIndex: { xs: 100, sm: 'auto' }
         }}>
             <BottomNav />

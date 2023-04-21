@@ -14,7 +14,7 @@ const Deckviewer = () => {
                     <Box flex={2} sx={{ display: { xs: "none", sm: "block" } }}><Sidebar /></Box>
                     <Box flex={8} p={2}><DeckLoader /></Box>
                 </Stack>
-                <Box sx={{ display: { xs: "block", sm: "none" } }}><BottomNav /></Box>
+                <Box sx={{ display: { xs: "block", sm: "none"}}}><BottomNav /></Box>
             </Box>
         </div>
     );

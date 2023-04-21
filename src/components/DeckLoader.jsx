@@ -54,7 +54,6 @@ const DeckLoader = () => {
         alignItems: "center",
         flexWrap: "wrap",
         color: "#121212",
-        position: "fixed",
         padding: 2,
         overflowY: "auto",
       }}
