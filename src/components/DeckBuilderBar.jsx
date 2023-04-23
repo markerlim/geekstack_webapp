@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, ButtonGroup, Grid, TextField, Tooltip } from "@mui/material";
+import { Box, Button, ButtonGroup, Grid, TextField, Tooltip, Typography } from "@mui/material";
 import { Delete, Save, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
@@ -231,63 +231,71 @@ const DeckBuilderBar = (props) => {
               sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
             />
           </Grid>
-          <Grid item xs={5}>
-            <Grid container rowSpacing={1} columnSpacing={0}>
+          <Grid item xs={4}>
+            <Grid container rowSpacing={0} columnSpacing={1}>
               <Grid item xs={5}>
                 <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
                 <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
-                  {totalCount}/50
+                  {totalCount}<span className="mobile-hidden">/50</span>
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
                 <span style={{ color: colorCount > 4 ? "red" : "inherit" }}>
-                  {colorCount}/4
+                  {colorCount}<span className="mobile-hidden">/4</span>
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
                 <span style={{ color: specialCount > 4 ? "red" : "inherit" }}>
-                  {specialCount}/4
+                  {specialCount}<span className="mobile-hidden">/4</span>
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TFINAL.png" alt="Final:" />{" "}
                 <span style={{ color: finalCount > 4 ? "red" : "inherit" }}>
-                  {finalCount}/4
+                  {finalCount}<span className="mobile-hidden">/4</span>
                 </span>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5} paddingRight={1}>
             <ButtonGroup size="small" aria-label="small button group">
-              <Button>
-                <Tooltip
-                  onClick={handleClearClick}
-                  title="Clear"
-                  p={1}
-                  sx={{ color: "#121212" }}
-                >
+              <Tooltip
+                p={1}
+                sx={{ color: "#121212", display: "flex", flexDirection: "column" }}
+              >
+                <Button onClick={handleClearClick}>
                   <Delete />
-                </Tooltip>
-              </Button>
-              <Tooltip title="Load Deck">
-                <Button onClick={handleLoadDeckClick} sx={{ color: "#121212" }}>
-                  <SystemUpdateAlt />
+                  <Typography sx={{ fontSize: 8 }} component="div">
+                    Clear
+                  </Typography>
                 </Button>
               </Tooltip>
-              <Button>
-                <Tooltip
-                  components={Button}
-                  onClick={() => handleSaveClick(false)}
-                  title="Save"
-                  p={1}
-                  sx={{ color: "#121212" }}
-                >
+              <Tooltip
+                p={1}
+                sx={{ color: "#121212", display: "flex", flexDirection: "column" }}
+              >
+                <Button onClick={handleLoadDeckClick}>
+                  <SystemUpdateAlt />
+                  <Typography sx={{ fontSize: 8 }} component="div">
+                    Load
+                  </Typography>
+                </Button>
+              </Tooltip>
+              <Tooltip
+                p={1}
+                sx={{ color: "#121212", display: "flex", flexDirection: "column" }}
+              >
+                <Button onClick={() => handleSaveClick(false)}>
                   <Save />
-                </Tooltip>
-              </Button>
+                  <Typography sx={{ fontSize: 8 }} component="div">
+                    Save
+                  </Typography>
+                </Button>
+              </Tooltip>
             </ButtonGroup>
+
           </Grid>
         </Grid>
       </Box>

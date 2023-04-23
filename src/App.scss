@@ -1,0 +1,14 @@
+body,
+html {
+  overflow-x: hidden;
+  overflow-y:hidden;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  scroll-behavior: smooth;
+}
+
+#app-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}

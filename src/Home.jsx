@@ -2,38 +2,36 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import CardRef from "./components/CardRef";
 import BottomNav from "./components/BottomNav"
-import { Box, Hidden, Stack, ThemeProvider, createTheme } from "@mui/material"
+import { Box, Hidden, Stack } from "@mui/material"
 import { useState } from "react";
 
 const Home = () => {
-  // Add the searchQuery state here
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Add the handleSearchInputChange function here
-  const handleSearchInputChange = (event) => {
-    setSearchQuery(event.target.value);
+  const handleSearch = (searchValue) => {
+    setSearchQuery(searchValue);
   };
-
   return (
     <div>
-        <Box bgcolor={"#121212"} color={"#f2f3f8"}>
-          <Navbar handleSearchInputChange={handleSearchInputChange} />
+      <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+        <Navbar onSearch={handleSearch} />
+        <Box>
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-            <Box flex={2} sx={{display:{xs:"none",sm:"block"}}}><Sidebar /></Box>
-            <Box flex={17} p={2}><CardRef searchQuery={searchQuery} /></Box>
-            <Hidden only={['sm', 'md', 'lg', 'xl']}>
+            <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
+            <Box flex={17} p={2}><CardRef searchQuery={searchQuery} />
+              <Hidden only={['md', 'lg', 'xl']}>
                 <Box>
-                  <br></br>
-                  <br></br>
                   <br></br>
                   <br></br>
                   <br></br>
                   <br></br>
                 </Box>
               </Hidden>
+            </Box>
           </Stack>
-          <Box flex={2} sx={{display:{xs:"block",sm:"none"}}}><BottomNav/></Box>
+          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
         </Box>
+      </Box>
     </div>
   );
 }

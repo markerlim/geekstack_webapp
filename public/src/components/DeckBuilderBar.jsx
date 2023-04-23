@@ -16,7 +16,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 
-const DeckBuilderBarMobile = (props) => {
+
+const DeckBuilderBar = (props) => {
   const { currentUser } = useAuth();
   const { countArray, setCountArray, filteredCards } = useCardState();
   const [deckName, setDeckName] = useState("myDeckId");
@@ -150,10 +151,6 @@ const DeckBuilderBarMobile = (props) => {
         color: "#121212",
         zIndex: 1,
         ...props.style,
-        position: "fixed", // Add this line
-        top: 0, // Add this line
-        left: 0, // Add this line
-        right: 0, // Add this line
       }}
       p={2}
     >
@@ -173,27 +170,27 @@ const DeckBuilderBarMobile = (props) => {
           <Grid item xs={5}>
             <Grid container rowSpacing={1} columnSpacing={0}>
               <Grid item xs={5}>
-                <img src="/icons/TTOTAL.png"alt="Total:" />{" "}
+                <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
                 <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
-                  {totalCount}
+                  {totalCount}/50
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
                 <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-                  {totalCount}
+                  {totalCount}/4
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
                 <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-                  {totalCount}
+                  {totalCount}/4
                 </span>
               </Grid>
               <Grid item xs={5}>
                 <img src="/icons/TFINAL.png" alt="Final:" />{" "}
                 <span style={{ color: totalCount > 4 ? "red" : "inherit" }}>
-                  {totalCount}
+                  {totalCount}/4
                 </span>
               </Grid>
             </Grid>
@@ -269,4 +266,4 @@ const DeckBuilderBarMobile = (props) => {
 
 };
 
-export default DeckBuilderBarMobile;
+export default DeckBuilderBar;

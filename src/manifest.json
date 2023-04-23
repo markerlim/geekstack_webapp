@@ -1,0 +1,22 @@
+{
+    "short_name": "UnionDeck",
+    "name": "Union Deck",
+    "description": "Deckbuilding application for Union Arena",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "icons/uniondeckiconsmall.png",
+        "sizes": "392x391",
+        "type": "image/png"
+      },
+      {
+        "src": "icons/uniondeckicon.png",
+        "sizes": "1952x1952",
+        "type": "image/png"
+      }
+    ]
+  }
+  

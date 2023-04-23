@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
+import { Box, Grid, Select, MenuItem, FormControl, Button } from "@mui/material";
 import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Refresh } from "@mui/icons-material";
+import searchMatch from "./searchUtils";
 
-const CardRef = () => {
+
+const CardRef = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -51,31 +53,42 @@ const CardRef = () => {
         }
     }, []);
 
+    const currentSearchQuery = props.searchQuery;
+
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
+        const searchFilterMatch = searchMatch(document, currentSearchQuery);
 
-        return boosterFilterMatch && colorFilterMatch && animeFilterMatch;
+        return boosterFilterMatch && colorFilterMatch && animeFilterMatch && searchFilterMatch;
     });
+
+    const handleSwipeLeft = () => {
+        const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
+        const nextIndex = (currentIndex + 1) % filteredDocuments.length;
+        setSelectedCard(filteredDocuments[nextIndex]);
+      };
+    
+      const handleSwipeRight = () => {
+        const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
+        const prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
+        setSelectedCard(filteredDocuments[prevIndex]);
+      };
+
 
     return (
         <div>
-            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2 }}>
-                <FormControl sx={{
-                    width: 80, height: 40, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px",
-                    '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
-                        width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
-                    },
-                }}>
-                    <Select disableUnderline
+<Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2,alignItems:"center"}}>
+                <FormControl sx={{margin:1}}>
+                    <Select
                         sx={{
-                            width: 80, height: 40, paddingLeft: 1, paddingRight: 1,
-                            '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
-                                width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
-                            },
+                            display:"flex",flexDirection:"column",justifyContent:"center",textAlign:"center",
+                            whiteSpace: 'nowrap',backgroundColor: "#f2f3f8",borderRadius:"5px",
+                            fontSize:11,width:"60px",height:"30px",
                             '& .MuiSelect-icon': {
-                                display: 'none',
+                                display:"none",
+                                position:"absolute"
                             },
                         }}
                         value={boosterFilter}
@@ -89,25 +102,24 @@ const CardRef = () => {
                         <MenuItem value="UA01BT">UA01BT</MenuItem>
                         <MenuItem value="UA02BT">UA02BT</MenuItem>
                         <MenuItem value="UA03BT">UA03BT</MenuItem>
+                        <MenuItem value="UA04BT">UA04BT</MenuItem>
+                        <MenuItem value="UA05BT">UA05BT</MenuItem>
                         <MenuItem value="UA01ST">UA01ST</MenuItem>
                         <MenuItem value="UA02ST">UA02ST</MenuItem>
                         <MenuItem value="UA03ST">UA03ST</MenuItem>
+                        <MenuItem value="UA04ST">UA04ST</MenuItem>
+                        <MenuItem value="UA05ST">UA05ST</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{
-                    width: 80, height: 40, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px",
-                    '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
-                        width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
-                    },
-                }}>
-                    <Select disableUnderline
+                <FormControl sx={{margin:1}}>
+                    <Select
                         sx={{
-                            width: 80, height: 40, fontSize: 15, paddingLeft:1,paddingRight:1,
-                            '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
-                                width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
-                            },
+                            display:"flex",flexDirection:"column",justifyContent:"center",textAlign:"center",
+                            whiteSpace: 'nowrap',backgroundColor: "#f2f3f8",borderRadius:"5px",
+                            fontSize:11,width:"60px",height:"30px",
                             '& .MuiSelect-icon': {
-                                display: 'none',
+                                display:"none",
+                                position:"absolute"
                             },
                         }}
                         value={colorFilter}
@@ -125,20 +137,15 @@ const CardRef = () => {
                         <MenuItem value="Purple">Purple</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{
-                    width: 80, height: 40, marginRight: 2, backgroundColor: "#f2f3f8", borderRadius: "5px"
-                    , '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
-                        width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
-                    },
-                }}>
-                    <Select disableUnderline
+                <FormControl sx={{margin:1}}>
+                    <Select 
                         sx={{
-                            width: 80, height: 40, fontSize: 15, paddingLeft:1,paddingRight:1,
-                            '@media (max-width: 599px)': { // This applies the styles for xs breakpoint (0px - 599px)
-                                width: 60, height: 30 // Change this value to adjust the width at the xs breakpoint
-                            },
+                            display:"flex",flexDirection:"column",justifyContent:"center",textAlign:"center",
+                            whiteSpace: 'nowrap',backgroundColor: "#f2f3f8",borderRadius:"5px",
+                            fontSize:11,width:"60px",height:"30px",
                             '& .MuiSelect-icon': {
-                                display: 'none',
+                                display:"none",
+                                position:"absolute"
                             },
                         }}
                         value={animeFilter}
@@ -152,12 +159,16 @@ const CardRef = () => {
                         <MenuItem value="Code Geass">Code Geass</MenuItem>
                         <MenuItem value="Jujutsu No Kaisen">Jujutsu No Kaisen</MenuItem>
                         <MenuItem value="Hunter X Hunter">Hunter X Hunter</MenuItem>
+                        <MenuItem value="Idolmaster Shiny Colors">Idolmaster Shiny Colors</MenuItem>
+                        <MenuItem value="Demon Slayer">Demon Slayer</MenuItem>
                     </Select>
                 </FormControl>
                 <Button
                     sx={{
                         minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
                         width: 30, // Change this value to adjust the width
+                        height:20,
+                        margin:1,
                         padding: 1, // Adjust the padding as needed 
                         backgroundColor: "#f2f3f8",
                         color: "#240052",
@@ -171,29 +182,33 @@ const CardRef = () => {
                     <Refresh sx={{ fontSize: 15 }} />
                 </Button>
             </Box>
-
-            <Grid container spacing={2} justifyContent="center">
-                {filteredDocuments.map((document) => (
-                    <Grid item key={document.cardId}>
-                        <Box onClick={() => handleOpenModal(document)}>
-                            <ResponsiveImage
-                                loading="lazy"
-                                src={document.image}
-                                draggable="false"
-                                alt="test"
-                            />
-                        </Box>
-                    </Grid>
-                ))}
-                {selectedCard && (
-                    <CardModal
-                        open={openModal}
-                        onClose={handleCloseModal}
-                        selectedCard={selectedCard}
-                    />
-                )}
-            </Grid>
-        </div>
+            <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+                <Grid container spacing={2} justifyContent="center">
+                    {filteredDocuments.map((document) => (
+                        <Grid item key={document.cardId}>
+                            <Box onClick={() => handleOpenModal(document)}>
+                                <ResponsiveImage
+                                    loading="lazy"
+                                    src={document.image}
+                                    draggable="false"
+                                    alt="test"
+                                />
+                            </Box>
+                        </Grid>
+                    ))}
+                    {selectedCard && (
+                        <CardModal
+                            open={openModal}
+                            onClose={handleCloseModal}
+                            selectedCard={selectedCard}
+                            onSwipeLeft={handleSwipeLeft}
+                            onSwipeRight={handleSwipeRight}
+                        />
+                    )}
+                </Grid>
+                <div style={{ height: '100px' }} />
+            </div>
+        </div >
     );
 };
 

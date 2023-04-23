@@ -1,0 +1,21 @@
+{
+    "name": "Union Deck",
+    "short_name": "UnionDeck",
+    "icons": [
+      {
+        "src": "/icons/UDIcon.png",
+        "sizes": "74x74",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/UDIcon_3.png",
+        "sizes": "294x294",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000"
+  }
+  
