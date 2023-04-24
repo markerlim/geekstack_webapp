@@ -1,5 +1,5 @@
 .formContainer{
-    background-color: purple;
+    background-color: #240056;
     height:100vh;
     display:flex;
     align-items: center;
@@ -67,7 +67,6 @@
 
 .hide-scrollbar {
   -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 @media (max-width: 1300px) {
