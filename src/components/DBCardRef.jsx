@@ -219,12 +219,13 @@ const DBCardRef = (props) => {
             <Grid container spacing={2} justifyContent="center">
                 {filteredDocuments.map((document, index) => (
                     <Grid item key={document.cardId}>
-                        <Box onClick={() => handleOpenModal(document)} >
+                        <Box >
                             <ResponsiveImage
                                 loading="lazy"
                                 src={document.image}
                                 draggable="false"
                                 alt="test"
+                                onClick={() => handleOpenModal(document)}
                             />
                             <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"}>
                                 <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>

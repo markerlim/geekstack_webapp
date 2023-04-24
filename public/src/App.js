@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import "./style.scss"
+import "./App.scss"
 import Home from "./Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -10,6 +11,9 @@ import Community from "./pages/Community";
 import { setToLocalStorage } from "./components/LocalStorage/localStorageHelper";
 import Deckviewer from "./pages/Deckviewer";
 import DeckCardLoader from "./pages/DeckCardLoader";
+import smoothscroll from "smoothscroll-polyfill";
+
+smoothscroll.polyfill();
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -35,6 +39,7 @@ function App() {
   };
 
   return (
+    <div id="app-container">
       <BrowserRouter>
         <Routes>
           <Route path="/" />
@@ -43,10 +48,11 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="community" element={<Community />} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
-          <Route path="deckviewer" element={<Deckviewer/>}/>
-          <Route path="/deck/:deckId" element={<DeckCardLoader />} /> // add the new route for the deck card viewer
+          <Route path="deckviewer" element={<Deckviewer />} />
+          <Route path="/deck/:deckId" element={<DeckCardLoader />} />
         </Routes>
       </BrowserRouter>
+    </div>
   );
 }
 

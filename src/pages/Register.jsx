@@ -5,21 +5,21 @@ import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { People } from "@mui/icons-material";
+import { Box } from "@mui/material";
 
 const Register = () => {
   const [err, setErr] = useState(false);
   const navigate = useNavigate();
 
-  const defaultAvatarUrl = "/images/Renee.png"; // Replace this with the actual URL of the default avatar image
+  const defaultAvatarUrl = "/icons/Renee.png"; // Replace this with the actual URL of the default avatar image
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
-    const file = e.target[3].files[0];
 
-    const photoURL = file ? await uploadAndGetDownloadURL(file, displayName) : defaultAvatarUrl;
+    const photoURL = defaultAvatarUrl;
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -42,39 +42,15 @@ const Register = () => {
     }
   };
 
-  const uploadAndGetDownloadURL = async (file, displayName) => {
-    const storageRef = ref(storage, displayName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    return new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        () => {},
-        (error) => {
-          reject(error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
-        }
-      );
-    });
-  };
-
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <span className="logo">GEEK STACK</span>
+        <span className="logo"><Box p={1}><img style={{ width: "auto", height: "80px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box></span>
         <span className="title">Sign up page</span>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Display name" />
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />
-          <input style={{ display: "none" }} type="file" id="file" />
-          <label htmlFor="file">
-            <People />
-            <span>Add an avatar (optional)</span>
-          </label>
           <button>Sign Up</button>
           {err && <span>Something went wrong</span>}
         </form>

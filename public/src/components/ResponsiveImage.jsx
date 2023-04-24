@@ -4,9 +4,14 @@ const ResponsiveImage = ({ src, alt, ...props }) => {
   const getImageStyle = () => {
     const screenWidth = window.innerWidth;
 
-    if (screenWidth >= 1000) {
-      return { width: "125px", height: "175.771875px" };
-    } else {
+    if (screenWidth >= 1200) {
+      return { width: "150px", height: "210.925px" };
+    } else if (screenWidth >= 900) {
+      return { width: "100px", height: "140.61875px" }
+    } else if (screenWidth >= 600) {
+      return { width: "100px", height: "140.61875px" }
+    }
+    else {
       return { width: "75px", height: "105.463125px" }; // Default for smaller screens
     }
   };
@@ -40,4 +45,4 @@ const ResponsiveImage = ({ src, alt, ...props }) => {
   );
 };
 
-export {ResponsiveImage}
+export { ResponsiveImage }

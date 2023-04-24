@@ -49,7 +49,7 @@ function App() {
           <Route path="community" element={<Community />} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
-          <Route path="/deck/:deckId" element={<DeckCardLoader />} /> // add the new route for the deck card viewer
+          <Route path="/deck/:deckId" element={<DeckCardLoader />} />
         </Routes>
       </BrowserRouter>
     </div>
