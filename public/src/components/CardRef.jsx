@@ -191,7 +191,7 @@ const CardRef = (props) => {
                                     loading="lazy"
                                     src={document.image}
                                     draggable="false"
-                                    alt="test"
+                                    alt="loading..."
                                 />
                             </Box>
                         </Grid>
@@ -206,7 +206,7 @@ const CardRef = (props) => {
                         />
                     )}
                 </Grid>
-                <div style={{ height: '100px' }} />
+                <div style={{ height: '200px' }} />
             </div>
         </div >
     );

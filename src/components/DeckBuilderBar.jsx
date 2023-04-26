@@ -11,7 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FullScreenDialog from "./FullScreenDialog";
-import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ImagePickerModal from "./ImagePickerModal";
@@ -30,10 +30,7 @@ const DeckBuilderBar = (props) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
 
-
   const images = [
-    "/images/Alice.png",
-    "/images/Renee.png",
     "/images/deckimage.jpg",
     "/images/deckimage1.jpg",
     "/images/deckimage2.jpg",
@@ -137,25 +134,50 @@ const DeckBuilderBar = (props) => {
         await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
       }
 
-      // Add the unique cards to a subcollection called "cards"
       const cardsCollectionRef = collection(
         db,
         `users/${uid}/decks/${deckUid}/cards`
       );
 
       await Promise.all(
-        filteredCards.map(async (card) => {
-          const cardData = {
-            booster: card.booster,
-            cardId: card.cardId,
-            cardName: card.cardName,
-            color: card.color,
-            effect: card.effect,
-            image: card.image,
-            trigger: card.trigger,
-            count: countArray[card.cardId] || 0,
-          };
-          await setDoc(doc(cardsCollectionRef, card.cardId), cardData);
+        Object.entries(countArray).map(async ([cardId, cardCount]) => {
+          const card = filteredCards.find((card) => card.cardId === cardId);
+          const cardDocRef = doc(cardsCollectionRef, cardId);
+
+          if (cardCount === 0) {
+            console.log("Deleting card with cardId:", cardId);
+            await deleteDoc(cardDocRef)
+              .then(() => {
+                console.log("Card deleted successfully:", cardId);
+              })
+              .catch((error) => {
+                console.error("Error deleting card:", error);
+              });
+          } else {
+            if (card) {
+              const cardData = {
+                anime: card.anime,
+                apcost: card.apcost,
+                basicpower: card.basicpower,
+                booster: card.booster,
+                cardId: card.cardId,
+                cardName: card.cardName,
+                category: card.category,
+                color: card.color,
+                effect: card.effect,
+                energycost: card.energycost,
+                energygen: card.energygen,
+                image: card.image,
+                traits: card.traits,
+                trigger: card.trigger,
+                triggerState: card.triggerState,
+                count: cardCount,
+              };
+              await setDoc(cardDocRef, cardData);
+            } else {
+              console.error("Card not found in filteredCards:", cardId);
+            }
+          }
         })
       );
 
@@ -231,27 +253,27 @@ const DeckBuilderBar = (props) => {
               sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
             />
           </Grid>
-          <Grid item xs={4}>
-            <Grid container rowSpacing={0} columnSpacing={1}>
-              <Grid item xs={5}>
+          <Grid item xs={4} sx={{ fontSize: 11, }}>
+            <Grid container rowSpacing={0} columnSpacing={5}>
+              <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
                 <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
                 <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
                   {totalCount}<span className="mobile-hidden">/50</span>
                 </span>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
                 <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
                 <span style={{ color: colorCount > 4 ? "red" : "inherit" }}>
                   {colorCount}<span className="mobile-hidden">/4</span>
                 </span>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
                 <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
                 <span style={{ color: specialCount > 4 ? "red" : "inherit" }}>
                   {specialCount}<span className="mobile-hidden">/4</span>
                 </span>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
                 <img src="/icons/TFINAL.png" alt="Final:" />{" "}
                 <span style={{ color: finalCount > 4 ? "red" : "inherit" }}>
                   {finalCount}<span className="mobile-hidden">/4</span>
@@ -259,7 +281,7 @@ const DeckBuilderBar = (props) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={5} paddingRight={1}>
+          <Grid item xs={5} >
             <ButtonGroup size="small" aria-label="small button group">
               <Tooltip
                 p={1}
@@ -295,7 +317,6 @@ const DeckBuilderBar = (props) => {
                 </Button>
               </Tooltip>
             </ButtonGroup>
-
           </Grid>
         </Grid>
       </Box>
@@ -327,12 +348,18 @@ const DeckBuilderBar = (props) => {
         open={saveStatus === "success"}
         autoHideDuration={6000}
         onClose={() => setSaveStatus(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        anchorOrigin={{vertical:"top",horizontal:"center"}}
+        sx={{
+          height:"100%"
+        }}
       >
         <Alert onClose={() => setSaveStatus(null)} severity="success" sx={{ width: '100%' }}>
-          Deck saved successfully!
+          Deck saved successfully! 
+          <br/>Please load your deck to view/edit.
         </Alert>
       </Snackbar>
+
+
       <ImagePickerModal
         open={showImagePickerModal}
         handleClose={() => setShowImagePickerModal(false)}

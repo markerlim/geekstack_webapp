@@ -6,7 +6,7 @@ import {
   createTheme,
   ThemeProvider,
 } from '@mui/material';
-import { Group, Home, Inventory, Style } from '@mui/icons-material';
+import { Home, Inventory, Stars, Style } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const customTheme = createTheme({
@@ -59,9 +59,9 @@ const BottomNav = () => {
           />
           <BottomNavigationAction
             component={Link}
-            to="/community"
-            label="Community"
-            icon={<Group />}
+            to="/disclaimer"
+            label="Disclaimer"
+            icon={<Stars />}
           />
         </BottomNavigation>
       </ThemeProvider>

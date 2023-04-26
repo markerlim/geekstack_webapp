@@ -1,12 +1,12 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon} from '@mui/material'
-import { Group, Home, Inventory, Settings, Style } from '@mui/icons-material'
+import { Home, Inventory, Stars, Style } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
 const Sidebar = () => {
     return(
-        <Box flex={2} p={0}  sx={{display:{sm:"none",md:"block"},height:"100vh"}}>
+        <Box flex={2} p={0}  sx={{display:{sm:"none",md:"block"},height:"40vh"}}>
             <Box position="fixed" >
                 <List >
                     <ListItem disablePadding>
@@ -31,16 +31,9 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#community" to="/community">
+                        <ListItemButton component={Link} href="#disclaimer" to="/disclaimer">
                         <ListItemIcon>
-                            <Group sx={{color:"#f2f3f8"}} alt="community"/>
-                        </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton component="a" href="#settings">
-                        <ListItemIcon>
-                            <Settings sx={{color:"#f2f3f8"}} alt="settings" />
+                            <Stars sx={{color:"#f2f3f8"}} alt="disclaimer"/>
                         </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

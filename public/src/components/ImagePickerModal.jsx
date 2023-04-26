@@ -11,7 +11,7 @@ const ImagePickerModal = ({ open, handleClose, images, handleImageSelected }) =>
             <Grid item xs={3} key={index}>
               <img
                 src={image}
-                alt={`Image ${index}`}
+                alt="deck"
                 style={{ width: "100%", cursor: "pointer" }}
                 onClick={() => {
                   handleImageSelected(image);

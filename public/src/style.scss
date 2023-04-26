@@ -69,6 +69,13 @@
   -ms-overflow-style: none;
 }
 
+.export-card-image {
+    width: 150px !important;
+    height: 210.925px !important;
+    object-fit: cover !important;
+  }
+
+  
 @media (max-width: 1300px) {
     .mobile-hidden {
       display: none;

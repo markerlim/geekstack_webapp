@@ -224,7 +224,7 @@ const DBCardRef = (props) => {
                                 loading="lazy"
                                 src={document.image}
                                 draggable="false"
-                                alt="test"
+                                alt="loading..."
                                 onClick={() => handleOpenModal(document)}
                             />
                             <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"}>

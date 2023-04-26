@@ -18,15 +18,8 @@ const Home = () => {
         <Box>
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
             <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-            <Box flex={17} p={2}><CardRef searchQuery={searchQuery} />
-              <Hidden only={['md', 'lg', 'xl']}>
-                <Box>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                </Box>
-              </Hidden>
+            <Box flex={17} p={2}>
+              <CardRef searchQuery={searchQuery} />
             </Box>
           </Stack>
           <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>

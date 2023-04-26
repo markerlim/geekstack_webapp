@@ -25,13 +25,13 @@ export const CardModal = ({ open, onClose, selectedCard,onSwipeLeft, onSwipeRigh
           <Grid draggable="false">
             <Grid container rowSpacing={1} columnSpacing={1}>
               <Grid item xs={3}>
-                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Cardname:</Box>
+                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Name:</Box>
               </Grid>
               <Grid item xs={9}>
                 <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardName}</Box>
               </Grid>
               <Grid item xs={3}>
-                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Card no:</Box>
+                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>ID:</Box>
               </Grid>
               <Grid item xs={9}>
                 <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardId}</Box>
@@ -41,6 +41,12 @@ export const CardModal = ({ open, onClose, selectedCard,onSwipeLeft, onSwipeRigh
               </Grid>
               <Grid item xs={9}>
                 <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.color}</Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Traits:</Box>
+              </Grid>
+              <Grid item xs={9}>
+                <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.traits}</Box>
               </Grid>
               <Grid item xs={3}>
                 <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Effect:</Box>

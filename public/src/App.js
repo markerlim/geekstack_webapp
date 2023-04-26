@@ -46,7 +46,7 @@ function App() {
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="community" element={<Community />} />
+          <Route path="disclaimer" element={<Community />} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />

@@ -18,8 +18,6 @@ const TestRightBar = () => {
     const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-
-
     const handleOpenModal = (document) => {
         setSelectedCard(document);
         setOpenModal(true);
@@ -159,12 +157,13 @@ const TestRightBar = () => {
                     {documents.map((document) => (
                         countArray[document.cardId] > 0 && (
                             <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
-                                <Box onContextMenu={(event) => { event.preventDefault(); handleOpenModal(document); }} >
+                                <Box>
                                     <ResponsiveImage
                                         loading="lazy"
                                         src={document.image}
                                         draggable="false"
-                                        alt="test"
+                                        alt="loading..."
+                                        onClick={() => handleOpenModal(document)}
                                     />
                                     <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"}>
                                         <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
