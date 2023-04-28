@@ -10,7 +10,7 @@ import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
 
 
-const TestRightBar = () => {
+const TestRightBar = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -85,6 +85,8 @@ const TestRightBar = () => {
         return cards.every((card) => card.anime === firstAnime);
     };
 
+    const [sortedCards, setSortedCards] = useState(filteredCards);
+
     useEffect(() => {
         if (!areCardsFromSameAnime(filteredCards)) {
             setSnackbarOpen(true);
@@ -150,11 +152,26 @@ const TestRightBar = () => {
         setTotalCount(newTotalCount);
     }, [countArray]);
 
+    useEffect(() => {
+        if (props.sortCards) {
+          const sorted = [...filteredCards].sort((a, b) => {
+            if (a.category === b.category) {
+              return a.energycost - b.energycost;
+            }
+            return a.category.localeCompare(b.category);
+          });
+    
+          setSortedCards(sorted);
+        } else {
+          setSortedCards(filteredCards);
+        }
+      }, [props.sortCards, filteredCards]);        
+
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
             <Grid style={{ overflowY: "auto", height: "100%" }}>
                 <Grid container spacing={2} justifyContent="center">
-                    {documents.map((document) => (
+                    {sortedCards.map((document) => (
                         countArray[document.cardId] > 0 && (
                             <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
                                 <Box>

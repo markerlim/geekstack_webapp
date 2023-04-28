@@ -18,6 +18,13 @@ const Deckbuilder = () => {
   const handleSearch = (searchValue) => {
       setSearchQuery(searchValue);
   };
+
+  const [sortCards, setSortCards] = useState(false);
+
+  const handleSortClick = () => {
+    setSortCards(!sortCards);
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box bgcolor={"#121212"} color={"#f2f3f8"} sx={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
@@ -28,9 +35,9 @@ const Deckbuilder = () => {
             <Box flex={1} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
             <Hidden only={['md', 'lg', 'xl']}>
               <Box bgcolor={"#784C9A"} sx={{ overflowY: 'auto', height: collapseDBCardRef ? "70%" : "45%", width: '100%' }} className="hide-scrollbar">
-                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky" }} />
+                <DeckBuilderBar onSortClick={handleSortClick} sortCards={sortCards} style={{ width: "100%", top: 0, position: "sticky" }} />
                 <br></br>
-                <TestRightBar/>
+                <TestRightBar sortCards={sortCards}/>
                 <br></br>
                 <br></br>
               </Box>
@@ -57,9 +64,9 @@ const Deckbuilder = () => {
             </Box>
             <Hidden only={['xs', 'sm']}>
               <Box flex={6} bgcolor={"#784C9A"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
-                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky" }} />
+                <DeckBuilderBar onSortClick={handleSortClick} sortCards={sortCards} style={{ width: "100%", top: 0, position: "sticky" }} />
                 <br></br>
-                <TestRightBar />
+                <TestRightBar sortCards={sortCards} />
                 <br></br>
                 <br></br>
                 <br></br>

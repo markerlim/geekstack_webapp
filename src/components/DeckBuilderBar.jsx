@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, ButtonGroup, Grid, TextField, Tooltip, Typography } from "@mui/material";
-import { Delete, Save, SystemUpdateAlt } from "@mui/icons-material";
+import { Delete, Save, Sort, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { db, } from "../Firebase";
@@ -29,6 +29,7 @@ const DeckBuilderBar = (props) => {
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
+  const [energyStats, setEnergyStats] = useState({});
 
   const images = [
     "/images/deckimage.jpg",
@@ -80,6 +81,16 @@ const DeckBuilderBar = (props) => {
     0
   );
 
+  const calculateStats = () => {
+    const energyCounts = filteredCards.reduce((acc, card) => {
+      acc[card.energycost] = (acc[card.energycost] || 0) + card.count;
+      return acc;
+    }, {});
+
+    return energyCounts;
+  };
+
+  const stats = calculateStats();
 
   const handleSaveClick = async (proceed = false) => {
     if (!proceed && totalCount < 50) {
@@ -216,6 +227,43 @@ const DeckBuilderBar = (props) => {
     setShowDeckLoaderModal(false); // Close the DeckLoader modal
   };
 
+  const sortCards = () => {
+    if (props.onSortCards) {
+      props.onSortCards();
+    }
+  };
+
+  const getImageSrc = (energycost) => {
+    switch (energycost) {
+      case 0:
+        return "/images/ENERGY0.png"
+      case 1:
+        return "/images/ENERGY1.png";
+      case 2:
+        return "/images/ENERGY2.png";
+      case 3:
+        return "/images/ENERGY3.png";
+      case 4:
+        return "/images/ENERGY4.png";
+      case 5:
+        return "/images/ENERGY5.png";
+      case 6:
+        return "/images/ENERGY6.png";
+      case 7:
+        return "/images/ENERGY7.png";
+      case 8:
+        return "/images/ENERGY8.png";
+      case 9:
+        return "/images/ENERGY9.png";
+      case 10:
+        return "/images/ENERGY10.png";
+      // Add more cases as needed
+      default:
+        return "/images/ENERGYDEFAULT.png";
+    }
+  };
+
+
   useEffect(() => {
     if (selectedImage && shouldSaveDeck) {
       handleSaveClick(true);
@@ -318,6 +366,21 @@ const DeckBuilderBar = (props) => {
               </Tooltip>
             </ButtonGroup>
           </Grid>
+          <Box style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <Button onClick={props.onSortClick}>
+              <Sort />
+              <Typography sx={{ fontSize: "14px" }} component="div">
+                {props.sortCards ? "Sorted Mode" : "Unsort Mode"}
+              </Typography>
+            </Button>
+            <div style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap"}}>
+              {Object.entries(stats).map(([energyCost, count]) => (
+                <div key={energyCost} style={{display:"flex",alignItems:"center", fontSize: "16px",}}>
+                  <img src={getImageSrc(parseInt(energyCost, 10))} alt={`Energy cost ${energyCost}`} width="50px" height="auto" /><span>:{count}</span>
+                </div>
+              ))}
+            </div>
+          </Box>
         </Grid>
       </Box>
       <Dialog
@@ -348,14 +411,14 @@ const DeckBuilderBar = (props) => {
         open={saveStatus === "success"}
         autoHideDuration={6000}
         onClose={() => setSaveStatus(null)}
-        anchorOrigin={{vertical:"top",horizontal:"center"}}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         sx={{
-          height:"100%"
+          height: "100%"
         }}
       >
         <Alert onClose={() => setSaveStatus(null)} severity="success" sx={{ width: '100%' }}>
-          Deck saved successfully! 
-          <br/>Please load your deck to view/edit.
+          Deck saved successfully!
+          <br />Please load your deck to view/edit.
         </Alert>
       </Snackbar>
 

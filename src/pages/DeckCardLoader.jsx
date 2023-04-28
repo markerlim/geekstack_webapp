@@ -4,12 +4,14 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
 import { Box, Grid, Stack } from "@mui/material";
-import { ResponsiveImage } from "../components/ResponsiveImage";
 import { CardModal } from "../components/CardModal";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, LabelList } from "recharts";
+import DeckCardExporter from "../components/DeckCardExporter";
+import ExportWrapper from "../components/ExportWrapper";
+import { toJpeg } from "html-to-image";
 
 const DeckCardLoader = () => {
   const { currentUser } = useAuth();
@@ -23,6 +25,7 @@ const DeckCardLoader = () => {
   const [energyStats, setEnergyStats] = useState({});
   const [apStats, setApStats] = useState({});
   const [categoryStats, setCategoryStats] = useState({});
+  const [showExportWrapper, setShowExportWrapper] = useState  (false);
 
   const calculateStats = () => {
     const energyCounts = cards.reduce((acc, card) => {
@@ -68,6 +71,43 @@ const DeckCardLoader = () => {
     setOpenModal(false);
   };
 
+  const exportDeckAsJpeg = async () => {
+    setShowExportWrapper(true);
+    
+    setTimeout(async () => {
+      const node = document.getElementById("export-wrapper");
+      if (!node) {
+        return;
+      }
+  
+      const originalTransform = node.style.transform;
+      const originalWidth = node.style.width;
+      const originalHeight = node.style.height;
+  
+      // Set the desired dimensions for the exported image
+      node.style.width = "1920px";
+      node.style.height = "1080px";
+      node.style.transform = "scale(1)";
+  
+      try {
+        const dataUrl = await toJpeg(node, { quality: 0.95 });
+        const link = document.createElement("a");
+        link.download = "deck-export.jpeg";
+        link.href = dataUrl;
+        link.click();
+      } catch (err) {
+        console.error("Failed to export deck as JPEG:", err);
+      } finally {
+        // Reset the styles after exporting
+        node.style.transform = originalTransform;
+        node.style.width = originalWidth;
+        node.style.height = originalHeight;
+      }
+      setShowExportWrapper(false);
+    }, 500); // You can adjust the timeout duration (in milliseconds) if needed.
+  };
+  
+
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -101,24 +141,26 @@ const DeckCardLoader = () => {
 
 
   return (
-    <div>
-      <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+    <div >
+      <Box bgcolor={"#121212"} color={"#f2f3f8"} minHeight="100vh">
         <Navbar />
+        <Box width="100%" textAlign="center" p={1}><button onClick={exportDeckAsJpeg}>Export as JPEG</button></Box>
         <Stack direction="row" spacing={2} justifyContent={"space-between"}>
           <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
             <Sidebar />
           </Box>
           <Box id="stats-and-cards" flex={10} sx={{ display: "flex", flexDirection: "row" }}>
-            <Box flex={8} p={1} sx={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+            <Box flex={8} p={1} sx={{ overflowY: "auto", height: { xs: "calc(100vh - 112px)", sm: "calc(100vh - 112px)", md: "calc(100vh - 64px)" }, }} className="hide-scrollbar">
               <Grid container spacing={2} justifyContent="center">
                 {cards.map((card) => (
                   <Grid item key={card.id}>
                     <Box display={"flex"} flexDirection={"column"} sx={{ textAlign: "center" }}>
-                      <ResponsiveImage
+                      <img
                         loading="lazy"
                         src={card.image}
                         draggable="false"
                         alt={card.front}
+                        className="image-responsive"
                         onClick={() => handleOpenModal(card.cardId)}
                       />
                       <span>{card.count}</span>
@@ -134,6 +176,7 @@ const DeckCardLoader = () => {
                   />
                 )}
               </Grid>
+              <div style={{ height: "100px" }} />
             </Box>
             <Box flex={2} p={1} sx={{ display: { xs: "none", sm: "none", md: "block" }, textAlign: "left", color: "#f2f3f8" }}>
               <h3>Energy Cost Breakdown:</h3>
@@ -145,7 +188,7 @@ const DeckCardLoader = () => {
                   <LabelList dataKey="value" position="top" />
                 </Bar>
               </BarChart>
-
+              <br></br>
               <h3>AP Cost Breakdown:</h3>
               <BarChart width={200} height={160} data={apChartData}>
                 <XAxis dataKey="key" />
@@ -155,7 +198,7 @@ const DeckCardLoader = () => {
                   <LabelList dataKey="value" position="top" />
                 </Bar>
               </BarChart>
-
+              <br></br>
               <h3>Card Type Breakdown:</h3>
               <BarChart width={200} height={160} data={categoryChartData}>
                 <XAxis dataKey="key" />
@@ -165,12 +208,26 @@ const DeckCardLoader = () => {
                   <LabelList dataKey="value" position="top" />
                 </Bar>
               </BarChart>
-              <Box sx={{ display: { xs: "none", sm: "block" }, textAlign: "center" }}><img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>
+              <br></br>
+              <Box sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: 150 }} alt="uniondeck" src="/icons/uniondecklogo.png" /></Box>
             </Box>
           </Box>
         </Stack>
-        <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
+        <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
+          <BottomNav />
+        </Box>
       </Box>
+      {showExportWrapper && (
+          <ExportWrapper>
+            <DeckCardExporter
+              cards={cards}
+              energyChartData={energyChartData}
+              apChartData={apChartData}
+              categoryChartData={categoryChartData}
+            />
+          </ExportWrapper>
+        )};
+
     </div>
   );
 };
