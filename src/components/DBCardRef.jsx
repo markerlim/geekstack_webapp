@@ -138,11 +138,15 @@ const DBCardRef = (props) => {
                         <MenuItem value="UA03BT">UA03BT</MenuItem>
                         <MenuItem value="UA04BT">UA04BT</MenuItem>
                         <MenuItem value="UA05BT">UA05BT</MenuItem>
+                        <MenuItem value="UA06BT">UA06BT</MenuItem>
+                        <MenuItem value="UA07BT">UA07BT</MenuItem>
                         <MenuItem value="UA01ST">UA01ST</MenuItem>
                         <MenuItem value="UA02ST">UA02ST</MenuItem>
                         <MenuItem value="UA03ST">UA03ST</MenuItem>
                         <MenuItem value="UA04ST">UA04ST</MenuItem>
                         <MenuItem value="UA05ST">UA05ST</MenuItem>
+                        <MenuItem value="UA06ST">UA06ST</MenuItem>
+                        <MenuItem value="UA07ST">UA07ST</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl sx={{margin:1}}>
@@ -195,6 +199,8 @@ const DBCardRef = (props) => {
                         <MenuItem value="Hunter X Hunter">Hunter X Hunter</MenuItem>
                         <MenuItem value="Idolmaster Shiny Colors">Idolmaster Shiny Colors</MenuItem>
                         <MenuItem value="Demon Slayer">Demon Slayer</MenuItem>
+                        <MenuItem value="Tales of Arise">Tales of Arise</MenuItem>
+                        <MenuItem value="That Time I Got Reincarnated as a Slime">That Time I Got Reincarnated as a Slime</MenuItem>
                     </Select>
                 </FormControl>
                 <Button

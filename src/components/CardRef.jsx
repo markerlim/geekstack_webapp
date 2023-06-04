@@ -68,27 +68,27 @@ const CardRef = (props) => {
         const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         const nextIndex = (currentIndex + 1) % filteredDocuments.length;
         setSelectedCard(filteredDocuments[nextIndex]);
-      };
-    
-      const handleSwipeRight = () => {
+    };
+
+    const handleSwipeRight = () => {
         const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         const prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         setSelectedCard(filteredDocuments[prevIndex]);
-      };
+    };
 
 
     return (
         <div>
-<Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2,alignItems:"center"}}>
-                <FormControl sx={{margin:1}}>
+            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+                <FormControl sx={{ margin: 1 }}>
                     <Select
                         sx={{
-                            display:"flex",flexDirection:"column",justifyContent:"center",textAlign:"center",
-                            whiteSpace: 'nowrap',backgroundColor: "#f2f3f8",borderRadius:"5px",
-                            fontSize:11,width:"60px",height:"30px",
+                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                            fontSize: 11, width: "60px", height: "30px",
                             '& .MuiSelect-icon': {
-                                display:"none",
-                                position:"absolute"
+                                display: "none",
+                                position: "absolute"
                             },
                         }}
                         value={boosterFilter}
@@ -104,22 +104,26 @@ const CardRef = (props) => {
                         <MenuItem value="UA03BT">UA03BT</MenuItem>
                         <MenuItem value="UA04BT">UA04BT</MenuItem>
                         <MenuItem value="UA05BT">UA05BT</MenuItem>
+                        <MenuItem value="UA06BT">UA06BT</MenuItem>
+                        <MenuItem value="UA07BT">UA07BT</MenuItem>
                         <MenuItem value="UA01ST">UA01ST</MenuItem>
                         <MenuItem value="UA02ST">UA02ST</MenuItem>
                         <MenuItem value="UA03ST">UA03ST</MenuItem>
                         <MenuItem value="UA04ST">UA04ST</MenuItem>
                         <MenuItem value="UA05ST">UA05ST</MenuItem>
+                        <MenuItem value="UA06ST">UA06ST</MenuItem>
+                        <MenuItem value="UA07ST">UA07ST</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{margin:1}}>
+                <FormControl sx={{ margin: 1 }}>
                     <Select
                         sx={{
-                            display:"flex",flexDirection:"column",justifyContent:"center",textAlign:"center",
-                            whiteSpace: 'nowrap',backgroundColor: "#f2f3f8",borderRadius:"5px",
-                            fontSize:11,width:"60px",height:"30px",
+                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                            fontSize: 11, width: "60px", height: "30px",
                             '& .MuiSelect-icon': {
-                                display:"none",
-                                position:"absolute"
+                                display: "none",
+                                position: "absolute"
                             },
                         }}
                         value={colorFilter}
@@ -137,15 +141,15 @@ const CardRef = (props) => {
                         <MenuItem value="Purple">Purple</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl sx={{margin:1}}>
-                    <Select 
+                <FormControl sx={{ margin: 1 }}>
+                    <Select
                         sx={{
-                            display:"flex",flexDirection:"column",justifyContent:"center",textAlign:"center",
-                            whiteSpace: 'nowrap',backgroundColor: "#f2f3f8",borderRadius:"5px",
-                            fontSize:11,width:"60px",height:"30px",
+                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                            fontSize: 11, width: "60px", height: "30px",
                             '& .MuiSelect-icon': {
-                                display:"none",
-                                position:"absolute"
+                                display: "none",
+                                position: "absolute"
                             },
                         }}
                         value={animeFilter}
@@ -161,14 +165,16 @@ const CardRef = (props) => {
                         <MenuItem value="Hunter X Hunter">Hunter X Hunter</MenuItem>
                         <MenuItem value="Idolmaster Shiny Colors">Idolmaster Shiny Colors</MenuItem>
                         <MenuItem value="Demon Slayer">Demon Slayer</MenuItem>
+                        <MenuItem value="Tales of Arise">Tales of Arise</MenuItem>
+                        <MenuItem value="That Time I Got Reincarnated as a Slime">That Time I Got Reincarnated as a Slime</MenuItem>
                     </Select>
                 </FormControl>
                 <Button
                     sx={{
                         minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
                         width: 30, // Change this value to adjust the width
-                        height:20,
-                        margin:1,
+                        height: 20,
+                        margin: 1,
                         padding: 1, // Adjust the padding as needed 
                         backgroundColor: "#f2f3f8",
                         color: "#240052",

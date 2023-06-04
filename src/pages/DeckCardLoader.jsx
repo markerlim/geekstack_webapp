@@ -144,7 +144,7 @@ const DeckCardLoader = () => {
     <div >
       <Box bgcolor={"#121212"} color={"#f2f3f8"} minHeight="100vh">
         <Navbar />
-        <Box width="100%" textAlign="center" p={1}><button onClick={exportDeckAsJpeg}>Export as JPEG</button></Box>
+        <Box width="100%" textAlign="center" p={1}><button onClick={exportDeckAsJpeg} disabled>Export as JPEG</button></Box>
         <Stack direction="row" spacing={2} justifyContent={"space-between"}>
           <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
             <Sidebar />
