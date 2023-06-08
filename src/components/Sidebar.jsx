@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon} from '@mui/material'
-import { Home, Inventory, Stars, Style } from '@mui/icons-material'
+import { Article, Home, Inventory, Stars, Style } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
@@ -27,6 +27,13 @@ const Sidebar = () => {
                         <ListItemButton component={Link} href="#decks" to="/deckviewer">
                         <ListItemIcon>
                             <Inventory sx={{color:"#f2f3f8"}} alt="deck views"/>
+                        </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} href="#articles" to="/articles">
+                        <ListItemIcon>
+                            <Article sx={{color:"#f2f3f8"}} alt="articles"/>
                         </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

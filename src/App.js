@@ -19,6 +19,7 @@ import AcardJJKpage from "./pages/AcardJJKpage";
 import AcardKMYpage from "./pages/AcardKMYpage";
 import AcardTOApage from "./pages/AcardTOApage";
 import AcardTSKpage from "./pages/AcardTSKpage";
+import Articleviewer from "./pages/Articleviewer";
 
 smoothscroll.polyfill();
 
@@ -54,6 +55,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="disclaimer" element={<Community />} />
+          <Route path="articles" element={<Articleviewer/>} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />
