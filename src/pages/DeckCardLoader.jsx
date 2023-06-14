@@ -25,7 +25,7 @@ const DeckCardLoader = () => {
   const [energyStats, setEnergyStats] = useState({});
   const [apStats, setApStats] = useState({});
   const [categoryStats, setCategoryStats] = useState({});
-  const [showExportWrapper, setShowExportWrapper] = useState  (false);
+  const [showExportWrapper, setShowExportWrapper] = useState(false);
 
   const calculateStats = () => {
     const energyCounts = cards.reduce((acc, card) => {
@@ -73,22 +73,22 @@ const DeckCardLoader = () => {
 
   const exportDeckAsJpeg = async () => {
     setShowExportWrapper(true);
-    
+
     setTimeout(async () => {
       const node = document.getElementById("export-wrapper");
       if (!node) {
         return;
       }
-  
+
       const originalTransform = node.style.transform;
       const originalWidth = node.style.width;
       const originalHeight = node.style.height;
-  
+
       // Set the desired dimensions for the exported image
       node.style.width = "1920px";
       node.style.height = "1080px";
       node.style.transform = "scale(1)";
-  
+
       try {
         const dataUrl = await toJpeg(node, { quality: 0.95 });
         const link = document.createElement("a");
@@ -106,7 +106,7 @@ const DeckCardLoader = () => {
       setShowExportWrapper(false);
     }, 500); // You can adjust the timeout duration (in milliseconds) if needed.
   };
-  
+
 
 
   useEffect(() => {
@@ -144,72 +144,51 @@ const DeckCardLoader = () => {
     <div >
       <Box bgcolor={"#121212"} color={"#f2f3f8"} minHeight="100vh">
         <Navbar />
-        <Box width="100%" textAlign="center" p={1}><button onClick={exportDeckAsJpeg} disabled>Export as JPEG</button></Box>
         <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-          <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+          <Box flex={1} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
             <Sidebar />
           </Box>
-          <Box id="stats-and-cards" flex={10} sx={{ display: "flex", flexDirection: "row" }}>
-            <Box flex={8} p={1} sx={{ overflowY: "auto", height: { xs: "calc(100vh - 112px)", sm: "calc(100vh - 112px)", md: "calc(100vh - 64px)" }, }} className="hide-scrollbar">
-              <Grid container spacing={2} justifyContent="center">
-                {cards.map((card) => (
-                  <Grid item key={card.id}>
-                    <Box display={"flex"} flexDirection={"column"} sx={{ textAlign: "center" }}>
-                      <img
-                        loading="lazy"
-                        src={card.image}
-                        draggable="false"
-                        alt={card.front}
-                        className="image-responsive"
-                        onClick={() => handleOpenModal(card.cardId)}
-                      />
-                      <span>{card.count}</span>
-                    </Box>
-                  </Grid>
-                ))}
-                <div style={{ height: '300px' }} />
-                {selectedCard && (
-                  <CardModal
-                    open={openModal}
-                    onClose={handleCloseModal}
-                    selectedCard={selectedCard}
-                  />
-                )}
-              </Grid>
-              <div style={{ height: "100px" }} />
-            </Box>
-            <Box flex={2} p={1} sx={{ display: { xs: "none", sm: "none", md: "block" }, textAlign: "left", color: "#f2f3f8" }}>
-              <h3>Energy Cost Breakdown:</h3>
-              <BarChart width={200} height={200} data={energyChartData}>
-                <XAxis dataKey="key" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8B7BEF">
-                  <LabelList dataKey="value" position="top" />
-                </Bar>
-              </BarChart>
-              <br></br>
-              <h3>AP Cost Breakdown:</h3>
-              <BarChart width={200} height={160} data={apChartData}>
-                <XAxis dataKey="key" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#70C7F9">
-                  <LabelList dataKey="value" position="top" />
-                </Bar>
-              </BarChart>
-              <br></br>
-              <h3>Card Type Breakdown:</h3>
-              <BarChart width={200} height={160} data={categoryChartData}>
-                <XAxis dataKey="key" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#FC86F0">
-                  <LabelList dataKey="value" position="top" />
-                </Bar>
-              </BarChart>
-              <br></br>
-              <Box sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: 150 }} alt="uniondeck" src="/icons/uniondecklogo.png" /></Box>
+          <Box flex={10} sx={{ display: "flex", flexDirection: "column" }}>
+            <br></br>
+            <Box id="stats-and-cards" sx={{ display: "flex", flexDirection: "row" }}>
+              <Box flex={8} p={1} sx={{ overflowY: "auto", height: { xs: "calc(100vh - 112px)", sm: "calc(100vh - 112px)", md: "calc(100vh - 64px)" }, }} className="hide-scrollbar">
+                <Grid container spacing={2} justifyContent="center">
+                  {cards.sort((a, b) => {
+                    if (a.category === b.category) {
+                      return a.energycost - b.energycost; // If the categories are the same, sort by energycost
+                    }
+                    return a.category > b.category ? 1 : -1; // Else sort by category
+                  }).map((card) => (
+                    <Grid item key={card.id}>
+                      <Box display={"flex"} flexDirection={"column"} sx={{ textAlign: "center" }}>
+                        <img
+                          loading="lazy"
+                          src={card.image}
+                          draggable="false"
+                          alt={card.front}
+                          className="image-responsive"
+                          onClick={() => handleOpenModal(card.cardId)}
+                        />
+                        <span>{card.count}</span>
+                      </Box>
+                    </Grid>
+                  ))}
+                  <div style={{ height: '300px' }} />
+                  {selectedCard && (
+                    <CardModal
+                      open={openModal}
+                      onClose={handleCloseModal}
+                      selectedCard={selectedCard}
+                    />
+                  )}
+                </Grid>
+                <div style={{ height: "100px" }} />
+              </Box>
+              <Box flex={2} p={1} sx={{ display: { xs: "none", sm: "none", md: "block" }, textAlign: "center", color: "#f2f3f8" }}>
+                <Box sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: 150 }} alt="uniondeck" src="/icons/uniondecklogo.png" /></Box>
+                <br></br>
+                <Box width="100%" textAlign="center"><button onClick={exportDeckAsJpeg} disabled>Export as JPEG</button></Box>
+              </Box>
             </Box>
           </Box>
         </Stack>
@@ -218,15 +197,15 @@ const DeckCardLoader = () => {
         </Box>
       </Box>
       {showExportWrapper && (
-          <ExportWrapper>
-            <DeckCardExporter
-              cards={cards}
-              energyChartData={energyChartData}
-              apChartData={apChartData}
-              categoryChartData={categoryChartData}
-            />
-          </ExportWrapper>
-        )};
+        <ExportWrapper>
+          <DeckCardExporter
+            cards={cards}
+            energyChartData={energyChartData}
+            apChartData={apChartData}
+            categoryChartData={categoryChartData}
+          />
+        </ExportWrapper>
+      )};
 
     </div>
   );

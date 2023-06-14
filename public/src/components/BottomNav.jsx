@@ -32,9 +32,9 @@ const BottomNav = () => {
         justifyContent: 'space-evenly',
         bgcolor: 'white',
         color: 'primary.contrastText',
-        boxShadow: { xs: 1, sm: 0 },
+        boxShadow: { xs: 1, sm: 1, md:0 },
         bottom: 0,
-        zIndex: { xs: 100, sm: 'auto' },
+        zIndex: { xs: 100, sm: 100, md:'auto' },
       }}
     >
       <ThemeProvider theme={customTheme}>

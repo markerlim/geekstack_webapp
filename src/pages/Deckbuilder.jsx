@@ -34,7 +34,7 @@ const Deckbuilder = () => {
           <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "column", md: "row" }, flex: 1, height: '100%' }}>
             <Box flex={1} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
             <Hidden only={['md', 'lg', 'xl']}>
-              <Box bgcolor={"#784C9A"} sx={{ overflowY: 'auto', height: collapseDBCardRef ? "70%" : "45%", width: '100%' }} className="hide-scrollbar">
+              <Box bgcolor={"#784C9A"} sx={{ overflowY: 'auto', height: collapseDBCardRef ? "80%" : "25%", width: '100%' }} className="hide-scrollbar">
                 <DeckBuilderBar onSortClick={handleSortClick} sortCards={sortCards} style={{ width: "100%", top: 0, position: "sticky" }} />
                 <br></br>
                 <TestRightBar sortCards={sortCards}/>
@@ -53,7 +53,7 @@ const Deckbuilder = () => {
             </Button>
             <Box flex={6} p={2} sx={{ overflowY: 'auto', display: { xs: collapseDBCardRef ? "none" : "block", sm: collapseDBCardRef ? "none" : "block", md: "block" }, height: '100%' }}>
               <Collapse in={!collapseDBCardRef}>
-                <DBCardRef searchQuery={searchQuery}/>
+                <DBCardRef searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
                 <br></br>
                 <br></br>
                 <br></br>
@@ -63,7 +63,7 @@ const Deckbuilder = () => {
               </Collapse>
             </Box>
             <Hidden only={['xs', 'sm']}>
-              <Box flex={6} bgcolor={"#784C9A"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
+              <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
                 <DeckBuilderBar onSortClick={handleSortClick} sortCards={sortCards} style={{ width: "100%", top: 0, position: "sticky" }} />
                 <br></br>
                 <TestRightBar sortCards={sortCards} />

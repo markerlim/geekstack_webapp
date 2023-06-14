@@ -20,7 +20,7 @@ const Home = () => {
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
             <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
             <Box flex={17} p={2}>
-              <HomepageUI searchQuery={searchQuery} />
+              <HomepageUI searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </Box>
           </Stack>
           <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>

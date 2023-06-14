@@ -106,39 +106,6 @@ const TestRightBar = (props) => {
 
 
     useEffect(() => {
-        const fetchDocuments = async () => {
-            const querySnapshot = await getDocs(collection(db, "unionarenatcg"));
-            const documentsArray = [];
-            querySnapshot.forEach((doc) => {
-                documentsArray.push(doc.data());
-            });
-            setToLocalStorage("documents", documentsArray);
-
-            // Initialize countArray with all cardIds and a count of zero
-            const initialCountArray = documentsArray.reduce((accumulator, document) => {
-                accumulator[document.cardId] = 0;
-                return accumulator;
-            }, {});
-
-            setCountArray(prevCountArray => {
-                // If countArray is empty, set it to initialCountArray
-                if (Object.keys(prevCountArray).length === 0) {
-                    return initialCountArray;
-                }
-                return prevCountArray;
-            });
-        };
-
-        const localDocuments = getFromLocalStorage("documents");
-        if (localDocuments) {
-            setDocuments(localDocuments);
-        } else {
-            fetchDocuments();
-        }
-    }, []);
-
-
-    useEffect(() => {
         const initialCountArray = documents.reduce((accumulator, document) => {
             accumulator[document.cardId] = 0;
             return accumulator;

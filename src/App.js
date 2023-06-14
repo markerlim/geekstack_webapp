@@ -20,6 +20,7 @@ import AcardKMYpage from "./pages/AcardKMYpage";
 import AcardTOApage from "./pages/AcardTOApage";
 import AcardTSKpage from "./pages/AcardTSKpage";
 import Articleviewer from "./pages/Articleviewer";
+import Geekhub from "./pages/Geekhub";
 
 smoothscroll.polyfill();
 
@@ -56,6 +57,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="disclaimer" element={<Community />} />
           <Route path="articles" element={<Articleviewer/>} />
+          <Route path="geekhub" element={<Geekhub/>} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />

@@ -9,14 +9,14 @@ import { Refresh } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 
 
-const CardRef = (props) => {
+const AcardJJK = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
 
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
-    const [animeFilter, setAnimeFilter] = useState("");
+    const [animeFilter, setAnimeFilter] = useState("Jujutsu No Kaisen");
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -31,7 +31,8 @@ const CardRef = (props) => {
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
-        setAnimeFilter("");
+        setAnimeFilter("Jujutsu No Kaisen");
+        props.setSearchQuery("");
     };
 
     useEffect(() => {
@@ -93,20 +94,8 @@ const CardRef = (props) => {
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value="UA01BT">UA01BT</MenuItem>
                         <MenuItem value="UA02BT">UA02BT</MenuItem>
-                        <MenuItem value="UA03BT">UA03BT</MenuItem>
-                        <MenuItem value="UA04BT">UA04BT</MenuItem>
-                        <MenuItem value="UA05BT">UA05BT</MenuItem>
-                        <MenuItem value="UA06BT">UA06BT</MenuItem>
-                        <MenuItem value="UA07BT">UA07BT</MenuItem>
-                        <MenuItem value="UA01ST">UA01ST</MenuItem>
                         <MenuItem value="UA02ST">UA02ST</MenuItem>
-                        <MenuItem value="UA03ST">UA03ST</MenuItem>
-                        <MenuItem value="UA04ST">UA04ST</MenuItem>
-                        <MenuItem value="UA05ST">UA05ST</MenuItem>
-                        <MenuItem value="UA06ST">UA06ST</MenuItem>
-                        <MenuItem value="UA07ST">UA07ST</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl sx={{ margin: 1 }}>
@@ -133,34 +122,6 @@ const CardRef = (props) => {
                         <MenuItem value="Green">Green</MenuItem>
                         <MenuItem value="Yellow">Yellow</MenuItem>
                         <MenuItem value="Purple">Purple</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl sx={{ margin: 1 }}>
-                    <Select
-                        sx={{
-                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                            fontSize: 11, width: "60px", height: "30px",
-                            '& .MuiSelect-icon': {
-                                display: "none",
-                                position: "absolute"
-                            },
-                        }}
-                        value={animeFilter}
-                        onChange={(event) => setAnimeFilter(event.target.value)}
-                        displayEmpty // Add this prop to display the placeholder when the value is empty
-                        renderValue={(selectedValue) => selectedValue || 'Anime'}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value="Code Geass">Code Geass</MenuItem>
-                        <MenuItem value="Jujutsu No Kaisen">Jujutsu No Kaisen</MenuItem>
-                        <MenuItem value="Hunter X Hunter">Hunter X Hunter</MenuItem>
-                        <MenuItem value="Idolmaster Shiny Colors">Idolmaster Shiny Colors</MenuItem>
-                        <MenuItem value="Demon Slayer">Demon Slayer</MenuItem>
-                        <MenuItem value="Tales of Arise">Tales of Arise</MenuItem>
-                        <MenuItem value="That Time I Got Reincarnated as a Slime">That Time I Got Reincarnated as a Slime</MenuItem>
                     </Select>
                 </FormControl>
                 <Button
@@ -212,5 +173,5 @@ const CardRef = (props) => {
     );
 };
 
-export default CardRef;
+export default AcardJJK;
 

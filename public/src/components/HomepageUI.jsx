@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Grid, ButtonBase, Button } from "@mui/material";
+import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
 import { ResponsiveImage } from "./ResponsiveImage";
+import { Refresh, ResetTv } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { Link } from "react-router-dom";
 

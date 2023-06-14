@@ -4,6 +4,7 @@ import CardRef from "./components/CardRef";
 import BottomNav from "./components/BottomNav"
 import { Box, Hidden, Stack } from "@mui/material"
 import { useState } from "react";
+import HomepageUI from "./components/HomepageUI";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +20,7 @@ const Home = () => {
           <Stack direction="row" spacing={2} justifyContent={"space-between"}>
             <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
             <Box flex={17} p={2}>
-              <CardRef searchQuery={searchQuery} />
+              <HomepageUI searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </Box>
           </Stack>
           <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>

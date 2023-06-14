@@ -3,6 +3,7 @@ import { Box, Stack } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
+import DeckLoader from "../components/DeckLoader";
 import Article01 from "../components/Post/Article01";
 
 const Articleviewer = () => {

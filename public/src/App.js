@@ -12,6 +12,14 @@ import { setToLocalStorage } from "./components/LocalStorage/localStorageHelper"
 import Deckviewer from "./pages/Deckviewer";
 import DeckCardLoader from "./pages/DeckCardLoader";
 import smoothscroll from "smoothscroll-polyfill";
+import AcardCGHpage from "./pages/AcardCGHpage";
+import AcardHXHpage from "./pages/AcardHXHpage";
+import AcardIMSpage from "./pages/AcardIMSpage";
+import AcardJJKpage from "./pages/AcardJJKpage";
+import AcardKMYpage from "./pages/AcardKMYpage";
+import AcardTOApage from "./pages/AcardTOApage";
+import AcardTSKpage from "./pages/AcardTSKpage";
+import Articleviewer from "./pages/Articleviewer";
 
 smoothscroll.polyfill();
 
@@ -47,9 +55,17 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="disclaimer" element={<Community />} />
+          <Route path="articles" element={<Articleviewer/>} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />
+          <Route path="cgh" element={<AcardCGHpage/>}/>
+          <Route path="hxh" element={<AcardHXHpage/>}/>
+          <Route path="ims" element={<AcardIMSpage/>}/>
+          <Route path="jjk" element={<AcardJJKpage/>}/>
+          <Route path="kmy" element={<AcardKMYpage/>}/>
+          <Route path="toa" element={<AcardTOApage/>}/>
+          <Route path="tsk" element={<AcardTSKpage/>}/>
         </Routes>
       </BrowserRouter>
     </div>

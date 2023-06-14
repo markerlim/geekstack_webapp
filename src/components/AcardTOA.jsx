@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button } from "@mui/material";
-import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
 import { CardModal } from "./CardModal";
-import { ResponsiveImage } from "./ResponsiveImage";
 import { Refresh } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 
@@ -13,7 +11,7 @@ const AcardTOA = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-
+    const [imageWidth, setImageWidth] = useState(100); //store value of slider
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [animeFilter, setAnimeFilter] = useState("Tales of Arise");
@@ -32,6 +30,7 @@ const AcardTOA = (props) => {
         setBoosterFilter("");
         setColorFilter("");
         setAnimeFilter("Tales of Arise");
+        props.setSearchQuery("");
     };
 
     useEffect(() => {
@@ -42,15 +41,9 @@ const AcardTOA = (props) => {
                 documentsArray.push(doc.data());
             });
             setDocuments(documentsArray);
-            setToLocalStorage("documents", documentsArray);
         };
 
-        const localDocuments = getFromLocalStorage("documents");
-        if (localDocuments) {
-            setDocuments(localDocuments);
-        } else {
-            fetchDocuments();
-        }
+        fetchDocuments();
     }, []);
 
     const currentSearchQuery = props.searchQuery;
@@ -74,6 +67,10 @@ const AcardTOA = (props) => {
         const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         const prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         setSelectedCard(filteredDocuments[prevIndex]);
+    };
+
+    const handleSliderChange = (event, newValue) => {
+        setImageWidth(newValue);
     };
 
 
@@ -147,17 +144,41 @@ const AcardTOA = (props) => {
                 >
                     <Refresh sx={{ fontSize: 15 }} />
                 </Button>
+                <Box sx={{ width: 100 }}>
+                    <Slider
+                        value={imageWidth}
+                        onChange={handleSliderChange}
+                        aria-labelledby="continuous-slider"
+                        valueLabelDisplay="auto"
+                        min={75}
+                        max={250}
+                        sx={{
+                            '& .MuiSlider-thumb': {
+                                color: '#F2F3F8', // color of the thumb
+                            },
+                            '& .MuiSlider-track': {
+                                color: '#F2F3F8', // color of the track
+                            },
+                            '& .MuiSlider-rail': {
+                                color: '#F2F3F8', // color of the rail
+                            },
+                            margin: 1,
+                        }}
+                    />
+                </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">
                     {filteredDocuments.map((document) => (
                         <Grid item key={document.cardId}>
                             <Box onClick={() => handleOpenModal(document)}>
-                                <ResponsiveImage
+                                <img
                                     loading="lazy"
                                     src={document.image}
                                     draggable="false"
-                                    alt="loading..."
+                                    alt={document.cardId}
+                                    width={imageWidth}
+                                    height="auto"
                                 />
                             </Box>
                         </Grid>

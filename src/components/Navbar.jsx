@@ -1,9 +1,10 @@
-import { AppBar, styled, Toolbar, Box, InputBase, Avatar, Menu, MenuItem } from '@mui/material'
+import { AppBar, styled, Toolbar, Box, InputBase, Avatar, Menu, MenuItem, Button } from '@mui/material'
 import React, { useContext, useRef, useState } from 'react'
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { SearchOutlined } from '@mui/icons-material';
 
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
@@ -11,12 +12,6 @@ const StyledToolbar = styled(Toolbar)({
     justifyContent: 'space-between',
 });
 
-const Search = styled("div")(({ theme }) => ({
-    backgroundColor: "white",
-    padding: "0 10px",
-    borderRadius: theme.shape.borderRadius,
-    width: "40%",
-}));
 const Icons = styled(Box)(({ theme }) => ({
     display: "none",
     alignItems: "center",
@@ -52,13 +47,22 @@ const Navbar = (props) => {
     return (
         <AppBar position="sticky">
             <StyledToolbar>
-                <Box p={1} sx={{ display: { xs: "none", sm: "block" }}}><img style={{width:"auto",height:"50px"}} alt="uniondeck" src="/icons/uniondecklogosmall.png"/></Box>
-                <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{width:"auto",height:"30px"}} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>
-                <Search>
-                    <InputBase placeholder='search..' 
-                    inputRef={searchInputRef}
-                    onChange={handleSearchInputChanged} />
-                </Search>
+                <Box p={1} sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>
+                <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{ width: "auto", height: "30px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>
+                <Box sx={{display:"flex",flexDirection:"row",backgroundColor:"#f2f3f8",borderRadius:"5px",paddingTop:"5px",paddingBottom:"5px",paddingLeft:"10px",paddingRight:"10px",marginLeft:"2px",marginRight:"2px"}}>
+                    <InputBase
+                        placeholder='search...'
+                        inputRef={searchInputRef}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSearchInputChanged}
+                        sx={{textAlign:"center",justifySelf:"flex-end",overflow:'hidden',borderRadius:"20px"}}
+                    >
+                        <SearchOutlined sx={{width:"25px"}}/>
+                    </Button>
+                </Box>
                 <Icons>
                     <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}
                         onClick={e => setOpen(true)} />
