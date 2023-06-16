@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button } from "@mui/material";
-import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
 import { CardModal } from "./CardModal";
-import { ResponsiveImage } from "./ResponsiveImage";
-import { Refresh } from "@mui/icons-material";
+import { ArrowBack, Refresh } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
+import { Link } from 'react-router-dom'
 
 
 const AcardIMS = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-
+    const [imageWidth, setImageWidth] = useState(100); //store value of slider
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [animeFilter, setAnimeFilter] = useState("Idolmaster Shiny Colors");
@@ -44,7 +43,7 @@ const AcardIMS = (props) => {
             });
             setDocuments(documentsArray);
         };
-    
+
         fetchDocuments();
     }, []);
 
@@ -71,10 +70,15 @@ const AcardIMS = (props) => {
         setSelectedCard(filteredDocuments[prevIndex]);
     };
 
+    const handleSliderChange = (event, newValue) => {
+        setImageWidth(newValue);
+    };
+
 
     return (
         <div>
-            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <FormControl sx={{ margin: 1 }}>
                     <Select
                         sx={{
@@ -119,9 +123,7 @@ const AcardIMS = (props) => {
                         </MenuItem>
                         <MenuItem value="Red">Red</MenuItem>
                         <MenuItem value="Blue">Blue</MenuItem>
-                        <MenuItem value="Green">Green</MenuItem>
                         <MenuItem value="Yellow">Yellow</MenuItem>
-                        <MenuItem value="Purple">Purple</MenuItem>
                     </Select>
                 </FormControl>
                 <Button
@@ -142,17 +144,57 @@ const AcardIMS = (props) => {
                 >
                     <Refresh sx={{ fontSize: 15 }} />
                 </Button>
+                <Box sx={{ width: 100 }}>
+                <Slider
+                        value={imageWidth}
+                        onChange={handleSliderChange}
+                        aria-labelledby="continuous-slider"
+                        valueLabelDisplay="auto"
+                        min={75}
+                        max={250}
+                        sx={{
+                            '& .MuiSlider-thumb': {
+                                color: '#F2F3F8', // color of the thumb
+                            },
+                            '& .MuiSlider-track': {
+                                color: '#F2F3F8', // color of the track
+                            },
+                            '& .MuiSlider-rail': {
+                                color: '#F2F3F8', // color of the rail
+                            },
+                            margin: 1,
+                        }}
+                    />
+                </Box>
+                </Box>
+                <Button
+                    sx={{
+                        height: 20,
+                        padding: 1, // Adjust the padding as needed 
+                        backgroundColor: "#f2f3f8",
+                        color: "#240052",
+                        '&:hover': {
+                            backgroundColor: "#240052", // Change this to the desired hover background color
+                            color: "#f2f3f8", // Change this to the desired hover text color if needed
+                        },
+                    }}
+                    component={Link} href="#home" to="/"
+                >
+                    Back <ArrowBack sx={{ fontSize: 15 }} />
+                </Button>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">
                     {filteredDocuments.map((document) => (
                         <Grid item key={document.cardId}>
                             <Box onClick={() => handleOpenModal(document)}>
-                                <ResponsiveImage
+                                <img
                                     loading="lazy"
                                     src={document.image}
                                     draggable="false"
-                                    alt="loading..."
+                                    alt={document.cardId}
+                                    width={imageWidth}
+                                    height="auto"
                                 />
                             </Box>
                         </Grid>

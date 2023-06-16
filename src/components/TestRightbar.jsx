@@ -13,7 +13,7 @@ const TestRightBar = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [totalCount, setTotalCount] = useState(0);
-    const { countArray, setCountArray, filteredCards, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
+    const { countArray, setCountArray, filteredCards, setFilteredCards, setAnimeFilter } = useCardState(); // Use useCardState hook
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleOpenModal = (document) => {
@@ -27,13 +27,6 @@ const TestRightBar = (props) => {
     };
 
     const MAX_COUNT = 4;
-
-    const updateFilteredCards = (updatedCountArray) => {
-        const newFilteredCards = documents.filter((doc) => updatedCountArray[doc.cardId] > 0)
-            .map((doc) => ({ ...doc, count: updatedCountArray[doc.cardId] }));
-        setFilteredCards(newFilteredCards);
-        setToLocalStorage("filteredCards", newFilteredCards);
-    };
 
     const increase = (cardId) => {
         setCountArray((prevCountArray) => {
@@ -131,7 +124,8 @@ const TestRightBar = (props) => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Grid style={{ overflowY: "auto", height: "100%" }}>
+            <br></br>
+            <Grid style={{ overflowY: "auto", height: "100%"}}>
                 <Grid container spacing={2} justifyContent="center">
                     {sortedCards.map((document) => (
                         countArray[document.cardId] > 0 && (

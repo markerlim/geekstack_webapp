@@ -3,8 +3,10 @@ import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
 import { CardModal } from "./CardModal";
-import { Refresh } from "@mui/icons-material";
+import { ArrowBack, Refresh } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
+import { Link } from 'react-router-dom'
+import { Helmet } from "react-helmet";
 
 
 const AcardCGH = (props) => {
@@ -76,60 +78,102 @@ const AcardCGH = (props) => {
 
     return (
         <div>
-            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
-                <FormControl sx={{ margin: 1 }}>
-                    <Select
+            <Helmet>
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+            </Helmet>
+            <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <FormControl sx={{ margin: 1 }}>
+                        <Select
+                            sx={{
+                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                fontSize: 11, width: "60px", height: "30px",
+                                '& .MuiSelect-icon': {
+                                    display: "none",
+                                    position: "absolute"
+                                },
+                            }}
+                            value={boosterFilter}
+                            onChange={(event) => setBoosterFilter(event.target.value)}
+                            displayEmpty // Add this prop to display the placeholder when the value is empty
+                            renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="UA01BT">UA01BT</MenuItem>
+                            <MenuItem value="UA01ST">UA01ST</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ margin: 1 }}>
+                        <Select
+                            sx={{
+                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                fontSize: 11, width: "60px", height: "30px",
+                                '& .MuiSelect-icon': {
+                                    display: "none",
+                                    position: "absolute"
+                                },
+                            }}
+                            value={colorFilter}
+                            onChange={(event) => setColorFilter(event.target.value)}
+                            displayEmpty // Add this prop to display the placeholder when the value is empty
+                            renderValue={(selectedValue) => selectedValue || 'Color'}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="Red">Red</MenuItem>
+                            <MenuItem value="Green">Green</MenuItem>
+                            <MenuItem value="Purple">Purple</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button
                         sx={{
-                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                            fontSize: 11, width: "60px", height: "30px",
-                            '& .MuiSelect-icon': {
-                                display: "none",
-                                position: "absolute"
+                            minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                            width: 30, // Change this value to adjust the width
+                            height: 20,
+                            margin: 1,
+                            padding: 1, // Adjust the padding as needed 
+                            backgroundColor: "#f2f3f8",
+                            color: "#240052",
+                            '&:hover': {
+                                backgroundColor: "#240052", // Change this to the desired hover background color
+                                color: "#f2f3f8", // Change this to the desired hover text color if needed
                             },
                         }}
-                        value={boosterFilter}
-                        onChange={(event) => setBoosterFilter(event.target.value)}
-                        displayEmpty // Add this prop to display the placeholder when the value is empty
-                        renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
+                        onClick={resetFilters}
                     >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value="UA01BT">UA01BT</MenuItem>
-                        <MenuItem value="UA01ST">UA01ST</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl sx={{ margin: 1 }}>
-                    <Select
-                        sx={{
-                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                            fontSize: 11, width: "60px", height: "30px",
-                            '& .MuiSelect-icon': {
-                                display: "none",
-                                position: "absolute"
-                            },
-                        }}
-                        value={colorFilter}
-                        onChange={(event) => setColorFilter(event.target.value)}
-                        displayEmpty // Add this prop to display the placeholder when the value is empty
-                        renderValue={(selectedValue) => selectedValue || 'Color'}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value="Red">Red</MenuItem>
-                        <MenuItem value="Green">Green</MenuItem>
-                        <MenuItem value="Purple">Purple</MenuItem>
-                    </Select>
-                </FormControl>
+                        <Refresh sx={{ fontSize: 15 }} />
+                    </Button>
+                    <Box sx={{ width: 100 }}>
+                        <Slider
+                            value={imageWidth}
+                            onChange={handleSliderChange}
+                            aria-labelledby="continuous-slider"
+                            valueLabelDisplay="auto"
+                            min={75}
+                            max={250}
+                            sx={{
+                                '& .MuiSlider-thumb': {
+                                    color: '#F2F3F8', // color of the thumb
+                                },
+                                '& .MuiSlider-track': {
+                                    color: '#F2F3F8', // color of the track
+                                },
+                                '& .MuiSlider-rail': {
+                                    color: '#F2F3F8', // color of the rail
+                                },
+                                margin: 1,
+                            }}
+                        />
+                    </Box>
+                </Box>
                 <Button
                     sx={{
-                        minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
-                        width: 30, // Change this value to adjust the width
                         height: 20,
-                        margin: 1,
                         padding: 1, // Adjust the padding as needed 
                         backgroundColor: "#f2f3f8",
                         color: "#240052",
@@ -138,20 +182,10 @@ const AcardCGH = (props) => {
                             color: "#f2f3f8", // Change this to the desired hover text color if needed
                         },
                     }}
-                    onClick={resetFilters}
+                    component={Link} href="#home" to="/"
                 >
-                    <Refresh sx={{ fontSize: 15 }} />
+                    Back <ArrowBack sx={{ fontSize: 15 }} />
                 </Button>
-                <Box sx={{ width: 100 }}>
-                    <Slider
-                        value={imageWidth}
-                        onChange={handleSliderChange}
-                        aria-labelledby="continuous-slider"
-                        valueLabelDisplay="auto"
-                        min={75}
-                        max={250}
-                    />
-                </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">

@@ -12,6 +12,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, LabelList } from "recharts";
 import DeckCardExporter from "../components/DeckCardExporter";
 import ExportWrapper from "../components/ExportWrapper";
 import { toJpeg } from "html-to-image";
+import { Helmet } from "react-helmet";
 
 const DeckCardLoader = () => {
   const { currentUser } = useAuth();
@@ -139,16 +140,29 @@ const DeckCardLoader = () => {
     calculateStats();
   }, [cards]);
 
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "webmanifest";
+    link.href = `${process.env.PUBLIC_URL}/manifest.json`; // Equivalent to %PUBLIC_URL%
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
 
   return (
     <div >
+      <Helmet>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+      </Helmet>
       <Box bgcolor={"#121212"} color={"#f2f3f8"} minHeight="100vh">
         <Navbar />
-        <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-          <Box flex={1} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+        <Box>
+          <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
             <Sidebar />
           </Box>
-          <Box flex={10} sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ display: "flex", flexDirection: "column",marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"15px",paddingRight:"15px"}}>
             <br></br>
             <Box id="stats-and-cards" sx={{ display: "flex", flexDirection: "row" }}>
               <Box flex={8} p={1} sx={{ overflowY: "auto", height: { xs: "calc(100vh - 112px)", sm: "calc(100vh - 112px)", md: "calc(100vh - 64px)" }, }} className="hide-scrollbar">
@@ -191,7 +205,7 @@ const DeckCardLoader = () => {
               </Box>
             </Box>
           </Box>
-        </Stack>
+          </Box>
         <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
           <BottomNav />
         </Box>

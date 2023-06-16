@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
     return (
-        <Box position="fixed" sx={{ display: { sm: "none", md: "block" }, height: "100vh",backgroundColor:"#240056",opacity:"80%",paddingTop:"30px"}}>
+        <Box position="fixed" sx={{ display: { sm: "none", md: "flex" }, height: "100vh",backgroundColor:"#210449",paddingTop:"30px",width:"100px",justifyContent:"center"}}>
             <Box>
                 <List>
                     <ListItem sx={{bottomMargin:"20px"}} disablePadding>
@@ -23,7 +23,7 @@ const Sidebar = () => {
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem disablePadding sx={{ display: "none" }}>
+                    <ListItem disablePadding>
                         <ListItemButton component={Link} href="#geekhub" to="/geekhub">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Diversity2 sx={{ color: "#10c5a3" }} alt="geekhub" />
@@ -37,7 +37,7 @@ const Sidebar = () => {
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem disablePadding sx={{ display: "none" }}>
+                    <ListItem disablePadding>
                         <ListItemButton component={Link} href="#articles" to="/articles">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Article sx={{ color: "#10c5a3" }} alt="articles" />

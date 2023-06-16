@@ -29,6 +29,7 @@ const DeckBuilderBar = (props) => {
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
+  const [countArrayMaintain, setCountArrayMaintain] = useState(false);
   const [energyStats, setEnergyStats] = useState({});
 
   const images = [
@@ -207,7 +208,6 @@ const DeckBuilderBar = (props) => {
     }
   };
 
-
   const handleProceedSave = () => {
     setShouldSaveDeck(true);
     handleSaveClick(true);
@@ -291,7 +291,7 @@ const DeckBuilderBar = (props) => {
       }}
       p={2}
     >
-      <Box display={"flex"} flexDirection={"row"} gap={2} sx={{ flex: "1 1 auto" }}>
+      <Box display={"flex"} flexDirection={"row"} gap={2}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
           <Grid container rowSpacing={1} columnSpacing={1}>
             <Grid item xs={3}>
@@ -334,7 +334,7 @@ const DeckBuilderBar = (props) => {
               </Grid>
             </Grid>
             <Grid item xs={4}>
-              <Button>Hide</Button>
+              <Button sx={{ display: "none" }}>Hide</Button>
             </Grid>
           </Grid>
           <Box>
@@ -353,12 +353,16 @@ const DeckBuilderBar = (props) => {
                 backgroundColor: buttonBackgroundColor, // Set hover background color same as normal state
               },
             }} onClick={props.onSortClick}>
-              <Sort sx={{ fontSize: "11px", color:buttonFontColor, fontWeight: "600", "&:hover": {
-                Color:buttonFontColor, // Set hover background color same as normal state
-              },}} />
-              <Typography sx={{ fontSize: "10px", color:buttonFontColor, fontWeight: "600", "&:hover": {
-                Color:buttonFontColor, // Set hover background color same as normal state
-              },}} component="div">
+              <Sort sx={{
+                fontSize: "11px", color: buttonFontColor, fontWeight: "600", "&:hover": {
+                  Color: buttonFontColor, // Set hover background color same as normal state
+                },
+              }} />
+              <Typography sx={{
+                fontSize: "10px", color: buttonFontColor, fontWeight: "600", "&:hover": {
+                  Color: buttonFontColor, // Set hover background color same as normal state
+                },
+              }} component="div">
                 {props.sortCards ? "Sorted Mode" : "Unsort Mode"}
               </Typography>
             </Button>

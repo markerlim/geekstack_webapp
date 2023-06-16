@@ -30,38 +30,42 @@ const BottomNav = () => {
         position: { xs: 'fixed', sm: 'fixed', md: 'static' },
         width: '100%',
         justifyContent: 'space-evenly',
-        bgcolor: 'white',
-        color: 'primary.contrastText',
+        bgcolor: '#240056',
+        color: '#10c5a3',
         boxShadow: { xs: 1, sm: 1, md:0 },
         bottom: 0,
         zIndex: { xs: 100, sm: 100, md:'auto' },
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation>
+        <BottomNavigation sx={{bgcolor: '#210449'}}>
           <BottomNavigationAction
             component={Link}
             to="/"
             label="Home"
             icon={<Home />}
+            sx={{color: '#10c5a3'}}
           />
           <BottomNavigationAction
             component={Link}
             to="/deckbuilder"
             label="Builder"
             icon={<Style />}
+            sx={{color: '#10c5a3'}}
           />
           <BottomNavigationAction
             component={Link}
             to="/deckviewer"
             label="Decks"
             icon={<Inventory />}
+            sx={{color: '#10c5a3'}}
           />
           <BottomNavigationAction
             component={Link}
             to="/disclaimer"
-            label="Disclaimer"
+            label="Donate"
             icon={<Stars />}
+            sx={{color: '#10c5a3'}}
           />
         </BottomNavigation>
       </ThemeProvider>

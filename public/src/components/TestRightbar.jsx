@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../Firebase";
-import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, Grid } from "@mui/material";
-import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
+import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
@@ -15,7 +13,7 @@ const TestRightBar = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [totalCount, setTotalCount] = useState(0);
-    const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
+    const { countArray, setCountArray, filteredCards, setFilteredCards, setAnimeFilter } = useCardState(); // Use useCardState hook
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleOpenModal = (document) => {
@@ -30,13 +28,6 @@ const TestRightBar = (props) => {
 
     const MAX_COUNT = 4;
 
-    const updateFilteredCards = (updatedCountArray) => {
-        const newFilteredCards = documents.filter((doc) => updatedCountArray[doc.cardId] > 0)
-            .map((doc) => ({ ...doc, count: updatedCountArray[doc.cardId] }));
-        setFilteredCards(newFilteredCards);
-        setToLocalStorage("filteredCards", newFilteredCards);
-    };
-
     const increase = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
@@ -47,11 +38,10 @@ const TestRightBar = (props) => {
                 newArray[cardId]++;
             }
             setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray);
-            return newArray;
+            return newArray; // Update the countArray state without triggering the updateFilteredCards function
         });
     };
-
+    
     const decrease = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
@@ -59,8 +49,7 @@ const TestRightBar = (props) => {
                 newArray[cardId]--;
             }
             setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray);
-            return newArray;
+            return newArray; // Update the countArray state without triggering the updateFilteredCards function
         });
     };
 
@@ -97,15 +86,6 @@ const TestRightBar = (props) => {
 
 
     useEffect(() => {
-        window.addEventListener("storage", handleLocalStorageUpdate);
-
-        return () => {
-            window.removeEventListener("storage", handleLocalStorageUpdate);
-        };
-    }, []);
-
-
-    useEffect(() => {
         const initialCountArray = documents.reduce((accumulator, document) => {
             accumulator[document.cardId] = 0;
             return accumulator;
@@ -132,11 +112,20 @@ const TestRightBar = (props) => {
         } else {
           setSortedCards(filteredCards);
         }
-      }, [props.sortCards, filteredCards]);        
+      }, [props.sortCards, filteredCards]);
+      
+      useEffect(() => {
+        // This will set the anime filter based on the anime of the first card
+        // in the sortedCards array (if there are any cards in the array)
+        if (sortedCards.length > 0) {
+          setAnimeFilter(sortedCards[0].anime);
+        }
+      }, [sortedCards]);
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Grid style={{ overflowY: "auto", height: "100%" }}>
+            <Grid style={{ overflowY: "auto", height: "100%"}}>
+                <br></br>
                 <Grid container spacing={2} justifyContent="center">
                     {sortedCards.map((document) => (
                         countArray[document.cardId] > 0 && (

@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, FormControl, Grid, MenuItem, Select } from "@mui/material";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
-import { AddCircle, Refresh, RemoveCircle } from "@mui/icons-material";
+import { AddCircle, ArrowBack, Refresh, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import searchMatch from "./searchUtils";
@@ -13,7 +13,7 @@ const DBCardRef = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const { countArray, setCountArray, filteredCards, setFilteredCards,animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
+    const { countArray, setCountArray, setFilteredCards,animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
 
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
@@ -21,9 +21,12 @@ const DBCardRef = (props) => {
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
-        setAnimeFilter("");
         props.setSearchQuery("");
     };
+
+    const resetAnimeFilters = () => {
+        setAnimeFilter("");
+    }
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -103,13 +106,18 @@ const DBCardRef = (props) => {
 
 
     useEffect(() => {
+        if(animeFilter !== "") {
+            return;
+        }
+    
         const initialCountArray = documents.reduce((accumulator, document) => {
             accumulator[document.cardId] = 0;
             return accumulator;
         }, {});
-
+    
         setCountArray(initialCountArray);
-    }, [documents]);
+    }, [documents, animeFilter]);
+    
 
     return (
         <div>
@@ -117,6 +125,7 @@ const DBCardRef = (props) => {
                 {animeFilter === "" && (
                     <>
                         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
+                            <br></br>
                             <Button variant={animeFilter === "Code Geass" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Code Geass")}>Code Geass</Button>
                             <Button variant={animeFilter === "Jujutsu No Kaisen" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Jujutsu No Kaisen")}>Jujutsu No Kaisen</Button>
                             <Button variant={animeFilter === "Hunter X Hunter" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Hunter X Hunter")}>Hunter X Hunter</Button>
@@ -207,6 +216,24 @@ const DBCardRef = (props) => {
                             onClick={resetFilters}
                         >
                             <Refresh sx={{ fontSize: 15 }} />
+                        </Button>
+                        <Button
+                            sx={{
+                                minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                                width: 30, // Change this value to adjust the width
+                                height: 20,
+                                margin: 1,
+                                padding: 1, // Adjust the padding as needed 
+                                backgroundColor: "#f2f3f8",
+                                color: "#240052",
+                                '&:hover': {
+                                    backgroundColor: "#240052", // Change this to the desired hover background color
+                                    color: "#f2f3f8", // Change this to the desired hover text color if needed
+                                },
+                            }}
+                            onClick={resetAnimeFilters}
+                        >
+                            <ArrowBack sx={{ fontSize: 15 }} />
                         </Button>
                     </>
                 )}

@@ -3,8 +3,9 @@ import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
 import { CardModal } from "./CardModal";
-import { Refresh } from "@mui/icons-material";
+import { ArrowBack, Refresh } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
+import { Link } from 'react-router-dom'
 
 
 const AcardIMS = (props) => {
@@ -76,7 +77,8 @@ const AcardIMS = (props) => {
 
     return (
         <div>
-            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <FormControl sx={{ margin: 1 }}>
                     <Select
                         sx={{
@@ -164,6 +166,22 @@ const AcardIMS = (props) => {
                         }}
                     />
                 </Box>
+                </Box>
+                <Button
+                    sx={{
+                        height: 20,
+                        padding: 1, // Adjust the padding as needed 
+                        backgroundColor: "#f2f3f8",
+                        color: "#240052",
+                        '&:hover': {
+                            backgroundColor: "#240052", // Change this to the desired hover background color
+                            color: "#f2f3f8", // Change this to the desired hover text color if needed
+                        },
+                    }}
+                    component={Link} href="#home" to="/"
+                >
+                    Back <ArrowBack sx={{ fontSize: 15 }} />
+                </Button>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">
