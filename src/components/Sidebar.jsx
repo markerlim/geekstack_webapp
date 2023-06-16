@@ -23,7 +23,7 @@ const Sidebar = () => {
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem disablePadding>
+                    <ListItem disablePadding sx={{ display: "none" }}>
                         <ListItemButton component={Link} href="#geekhub" to="/geekhub">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Diversity2 sx={{ color: "#10c5a3" }} alt="geekhub" />

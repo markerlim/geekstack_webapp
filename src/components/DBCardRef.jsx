@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
-import { collection, getDocs, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, FormControl, Grid, MenuItem, Select } from "@mui/material";
-import { setToLocalStorage, getFromLocalStorage } from "./LocalStorage/localStorageHelper";
+import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { CardModal } from "./CardModal";
 import { AddCircle, Refresh, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
@@ -13,11 +13,10 @@ const DBCardRef = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
+    const { countArray, setCountArray, filteredCards, setFilteredCards,animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
 
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
-    const [animeFilter, setAnimeFilter] = useState("");
 
     const resetFilters = () => {
         setBoosterFilter("");
