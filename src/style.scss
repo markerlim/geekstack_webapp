@@ -1,3 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.articleheader {
+	font-size: 100px;
+	width: 100%;
+	display: flex;
+    position:relative;
+	align-items: end;
+	justify-content: center;
+	mix-blend-mode: screen;
+	
+	span {
+		--color: #e4447c;
+		font-family: Impact, 'Anton', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+		font-weight: 700;
+		font-style: italic;
+		display: block;
+		position: absolute;
+        margin-left:-400px;
+		color: var(--color);
+        box-shadow:"0 6px 20px rgba(0, 0, 0, 1)";
+
+		&::before, &::after {
+			content: attr(data-text);
+			display: block;
+			position: relative;
+			padding: 10px;
+			z-index: 1;
+		}
+
+		&::before {
+			position: absolute;
+			-webkit-text-stroke: 20px #121212;
+			z-index: 0;
+		}
+
+		&:first-child {
+			transform: translate(-50px, -50px);
+		}
+
+		&:last-child {
+			--color: #12b1bf;
+			transform: translate(70px, 70px);
+            z-index: 2;
+		}
+	}
+}
+
 .formContainer {
     background-color: #240056;
     height: 100vh;

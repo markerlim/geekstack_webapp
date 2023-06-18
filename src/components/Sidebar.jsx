@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
     return (
-        <Box position="fixed" sx={{ display: { sm: "none", md: "flex" }, height: "100vh",backgroundColor:"#210449",paddingTop:"30px",width:"100px",justifyContent:"center"}}>
+        <Box position="fixed" sx={{ display: { sm: "none", md: "flex" }, height: "100vh",backgroundColor:"#210449",paddingTop:"30px",width:"100px",justifyContent:"center",zIndex:100}}>
             <Box>
                 <List>
                     <ListItem sx={{bottomMargin:"20px"}} disablePadding>
