@@ -1,8 +1,7 @@
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
-import CardRef from "./components/CardRef";
 import BottomNav from "./components/BottomNav"
-import { Box, Hidden, Stack } from "@mui/material"
+import { Box } from "@mui/material"
 import { useState } from "react";
 import HomepageUI from "./components/HomepageUI";
 
@@ -17,13 +16,15 @@ const Home = () => {
       <Box bgcolor={"#121212"} color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
         <Box>
-          <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-            <Box flex={2} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-            <Box flex={17} p={2}>
+          <Box>
+            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+              <Sidebar />
+            </Box>
+            <Box sx={{marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px", paddingTop: "18px"}}>
               <HomepageUI searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </Box>
-          </Stack>
-          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
+          </Box>
+          <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
         </Box>
       </Box>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Stack } from "@mui/material"
+import { Box } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
@@ -24,10 +24,12 @@ const Articleviewer = () => {
             </Helmet>
             <Box bgcolor={"#121212"} color={"#f2f3f8"}>
                 <Navbar />
-                <Box>
+                <Box height={"100%"}>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px", paddingTop: "18px" }} height={"86vh"}>\
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px", paddingTop: "18px",overflowY:"auto", marginTop:"-70px",height:"100vh"}}>
+                        <div style={{height:"70px"}}></div>
                         <Article01 />
+                        <div style={{height:"100px"}}></div>
                     </Box>
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>

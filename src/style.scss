@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-
+  
 .articleheader {
 	font-size: 100px;
 	width: 100%;
@@ -44,6 +44,76 @@
             z-index: 2;
 		}
 	}
+}
+
+#article01 .css-1evflyk {
+    content: "";
+    position: fixed;
+    background: url(https://unionarena-tcg.com/jp/images/products/boosters/jjk-1/bg.jpg) no-repeat top;
+    background-size: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+@keyframes cardShimmer {
+    0%{transform: translate(-100%,-100%);}
+    100%{transform: translate(100%,100%);}
+}
+.card__shine{
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: translateZ(2px);
+    width: 100%;
+}
+@media screen and (min-width: 900px) {
+    .card__img-wrapper{
+        height:314.25px;
+    }
+}
+@media screen and (max-width:899px){
+    .card__img-wrapper{
+        height:213.48px;
+    }
+}
+.card__img-wrapper {
+    position: relative;
+    transform-style: preserve-3d;
+    display:flex;
+    justify-content: center;
+}
+.card__img, .card__shine {
+    border-bottom-left-radius: 4.25% 3%;
+    border-bottom-right-radius: 4.25% 3%;
+    border-top-left-radius: 4.35% 3%;
+    border-top-right-radius: 4.25% 3%;
+    overflow: hidden;
+}
+.card__shine-shimmer {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    animation: cardShimmer 3s linear infinite;
+    mix-blend-mode: luminosity;
+    transform: translate(-100%, -100%);
+}
+.card__shine-shimmer::after {
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255, 255, 255, 0.37), rgba(255,255,255,0));
+    content: "";
+    height: 20%;
+    left: -50%;
+    opacity: 0.7;
+    position: absolute;
+    top: 40%;
+    transform: rotate(-45deg);
+    width: 200%;
 }
 
 .formContainer {
