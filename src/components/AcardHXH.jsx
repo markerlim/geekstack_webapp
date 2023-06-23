@@ -74,7 +74,6 @@ const AcardHXH = (props) => {
         setImageWidth(newValue);
     };
 
-
     return (
         <div>
             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>

@@ -26,7 +26,7 @@ const Articleviewer = () => {
                 <Navbar />
                 <Box height={"100%"}>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px", paddingTop: "18px",overflowY:"auto", marginTop:"-70px",height:"100vh"}}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px",overflowY:"auto",height:"100vh"}}>
                         <div style={{height:"70px"}}></div>
                         <Article01 />
                         <div style={{height:"100px"}}></div>

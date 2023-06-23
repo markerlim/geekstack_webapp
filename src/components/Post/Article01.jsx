@@ -13,7 +13,7 @@ const Article01 = () => {
     return (
         <div>
             <Box>
-                <article style={{ lineHeight: "30px", fontSize: "16px", paddingRight: "10%", paddingLeft: "10%" }}>
+                <article style={{ lineHeight: "30px", fontSize: "16px", paddingRight: "10%", paddingLeft: "10%",marginTop:"-70px" }}>
                     <Box className="articleheader" sx={{ display: "flex", flexDirection: "row", gap: "20px", margin: "30px", justifyContent: "center" }}>
                         <img style={{ width: "225px", height: "auto", marginRight: "-50px" }} src="/UD/JJK-1-063.png" alt="JJK-1-063" />
                         <img style={{ width: "250px", height: "auto", zIndex: 0, boxShadow: "0 6px 20px rgba(0, 0, 0, 1)", borderRadius: "10px" }} src="/UD/JJK-1-105.png" alt="JJK-1-105" />

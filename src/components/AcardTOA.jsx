@@ -124,8 +124,6 @@ const AcardTOA = (props) => {
                             <MenuItem value="Red">Red</MenuItem>
                             <MenuItem value="Blue">Blue</MenuItem>
                             <MenuItem value="Green">Green</MenuItem>
-                            <MenuItem value="Yellow">Yellow</MenuItem>
-                            <MenuItem value="Purple">Purple</MenuItem>
                         </Select>
                     </FormControl>
                     <Button
