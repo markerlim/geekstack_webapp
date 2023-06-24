@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import React, { useEffect } from "react";
 import { ResponsiveImageArticle } from "../ResponsiveImageArticle"
 const Article01 = () => {
@@ -10,10 +10,46 @@ const Article01 = () => {
             document.body.id = "";
         };
     }, []); // Empty dependency array so this runs once on mount and cleanup on unmount
+
+    const theme = useTheme();
+    const paddingStyles = {
+        sm: {
+            paddingLeft: theme.spacing("10%"),
+            paddingRight: theme.spacing("10%"),
+        },
+        md: {
+            paddingLeft: theme.spacing("20%"),
+            paddingRight: theme.spacing("20%"),
+        },
+        lg: {
+            paddingLeft: theme.spacing("40%"),
+            paddingRight: theme.spacing("40%"),
+        },
+    };
+
     return (
         <div>
             <Box>
-                <article style={{ lineHeight: "30px", fontSize: "16px", paddingRight: "10%", paddingLeft: "10%",marginTop:"-70px" }}>
+                <Box sx={{
+                    lineHeight: "30px",
+                    fontSize: "16px",
+                    paddingRight: "10%",
+                    paddingLeft: "10%",
+                    paddingBottom: "20%",
+                    marginTop: "-70px",
+                    [theme.breakpoints.up("md")]: {
+                        paddingRight: "20%",
+                        paddingLeft: "20%",
+                    },
+                    [theme.breakpoints.up("lg")]: {
+                        paddingRight: "20%",
+                        paddingLeft: "20%",
+                    },
+                    [theme.breakpoints.up("xl")]: {
+                        paddingRight: "30%",
+                        paddingLeft: "30%",
+                    },
+                }}>
                     <Box className="articleheader" sx={{ display: "flex", flexDirection: "row", gap: "20px", margin: "30px", justifyContent: "center" }}>
                         <img style={{ width: "225px", height: "auto", marginRight: "-50px" }} src="/UD/JJK-1-063.png" alt="JJK-1-063" />
                         <img style={{ width: "250px", height: "auto", zIndex: 0, boxShadow: "0 6px 20px rgba(0, 0, 0, 1)", borderRadius: "10px" }} src="/UD/JJK-1-105.png" alt="JJK-1-105" />
@@ -88,7 +124,7 @@ const Article01 = () => {
                         With 4 fingers in the Outside Area, your Fukuma Mizuchi allows your Sukuna to gain strong abilities to overwhelm your opponents and potentially closing up games.
                         There are definitely other ways to explore the deck due to how much tempo it gains in a game if you had the right cycle cards.
                     </Box>
-                </article>
+                </Box>
                 <Box>
 
                 </Box>

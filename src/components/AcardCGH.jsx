@@ -3,7 +3,7 @@ import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, Switch, FormControlLabel, Typography } from "@mui/material";
 import { CardModal } from "./CardModal";
-import { ArrowBack, Refresh } from "@mui/icons-material";
+import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { Link } from 'react-router-dom'
 import { Helmet } from "react-helmet";
@@ -14,23 +14,28 @@ const AcardCGH = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [imageWidth, setImageWidth] = useState(100); //store value of slider
-    const imageHeight = imageWidth * 1.395; 
+    const imageHeight = imageWidth * 1.395;
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
     const [animeFilter, setAnimeFilter] = useState("Code Geass");
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
+    const [altFormIndex, setAltFormIndex] = useState({});
 
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
         setOpenModal(true);
+        if (document.altforms) {
+            setAltFormIndex({ [document.cardId]: 0 });
+        }
     };
 
     const handleCloseModal = () => {
         setSelectedCard(null);
         setOpenModal(false);
+        setAltFormIndex({});
     };
 
     const resetFilters = () => {
@@ -39,6 +44,7 @@ const AcardCGH = (props) => {
         setRarityFilter("");
         setAltForms(false);
         setOnlyAltForm(false);
+        setAltFormIndex({});
         setAnimeFilter("Code Geass");
         props.setSearchQuery("");
     };
@@ -47,14 +53,21 @@ const AcardCGH = (props) => {
         const fetchDocuments = async () => {
             const querySnapshot = await getDocs(collection(db, "unionarenatcg"));
             const documentsArray = [];
+            const initialAltForms = {};
             querySnapshot.forEach((doc) => {
-                documentsArray.push(doc.data());
+                const docData = doc.data();
+                documentsArray.push(docData);
+                if (docData.altforms) {
+                    initialAltForms[docData.cardId] = 0;
+                }
             });
             setDocuments(documentsArray);
+            setAltForms(initialAltForms);
         };
 
         fetchDocuments();
     }, []);
+
 
     const currentSearchQuery = props.searchQuery;
 
@@ -86,32 +99,47 @@ const AcardCGH = (props) => {
         setImageWidth(newValue);
     };
 
-    const handleAltformToggle = (cardId) => {
-        if (!onlyAltForm) {
-            setAltForms(prev => {
-                const isAlt = prev[cardId];
-                return {
-                    ...prev,
-                    [cardId]: !isAlt,
-                };
-            });
-        }
+    const handleFormChange = (event, document) => {
+        event.stopPropagation(); // Prevent event from bubbling up
+        setAltFormIndex(prev => {
+            const currentFormIndex = prev[document.cardId] || 0;
+            let altFormsLength = 0;
+            if (Array.isArray(document.altforms)) {
+                altFormsLength = document.altforms.length;
+            } else if (typeof document.altforms === "string") {
+                altFormsLength = 1; // Consider the original form and the alt form
+            }
+            const newFormIndex = (currentFormIndex + 1) % (altFormsLength + 1); // Add 1 to account for the original form
+            return {
+                ...prev,
+                [document.cardId]: newFormIndex,
+            };
+        });
     };
-    
+
+
+
     useEffect(() => {
         if (onlyAltForm) {
-            const newAltForms = {};
-            documents.forEach((document) => {
-                if (document.altform) {
-                    newAltForms[document.cardId] = true;
+            setAltForms(prev => {
+                const newAltForms = { ...prev };
+                for (let cardId in newAltForms) {
+                    const document = documents.find(doc => doc.cardId === cardId);
+                    newAltForms[cardId] = (newAltForms[cardId] + 1) % document.altforms.length;
                 }
+                return newAltForms;
             });
-            setAltForms(newAltForms);
         } else {
-            setAltForms({});
+            setAltForms(prev => {
+                const newAltForms = { ...prev };
+                for (let cardId in newAltForms) {
+                    newAltForms[cardId] = 0;
+                }
+                return newAltForms;
+            });
         }
     }, [onlyAltForm, documents]);
-    
+
 
     return (
         <div>
@@ -235,18 +263,9 @@ const AcardCGH = (props) => {
                     </Box>
                 </Box>
                 <Box>
-                    <FormControlLabel sx={{ bgcolor: "#f2f3f8", borderRadius: "7px", paddingRight: "10px", color: "#121212", height: 22 }}
-                        control={
-                            <Switch
-                                checked={onlyAltForm}
-                                onChange={() => setOnlyAltForm((prev) => !prev)}
-                                color="primary"
-                            />
-                        }
-                        label={
-                            <Typography sx={{ fontSize: 12 }} variant="body2">Alternate Art</Typography>
-                        }
-                    />
+                    <Button>
+                        Alternate Art
+                    </Button>
                     <Button
                         sx={{
                             fontSize: 10,
@@ -272,24 +291,28 @@ const AcardCGH = (props) => {
                             <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative" }} height={imageHeight} width={imageWidth}>
                                 <img
                                     loading="lazy"
-                                    src={altForms[document.cardId] ? document.altform : document.image}
+                                    src={
+                                        (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) ? document.altforms[altFormIndex[document.cardId]] :
+                                            (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) ? document.altforms :
+                                                document.image
+                                    }
                                     draggable="false"
                                     alt={document.cardId}
                                     width={imageWidth}
                                     height={imageHeight}
                                 />
-                                <div className={altForms[document.cardId] ? "card__shine_alt" : ""}>
-                                    <div className={altForms[document.cardId] ? "card__shine-shimmer_alt" : ""}></div>
-                                </div>
                             </Box>
-                            {document.altform && (
-                                <Switch
-                                    checked={altForms[document.cardId]}
-                                    onChange={() => handleAltformToggle(document.cardId)}
-                                    color="primary"
-                                    sx={{ position: "absolute", bottom: 0, right: 0 }}
-                                />
-                            )}
+                            {(Array.isArray(document.altforms) && document.altforms.length > 1) || (typeof document.altforms === "string") ? (
+                                <button
+                                    onClick={(event) => handleFormChange(event, document)}
+                                    style={{ position: "absolute",backgroundColor:"#f2f3f8",
+                                    border:"none",borderRadius:"100px",
+                                    cursor:"pointer",bottom: 15, right: 5,width: `${imageWidth * 0.2}px`,height: `${imageWidth * 0.2}px`,
+                                    display:"flex",justifyContent:"center",alignItems:"center",overflow:"hidden" }}
+                                >
+                                    <SwapHoriz sx={{fontSize:"20px"}}/>
+                                </button>
+                            ) : null}
                         </Grid>
                     ))}
                     {selectedCard && (

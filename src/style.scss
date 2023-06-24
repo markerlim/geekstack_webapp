@@ -5,7 +5,7 @@
     width: 100%;
     display: flex;
     position: relative;
-    align-items: end;
+    align-items: flex-end;
     justify-content: center;
     mix-blend-mode: screen;
 
@@ -53,32 +53,6 @@
     content: "";
     position: fixed;
     background: url(https://unionarena-tcg.com/jp/images/products/boosters/jjk-1/bg.jpg) no-repeat top;
-    background-size: cover;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-}
-
-#cgh .css-1evflyk {
-    content: "";
-    position: fixed;
-    background: url(https://www.unionarena-tcg.com/jp/images/products/boosters/cgh-1/bg.jpg) no-repeat top;
-    background-size: cover;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-}
-
-#hxh .css-1evflyk {
-    content: "";
-    position: fixed;
-    background: url(https://www.unionarena-tcg.com/jp/images/products/boosters/htr-1/bg.jpg) no-repeat top;
-    background-color: rgba(63, 63, 63, 0.5);
-    background-blend-mode: multiply;
     background-size: cover;
     top: 0;
     left: 0;
