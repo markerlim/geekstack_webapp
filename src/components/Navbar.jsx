@@ -46,7 +46,6 @@ const Navbar = (props) => {
 
     return (
         <AppBar position="sticky">
-            <Box sx={{padding:"5px",textAlign:"center"}}>Hi do note that there are certain features that are new and may have bugs, we seek your kind understanding</Box>
             <StyledToolbar>
                 <Box p={1} sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>
                 <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{ width: "auto", height: "30px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>

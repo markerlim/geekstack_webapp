@@ -24,11 +24,11 @@ const Deckviewer = () => {
             </Helmet>
             <Box bgcolor={"#121212"} color={"#f2f3f8"}>
                 <Navbar />
-                <Stack direction="row" spacing={2} justifyContent={"space-between"}>
-                    <Box flex={1} sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box flex={8} p={2} height={"86vh"}><DeckLoader />
+                <Box>
+                    <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
+                    <Box height={"86vh"} sx={{marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"15px",paddingRight:"15px"}}><DeckLoader />
                     </Box>
-                </Stack>
+                    </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>
             </Box>
         </div>

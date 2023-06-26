@@ -203,6 +203,46 @@ const HomepageUI = (props) => {
                                 />
                             </ButtonBase>
                         </Link>
+                        <Link to={{ pathname: `btr` }} style={{ textDecoration: "none" }}>
+                            <ButtonBase sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                bgcolor: "#121212",
+                                padding: 2,
+                                borderRadius: 5,
+                                boxShadow: 5,
+                                overflow: "hidden",
+                                width: { xs: 125, sm: 200 },
+                                height: { xs: 188, sm: 300 }
+                            }}>
+                                <img
+                                    src="/images/deckimage9.jpg"
+                                    alt="me & robocco"
+                                    style={{ width: "140%", height: "auto" }}
+                                />
+                            </ButtonBase>
+                        </Link>
+                        <Link to={{ pathname: `mha` }} style={{ textDecoration: "none" }}>
+                            <ButtonBase sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                bgcolor: "#121212",
+                                padding: 2,
+                                borderRadius: 5,
+                                boxShadow: 5,
+                                overflow: "hidden",
+                                width: { xs: 125, sm: 200 },
+                                height: { xs: 188, sm: 300 }
+                            }}>
+                                <img
+                                    src="/images/deckimage10.jpg"
+                                    alt="my hero academia"
+                                    style={{ width: "140%", height: "auto" }}
+                                />
+                            </ButtonBase>
+                        </Link>
                     </Box>
                     <div style={{ height: "200px" }} />
                 </div>

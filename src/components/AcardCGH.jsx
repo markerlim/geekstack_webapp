@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, Switch, FormControlLabel, Typography } from "@mui/material";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
 import { CardModal } from "./CardModal";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
@@ -75,8 +75,8 @@ const AcardCGH = (props) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
-        const rarityFilterMatch = !rarityFilter || document.rarity === rarityFilter;
         const searchFilterMatch = searchMatch(document, currentSearchQuery);
+        const rarityFilterMatch = rarityFilter === "ALT" ? document.altforms !== undefined : !rarityFilter || document.rarity === rarityFilter;
         const altFormFilterMatch = !onlyAltForm || document.altform;
 
         return boosterFilterMatch && colorFilterMatch && animeFilterMatch && rarityFilterMatch && searchFilterMatch && altFormFilterMatch;
@@ -116,8 +116,6 @@ const AcardCGH = (props) => {
             };
         });
     };
-
-
 
     useEffect(() => {
         if (onlyAltForm) {
@@ -182,8 +180,8 @@ const AcardCGH = (props) => {
                                     position: "absolute"
                                 },
                             }}
-                            value={boosterFilter}
-                            onChange={(event) => setBoosterFilter(event.target.value)}
+                            value={rarityFilter}
+                            onChange={(event) => setRarityFilter(event.target.value)}
                             displayEmpty // Add this prop to display the placeholder when the value is empty
                             renderValue={(selectedValue) => selectedValue || 'Rarity'} // Add this prop to display the placeholder text when the value is empty
                         >
@@ -263,9 +261,6 @@ const AcardCGH = (props) => {
                     </Box>
                 </Box>
                 <Box>
-                    <Button>
-                        Alternate Art
-                    </Button>
                     <Button
                         sx={{
                             fontSize: 10,
@@ -286,35 +281,59 @@ const AcardCGH = (props) => {
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">
-                    {filteredDocuments.map((document) => (
-                        <Grid item key={document.cardId} sx={{ position: "relative" }}>
-                            <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative" }} height={imageHeight} width={imageWidth}>
-                                <img
-                                    loading="lazy"
-                                    src={
-                                        (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) ? document.altforms[altFormIndex[document.cardId]] :
-                                            (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) ? document.altforms :
-                                                document.image
-                                    }
-                                    draggable="false"
-                                    alt={document.cardId}
-                                    width={imageWidth}
-                                    height={imageHeight}
-                                />
-                            </Box>
-                            {(Array.isArray(document.altforms) && document.altforms.length > 1) || (typeof document.altforms === "string") ? (
-                                <button
-                                    onClick={(event) => handleFormChange(event, document)}
-                                    style={{ position: "absolute",backgroundColor:"#f2f3f8",
-                                    border:"none",borderRadius:"100px",
-                                    cursor:"pointer",bottom: 15, right: 5,width: `${imageWidth * 0.2}px`,height: `${imageWidth * 0.2}px`,
-                                    display:"flex",justifyContent:"center",alignItems:"center",overflow:"hidden" }}
-                                >
-                                    <SwapHoriz sx={{fontSize:"20px"}}/>
-                                </button>
-                            ) : null}
-                        </Grid>
-                    ))}
+                    {filteredDocuments
+                        .filter(document => !(rarityFilter === 'ALT' && (!document.altforms || document.altforms.length === 0 || document.altforms === '')))
+                        .map((document) => {
+                            if (rarityFilter === 'ALT' && document.altforms) {
+                                const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
+                                return altForms.map((form, index) => (
+                                    <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
+                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative",cursor:"pointer" }} height={imageHeight} width={imageWidth}>
+                                            <img
+                                                loading="lazy"
+                                                src={form}
+                                                draggable="false"
+                                                alt={`${document.cardId}-${index}`}
+                                                width={imageWidth}
+                                                height={imageHeight}
+                                            />
+                                        </Box>
+                                    </Grid>
+                                ))
+                            } else {
+                                return (
+                                    <Grid item key={document.cardId} sx={{ position: "relative" }}>
+                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative",cursor:"pointer" }}  height={imageHeight} width={imageWidth}>
+                                            <img
+                                                loading="lazy"
+                                                src={
+                                                    (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) ? document.altforms[altFormIndex[document.cardId]] :
+                                                        (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) ? document.altforms :
+                                                            document.image
+                                                }
+                                                draggable="false"
+                                                alt={document.cardId}
+                                                width={imageWidth}
+                                                height={imageHeight}
+                                            />
+                                        </Box>
+                                        {((Array.isArray(document.altforms) && document.altforms.length > 0) || (typeof document.altforms === "string" && document.altforms !== '')) ? (
+                                            <button
+                                                onClick={(event) => handleFormChange(event, document)}
+                                                style={{
+                                                position: "absolute", backgroundColor: "#f2f3f8",
+                                                border: "none", borderRadius: "100px",
+                                                cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.2}px`, height: `${imageWidth * 0.2}px`,
+                                                display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
+                                                }}
+                                            >
+                                                <SwapHoriz sx={{ fontSize: "20px" }} />
+                                            </button>
+                                        ) : null}
+                                    </Grid>
+                                )
+                            }
+                        })}
                     {selectedCard && (
                         <CardModal
                             open={openModal}

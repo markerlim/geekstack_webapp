@@ -3,10 +3,10 @@ import { Box } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
-import AcardHXH from "../components/AcardHXH";
+import AcardMHA from "../components/AcardMHA";
 import { Helmet } from "react-helmet";
 
-const AcardHXHpage = () => {
+const AcardMHApage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (searchValue) => {
@@ -30,9 +30,9 @@ const AcardHXHpage = () => {
       <Box bgcolor={"#121212"} color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
         <Box>
-            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
+            <Box sx={{ display: { xs: "none", sm: "none", md: "block" }}}><Sidebar /></Box>
             <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"18px",paddingRight:"18px"}}>
-              <AcardHXH searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <AcardMHA searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </Box>
           <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
         </Box>
@@ -41,4 +41,4 @@ const AcardHXHpage = () => {
   );
 }
 
-export default AcardHXHpage
+export default AcardMHApage

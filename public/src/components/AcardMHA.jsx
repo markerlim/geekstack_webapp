@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { Helmet } from "react-helmet";
 
 
-const AcardIMS = (props) => {
+const AcardMHA = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -18,7 +18,7 @@ const AcardIMS = (props) => {
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
-    const [animeFilter, setAnimeFilter] = useState("Idolmaster Shiny Colors");
+    const [animeFilter, setAnimeFilter] = useState("My Hero Academia");
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
@@ -45,7 +45,7 @@ const AcardIMS = (props) => {
         setAltForms(false);
         setOnlyAltForm(false);
         setAltFormIndex({});
-        setAnimeFilter("Idolmaster Shiny Colors");
+        setAnimeFilter("My Hero Academia");
         props.setSearchQuery("");
     };
 
@@ -165,8 +165,8 @@ const AcardIMS = (props) => {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value="UA04BT">UA04BT</MenuItem>
-                            <MenuItem value="UA04ST">UA04ST</MenuItem>
+                            <MenuItem value="UA10BT">UA10BT</MenuItem>
+                            <MenuItem value="UA10ST">UA10ST</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl sx={{ margin: 1 }}>
@@ -215,8 +215,8 @@ const AcardIMS = (props) => {
                                 <em>None</em>
                             </MenuItem>
                             <MenuItem value="Red">Red</MenuItem>
-                            <MenuItem value="Blue">Blue</MenuItem>
-                            <MenuItem value="Yellow">Yellow</MenuItem>
+                            <MenuItem value="Green">Green</MenuItem>
+                            <MenuItem value="Purple">Purple</MenuItem>
                         </Select>
                     </FormControl>
                     <Button
@@ -350,5 +350,5 @@ const AcardIMS = (props) => {
     );
 };
 
-export default AcardIMS;
+export default AcardMHA;
 

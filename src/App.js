@@ -19,6 +19,8 @@ import AcardJJKpage from "./pages/AcardJJKpage";
 import AcardKMYpage from "./pages/AcardKMYpage";
 import AcardTOApage from "./pages/AcardTOApage";
 import AcardTSKpage from "./pages/AcardTSKpage";
+import AcardBTRpage from "./pages/AcardBTRpage";
+import AcardMHApage from "./pages/AcardMHApage";
 import Articleviewer from "./pages/Articleviewer";
 import Geekhub from "./pages/Geekhub";
 
@@ -68,6 +70,8 @@ function App() {
           <Route path="kmy" element={<AcardKMYpage/>}/>
           <Route path="toa" element={<AcardTOApage/>}/>
           <Route path="tsk" element={<AcardTSKpage/>}/>
+          <Route path="btr" element={<AcardBTRpage/>}/>
+          <Route path="mha" element={<AcardMHApage/>}/>
         </Routes>
       </BrowserRouter>
     </div>

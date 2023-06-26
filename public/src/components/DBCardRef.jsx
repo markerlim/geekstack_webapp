@@ -133,6 +133,8 @@ const DBCardRef = (props) => {
                             <Button variant={animeFilter === "Demon Slayer" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Demon Slayer")}>Demon Slayer</Button>
                             <Button variant={animeFilter === "Tales of Arise" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Tales of Arise")}>Tales of Arise</Button>
                             <Button variant={animeFilter === "That Time I Got Reincarnated as a Slime" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("That Time I Got Reincarnated as a Slime")}>That Time I Got Reincarnated as a Slime</Button>
+                            <Button variant={animeFilter === "Me & Roboco" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Me & Roboco")}>Me & Roboco</Button>
+                            <Button variant={animeFilter === "My Hero Academia" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("My Hero Academia")}>My Hero Academia</Button>
                         </Box>
                     </>
                 )}
@@ -164,6 +166,8 @@ const DBCardRef = (props) => {
                                 <MenuItem value="UA05BT">UA05BT</MenuItem>
                                 <MenuItem value="UA06BT">UA06BT</MenuItem>
                                 <MenuItem value="UA07BT">UA07BT</MenuItem>
+                                <MenuItem value="UA09BT">UA09BT</MenuItem>
+                                <MenuItem value="UA10BT">UA10BT</MenuItem>
                                 <MenuItem value="UA01ST">UA01ST</MenuItem>
                                 <MenuItem value="UA02ST">UA02ST</MenuItem>
                                 <MenuItem value="UA03ST">UA03ST</MenuItem>
@@ -171,6 +175,8 @@ const DBCardRef = (props) => {
                                 <MenuItem value="UA05ST">UA05ST</MenuItem>
                                 <MenuItem value="UA06ST">UA06ST</MenuItem>
                                 <MenuItem value="UA07ST">UA07ST</MenuItem>
+                                <MenuItem value="UA09ST">UA09ST</MenuItem>
+                                <MenuItem value="UA10ST">UA10ST</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl sx={{ margin: 1 }}>

@@ -124,8 +124,8 @@ const TestRightBar = (props) => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
+            <br></br>
             <Grid style={{ overflowY: "auto", height: "100%"}}>
-                <br></br>
                 <Grid container spacing={2} justifyContent="center">
                     {sortedCards.map((document) => (
                         countArray[document.cardId] > 0 && (

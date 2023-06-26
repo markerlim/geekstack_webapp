@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { Helmet } from "react-helmet";
 
 
-const AcardIMS = (props) => {
+const AcardBTR = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -18,7 +18,7 @@ const AcardIMS = (props) => {
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
-    const [animeFilter, setAnimeFilter] = useState("Idolmaster Shiny Colors");
+    const [animeFilter, setAnimeFilter] = useState("Me & Roboco");
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
@@ -45,7 +45,7 @@ const AcardIMS = (props) => {
         setAltForms(false);
         setOnlyAltForm(false);
         setAltFormIndex({});
-        setAnimeFilter("Idolmaster Shiny Colors");
+        setAnimeFilter("Me & Roboco");
         props.setSearchQuery("");
     };
 
@@ -165,8 +165,8 @@ const AcardIMS = (props) => {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value="UA04BT">UA04BT</MenuItem>
-                            <MenuItem value="UA04ST">UA04ST</MenuItem>
+                            <MenuItem value="UA09BT">UA09BT</MenuItem>
+                            <MenuItem value="UA09ST">UA09ST</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl sx={{ margin: 1 }}>
@@ -214,8 +214,8 @@ const AcardIMS = (props) => {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value="Red">Red</MenuItem>
                             <MenuItem value="Blue">Blue</MenuItem>
+                            <MenuItem value="Green">Green</MenuItem>
                             <MenuItem value="Yellow">Yellow</MenuItem>
                         </Select>
                     </FormControl>
@@ -281,7 +281,7 @@ const AcardIMS = (props) => {
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">
-                    {filteredDocuments
+                {filteredDocuments
                         .filter(document => !(rarityFilter === 'ALT' && (!document.altforms || document.altforms.length === 0 || document.altforms === '')))
                         .map((document) => {
                             if (rarityFilter === 'ALT' && document.altforms) {
@@ -303,7 +303,7 @@ const AcardIMS = (props) => {
                             } else {
                                 return (
                                     <Grid item key={document.cardId} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative",cursor:"pointer" }} height={imageHeight} width={imageWidth}>
+                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative",cursor:"pointer" }}  height={imageHeight} width={imageWidth}>
                                             <img
                                                 loading="lazy"
                                                 src={
@@ -321,10 +321,10 @@ const AcardIMS = (props) => {
                                             <button
                                                 onClick={(event) => handleFormChange(event, document)}
                                                 style={{
-                                                    position: "absolute", backgroundColor: "#f2f3f8",
-                                                    border: "none", borderRadius: "100px",
-                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.2}px`, height: `${imageWidth * 0.2}px`,
-                                                    display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
+                                                position: "absolute", backgroundColor: "#f2f3f8",
+                                                border: "none", borderRadius: "100px",
+                                                cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.2}px`, height: `${imageWidth * 0.2}px`,
+                                                display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
                                                 }}
                                             >
                                                 <SwapHoriz sx={{ fontSize: "20px" }} />
@@ -350,5 +350,5 @@ const AcardIMS = (props) => {
     );
 };
 
-export default AcardIMS;
+export default AcardBTR;
 

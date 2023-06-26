@@ -42,6 +42,8 @@ const DeckBuilderBar = (props) => {
     "/images/deckimage6.jpg",
     "/images/deckimage7.jpg",
     "/images/deckimage8.jpg",
+    "/images/deckimage9.jpg",
+    "/images/deckimage10.jpg",
   ];
 
   const handleClearClick = () => {
