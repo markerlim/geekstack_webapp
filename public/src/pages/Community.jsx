@@ -31,10 +31,10 @@ const Community = () => {
                         <span style={{ color: "#DA9292" }}><strong>DISCLAIMER: Do note that the account creation is mainly a security feature for the Website itself (from Bots) and we will have no access to your credentials whatsoever.
                             Your account information is kept confidential and secure, and we take all necessary steps to prevent any unauthorized access to your account.</strong></span>
                         <br></br>
+                        <span>The literal and graphical information presented on this site about union deck, including all data about the cards is copyright by Bandai Namco Entertainment.
+                            <br></br>
+                            This website is not produced by, endorsed by, supported by or affiliated with Bandai Namco Entertainment.</span>
                         <span>Also, do note that we will be implementing more features along the way so please do be patient.</span>
-                        <br></br>
-                        <span><strong>Latest patch:</strong> The images in all the decks created before 27/04/2023 are stored on an alternate database. However only the export jpeg feature is affected.</span>
-                        <span>In order to work around this, you can load your deck in deckbuild and resave your deck. You should thereafter be able to export</span>
                         <br></br>
                         <br></br>
                         <span style={{ textAlign: "center" }}>If you like what we do and would like to support us,<br />please feel free to donate as the maintainence of website is not cheap :D</span>
