@@ -37,7 +37,7 @@ const Sidebar = () => {
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem sx={{display:"none"}} disablePadding>
+                    <ListItem disablePadding>
                         <ListItemButton component={Link} href="#articles" to="/articles">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Article sx={{ color: "#10c5a3" }} alt="articles" />

@@ -23,6 +23,7 @@ import AcardBTRpage from "./pages/AcardBTRpage";
 import AcardMHApage from "./pages/AcardMHApage";
 import Articleviewer from "./pages/Articleviewer";
 import Geekhub from "./pages/Geekhub";
+import ArticleUI from "./pages/ArticleUI";
 
 smoothscroll.polyfill();
 
@@ -72,6 +73,7 @@ function App() {
           <Route path="tsk" element={<AcardTSKpage/>}/>
           <Route path="btr" element={<AcardBTRpage/>}/>
           <Route path="mha" element={<AcardMHApage/>}/>
+          <Route path="/article01" element={<ArticleUI/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, ButtonGroup, Grid, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { Delete, Save, Sort, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
@@ -29,8 +29,6 @@ const DeckBuilderBar = (props) => {
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
-  const [countArrayMaintain, setCountArrayMaintain] = useState(false);
-  const [energyStats, setEnergyStats] = useState({});
 
   const images = [
     "/images/deckimage.jpg",

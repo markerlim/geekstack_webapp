@@ -201,7 +201,7 @@ const DeckCardLoader = () => {
               <Box flex={2} p={1} sx={{ display: { xs: "none", sm: "none", md: "block" }, textAlign: "center", color: "#f2f3f8" }}>
                 <Box sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: 150 }} alt="uniondeck" src="/icons/uniondecklogo.png" /></Box>
                 <br></br>
-                <Box width="100%" textAlign="center"><button onClick={exportDeckAsJpeg} disabled>Export as JPEG</button></Box>
+                <Box width="100%" textAlign="center"><button onClick={exportDeckAsJpeg} style={{cursor:"pointer"}}>Export as JPEG</button></Box>
               </Box>
             </Box>
           </Box>
