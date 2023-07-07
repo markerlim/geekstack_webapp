@@ -69,7 +69,6 @@ const DeckCardExporter = ({ cards, energyStats, triggerStateStats }) => {
           width: "1920px",
           height: "1080px",
           backgroundColor: "#121212",
-          background: "url(/images/articlebg/JJKBG.jpg) no-repeat" ,
           position: "relative",
           overflow: "hidden",
         }}
@@ -86,7 +85,7 @@ const DeckCardExporter = ({ cards, energyStats, triggerStateStats }) => {
           }}
         >
           <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Box flex={10} p={3}>
+            <Box flex={8} p={1}>
               <Grid container spacing={2} justifyContent="center">
                 {cards.map((card, index) => (
                   <Grid item key={card.id}>
@@ -100,7 +99,7 @@ const DeckCardExporter = ({ cards, energyStats, triggerStateStats }) => {
                 ))}
               </Grid>
             </Box>
-            <Box flex={2} p={3} sx={{ textAlign: "left", color: "#f2f3f8" }}>
+            <Box flex={2} p={1} sx={{ textAlign: "left", color: "#f2f3f8" }}>
               <h3>Energy Cost Breakdown:</h3>
               <div style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
                 {Object.entries(energyStats).map(([energyCost, count]) => (
@@ -111,17 +110,17 @@ const DeckCardExporter = ({ cards, energyStats, triggerStateStats }) => {
               </div>
               <h3>AP Cost Breakdown:</h3>
               <div style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
-                {Object.entries(triggerStateStats)
-                  .filter(([triggerState, count]) =>
-                    triggerState === "Color" || triggerState === "Special" || triggerState === "Final"
-                  )
-                  .map(([triggerState, count]) => (
-                    <div key={triggerState} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
-                      <img src={getImageSrc1(triggerState)} alt={`${triggerState}`} width="50px" height="auto" /><span>: {count}</span>
-                    </div>
-                  ))
-                }
-              </div>
+                  {Object.entries(triggerStateStats)
+                    .filter(([triggerState, count]) =>
+                      triggerState === "Color" || triggerState === "Special" || triggerState === "Final"
+                    )
+                    .map(([triggerState, count]) => (
+                      <div key={triggerState} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
+                        <img src={getImageSrc1(triggerState)} alt={`${triggerState}`} width="50px" height="auto" /><span>:{count}</span>
+                      </div>
+                    ))
+                  }
+                </div>
               <h3>Card Type Breakdown:</h3>
               <Box sx={{ textAlign: "center", display: "flex", flexDirection: "column", gap: "10px", justifyContent: "center", alignItems: "center" }}>
                 <div style={{ height: "30px" }} />
