@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import AcardCGH from "../components/AcardCGH";
 import { Helmet } from "react-helmet";
+import { Favorite } from "@mui/icons-material";
 
-const AcardCGHpage = () => {
+const AcardCGHpage = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (searchValue) => {
     setSearchQuery(searchValue);
   };
+
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "webmanifest";
@@ -29,6 +31,16 @@ const AcardCGHpage = () => {
       </Helmet>
       <Box bgcolor={"#121212"} color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
+        <IconButton
+          sx={{
+            position: "fixed",
+            bottom: "50px",
+            right: "50px",
+            color: "red",
+          }}
+        >
+          <Favorite sx={{fontSize: "100px"}} />
+        </IconButton>
         <Box>
             <Box sx={{ display: { xs: "none", sm: "none", md: "block" }}}><Sidebar /></Box>
             <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"18px",paddingRight:"18px"}}>

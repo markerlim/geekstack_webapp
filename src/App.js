@@ -24,6 +24,7 @@ import AcardMHApage from "./pages/AcardMHApage";
 import Articleviewer from "./pages/Articleviewer";
 import Geekhub from "./pages/Geekhub";
 import ArticleUI from "./pages/ArticleUI";
+import TestPage from "./pages/TestPage";
 
 smoothscroll.polyfill();
 
@@ -63,6 +64,7 @@ function App() {
           <Route path="geekhub" element={<Geekhub/>} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
+          <Route path="test" element={<TestPage />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />
           <Route path="cgh" element={<AcardCGHpage/>}/>
           <Route path="hxh" element={<AcardHXHpage/>}/>

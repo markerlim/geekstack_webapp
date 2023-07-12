@@ -23,7 +23,7 @@ const Sidebar = () => {
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem sx={{display:"none"}} disablePadding>
+                    <ListItem disablePadding>
                         <ListItemButton component={Link} href="#geekhub" to="/geekhub">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Diversity2 sx={{ color: "#10c5a3" }} alt="geekhub" />
@@ -46,6 +46,13 @@ const Sidebar = () => {
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton component={Link} href="#disclaimer" to="/disclaimer">
+                            <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
+                                <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} href="#test" to="/test">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
                             </ListItemIcon>
