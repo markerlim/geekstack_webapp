@@ -264,3 +264,17 @@
         display: none;
     }
 }
+
+.fc-list-day-cushion{
+    background-color: #240056 !important;
+}
+.fc-list-event:hover{
+    color:#121212 ;
+}
+.fc-list-event{
+    background-color: #2f2f2f;
+    color:#f2f3f8;
+}
+.fc-listYear-view, .fc-list-day th, .fc-event td{
+    border-color:transparent !important;
+}

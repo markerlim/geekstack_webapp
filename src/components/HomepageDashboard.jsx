@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { doc, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
@@ -9,6 +9,33 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 const HomepageDashboard = () => {
   const [favorites, setFavorites] = useState([]);
   const { currentUser } = useAuth();
+  const [justifyContent, setJustifyContent] = useState('flex-start');
+  const boxRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (!boxRef.current) return;
+
+      let childWidth = 0;
+      for (let child of boxRef.current.children) {
+        childWidth += child.getBoundingClientRect().width;
+      }
+
+      if (childWidth > boxRef.current.getBoundingClientRect().width) {
+        setJustifyContent('flex-start');
+      } else {
+        setJustifyContent('center');
+      }
+    }
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, [favorites]);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -30,7 +57,8 @@ const HomepageDashboard = () => {
     }
   }, [currentUser]);
 
-  const handleFavorite = async (favorite) => {
+  const handleFavorite = async (event, favorite) => {
+    event.stopPropagation(); // Stop event propagation
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
       await updateDoc(userDocRef, {
@@ -43,10 +71,10 @@ const HomepageDashboard = () => {
   };
 
   return (
-    <div>
-      <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
-        {favorites.map((favorite, index) => (
-          <Link to={{ pathname: `/${favorite.pathname}` }} style={{ textDecoration: "none" }}>
+    <Box ref={boxRef} sx={{ display: "flex", flexDirection: "row", overflowX: "auto",justifyContent:justifyContent, width: "100%", gap: "20px" }}>
+      {favorites.map((favorite, index) => (
+        <div>
+          <Link to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
             <ButtonBase
               sx={{
                 display: "flex",
@@ -62,26 +90,24 @@ const HomepageDashboard = () => {
               }}
             >
               <img
+                key={index}
                 src={favorite.imageSrc}
                 alt={favorite.alt}
                 style={{ width: "140%", height: "auto" }}
               />
-              <IconButton
-                sx={{
-                  position: "absolute",
-                  top: 5,
-                  right: 5,
-                  color: favorites.includes(favorite) ? "red" : "white",
-                }}
-                onClick={() => handleFavorite(favorite)}
-              >
-                <FavoriteIcon />
-              </IconButton>
             </ButtonBase>
           </Link>
-        ))}
-      </Box>
-    </div>
+          <IconButton
+            sx={{
+              color: favorites.includes(favorite) ? "red" : "white",
+            }}
+            onClick={() => handleFavorite(favorite)}
+          >
+            <FavoriteIcon />
+          </IconButton>
+        </div>
+      ))}
+    </Box>
   );
 };
 

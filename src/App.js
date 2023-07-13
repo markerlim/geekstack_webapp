@@ -60,22 +60,22 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="disclaimer" element={<Community />} />
-          <Route path="articles" element={<Articleviewer/>} />
-          <Route path="geekhub" element={<Geekhub/>} />
+          <Route path="articles" element={<Articleviewer />} />
+          <Route path="geekhub" element={<Geekhub />} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
           <Route path="test" element={<TestPage />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />
-          <Route path="cgh" element={<AcardCGHpage/>}/>
-          <Route path="hxh" element={<AcardHXHpage/>}/>
-          <Route path="ims" element={<AcardIMSpage/>}/>
-          <Route path="jjk" element={<AcardJJKpage/>}/>
-          <Route path="kmy" element={<AcardKMYpage/>}/>
-          <Route path="toa" element={<AcardTOApage/>}/>
-          <Route path="tsk" element={<AcardTSKpage/>}/>
-          <Route path="btr" element={<AcardBTRpage/>}/>
-          <Route path="mha" element={<AcardMHApage/>}/>
-          <Route path="/article01" element={<ArticleUI/>} />
+          <Route path="cgh" element={<AcardCGHpage />} />
+          <Route path="hxh" element={<AcardHXHpage />} />
+          <Route path="ims" element={<AcardIMSpage />} />
+          <Route path="jjk" element={<AcardJJKpage />} />
+          <Route path="kmy" element={<AcardKMYpage />} />
+          <Route path="toa" element={<AcardTOApage />} />
+          <Route path="tsk" element={<AcardTSKpage />} />
+          <Route path="btr" element={<AcardBTRpage />} />
+          <Route path="mha" element={<AcardMHApage />} />
+          <Route path="/article01" element={<ArticleUI />} />
         </Routes>
       </BrowserRouter>
     </div>

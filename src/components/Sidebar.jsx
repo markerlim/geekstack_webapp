@@ -10,49 +10,49 @@ const Sidebar = () => {
             <Box>
                 <List>
                     <ListItem sx={{bottomMargin:"20px"}} disablePadding>
-                        <ListItemButton component={Link} href="#home" to="/">
+                        <ListItemButton component={Link} to="/">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Home sx={{ color: "#10c5a3" }} alt="home" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#cards" to="/deckbuilder">
+                        <ListItemButton component={Link} to="/deckbuilder">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Style sx={{ color: "#10c5a3" }} alt="deckbuilder" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#geekhub" to="/geekhub">
+                        <ListItemButton component={Link} to="/geekhub">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Diversity2 sx={{ color: "#10c5a3" }} alt="geekhub" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#decks" to="/deckviewer">
+                        <ListItemButton component={Link} to="/deckviewer">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Inventory sx={{ color: "#10c5a3" }} alt="deck views" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#articles" to="/articles">
+                        <ListItemButton component={Link} to="/articles">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Article sx={{ color: "#10c5a3" }} alt="articles" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#disclaimer" to="/disclaimer">
+                        <ListItemButton component={Link} to="/disclaimer">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#test" to="/test">
+                        <ListItemButton component={Link} to="/test">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
                             </ListItemIcon>
