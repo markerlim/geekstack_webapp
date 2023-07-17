@@ -22,9 +22,11 @@ import AcardTSKpage from "./pages/AcardTSKpage";
 import AcardBTRpage from "./pages/AcardBTRpage";
 import AcardMHApage from "./pages/AcardMHApage";
 import Articleviewer from "./pages/Articleviewer";
+import DigimonPage from "./pages/DigimonPage";
 import Geekhub from "./pages/Geekhub";
 import ArticleUI from "./pages/ArticleUI";
 import TestPage from "./pages/TestPage";
+import DTCGBTpage from "./pages/DTCGBTpage";
 
 smoothscroll.polyfill();
 
@@ -75,6 +77,8 @@ function App() {
           <Route path="tsk" element={<AcardTSKpage />} />
           <Route path="btr" element={<AcardBTRpage />} />
           <Route path="mha" element={<AcardMHApage />} />
+          <Route path="digimon" element={<DigimonPage/>}/>
+          <Route path="/digimon/:booster" element={<DTCGBTpage/>}/>
           <Route path="/article01" element={<ArticleUI />} />
         </Routes>
       </BrowserRouter>

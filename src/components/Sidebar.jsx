@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
-import { Article, Diversity2, Home, Inventory, Stars, Style } from '@mui/icons-material'
+import { Article, CardGiftcardTwoTone, Diversity2, Home, Inventory, Stars, Style } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
@@ -24,7 +24,7 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/geekhub">
+                        <ListItemButton sx={{display:"none"}} component={Link} to="/geekhub">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Diversity2 sx={{ color: "#10c5a3" }} alt="geekhub" />
                             </ListItemIcon>
@@ -38,7 +38,7 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/articles">
+                        <ListItemButton sx={{display:"none"}} component={Link} to="/articles">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Article sx={{ color: "#10c5a3" }} alt="articles" />
                             </ListItemIcon>
@@ -55,6 +55,13 @@ const Sidebar = () => {
                         <ListItemButton component={Link} to="/test">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/digimon">
+                            <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
+                                <img src="/icons/digivice.png" width="30px" alt="digivice"/>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

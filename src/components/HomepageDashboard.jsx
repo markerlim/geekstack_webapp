@@ -51,37 +51,52 @@ const HomepageDashboard = () => {
         console.error("Error fetching favorites:", error);
       }
     };
-
     if (currentUser) {
       fetchFavorites();
     }
   }, [currentUser]);
 
-  const handleFavorite = async (event, favorite) => {
-    event.stopPropagation(); // Stop event propagation
+  const handleFavorite = async (favorite) => {
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
-      await updateDoc(userDocRef, {
-        favorites: arrayRemove(favorite),
-      });
-      setFavorites(favorites.filter((item) => item !== favorite));
+
+      // Get current user document snapshot
+      const docSnap = await getDoc(userDocRef);
+      // Extract current favorites
+      const currentFavorites = docSnap.data().favorites || [];
+      // Find the favorite to be removed
+      const favoriteToRemove = currentFavorites.find(
+        (fav) =>
+          fav.pathname === favorite.pathname &&
+          fav.alt === favorite.alt &&
+          fav.imageSrc === favorite.imageSrc &&
+          fav.imgWidth === favorite.imgWidth
+      );
+
+      if (favoriteToRemove) {
+        await updateDoc(userDocRef, {
+          favorites: arrayRemove(favoriteToRemove),
+        });
+
+        setFavorites(currentFavorites.filter((fav) => fav !== favoriteToRemove));
+      }
     } catch (error) {
       console.error("Error removing from favorites:", error);
     }
   };
 
+
   return (
-    <Box ref={boxRef} sx={{ display: "flex", flexDirection: "row", overflowX: "auto",justifyContent:justifyContent, width: "100%", gap: "20px" }}>
+    <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", gap: "20px" }}>
       {favorites.map((favorite, index) => (
         <div>
-          <Link to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
+          <Link key={index} to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
             <ButtonBase
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 bgcolor: "#121212",
-                padding: 2,
                 borderRadius: 5,
                 boxShadow: 5,
                 overflow: "hidden",
@@ -90,10 +105,9 @@ const HomepageDashboard = () => {
               }}
             >
               <img
-                key={index}
                 src={favorite.imageSrc}
                 alt={favorite.alt}
-                style={{ width: "140%", height: "auto" }}
+                style={{ width: `${favorite.imgWidth}`, height: "auto" }}
               />
             </ButtonBase>
           </Link>

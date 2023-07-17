@@ -34,29 +34,29 @@ const Articleviewer = () => {
                 <Navbar />
                 <Box height={"100%"}>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px", overflowY: "auto", height: "100vh", justifyContent: "center"}}>
-                            <ButtonBase
-                                onClick={handleButtonClick}  // handle button click to navigate to a new route
-                                sx={{
-                                    alignItems: "center",
-                                    backgroundColor: "#240056",
-                                    padding: "20px",
-                                    gap: "10px",
-                                    overflow: "hidden",
-                                    height: { xs: 188, sm: 200 }
-                                }}>
-                                <img
-                                    src="/UD/JJK-1-063_ALT.png"
-                                    alt="sukunafinger"
-                                    style={{ width: "130px", height: "auto" }}
-                                />
-                                <Box sx=
-                                    {{ textAlign: "left",height:"inherit",paddingTop:"40px"}}>
-                                    <span style={{ fontFamily: "Anton", fontSize: "20px" }}>How does the Sukuna Deck work?</span>
-                                    <br></br>
-                                    Written by DPP Channel
-                                </Box>
-                            </ButtonBase>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px", overflowY: "auto", height: "100vh", justifyContent: "center" }}>
+                        <ButtonBase
+                            onClick={handleButtonClick}  // handle button click to navigate to a new route
+                            sx={{
+                                alignItems: "center",
+                                backgroundColor: "#240056",
+                                padding: "20px",
+                                gap: "10px",
+                                overflow: "hidden",
+                                height: { xs: 188, sm: 200 }
+                            }}>
+                            <img
+                                src="/UD/JJK-1-063_ALT.png"
+                                alt="sukunafinger"
+                                style={{ width: "130px", height: "auto" }}
+                            />
+                            <Box sx=
+                                {{ textAlign: "left", height: "inherit", paddingTop: "40px" }}>
+                                <span style={{ fontFamily: "Anton", fontSize: "20px" }}>How does the Sukuna Deck work?</span>
+                                <br></br>
+                                Written by DPP Channel
+                            </Box>
+                        </ButtonBase>
                     </Box>
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>

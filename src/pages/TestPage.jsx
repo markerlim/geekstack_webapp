@@ -118,8 +118,8 @@ const TestPage = () => {
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, overflowY: "auto", paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center" }} height={"86vh"}>
-                        <div style={{ height: "0px" }}></div>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex",flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"90vh"}>
+                        <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box width={"80vw"} position={"relative"}>
                             <div>Launch Calendar</div>
@@ -147,6 +147,7 @@ const TestPage = () => {
                                 <MenuItem value="ruipoUA">UNIONARENA</MenuItem>
                                 <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                             </Select>
+                            <div style={{ height: "200px" }}></div>
                         </Box>
                     </Box>
                 </Box>

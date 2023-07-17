@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Box, Grid, ButtonBase, Button, IconButton } from "@mui/material";
+import { Box, Grid, Button, } from "@mui/material";
 import { CardModal } from "./CardModal";
 import { ResponsiveImage } from "./ResponsiveImage";
 import searchMatch from "./searchUtils";
-import { Link } from "react-router-dom";
-import { Favorite } from "@mui/icons-material";
 import ButtonList from "./UnionArenaBoosterButton";
 
 const HomepageUI = (props) => {

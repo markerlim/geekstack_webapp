@@ -4,9 +4,9 @@ import { ButtonBase, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
-import { doc, getDoc, setDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
 
-const MyButton = ({ pathname, alt, imageSrc }) => {
+const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const { currentUser } = useAuth();
 
@@ -37,7 +37,7 @@ const MyButton = ({ pathname, alt, imageSrc }) => {
 
       checkFavorite();
     }
-  }, [currentUser, pathname, alt, imageSrc]);
+  }, [currentUser, pathname, alt, imageSrc, imgWidth]);
 
   const handleFavorite = async () => {
     setIsFavorited(!isFavorited);
@@ -45,7 +45,7 @@ const MyButton = ({ pathname, alt, imageSrc }) => {
     if (currentUser) {
       try {
         const userDocRef = doc(db, "users", currentUser.uid);
-        const favoriteData = { pathname, alt, imageSrc };
+        const favoriteData = { pathname, alt, imageSrc, imgWidth };
 
         if (isFavorited) {
           // If already favorited, remove it
@@ -79,7 +79,6 @@ const MyButton = ({ pathname, alt, imageSrc }) => {
             flexDirection: "column",
             alignItems: "center",
             bgcolor: "#121212",
-            padding: 2,
             borderRadius: 5,
             boxShadow: 5,
             overflow: "hidden",
@@ -90,7 +89,7 @@ const MyButton = ({ pathname, alt, imageSrc }) => {
           <img
             src={imageSrc}
             alt={alt}
-            style={{ width: "140%", height: "auto" }}
+            style={{ width: `${imgWidth}`, height: "auto" }}
           />
         </ButtonBase>
       </Link>
@@ -111,47 +110,56 @@ const ButtonList = () => {
     {
       pathname: "cgh",
       alt: "code geass",
-      imageSrc: "/images/deckimage1.jpg"
+      imageSrc: "/images/deckimage1.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "jjk",
       alt: "jujutsu no kaisen",
-      imageSrc: "/images/deckimage2.jpg"
+      imageSrc: "/images/deckimage2.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "hxh",
       alt: "hunter x hunter",
-      imageSrc: "/images/deckimage3.jpg"
+      imageSrc: "/images/deckimage3.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "ims",
       alt: "idolmaster shiny colors",
-      imageSrc: "/images/deckimage4.jpg"
+      imageSrc: "/images/deckimage4.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "kmy",
       alt: "demon slayer",
-      imageSrc: "/images/deckimage5.jpg"
+      imageSrc: "/images/deckimage5.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "toa",
       alt: "tales of arise",
-      imageSrc: "/images/deckimage6.jpg"
+      imageSrc: "/images/deckimage6.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "tsk",
       alt: "that time I reincarnated as a slime",
-      imageSrc: "/images/deckimage7.jpg"
+      imageSrc: "/images/deckimage7.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "btr",
       alt: "me & robocco",
-      imageSrc: "/images/deckimage9.jpg"
+      imageSrc: "/images/deckimage9.jpg",
+      imgWidth: "110%",
     },
     {
       pathname: "mha",
       alt: "my hero academia",
-      imageSrc: "/images/deckimage10.jpg"
+      imageSrc: "/images/deckimage10.jpg",
+      imgWidth: "110%",
     },
     // Add more button data as needed
   ];
@@ -164,6 +172,7 @@ const ButtonList = () => {
           pathname={button.pathname}
           alt={button.alt}
           imageSrc={button.imageSrc}
+          imgWidth={button.imgWidth}
         />
       ))}
     </>
