@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, MenuItem, Select } from "@mui/material"
+import { Box, Button, ButtonBase, MenuItem, Select } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
@@ -118,7 +118,7 @@ const TestPage = () => {
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex",flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"90vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box width={"80vw"} position={"relative"}>
@@ -147,7 +147,26 @@ const TestPage = () => {
                                 <MenuItem value="ruipoUA">UNIONARENA</MenuItem>
                                 <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                             </Select>
-                            <div style={{ height: "200px" }}></div>
+                        </Box>
+                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap:'wrap', gap:{ xs: "20px", sm:"50px" },justifyContent:"center" }}>
+                            <ButtonBase sx={{padding:"1px", display: "flex", flexDirection: "column",
+                                '&:hover': {
+                                    backgroundColor: "#240052", // Change this to the desired hover background color
+                                    color: "#f2f3f8", // Change this to the desired hover text color if needed
+                                },
+                            }}
+                                href="https://www.buymeacoffee.com/uniondeck">
+                                <img style={{ width: "200px", borderRadius: "10px" }} src="images/donation.png" alt="donation" />
+
+                                <span style={{ color: "#f2f3f8" }}>Click or scan to contribute!</span>
+                            </ButtonBase>
+                            <Box sx={{flexWrap:"wrap",width:{ xs: "80vw", sm: "40vw" },textJustify:"inter-word",textAlign:"justify"}}>
+                                I hope that the experience on this website is enjoyable for you and would kindly appreciate any form of donation and contribution.
+                                All money from this website will be used to run and make this website better
+                            </Box>
+                        </Box>
+                        <Box padding={1}>
+                            <div style={{height:"100px"}}></div>
                         </Box>
                     </Box>
                 </Box>

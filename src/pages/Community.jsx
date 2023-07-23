@@ -28,12 +28,12 @@ const Community = () => {
                         <Sidebar />
                     </Box>
                     <Box height={"100vh"} sx={{ display: "flex", flexDirection: "column", overflowY: "auto", marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingTop: "25px", paddingLeft: "25px", paddingRight: "25px" }}>
-                        <span style={{ color: "#DA9292" }}><strong>DISCLAIMER: Do note that the account creation is mainly a security feature for the Website itself (from Bots) and we will have no access to your credentials whatsoever.
+                        <span style={{ color: "#DA9292" }}><strong>DISCLAIMER: Do note that the account creation is mainly a security feature for the Website itself (from Bots) and we will have no access to your google credentials whatsoever.
                             Your account information is kept confidential and secure, and we take all necessary steps to prevent any unauthorized access to your account.</strong></span>
                         <br></br>
                         <span>The literal and graphical information presented on this site about union deck, including all data about the cards is copyright by Bandai Namco Entertainment.
                             <br></br>
-                            This website is not produced by, endorsed by, supported by or affiliated with Bandai Namco Entertainment.</span>
+                            This website is not produced by, endorsed by, supported by or affiliated with Bandai Namco Entertainment.Please support the official card game by Bandai Namco Entertainment</span>
                         <span>Also, do note that we will be implementing more features along the way so please do be patient.</span>
                         <br></br>
                         <br></br>

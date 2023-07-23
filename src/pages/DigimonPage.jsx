@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
 import { Helmet } from "react-helmet";
+import "../style.scss";
 import DTCGButtonList from "../components/DTCGBoosterButton";
 
 const DigimonPage = () => {
@@ -26,11 +27,11 @@ const DigimonPage = () => {
             </Helmet>
             <Box bgcolor={"#121212"} color={"#f2f3f8"}>
                 <Navbar />
-                <Box>
+                <Box className="hide-scrollbar">
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"90vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
                         <div style={{ height: "1px" }}></div>
-                        <Box sx={{display:"flex",flexDirection:"row",flexWrap:"wrap",gap:"30px",justifyContent:"center"}}>
+                        <Box sx={{display:"flex",flexDirection:"row",flexWrap:"wrap",gap:"30px",paddingBottom:"150px",justifyContent:"center"}}>
                             <DTCGButtonList />
                         </Box>
                     </Box>

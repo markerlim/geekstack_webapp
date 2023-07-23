@@ -4,13 +4,14 @@ import { db } from "../Firebase";
 import { doc, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { Box, ButtonBase, IconButton } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Star } from "@mui/icons-material";
 
 const HomepageDashboard = () => {
   const [favorites, setFavorites] = useState([]);
   const { currentUser } = useAuth();
   const [justifyContent, setJustifyContent] = useState('flex-start');
   const boxRef = useRef(null);
+  const digimon = "digimon/";
 
   useEffect(() => {
     const handleResize = () => {
@@ -87,40 +88,47 @@ const HomepageDashboard = () => {
 
 
   return (
-    <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", gap: "20px" }}>
-      {favorites.map((favorite, index) => (
-        <div>
-          <Link key={index} to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
-            <ButtonBase
+    <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", gap: "20px", height: { xs: 228, sm: 340 }, }}>
+      {favorites.length > 0 ? (
+        favorites.map((favorite, index) => (
+          <div>
+            <Link key={index} to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
+              <ButtonBase
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  bgcolor: "#121212",
+                  borderRadius: 5,
+                  boxShadow: 5,
+                  overflow: "hidden",
+                  width: { xs: 125, sm: 200 },
+                  height: { xs: 188, sm: 300 },
+                }}
+              >
+                <img
+                  src={favorite.imageSrc}
+                  alt={favorite.alt}
+                  style={{ width: `${favorite.imgWidth}`, height: "auto" }}
+                />
+              </ButtonBase>
+            </Link>
+            <IconButton
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                bgcolor: "#121212",
-                borderRadius: 5,
-                boxShadow: 5,
-                overflow: "hidden",
-                width: { xs: 125, sm: 200 },
-                height: { xs: 188, sm: 300 },
+                color: favorites.includes(favorite) ? "#CCff00" : "white",
               }}
+              onClick={() => handleFavorite(favorite)}
             >
-              <img
-                src={favorite.imageSrc}
-                alt={favorite.alt}
-                style={{ width: `${favorite.imgWidth}`, height: "auto" }}
-              />
-            </ButtonBase>
-          </Link>
-          <IconButton
-            sx={{
-              color: favorites.includes(favorite) ? "red" : "white",
-            }}
-            onClick={() => handleFavorite(favorite)}
-          >
-            <FavoriteIcon />
-          </IconButton>
-        </div>
-      ))}
+              <Star />
+              <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{favorite.pathname.replace(digimon, "")}</strong></span>
+            </IconButton>
+          </div>
+        ))
+      ) : (
+        <Box sx={{ height: { xs: 228, sm: 340 }, alignItems: "center", display: "flex", fontSize: "20px", fontWeight: "900" }}>
+          <span style={{padding:"30px",backgroundColor:"#240052",borderRadius:"10px"}}>You currently have no favourites. Do star them to add the pages to your favorite.</span>
+        </Box>
+      )}
     </Box>
   );
 };

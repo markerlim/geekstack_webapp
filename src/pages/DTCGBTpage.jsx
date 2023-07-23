@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid } from "@mui/material"
+import { Box, Grid, Slider } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
-import { ResponsiveImage } from "../components/ResponsiveImage";
 import { CardDigimonModal } from "../components/DigimonPageComponent/CardDigimonModal";
 import { useParams } from "react-router-dom";
 
 const DTCGBTpage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const {booster} = useParams();
+
+  const { booster } = useParams();
   const url = `http://localhost:5000/digimonData?booster=${booster}`;
-  const handleSearch = (searchValue) => {
-    setSearchQuery(searchValue);
-  };
   const [digimons, setDigimons] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [imageWidth, setImageWidth] = useState(100);
+  const imageHeight = imageWidth * 1.395;
 
   const handleOpenModal = (digimon) => {
     setSelectedCard(digimon);
@@ -27,6 +25,22 @@ const DTCGBTpage = () => {
   const handleCloseModal = () => {
     setSelectedCard(null);
     setOpenModal(false);
+  };
+
+  const handleSwipeLeft = () => {
+    const currentIndex = digimons.findIndex((doc) => doc.cardid === selectedCard.cardid);
+    const nextIndex = (currentIndex + 1) % digimons.length;
+    setSelectedCard(digimons[nextIndex]);
+  };
+
+  const handleSwipeRight = () => {
+    const currentIndex = digimons.findIndex((doc) => doc.cardid === selectedCard.cardid);
+    const prevIndex = (currentIndex - 1 + digimons.length) % digimons.length;
+    setSelectedCard(digimons[prevIndex]);
+  };
+
+  const handleSliderChange = (event, newValue) => {
+    setImageWidth(newValue);
   };
 
   useEffect(() => {
@@ -54,27 +68,52 @@ const DTCGBTpage = () => {
       document.head.removeChild(link);
     };
   }, []);
-  
+
   return (
     <div>
       <Helmet>
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Helmet>
       <Box bgcolor={"#121212"} color={"#f2f3f8"}>
-        <Navbar onSearch={handleSearch} />
+        <Navbar />
         <Box>
           <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
           <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px" }}>
-            <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+            <Box sx={{ width: 100 }}>
+              <Slider
+                value={imageWidth}
+                onChange={handleSliderChange}
+                aria-labelledby="continuous-slider"
+                valueLabelDisplay="auto"
+                min={75}
+                max={250}
+                sx={{
+                  '& .MuiSlider-thumb': {
+                    color: '#F2F3F8', // color of the thumb
+                  },
+                  '& .MuiSlider-track': {
+                    color: '#F2F3F8', // color of the track
+                  },
+                  '& .MuiSlider-rail': {
+                    color: '#F2F3F8', // color of the rail
+                  },
+                  margin: 1,
+                }}
+              />
+            </Box>
+            <div style={{ overflowY: "auto", height: "100vh" }} className="hide-scrollbar">
               <Grid container spacing={2} justifyContent="center">
                 {digimons.map((digimon) => (
-                  <Grid item key={digimon.cardid}>
+                  <Grid item >
                     <Box onClick={() => handleOpenModal(digimon)}>
-                      <ResponsiveImage
+                      <img
+                        key={digimon.cardid}
                         loading="lazy"
                         src={digimon.images}
                         draggable="false"
                         alt={digimon.cardid}
+                        width={imageWidth}
+                        height={imageHeight}
                       />
                     </Box>
                   </Grid>
@@ -84,9 +123,12 @@ const DTCGBTpage = () => {
                     open={openModal}
                     onClose={handleCloseModal}
                     selectedCard={selectedCard}
+                    onSwipeLeft={handleSwipeLeft}
+                    onSwipeRight={handleSwipeRight}
                   />
                 )}
               </Grid>
+              <div style={{ height: "200px" }}></div>
             </div>
           </Box>
           <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>

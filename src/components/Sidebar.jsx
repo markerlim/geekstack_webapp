@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
-import { Article, CardGiftcardTwoTone, Diversity2, Home, Inventory, Stars, Style } from '@mui/icons-material'
+import { Article, Diversity2, Home, Inventory, Stars, Style } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
@@ -52,16 +52,16 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/test">
+                        <ListItemButton component={Link} to="/digimon">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
-                                <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
+                                <img src="/icons/digivice.png" width="30px" alt="digivice"/>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/digimon">
+                        <ListItemButton component={Link} to="/unionarena">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
-                                <img src="/icons/digivice.png" width="30px" alt="digivice"/>
+                                <img src="/icons/unionarenaicon.ico" width="30px" alt="digivice"/>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

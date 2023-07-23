@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ButtonBase, IconButton } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
+import { Star } from "@mui/icons-material";
 
 const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -96,11 +96,12 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
       </Link>
       <IconButton
         sx={{
-          color: isFavorited ? "red" : "white",
+          color: isFavorited ? "#CCFF00" : "white",
         }}
         onClick={handleFavorite}
       >
-        <FavoriteIcon />
+        <Star />
+        <span style={{color:"#f2f3f8",textTransform:"uppercase"}}><strong>{pathname}</strong></span>
       </IconButton>
     </div>
   );
