@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton } from "@mui/material"
+import { Box } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import AcardCGH from "../components/AcardCGH";
 import { Helmet } from "react-helmet";
-import { Favorite } from "@mui/icons-material";
 
 const AcardCGHpage = (props) => {
   const [searchQuery, setSearchQuery] = useState("");

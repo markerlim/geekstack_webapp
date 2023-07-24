@@ -21,6 +21,7 @@ import AcardTOApage from "./pages/AcardTOApage";
 import AcardTSKpage from "./pages/AcardTSKpage";
 import AcardBTRpage from "./pages/AcardBTRpage";
 import AcardMHApage from "./pages/AcardMHApage";
+import AcardGNTpage from "./pages/AcardGNTpage";
 import Articleviewer from "./pages/Articleviewer";
 import DigimonPage from "./pages/DigimonPage";
 import Geekhub from "./pages/Geekhub";
@@ -62,7 +63,7 @@ function App() {
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="disclaimer" element={<Community />} />
+          <Route path="credits" element={<Community />} />
           <Route path="articles" element={<Articleviewer />} />
           <Route path="geekhub" element={<Geekhub />} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
@@ -78,6 +79,7 @@ function App() {
           <Route path="/unionarena/tsk" element={<AcardTSKpage />} />
           <Route path="/unionarena/btr" element={<AcardBTRpage />} />
           <Route path="/unionarena/mha" element={<AcardMHApage />} />
+          <Route path="/unionarena/gnt" element={<AcardGNTpage />} />
           <Route path="unionarena" element={<UnionArenaPage/>} />
           <Route path="digimon" element={<DigimonPage/>}/>
           <Route path="/digimon/:booster" element={<DTCGBTpage/>}/>

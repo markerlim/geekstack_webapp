@@ -8,7 +8,7 @@ import { Helmet } from "react-helmet";
 import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
 
-const TestPage = () => {
+const Home = () => {
     const launchdates = [
         {
             title: "UABT11 Gintama",
@@ -118,10 +118,10 @@ const TestPage = () => {
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight:"0px",display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box width={"80vw"} position={"relative"}>
+                        <Box width={"80vw"} position={"relative"} sx={{marginRight:"15px"}}>
                             <div>Launch Calendar</div>
                             <FullCalendar
                                 key={selectedId}
@@ -148,21 +148,18 @@ const TestPage = () => {
                                 <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                             </Select>
                         </Box>
-                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap:'wrap', gap:{ xs: "20px", sm:"50px" },justifyContent:"center" }}>
-                            <ButtonBase sx={{padding:"1px", display: "flex", flexDirection: "column",
-                                '&:hover': {
-                                    backgroundColor: "#240052", // Change this to the desired hover background color
-                                    color: "#f2f3f8", // Change this to the desired hover text color if needed
-                                },
-                            }}
+                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap:'wrap',marginRight:"15px", gap:{ xs: "20px", sm:"50px" },justifyContent:"center" }}>
+                            <ButtonBase sx={{padding:"1px", display: "flex", flexDirection: "column",}}
                                 href="https://www.buymeacoffee.com/uniondeck">
                                 <img style={{ width: "200px", borderRadius: "10px" }} src="images/donation.png" alt="donation" />
-
+                                <br/>
                                 <span style={{ color: "#f2f3f8" }}>Click or scan to contribute!</span>
                             </ButtonBase>
                             <Box sx={{flexWrap:"wrap",width:{ xs: "80vw", sm: "40vw" },textJustify:"inter-word",textAlign:"justify"}}>
                                 I hope that the experience on this website is enjoyable for you and would kindly appreciate any form of donation and contribution.
                                 All money from this website will be used to run and make this website better
+                                <br/>
+                                <a href="/credits">Read more on how your contribution can help!</a>
                             </Box>
                         </Box>
                         <Box padding={1}>
@@ -176,4 +173,4 @@ const TestPage = () => {
     );
 }
 
-export default TestPage
+export default Home

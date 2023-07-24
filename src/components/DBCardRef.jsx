@@ -135,6 +135,7 @@ const DBCardRef = (props) => {
                             <Button variant={animeFilter === "That Time I Got Reincarnated as a Slime" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("That Time I Got Reincarnated as a Slime")}>That Time I Got Reincarnated as a Slime</Button>
                             <Button variant={animeFilter === "Me & Roboco" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Me & Roboco")}>Me & Roboco</Button>
                             <Button variant={animeFilter === "My Hero Academia" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("My Hero Academia")}>My Hero Academia</Button>
+                            <Button variant={animeFilter === "Gintama" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Gintama")}>Gintama</Button>
                         </Box>
                     </>
                 )}

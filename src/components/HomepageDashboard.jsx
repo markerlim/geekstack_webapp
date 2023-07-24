@@ -12,6 +12,7 @@ const HomepageDashboard = () => {
   const [justifyContent, setJustifyContent] = useState('flex-start');
   const boxRef = useRef(null);
   const digimon = "digimon/";
+  const uacard ="unionarena/";
 
   useEffect(() => {
     const handleResize = () => {
@@ -88,11 +89,11 @@ const HomepageDashboard = () => {
 
 
   return (
-    <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", gap: "20px", height: { xs: 228, sm: 340 }, }}>
+    <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%",paddingRight:"15px", gap: "20px", height: { xs: 248, sm: 360 }, }}>
       {favorites.length > 0 ? (
         favorites.map((favorite, index) => (
-          <div>
-            <Link key={index} to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
+          <div key={index}>
+            <Link to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
               <ButtonBase
                 sx={{
                   display: "flex",
@@ -120,7 +121,7 @@ const HomepageDashboard = () => {
               onClick={() => handleFavorite(favorite)}
             >
               <Star />
-              <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{favorite.pathname.replace(digimon, "")}</strong></span>
+              <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{favorite.pathname.replace(digimon, "").replace(uacard,"")}</strong></span>
             </IconButton>
           </div>
         ))

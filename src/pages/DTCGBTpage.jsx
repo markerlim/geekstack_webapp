@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Slider } from "@mui/material"
+import { Box, FormControl, Grid, MenuItem, Select, Slider } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
@@ -14,6 +14,7 @@ const DTCGBTpage = () => {
   const [digimons, setDigimons] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [colorFilter, setColorFilter] = useState('');
   const [imageWidth, setImageWidth] = useState(100);
   const imageHeight = imageWidth * 1.395;
 
@@ -79,31 +80,59 @@ const DTCGBTpage = () => {
         <Box>
           <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
           <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "18px", paddingRight: "18px" }}>
-            <Box sx={{ width: 100 }}>
-              <Slider
-                value={imageWidth}
-                onChange={handleSliderChange}
-                aria-labelledby="continuous-slider"
-                valueLabelDisplay="auto"
-                min={75}
-                max={250}
+            <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+            <FormControl sx={{ margin: 1 }}>
+              <Select
+                value={colorFilter}
+                onChange={(event) => setColorFilter(event.target.value)}
                 sx={{
-                  '& .MuiSlider-thumb': {
-                    color: '#F2F3F8', // color of the thumb
+                  display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                  whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                  fontSize: 11, width: "60px", height: "30px",
+                  '& .MuiSelect-icon': {
+                    display: "none",
+                    position: "absolute"
                   },
-                  '& .MuiSlider-track': {
-                    color: '#F2F3F8', // color of the track
-                  },
-                  '& .MuiSlider-rail': {
-                    color: '#F2F3F8', // color of the rail
-                  },
-                  margin: 1,
                 }}
-              />
+                displayEmpty
+                renderValue={(selectedValue) => selectedValue || 'Color'}
+              >
+                <MenuItem value="">All</MenuItem>
+                <MenuItem value="Red">Red</MenuItem>
+                <MenuItem value="Blue">Blue</MenuItem>
+                <MenuItem value="Green">Green</MenuItem>
+                <MenuItem value="Yellow">Yellow</MenuItem>
+                <MenuItem value="Purple">Purple</MenuItem>
+                <MenuItem value="Black">Black</MenuItem>
+                <MenuItem value="White">White</MenuItem>
+              </Select>
+              </FormControl>
+              <Box sx={{ width: 100 }}>
+                <Slider
+                  value={imageWidth}
+                  onChange={handleSliderChange}
+                  aria-labelledby="continuous-slider"
+                  valueLabelDisplay="auto"
+                  min={75}
+                  max={250}
+                  sx={{
+                    '& .MuiSlider-thumb': {
+                      color: '#F2F3F8', // color of the thumb
+                    },
+                    '& .MuiSlider-track': {
+                      color: '#F2F3F8', // color of the track
+                    },
+                    '& .MuiSlider-rail': {
+                      color: '#F2F3F8', // color of the rail
+                    },
+                    margin: 1,
+                  }}
+                />
+              </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "100vh" }} className="hide-scrollbar">
               <Grid container spacing={2} justifyContent="center">
-                {digimons.map((digimon) => (
+                {digimons.filter((digimon) => colorFilter === '' || digimon.color1 === colorFilter || digimon.color2 === colorFilter).map((digimon) => (
                   <Grid item >
                     <Box onClick={() => handleOpenModal(digimon)}>
                       <img

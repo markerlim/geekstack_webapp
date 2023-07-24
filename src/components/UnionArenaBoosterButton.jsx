@@ -6,9 +6,10 @@ import { db } from "../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
 import { Star } from "@mui/icons-material";
 
-const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
+const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const { currentUser } = useAuth();
+  const game = "unionarena/";
 
   useEffect(() => {
     if (currentUser) {
@@ -22,7 +23,7 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
             const userData = docSnapshot.data();
             if (userData?.favorites) {
               const isFav = userData.favorites.some(favorite =>
-                favorite.pathname === pathname && favorite.alt === alt && favorite.imageSrc === imageSrc
+                favorite.pathname.replace(game, "") === pathname && favorite.alt === alt && favorite.imageSrc === imageSrc
               );
 
               if (isFav) {
@@ -37,15 +38,15 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
 
       checkFavorite();
     }
-  }, [currentUser, pathname, alt, imageSrc, imgWidth]);
+  }, [currentUser, pathname, alt, imageSrc]);
 
   const handleFavorite = async () => {
     setIsFavorited(!isFavorited);
-
     if (currentUser) {
       try {
         const userDocRef = doc(db, "users", currentUser.uid);
         const favoriteData = { pathname, alt, imageSrc, imgWidth };
+        favoriteData.pathname = game + favoriteData.pathname
 
         if (isFavorited) {
           // If already favorited, remove it
@@ -54,7 +55,7 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
             const newFavorites = userData.favorites.filter(favorite =>
-              favorite.pathname !== pathname || favorite.alt !== alt || favorite.imageSrc !== imageSrc
+              favorite.pathname.replace(game, "") !== pathname || favorite.alt !== alt || favorite.imageSrc !== imageSrc
             );
 
             await setDoc(userDocRef, { favorites: newFavorites }, { merge: true });
@@ -100,7 +101,7 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
         onClick={handleFavorite}
       >
         <Star />
-        <span style={{color:"#f2f3f8",textTransform:"uppercase"}}><strong>{pathname}</strong></span>
+        <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{pathname}</strong></span>
       </IconButton>
     </div>
   );
@@ -162,7 +163,12 @@ const ButtonList = () => {
       imageSrc: "/images/deckimage10.jpg",
       imgWidth: "110%",
     },
-    // Add more button data as needed
+    {
+      pathname: "gnt",
+      alt: "gintama",
+      imageSrc: "/images/deckimage11.jpg",
+      imgWidth: "110%",
+    },
   ];
 
   return (
