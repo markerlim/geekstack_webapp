@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
-import { Article, Diversity2, Home, Inventory, Style, VolunteerActivism } from '@mui/icons-material'
+import { Article, Build, Diversity2, Home, Inventory, Style, VolunteerActivism } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
@@ -19,7 +19,7 @@ const Sidebar = () => {
                     <ListItem disablePadding>
                         <ListItemButton component={Link} to="/deckbuilder">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
-                                <Style sx={{ color: "#10c5a3" }} alt="deckbuilder" />
+                                <Build sx={{ color: "#10c5a3" }} alt="deckbuilder" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

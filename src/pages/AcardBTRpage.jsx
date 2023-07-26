@@ -35,19 +35,8 @@ const AcardBTRpage = () => {
       <Helmet>
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Helmet>
-      <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+      <Box color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
-        <IconButton
-          sx={{
-            position: "fixed",
-            bottom: "50px",
-            right: "50px",
-            color: isFavorited ? "red" : "inherit"
-          }}
-          onClick={handleFavorite}
-        >
-          <Favorite sx={{fontSize: "100px"}} />
-        </IconButton>
         <Box>
           <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
             <Sidebar />

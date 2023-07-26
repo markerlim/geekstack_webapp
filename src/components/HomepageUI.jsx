@@ -67,11 +67,10 @@ const HomepageUI = (props) => {
     return (
         <div>
             {props.searchQuery === "" && (
-                <div style={{ height: "86vh", overflowY: "auto" }} className="hide-scrollbar">
+                <div >
                     <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
                         <ButtonList/>
                     </Box>
-                    <div style={{ height: "200px" }} />
                 </div>
             )}
             {props.searchQuery !== "" && (
@@ -118,7 +117,6 @@ const HomepageUI = (props) => {
                         />
                     )}
                 </Grid>
-                <div style={{ height: '200px' }} />
             </div>
         </div >
     );

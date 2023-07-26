@@ -25,9 +25,9 @@ const DigimonPage = () => {
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
-            <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+            <Box color={"#f2f3f8"}>
                 <Navbar />
-                <Box className="hide-scrollbar">
+                <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
                         <div style={{ height: "1px" }}></div>

@@ -21,7 +21,7 @@ const Community = () => {
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
-            <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+            <Box color={"#f2f3f8"}>
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>

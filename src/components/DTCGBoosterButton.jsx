@@ -6,7 +6,7 @@ import { db } from "../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
 import { Star } from "@mui/icons-material";
 
-const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
+const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const { currentUser } = useAuth();
   const game = "digimon/";
@@ -23,7 +23,7 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
             const userData = docSnapshot.data();
             if (userData?.favorites) {
               const isFav = userData.favorites.some(favorite =>
-                favorite.pathname.replace(game,"") === pathname && favorite.alt === alt && favorite.imageSrc === imageSrc
+                favorite.pathname.replace(game, "") === pathname && favorite.alt === alt && favorite.imageSrc === imageSrc
               );
 
               if (isFav) {
@@ -55,7 +55,7 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
             const newFavorites = userData.favorites.filter(favorite =>
-              favorite.pathname.replace(game,"") !== pathname || favorite.alt !== alt || favorite.imageSrc !== imageSrc
+              favorite.pathname.replace(game, "") !== pathname || favorite.alt !== alt || favorite.imageSrc !== imageSrc
             );
 
             await setDoc(userDocRef, { favorites: newFavorites }, { merge: true });
@@ -101,7 +101,7 @@ const MyButton = ({ pathname, alt, imageSrc,imgWidth }) => {
         onClick={handleFavorite}
       >
         <Star />
-        <span style={{color:"#f2f3f8",textTransform:"uppercase"}}><strong>{pathname}</strong></span>
+        <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{pathname}</strong></span>
       </IconButton>
     </div>
   );
@@ -112,12 +112,24 @@ const DTCGButtonList = () => {
   const url = `http://localhost:5000/dtcgbooster`;
   useEffect(() => {
     fetch(url)
-      .then(res => res.json())
-      .then(data => {
+    .then(res => res.json())
+    .then(data => {
         console.log(url)
         console.log(data); // Log the response to the console
+        data.sort((a, b) => {
+            // Extract the prefix (bt, ex, etc.) and the numeric part
+            const [, prefixA, numA] = a.pathname.match(/(\D+)(\d+)/);
+            const [, prefixB, numB] = b.pathname.match(/(\D+)(\d+)/);
+
+            // Compare the prefixes first
+            if (prefixA < prefixB) return -1;
+            if (prefixA > prefixB) return 1;
+
+            // If the prefixes are the same, compare the numeric parts
+            return Number(numA) - Number(numB);
+        });
         setButtonData(data);
-      });
+    });
   }, [url]);
 
   return (

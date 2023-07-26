@@ -272,9 +272,21 @@
     color:#121212 ;
 }
 .fc-list-event{
-    background-color: #2f2f2f;
+    background-color: #121212;
     color:#f2f3f8;
 }
 .fc-listYear-view, .fc-list-day th, .fc-event td{
     border-color:transparent !important;
+}
+
+.fc-list-event-time {
+    display:none; /* This will hide the "all-day" text */
+}
+.fc-list-event-graphic{
+    display:none;
+}
+.fc-list-event-title {
+    display:flex;
+    align-items: center;
+    flex: 0 0 auto;
 }

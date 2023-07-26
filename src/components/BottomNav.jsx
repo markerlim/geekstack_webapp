@@ -9,9 +9,8 @@ import {
   MenuItem,
   Slide,
 } from '@mui/material';
-import { Gamepad, Home, Inventory, Stars, Style } from '@mui/icons-material';
+import { Build, Home, Inventory, Style, VolunteerActivism } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { TransitionProps } from '@mui/material/transitions';
 
 const customTheme = createTheme({
   components: {
@@ -56,54 +55,104 @@ const BottomNav = () => {
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#210449'}}>
+        <BottomNavigation sx={{ bgcolor: '#210449', gap: "0px" }}>
           <BottomNavigationAction
             onClick={handleClick}
             label="Games"
-            icon={<Gamepad />}
-            sx={{ color: '#10c5a3' }}
+            icon={<Style />}
+            sx={{
+              color: '#10c5a3',
+              '@media (max-width:400px)': {
+                // put your styling here
+                minWidth: 'auto', // this will override the default minWidth: 80
+                padding: '6px 3px', // decrease padding
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.6rem', // decrease font size
+                },
+              }
+            }}
           />
           <BottomNavigationAction
             component={Link}
             to="/deckbuilder"
             label="Builder"
-            icon={<Style />}
-            sx={{ color: '#10c5a3' }}
+            icon={<Build />}
+            sx={{
+              color: '#10c5a3',
+              '@media (max-width:400px)': {
+                // put your styling here
+                minWidth: 'auto', // this will override the default minWidth: 80
+                padding: '6px 3px', // decrease padding
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.6rem', // decrease font size
+                },
+              }
+            }}
           />
           <BottomNavigationAction
             component={Link}
             to="/"
             label="Home"
             icon={<Home />}
-            sx={{ color: '#10c5a3' }}
+            sx={{
+              color: '#10c5a3',
+              '@media (max-width:400px)': {
+                // put your styling here
+                minWidth: 'auto', // this will override the default minWidth: 80
+                padding: '6px 3px', // decrease padding
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.6rem', // decrease font size
+                },
+              }
+            }}
           />
           <BottomNavigationAction
             component={Link}
             to="/deckviewer"
             label="Decks"
             icon={<Inventory />}
-            sx={{ color: '#10c5a3' }}
+            sx={{
+              color: '#10c5a3',
+              '@media (max-width:400px)': {
+                // put your styling here
+                minWidth: 'auto', // this will override the default minWidth: 80
+                padding: '6px 3px', // decrease padding
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.6rem', // decrease font size
+                },
+              }
+            }}
           />
           <BottomNavigationAction
             component={Link}
             to="/credits"
             label="Support"
-            icon={<Stars />}
-            sx={{ color: '#10c5a3' }}
+            icon={<VolunteerActivism/>}
+            sx={{
+              color: '#10c5a3',
+              '@media (max-width:400px)': {
+                // put your styling here
+                minWidth: 'auto', // this will override the default minWidth: 80
+                padding: '6px 3px', // decrease padding
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.6rem', // decrease font size
+                },
+              }
+            }}
           />
         </BottomNavigation>
         <Menu
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            TransitionComponent={Transition}
-          >
-            <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/digimon"><img src="/icons/digivice.png" width="30px" alt="digivice" />  Digimon</MenuItem>
-          </Menu>
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          TransitionComponent={Transition}
+        >
+          <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/digimon"><img src="/icons/digivice.png" width="30px" alt="digivice" />  Digimon</MenuItem>
+        </Menu>
       </ThemeProvider>
     </Box>
   );

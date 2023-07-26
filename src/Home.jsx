@@ -8,6 +8,21 @@ import { Helmet } from "react-helmet";
 import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
 
+function handleEventClick(clickInfo) {
+    if (clickInfo.event.url) { // Check if the event has a URL
+        window.open(clickInfo.event.url, '_blank'); // Open the URL in a new tab
+        clickInfo.jsEvent.preventDefault(); // Prevent the browser from navigating to the URL in the current tab
+    }
+}
+
+function renderEventContent(eventInfo) {
+    return {
+        html: eventInfo.event.allDay ? 
+            `<div style="width: 80px; height: 30px;overflow:hidden; border-radius:10px; margin-right:10px;flex: 0 0 auto;"><img src="${eventInfo.event.extendedProps.icon}" style="width:80px;height:auto;"/></div>   ${eventInfo.event.title}` : 
+            `${eventInfo.event.title}`
+    }
+}
+
 const Home = () => {
     const launchdates = [
         {
@@ -16,6 +31,7 @@ const Home = () => {
             end: "2023-07-28",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Gintamaicon.jpg",
         },
         {
             title: "Digimon EX05 - Animal Colosseum",
@@ -23,6 +39,7 @@ const Home = () => {
             end: "2023-08-25",
             backgroundColor: "#41aeeb",
             id: "ruipoDCG",
+            icon:"/icons/UAtags/Digimonicon.jpg",
         },
         {
             title: "Digimon BT15",
@@ -30,6 +47,7 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#41aeeb",
             id: "ruipoDCG",
+            icon:"/icons/UAtags/Digimonicon.jpg",
         },
         {
             title: "UABT12 Bluelock",
@@ -37,6 +55,8 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            url:'https://unionarena-tcg.com/jp/products/boosters/blk-1.php',
+            icon:"/icons/UAtags/Bluelockicon.jpg",
         },
         {
             title: "UABT08 Bleach",
@@ -44,6 +64,7 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Bleach1000icon.jpg",
         },
         {
             title: "UABT13 Tekken7",
@@ -51,6 +72,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Tekken7icon.jpg",
         },
         {
             title: "Jujutsu Kaisen New Card Selection",
@@ -58,6 +80,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Jujutsunokaisenicon.jpg",
         },
         {
             title: "Demon Slayer New Card Selection",
@@ -65,6 +88,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Demonslayericon.jpg",
         },
         {
             title: "Hunter X Hunter EX01",
@@ -72,6 +96,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Hunterxhuntericon.jpg",
         },
         {
             title: "Code Geass EX02",
@@ -79,6 +104,7 @@ const Home = () => {
             end: "2023-11-24",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
+            icon:"/icons/UAtags/Codegeassicon.jpg",
         },
     ];
 
@@ -114,7 +140,7 @@ const Home = () => {
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
-            <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+            <Box color={"#f2f3f8"}>
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
@@ -134,6 +160,8 @@ const Home = () => {
                                 }}
                                 height={"40vh"}
                                 events={filteredEvents || launchdates} // Use filteredEvents if available, else use all events
+                                eventClick={handleEventClick}
+                                eventContent={renderEventContent}
                             />
                             <Select
                                 value={selectedId}
@@ -148,6 +176,13 @@ const Home = () => {
                                 <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                             </Select>
                         </Box>
+                        <Box width={"60vw"} sx={{display:"flex", flexDirection:"column",bgcolor:"#2f2f2f",paddingRight:"30px",paddingLeft:"30px",paddingTop:"20px",paddingBottom:"20px",borderRadius:"20px"}}>
+                            <div style={{fontSize:"20px",color:"#10c595"}}><strong>UPDATES ON WEBSITE</strong></div>
+                            <br/>
+                            <div>Current Update: Added UA11BT Gintama</div>
+                            <br/>
+                            <div>Next Update: Addition of Digimon Card Game</div>
+                        </Box>
                         <Box sx={{ display: "flex", flexDirection: "row", flexWrap:'wrap',marginRight:"15px", gap:{ xs: "20px", sm:"50px" },justifyContent:"center" }}>
                             <ButtonBase sx={{padding:"1px", display: "flex", flexDirection: "column",}}
                                 href="https://www.buymeacoffee.com/uniondeck">
@@ -159,7 +194,7 @@ const Home = () => {
                                 I hope that the experience on this website is enjoyable for you and would kindly appreciate any form of donation and contribution.
                                 All money from this website will be used to run and make this website better
                                 <br/>
-                                <a href="/credits">Read more on how your contribution can help!</a>
+                                <a style={{color:"#10c5a3"}} href="/credits">Read more on how your contribution can help!</a>
                             </Box>
                         </Box>
                         <Box padding={1}>
