@@ -21,8 +21,14 @@ import AcardTOApage from "./pages/AcardTOApage";
 import AcardTSKpage from "./pages/AcardTSKpage";
 import AcardBTRpage from "./pages/AcardBTRpage";
 import AcardMHApage from "./pages/AcardMHApage";
+import AcardGNTpage from "./pages/AcardGNTpage";
 import Articleviewer from "./pages/Articleviewer";
+import DigimonPage from "./pages/DigimonPage";
 import Geekhub from "./pages/Geekhub";
+import ArticleUI from "./pages/ArticleUI";
+import TestPage from "./pages/TestPage";
+import DTCGBTpage from "./pages/DTCGBTpage";
+import UnionArenaPage from "./pages/UnionArenaPage";
 
 smoothscroll.polyfill();
 
@@ -57,21 +63,27 @@ function App() {
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="disclaimer" element={<Community />} />
-          <Route path="articles" element={<Articleviewer/>} />
-          <Route path="geekhub" element={<Geekhub/>} />
+          <Route path="credits" element={<Community />} />
+          <Route path="articles" element={<Articleviewer />} />
+          <Route path="geekhub" element={<Geekhub />} />
           <Route path="deckbuilder" element={<Deckbuilder />} />
           <Route path="deckviewer" element={<Deckviewer />} />
+          <Route path="test" element={<TestPage />} />
           <Route path="/deck/:deckId" element={<DeckCardLoader />} />
-          <Route path="cgh" element={<AcardCGHpage/>}/>
-          <Route path="hxh" element={<AcardHXHpage/>}/>
-          <Route path="ims" element={<AcardIMSpage/>}/>
-          <Route path="jjk" element={<AcardJJKpage/>}/>
-          <Route path="kmy" element={<AcardKMYpage/>}/>
-          <Route path="toa" element={<AcardTOApage/>}/>
-          <Route path="tsk" element={<AcardTSKpage/>}/>
-          <Route path="btr" element={<AcardBTRpage/>}/>
-          <Route path="mha" element={<AcardMHApage/>}/>
+          <Route path="/unionarena/cgh" element={<AcardCGHpage />} />
+          <Route path="/unionarena/hxh" element={<AcardHXHpage />} />
+          <Route path="/unionarena/ims" element={<AcardIMSpage />} />
+          <Route path="/unionarena/jjk" element={<AcardJJKpage />} />
+          <Route path="/unionarena/kmy" element={<AcardKMYpage />} />
+          <Route path="/unionarena/toa" element={<AcardTOApage />} />
+          <Route path="/unionarena/tsk" element={<AcardTSKpage />} />
+          <Route path="/unionarena/btr" element={<AcardBTRpage />} />
+          <Route path="/unionarena/mha" element={<AcardMHApage />} />
+          <Route path="/unionarena/gnt" element={<AcardGNTpage />} />
+          <Route path="unionarena" element={<UnionArenaPage/>} />
+          <Route path="digimon" element={<DigimonPage/>}/>
+          <Route path="/digimon/:booster" element={<DTCGBTpage/>}/>
+          <Route path="/article01" element={<ArticleUI />} />
         </Routes>
       </BrowserRouter>
     </div>

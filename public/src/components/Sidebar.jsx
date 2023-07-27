@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
-import { Article, Diversity2, Home, Inventory, Stars, Style } from '@mui/icons-material'
+import { Article, Build, Diversity2, Home, Inventory, Style, VolunteerActivism } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 
@@ -10,44 +10,58 @@ const Sidebar = () => {
             <Box>
                 <List>
                     <ListItem sx={{bottomMargin:"20px"}} disablePadding>
-                        <ListItemButton component={Link} href="#home" to="/">
+                        <ListItemButton component={Link} to="/">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Home sx={{ color: "#10c5a3" }} alt="home" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#cards" to="/deckbuilder">
+                        <ListItemButton component={Link} to="/deckbuilder">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
-                                <Style sx={{ color: "#10c5a3" }} alt="deckbuilder" />
+                                <Build sx={{ color: "#10c5a3" }} alt="deckbuilder" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem sx={{display:"none"}} disablePadding>
-                        <ListItemButton component={Link} href="#geekhub" to="/geekhub">
+                    <ListItem disablePadding>
+                        <ListItemButton sx={{display:"none"}} component={Link} to="/geekhub">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Diversity2 sx={{ color: "#10c5a3" }} alt="geekhub" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#decks" to="/deckviewer">
+                        <ListItemButton component={Link} to="/deckviewer">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Inventory sx={{ color: "#10c5a3" }} alt="deck views" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem sx={{display:"none"}} disablePadding>
-                        <ListItemButton component={Link} href="#articles" to="/articles">
+                    <ListItem disablePadding>
+                        <ListItemButton sx={{display:"none"}} component={Link} to="/articles">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
                                 <Article sx={{ color: "#10c5a3" }} alt="articles" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} href="#disclaimer" to="/disclaimer">
+                        <ListItemButton component={Link} to="/credits">
                             <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
-                                <Stars sx={{ color: "#10c5a3" }} alt="disclaimer" />
+                                <VolunteerActivism sx={{ color: "#10c5a3" }} alt="disclaimer" />
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/digimon">
+                            <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
+                                <img src="/icons/digivice.png" width="30px" alt="digivice"/>
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/unionarena">
+                            <ListItemIcon sx={{justifyContent:"center",alignItems:"center"}}>
+                                <img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena"/>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

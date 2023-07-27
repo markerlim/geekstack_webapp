@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton } from "@mui/material"
+import { Box } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
-import AcardBTR from "../components/AcardBTR";
+import AcardGNT from "../components/AcardGNT";
 import { Helmet } from "react-helmet";
-import { Favorite } from "@mui/icons-material";
 
-const AcardBTRpage = () => {
+const AcardGNTpage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isFavorited, setIsFavorited] = useState(false);
 
   const handleSearch = (searchValue) => {
     setSearchQuery(searchValue);
   };
-
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited);
-  };
-
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "webmanifest";
@@ -29,7 +22,6 @@ const AcardBTRpage = () => {
       document.head.removeChild(link);
     };
   }, []);
-
   return (
     <div>
       <Helmet>
@@ -38,25 +30,15 @@ const AcardBTRpage = () => {
       <Box color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
         <Box>
-          <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
-            <Sidebar />
-          </Box>
-          <Box
-            sx={{
-              marginLeft: { xs: "0px", sm: "0px", md: "100px" },
-              paddingLeft: "18px",
-              paddingRight: "18px"
-            }}
-          >
-            <AcardBTR searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          </Box>
-          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
-            <BottomNav />
-          </Box>
+            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
+            <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"18px",paddingRight:"18px"}}>
+              <AcardGNT searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            </Box>
+          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
         </Box>
       </Box>
     </div>
   );
-};
+}
 
-export default AcardBTRpage;
+export default AcardGNTpage

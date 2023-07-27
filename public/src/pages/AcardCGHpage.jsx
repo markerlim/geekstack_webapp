@@ -6,12 +6,13 @@ import BottomNav from "../components/BottomNav"
 import AcardCGH from "../components/AcardCGH";
 import { Helmet } from "react-helmet";
 
-const AcardCGHpage = () => {
+const AcardCGHpage = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (searchValue) => {
     setSearchQuery(searchValue);
   };
+
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "webmanifest";
@@ -27,7 +28,7 @@ const AcardCGHpage = () => {
       <Helmet>
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Helmet>
-      <Box bgcolor={"#121212"} color={"#f2f3f8"}>
+      <Box color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
         <Box>
             <Box sx={{ display: { xs: "none", sm: "none", md: "block" }}}><Sidebar /></Box>

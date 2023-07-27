@@ -5,7 +5,7 @@ import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/m
 import { CardModal } from "./CardModal";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Helmet } from "react-helmet";
 
 
@@ -22,7 +22,12 @@ const AcardBTR = (props) => {
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
-
+    const navigate = useNavigate();
+    const location = useLocation();
+  
+    const goBack = () => {
+      navigate(-1);
+    };
 
     const handleOpenModal = (document) => {
         setSelectedCard(document);
@@ -273,7 +278,7 @@ const AcardBTR = (props) => {
                                 color: "#f2f3f8", // Change this to the desired hover text color if needed
                             },
                         }}
-                        component={Link} href="#home" to="/"
+                        onClick={goBack}
                     >
                         Back <ArrowBack sx={{ fontSize: 15 }} />
                     </Button>

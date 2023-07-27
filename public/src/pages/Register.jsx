@@ -1,10 +1,8 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, storage, db } from "../Firebase";
 import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { People } from "@mui/icons-material";
 import { Box } from "@mui/material";
 
 const Register = () => {

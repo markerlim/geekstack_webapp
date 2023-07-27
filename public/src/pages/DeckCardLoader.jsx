@@ -8,7 +8,6 @@ import { CardModal } from "../components/CardModal";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, LabelList } from "recharts";
 import DeckCardExporter from "../components/DeckCardExporter";
 import ExportWrapper from "../components/ExportWrapper";
 import { toJpeg } from "html-to-image";
@@ -24,6 +23,7 @@ const DeckCardLoader = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const [energyStats, setEnergyStats] = useState({});
+  const [triggerStateStats, setTriggerStateStats] = useState({});
   const [apStats, setApStats] = useState({});
   const [categoryStats, setCategoryStats] = useState({});
   const [showExportWrapper, setShowExportWrapper] = useState(false);
@@ -44,21 +44,16 @@ const DeckCardLoader = () => {
       return acc;
     }, {});
 
+    const triggerCounts = cards.reduce((acc, card) => {
+      acc[card.triggerState] = (acc[card.triggerState] || 0) + card.count;
+      return acc;
+    }, {});
+
     setEnergyStats(energyCounts);
     setApStats(apCounts);
     setCategoryStats(categoryCounts);
+    setTriggerStateStats(triggerCounts);
   };
-
-  const createChartData = (stats) => {
-    return Object.entries(stats).map(([key, value]) => {
-      return { key, value };
-    });
-  };
-
-  const energyChartData = createChartData(energyStats);
-  const apChartData = createChartData(apStats);
-  const categoryChartData = createChartData(categoryStats);
-
 
   const handleOpenModal = (cardId) => {
     const cardsData = JSON.parse(localStorage.getItem("temporaryDocument"));
@@ -151,6 +146,50 @@ const DeckCardLoader = () => {
     };
   }, []);
 
+  const getImageSrc = (energycost) => {
+    switch (energycost) {
+      case 0:
+        return "/images/ENERGY0.png"
+      case 1:
+        return "/images/ENERGY1.png";
+      case 2:
+        return "/images/ENERGY2.png";
+      case 3:
+        return "/images/ENERGY3.png";
+      case 4:
+        return "/images/ENERGY4.png";
+      case 5:
+        return "/images/ENERGY5.png";
+      case 6:
+        return "/images/ENERGY6.png";
+      case 7:
+        return "/images/ENERGY7.png";
+      case 8:
+        return "/images/ENERGY8.png";
+      case 9:
+        return "/images/ENERGY9.png";
+      case 10:
+        return "/images/ENERGY10.png";
+      // Add more cases as needed
+      default:
+        return "/images/ENERGYDEFAULT.png";
+    }
+  };
+
+  const getImageSrc1 = (triggerState) => {
+    switch (triggerState) {
+      case "Color":
+        return "/icons/TCOLOR.png"
+      case "Special":
+        return "/icons/TSpecial.png";
+      case "Final":
+        return "/icons/TFINAL.png";
+      // Add more cases as needed
+      default:
+        return "";
+    }
+  };
+
   return (
     <div >
       <Helmet>
@@ -162,7 +201,7 @@ const DeckCardLoader = () => {
           <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
             <Sidebar />
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column",marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"15px",paddingRight:"15px"}}>
+          <Box sx={{ display: "flex", flexDirection: "column", marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px" }}>
             <br></br>
             <Box id="stats-and-cards" sx={{ display: "flex", flexDirection: "row" }}>
               <Box flex={8} p={1} sx={{ overflowY: "auto", height: { xs: "calc(100vh - 112px)", sm: "calc(100vh - 112px)", md: "calc(100vh - 64px)" }, }} className="hide-scrollbar">
@@ -171,7 +210,7 @@ const DeckCardLoader = () => {
                     if (a.category === b.category) {
                       return a.energycost - b.energycost; // If the categories are the same, sort by energycost
                     }
-                    return a.category > b.category ? 1 : -1; // Else sort by category
+                    return a.category < b.category ? 1 : -1; // Else sort by category
                   }).map((card) => (
                     <Grid item key={card.id}>
                       <Box display={"flex"} flexDirection={"column"} sx={{ textAlign: "center" }}>
@@ -201,11 +240,31 @@ const DeckCardLoader = () => {
               <Box flex={2} p={1} sx={{ display: { xs: "none", sm: "none", md: "block" }, textAlign: "center", color: "#f2f3f8" }}>
                 <Box sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: 150 }} alt="uniondeck" src="/icons/uniondecklogo.png" /></Box>
                 <br></br>
-                <Box width="100%" textAlign="center"><button onClick={exportDeckAsJpeg} style={{cursor:"pointer"}}>Export as JPEG</button></Box>
+                <div style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
+                  {Object.entries(energyStats).map(([energyCost, count]) => (
+                    <div key={energyCost} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
+                      <img src={getImageSrc(parseInt(energyCost, 10))} alt={`Energy cost ${energyCost}`} width="30px" height="auto" /><span>: {count}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
+                  {Object.entries(triggerStateStats)
+                    .filter(([triggerState, count]) =>
+                      triggerState === "Color" || triggerState === "Special" || triggerState === "Final"
+                    )
+                    .map(([triggerState, count]) => (
+                      <div key={triggerState} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
+                        <img src={getImageSrc1(triggerState)} alt={`${triggerState}`} width="50px" height="auto" /><span>: {count}</span>
+                      </div>
+                    ))
+                  }
+                </div>
+                <br></br>
+                <Box width="100%" textAlign="center"><button onClick={exportDeckAsJpeg} style={{ cursor: "pointer" }}>Export as JPEG</button></Box>
               </Box>
             </Box>
           </Box>
-          </Box>
+        </Box>
         <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
           <BottomNav />
         </Box>
@@ -214,13 +273,11 @@ const DeckCardLoader = () => {
         <ExportWrapper>
           <DeckCardExporter
             cards={cards}
-            energyChartData={energyChartData}
-            apChartData={apChartData}
-            categoryChartData={categoryChartData}
+            energyStats={energyStats}
+            triggerStateStats={triggerStateStats}
           />
         </ExportWrapper>
       )};
-
     </div>
   );
 };

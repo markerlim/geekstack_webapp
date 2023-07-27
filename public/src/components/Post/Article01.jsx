@@ -122,11 +122,30 @@ const Article01 = () => {
                         Sukuna gets stronger for each finger that it has access to - lore accurate to the show.
                         The general gameplan will be to get 4 fingers as fast as possible to the Outside Area.
                         With 4 fingers in the Outside Area, your Fukuma Mizuchi allows your Sukuna to gain strong abilities to overwhelm your opponents and potentially closing up games.
-                        There are definitely other ways to explore the deck due to how much tempo it gains in a game if you had the right cycle cards.
+                        Get to your Sukuna Fingers faster with cycle cards such as Sukuna ST and Maki that accelerate the overall gameplan.
+                        Let's not forget there are also Itadori Yuji and Sukuna BT that helps to search the Top 5 for those key pieces.
+                        Once you have secured the Sukuna Fingers and having Fukuma Mizuchi in play, you would have the upper-hand in the games!
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+                        <img src="/images/articlebg/JJKBGHEADER.png" alt="header" style={{ height: "200px", width: "700px" }} />
+                        <span style={{ position: "absolute", paddingTop: "80px", fontSize: "50px", fontFamily: "Impact, 'Anton', Haettenschweiler, 'Arial Narrow Bold', sans-serif" }}>Weakness</span>
+                    </Box>
+                    <Box>
+                        Sukuna relies heavily on getting its key pieces before it becomes a threat to the opponent.
+                        Set-ups generally takes time and in this high-pace game of Union Arena, there might not be a good window to be 'farming'.
+                        'Farming' against a Sukuna deck might not be wise as a Sukuna with Snipe and Impact 2 is pretty hard to beat.
+                        Rushing down Sukuna would generally be a good idea to prevent them from reaching the full power of Sukuna.
+                        Certain decks are also equipped with unique ways to deal with Sukuna in general such as Field Removals and also cards that place cards from the Outside Area to the Remove Area.
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+                        <img src="/images/articlebg/JJKBGHEADER.png" alt="header" style={{ height: "200px", width: "700px" }} />
+                        <span style={{ position: "absolute", paddingTop: "80px", fontSize: "50px", fontFamily: "Impact, 'Anton', Haettenschweiler, 'Arial Narrow Bold', sans-serif" }}>Conclusion</span>
+                    </Box>
+                    <Box>
+                    Sukuna decks do have an addicting playstyle if you love to cycle through your cards. The deck does not has a steep learning curve and definitely is one that rewards good plays.
                     </Box>
                 </Box>
                 <Box>
-
                 </Box>
             </Box>
         </div>

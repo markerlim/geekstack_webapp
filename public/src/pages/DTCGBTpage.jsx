@@ -11,7 +11,7 @@ import { ArrowBack } from "@mui/icons-material";
 const DTCGBTpage = () => {
 
   const { booster } = useParams();
-  const url = `http://testcluster.mk6k9k8.mongodb.net/digimonData?booster=${booster}`;
+  const url = `testcluster.mk6k9k8.mongodb.net/digimonData?booster=${booster}`;
   const [digimons, setDigimons] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
