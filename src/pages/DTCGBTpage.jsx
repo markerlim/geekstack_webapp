@@ -9,9 +9,10 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowBack } from "@mui/icons-material";
 
 const DTCGBTpage = () => {
-
   const { booster } = useParams();
-  const url = `http://testcluster.mk6k9k8.mongodb.net/digimonData?booster=${booster}`;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true);
+  const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/digimonData?page=${currentPage}&booster=${booster}&secret=${process.env.REACT_APP_SECRET_KEY}`;
   const [digimons, setDigimons] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -50,21 +51,35 @@ const DTCGBTpage = () => {
   const handleSliderChange = (event, newValue) => {
     setImageWidth(newValue);
   };
+  const fetchData = async (page) => {
+    try {
+      const response = await fetch(url);
+
+      const result = await response.json();
+      const data = result.data;
+      
+      data.sort((a, b) => {
+        const aId = parseInt(a.cardid.slice(-3));
+        const bId = parseInt(b.cardid.slice(-3));
+        return aId - bId;
+      });
+
+      if (data.length === 0) {
+        setHasMoreData(false); // No more data for the current page
+      } else {
+        setDigimons((prevData) => [...prevData, ...data]);
+        setCurrentPage((prevPage) => prevPage + 1); // Move to the next page
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        console.log(url)
-        console.log(data); // Log the response to the console
-        data.sort((a, b) => {
-          const aId = parseInt(a.cardid.slice(-3));
-          const bId = parseInt(b.cardid.slice(-3));
-          return aId - bId;
-        });
-        setDigimons(data);
-      });
-  }, [url]);
+    if (hasMoreData) {
+      fetchData(currentPage);
+    }
+  }, [currentPage, hasMoreData]);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -177,7 +192,7 @@ const DTCGBTpage = () => {
                   />
                 )}
               </Grid>
-              <div style={{ height: "200px" }}></div>
+              <div style={{ height: "300px" }}></div>
             </div>
           </Box>
           <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>

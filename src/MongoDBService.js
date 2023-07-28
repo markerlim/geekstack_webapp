@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
+const dotenv = require('dotenv').config();
 
-const uri =  process.env.MONGODB_URI; // Replace with your MongoDB connection URI
+const uri =  process.env.REACT_APP_MONGODB_URI; // Replace with your MongoDB connection URI
 const client = new MongoClient(uri);
 
 async function getMongoData(collectionName) {

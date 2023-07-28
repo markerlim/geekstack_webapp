@@ -108,29 +108,34 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
 };
 
 const DTCGButtonList = () => {
-  const [buttonData, setButtonData] = useState([])
-  const url = `testcluster.mk6k9k8.mongodb.net/dtcgbooster`;
+  const [buttonData, setButtonData] = useState([]);
+  const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/dtcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
+
   useEffect(() => {
-    fetch(url)
-    .then(res => res.json())
-    .then(data => {
-        console.log(url)
-        console.log(data); // Log the response to the console
-        data.sort((a, b) => {
-            // Extract the prefix (bt, ex, etc.) and the numeric part
-            const [, prefixA, numA] = a.pathname.match(/(\D+)(\d+)/);
-            const [, prefixB, numB] = b.pathname.match(/(\D+)(\d+)/);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        const data = result.data;
 
-            // Compare the prefixes first
-            if (prefixA < prefixB) return -1;
-            if (prefixA > prefixB) return 1;
+        // Extract the 'pathname' from each object in the data array
+        const extractedPathnames = data.map((item) => item.pathname);
 
-            // If the prefixes are the same, compare the numeric parts
-            return Number(numA) - Number(numB);
-        });
-        setButtonData(data);
-    });
+        // Sort the extracted pathnames alphabetically
+        extractedPathnames.sort();
+
+        // Create a new array by sorting the original data array based on the sorted pathnames
+        const sortedData = extractedPathnames.map((pathname) => data.find((item) => item.pathname === pathname));
+
+        setButtonData(sortedData);
+      } catch (error) {
+        console.error("Fetch error data:", error);
+      }
+    };
+
+    fetchData();
   }, [url]);
+  
 
   return (
     <>
