@@ -55,7 +55,6 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            url:'https://unionarena-tcg.com/jp/products/boosters/blk-1.php',
             icon:"/icons/UAtags/Bluelockicon.jpg",
         },
         {

@@ -5,7 +5,7 @@ import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/m
 import { CardModal } from "./CardModal";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Helmet } from "react-helmet";
 
 
@@ -31,11 +31,27 @@ const AcardTOA = (props) => {
 
 
     const handleOpenModal = (document) => {
-        setSelectedCard(document);
-        setOpenModal(true);
-        if (document.altforms) {
-            setAltFormIndex({ [document.cardId]: 0 });
+        let currentImage = document.image;
+        if ((onlyAltForm || rarityFilter === "ALT") && document.altforms) {
+            if (Array.isArray(document.altforms)) {
+                currentImage = document.altforms[altFormIndex[document.cardId] || 0];
+            } else if (typeof document.altforms === "string") {
+                currentImage = document.altforms;
+            }
+        } else if (altFormIndex[document.cardId] !== undefined) {
+            if (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) {
+                currentImage = document.altforms[altFormIndex[document.cardId]];
+            } else if (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) {
+                currentImage = document.altforms;
+            }
         }
+
+        setSelectedCard({
+            ...document,
+            currentImage: currentImage
+        });
+
+        setOpenModal(true);
     };
 
     const handleCloseModal = () => {
@@ -133,6 +149,15 @@ const AcardTOA = (props) => {
                 }
                 return newAltForms;
             });
+            setAltFormIndex(prev => {
+                const newAltFormIndex = { ...prev };
+                for (let cardId in documents) {
+                    if (documents[cardId].altforms) {
+                        newAltFormIndex[cardId] = (newAltFormIndex[cardId] || 0 + 1) % documents[cardId].altforms.length;
+                    }
+                }
+                return newAltFormIndex;
+            });
         } else {
             setAltForms(prev => {
                 const newAltForms = { ...prev };
@@ -140,6 +165,13 @@ const AcardTOA = (props) => {
                     newAltForms[cardId] = 0;
                 }
                 return newAltForms;
+            });
+            setAltFormIndex(prev => {
+                const newAltFormIndex = { ...prev };
+                for (let cardId in newAltFormIndex) {
+                    newAltFormIndex[cardId] = 0;
+                }
+                return newAltFormIndex;
             });
         }
     }, [onlyAltForm, documents]);

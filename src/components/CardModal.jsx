@@ -17,7 +17,7 @@ export const CardModal = ({ open, onClose, selectedCard,onSwipeLeft, onSwipeRigh
     }}>
       <Box minWidth={0} minHeight={600} overflowY={"auto"}p={3}sx={{ display: 'flex', flexDirection: 'column', gap: 3 }} {...swipeHandlers}>
         <Box sx={{position:"absolute",marginTop:"25%",left:0,top:0,opacity:"75%", display: { xs: "none", sm: "block" }}}><img style={{transform:"Rotate(90deg)",width:"auto",height:"100px"}}alt="uniondeck" src="/icons/uniondecklogosmall.png"/></Box>
-        <Box textAlign={"center"}><img loading="lazy" src={selectedCard.image}
+        <Box textAlign={"center"}><img loading="lazy" src={selectedCard.currentImage}
           draggable="false" alt="test" style={{ width: "250px", height: "351.54375px", borderRadius: "5%", border: "2px solid black" }}
         />
         </Box>
