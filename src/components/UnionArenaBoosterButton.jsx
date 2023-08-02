@@ -96,7 +96,7 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
       </Link>
       <IconButton
         sx={{
-          color: isFavorited ? "#CCFF00" : "white",
+          color: isFavorited ? "#7C4FFF" : "white",
         }}
         onClick={handleFavorite}
       >

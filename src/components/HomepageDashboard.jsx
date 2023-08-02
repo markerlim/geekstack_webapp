@@ -116,7 +116,7 @@ const HomepageDashboard = () => {
             </Link>
             <IconButton
               sx={{
-                color: favorites.includes(favorite) ? "#CCff00" : "white",
+                color: favorites.includes(favorite) ? "#7C4FFF" : "white",
               }}
               onClick={() => handleFavorite(favorite)}
             >

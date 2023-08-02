@@ -96,7 +96,7 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
       </Link>
       <IconButton
         sx={{
-          color: isFavorited ? "#CCFF00" : "white",
+          color: isFavorited ? "#7C4FFF" : "white",
         }}
         onClick={handleFavorite}
       >
@@ -105,6 +105,39 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
       </IconButton>
     </div>
   );
+};
+const extractNumericPart = (pathname) => {
+  const matches = pathname.match(/\d+/);
+  return matches ? parseInt(matches[0]) : NaN;
+};
+
+const extractAlphaPart = (pathname) => {
+  const matches = pathname.match(/[a-zA-Z]+/);
+  return matches ? matches[0] : "";
+};
+
+const customSort = (a, b) => {
+  const alphaPartA = extractAlphaPart(a.pathname);
+  const alphaPartB = extractAlphaPart(b.pathname);
+
+  // First, compare the alphabet parts of the pathnames
+  const alphaCompare = alphaPartA.localeCompare(alphaPartB);
+
+  if (alphaCompare !== 0) {
+    // If the alphabet parts are different, return the result of the alphabetical comparison
+    return alphaCompare;
+  }
+
+  // If the alphabet parts are the same, compare the numeric parts
+  const numericPartA = extractNumericPart(a.pathname);
+  const numericPartB = extractNumericPart(b.pathname);
+
+  if (!isNaN(numericPartA) && !isNaN(numericPartB)) {
+    return numericPartA - numericPartB;
+  } else {
+    // Fallback to alphabetical sorting if any of the numeric parts is not found
+    return a.pathname.localeCompare(b.pathname);
+  }
 };
 
 const DTCGButtonList = () => {
@@ -125,7 +158,9 @@ const DTCGButtonList = () => {
         extractedPathnames.sort();
 
         // Create a new array by sorting the original data array based on the sorted pathnames
-        const sortedData = extractedPathnames.map((pathname) => data.find((item) => item.pathname === pathname));
+        const sortedData = extractedPathnames.map((pathname) =>
+          data.find((item) => item.pathname === pathname)
+        ).sort(customSort);
 
         setButtonData(sortedData);
       } catch (error) {
@@ -135,7 +170,7 @@ const DTCGButtonList = () => {
 
     fetchData();
   }, [url]);
-  
+
 
   return (
     <>

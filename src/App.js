@@ -29,6 +29,7 @@ import ArticleUI from "./pages/ArticleUI";
 import TestPage from "./pages/TestPage";
 import DTCGBTpage from "./pages/DTCGBTpage";
 import UnionArenaPage from "./pages/UnionArenaPage";
+import UADecklistSharingPage from "./pages/UADecklistSharingPage";
 
 smoothscroll.polyfill();
 
@@ -81,6 +82,7 @@ function App() {
           <Route path="/unionarena/mha" element={<AcardMHApage />} />
           <Route path="/unionarena/gnt" element={<AcardGNTpage />} />
           <Route path="unionarena" element={<UnionArenaPage/>} />
+          <Route path="uadecklist" element={<UADecklistSharingPage/>} />
           <Route path="digimon" element={<DigimonPage/>}/>
           <Route path="/digimon/:booster" element={<DTCGBTpage/>}/>
           <Route path="/article01" element={<ArticleUI />} />
