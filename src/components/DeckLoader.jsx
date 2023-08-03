@@ -53,6 +53,7 @@ const DeckLoader = () => {
     });
     console.log(cardsData, "present")
     setCards(cardsData);
+    setSelectedCards([]);
     setOpen(true);
   };
 
@@ -94,14 +95,14 @@ const DeckLoader = () => {
       return [...prevState, { id: cardId, name: cardName, imagesrc: image }];
     });
   };
-  
+
   const handleShareDeck = async (deck) => {
     try {
       if (!deck || !deck.id) {
         console.error("Deck ID is missing.");
         return;
       }
-  
+
       if (currentUser) {
         // Create date object in GMT+8 timezone
         const date = new Date();
@@ -111,7 +112,7 @@ const DeckLoader = () => {
         const utc = localTime + localOffset;
         const timestamp = utc + (3600000 * offset);
         const finalDate = new Date(timestamp);
-        
+
         // Get the cards of the selected deck from Firestore
         const cardsSnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deck.id}/cards`));
         const cardsData = [];
@@ -121,7 +122,7 @@ const DeckLoader = () => {
             ...cardDoc.data(),
           });
         });
-  
+
         // Create a new shared deck document in the 'uniondecklist' collection
         await addDoc(collection(db, "uniondecklist"), {
           deckName: deck.name,
@@ -142,7 +143,7 @@ const DeckLoader = () => {
       console.error("Error sharing deck: ", error);
     }
   };
-  
+
 
   return (
     <Box
@@ -260,10 +261,19 @@ const DeckLoader = () => {
                 ))}
               </Box>
               <Box sx={{ display: "flex", gap: "5px", justifyContent: "center" }}>
-                <Button sx={{ color: "#7C4FFF" }} onClick={() => {
-                  handleClose();
-                  handleShareDeck(deck, description, selectedCards);
-                }}>Submit</Button>
+                <Button
+                  sx={{ color: "#7C4FFF" }}
+                  onClick={() => {
+                    if (selectedCards.length !== 3) {
+                      alert("You must select exactly 3 cards to submit.");
+                      return;
+                    }
+                    handleClose();
+                    handleShareDeck(deck, description, selectedCards);
+                  }}
+                >
+                  Submit
+                </Button>
                 <Button sx={{ color: "#7C4FFF" }} onClick={handleClose}>Cancel</Button>
               </Box>
             </Box>

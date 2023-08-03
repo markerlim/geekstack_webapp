@@ -175,7 +175,7 @@ const Home = () => {
                                 <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                             </Select>
                         </Box>
-                        <Box width={"60vw"} sx={{display:"flex", flexDirection:"column",bgcolor:"#2f2f2f",paddingRight:"30px",paddingLeft:"30px",paddingTop:"20px",paddingBottom:"20px",borderRadius:"20px"}}>
+                        <Box width={"60vw"} sx={{display:"flex", flexDirection:"column",bgcolor:"#26252d",paddingRight:"30px",paddingLeft:"30px",paddingTop:"20px",paddingBottom:"20px",borderRadius:"20px"}}>
                             <div style={{fontSize:"20px",color:"#10c595"}}><strong>UPDATES ON WEBSITE</strong></div>
                             <br/>
                             <div><strong>Current Update:</strong>

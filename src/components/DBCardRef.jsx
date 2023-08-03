@@ -29,7 +29,11 @@ const DBCardRef = (props) => {
     }
 
     const handleOpenModal = (document) => {
-        setSelectedCard(document);
+        let currentImage = document.image
+        setSelectedCard({
+            ...document,
+            currentImage: currentImage
+        });
         setOpenModal(true);
     }
 

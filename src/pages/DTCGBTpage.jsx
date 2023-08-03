@@ -12,7 +12,6 @@ const DTCGBTpage = () => {
   const { booster } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreData, setHasMoreData] = useState(true);
-  const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/digimonData?page=${currentPage}&booster=${booster}&secret=${process.env.REACT_APP_SECRET_KEY}`;
   const [digimons, setDigimons] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -51,24 +50,29 @@ const DTCGBTpage = () => {
   const handleSliderChange = (event, newValue) => {
     setImageWidth(newValue);
   };
+
   const fetchData = async (page) => {
+    const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/digimonData?page=${page}&booster=${booster}&secret=${process.env.REACT_APP_SECRET_KEY}`;
     try {
       const response = await fetch(url);
-
       const result = await response.json();
       const data = result.data;
-      
-      data.sort((a, b) => {
-        const aId = parseInt(a.cardid.slice(-3));
-        const bId = parseInt(b.cardid.slice(-3));
-        return aId - bId;
+
+      setDigimons((prevData) => {
+        const newData = [...prevData, ...data];
+        newData.sort((a, b) => {
+          const aId = parseInt(a.cardid.split('-')[1]);
+          const bId = parseInt(b.cardid.split('-')[1]);
+          return aId - bId;
+        });
+        return newData;
       });
 
-      if (data.length === 0) {
-        setHasMoreData(false); // No more data for the current page
-      } else {
-        setDigimons((prevData) => [...prevData, ...data]);
-        setCurrentPage((prevPage) => prevPage + 1); // Move to the next page
+      // Replace pageSize with your actual page size
+      const pageSize = 20;
+      if (data.length === pageSize) {
+        // More data is available. Increment currentPage.
+        setCurrentPage(page + 1);
       }
     } catch (error) {
       console.error(error);
@@ -76,10 +80,10 @@ const DTCGBTpage = () => {
   };
 
   useEffect(() => {
-    if (hasMoreData) {
-      fetchData(currentPage);
-    }
-  }, [currentPage, hasMoreData]);
+    fetchData(currentPage);
+    console.log(currentPage,"shown")
+  }, [currentPage]);
+  
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -168,10 +172,9 @@ const DTCGBTpage = () => {
             <div style={{ overflowY: "auto", height: "100vh" }} className="hide-scrollbar">
               <Grid container spacing={2} justifyContent="center">
                 {digimons.filter((digimon) => colorFilter === '' || digimon.color1 === colorFilter || digimon.color2 === colorFilter).map((digimon) => (
-                  <Grid item >
+                  <Grid item key={digimon.cardid} >
                     <Box onClick={() => handleOpenModal(digimon)}>
                       <img
-                        key={digimon.cardid}
                         loading="lazy"
                         src={digimon.images}
                         draggable="false"

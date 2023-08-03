@@ -264,7 +264,7 @@
         display: none;
     }
 }
-
+/*Homepage*/
 .fc-list-day-cushion{
     background-color: #240056 !important;
 }
@@ -290,3 +290,19 @@
     align-items: center;
     flex: 0 0 auto;
 }
+/*UADecklistCardButton*/
+.uatags-effect {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 900;
+    margin-right: 10px;
+    background-color: #7c4fff;
+    color: #f2f3f8;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .uatags-effect:hover {
+    background-color: #001146;
+    transition: all 0.2s ease-in-out;
+  }
