@@ -9,7 +9,7 @@ import { Star } from "@mui/icons-material";
 const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const { currentUser } = useAuth();
-  const game = "unionarena/";
+  const game = "onepiece/";
 
   useEffect(() => {
     if (currentUser) {
@@ -106,70 +106,71 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
     </div>
   );
 };
+const extractNumericPart = (pathname) => {
+  const matches = pathname.match(/\d+/);
+  return matches ? parseInt(matches[0]) : NaN;
+};
 
-const ButtonList = () => {
-  const buttonData = [
-    {
-      pathname: "cgh",
-      alt: "code geass",
-      imageSrc: "/images/deckimage1.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "jjk",
-      alt: "jujutsu no kaisen",
-      imageSrc: "/images/deckimage2.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "hxh",
-      alt: "hunter x hunter",
-      imageSrc: "/images/deckimage3.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "ims",
-      alt: "idolmaster shiny colors",
-      imageSrc: "/images/deckimage4.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "kmy",
-      alt: "demon slayer",
-      imageSrc: "/images/deckimage5.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "toa",
-      alt: "tales of arise",
-      imageSrc: "/images/deckimage6.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "tsk",
-      alt: "that time I reincarnated as a slime",
-      imageSrc: "/images/deckimage7.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "btr",
-      alt: "me & robocco",
-      imageSrc: "/images/deckimage9.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "mha",
-      alt: "my hero academia",
-      imageSrc: "/images/deckimage10.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "gnt",
-      alt: "gintama",
-      imageSrc: "/images/deckimage11.jpg",
-      imgWidth: "110%",
-    },
-  ];
+const extractAlphaPart = (pathname) => {
+  const matches = pathname.match(/[a-zA-Z]+/);
+  return matches ? matches[0] : "";
+};
+
+const customSort = (a, b) => {
+  const alphaPartA = extractAlphaPart(a.pathname);
+  const alphaPartB = extractAlphaPart(b.pathname);
+
+  // First, compare the alphabet parts of the pathnames
+  const alphaCompare = alphaPartA.localeCompare(alphaPartB);
+
+  if (alphaCompare !== 0) {
+    // If the alphabet parts are different, return the result of the alphabetical comparison
+    return alphaCompare;
+  }
+
+  // If the alphabet parts are the same, compare the numeric parts
+  const numericPartA = extractNumericPart(a.pathname);
+  const numericPartB = extractNumericPart(b.pathname);
+
+  if (!isNaN(numericPartA) && !isNaN(numericPartB)) {
+    return numericPartA - numericPartB;
+  } else {
+    // Fallback to alphabetical sorting if any of the numeric parts is not found
+    return a.pathname.localeCompare(b.pathname);
+  }
+};
+
+const DTCGButtonList = () => {
+  const [buttonData, setButtonData] = useState([]);
+  const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/dtcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        const data = result.data;
+
+        // Extract the 'pathname' from each object in the data array
+        const extractedPathnames = data.map((item) => item.pathname);
+
+        // Sort the extracted pathnames alphabetically
+        extractedPathnames.sort();
+
+        // Create a new array by sorting the original data array based on the sorted pathnames
+        const sortedData = extractedPathnames.map((pathname) =>
+          data.find((item) => item.pathname === pathname)
+        ).sort(customSort);
+
+        setButtonData(sortedData);
+      } catch (error) {
+        console.error("Fetch error data:", error);
+      }
+    };
+
+    fetchData();
+  }, [url]);
+
 
   return (
     <>
@@ -186,4 +187,4 @@ const ButtonList = () => {
   );
 };
 
-export default ButtonList;
+export default DTCGButtonList;

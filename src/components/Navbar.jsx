@@ -90,6 +90,7 @@ const Navbar = (props) => {
                     horizontal: 'left',
                 }}
             >
+                <MenuItem component={Link} to="/account">Account</MenuItem>
                 <MenuItem component={Link} onClick={handleLogout} to="/login">Logout</MenuItem>
             </Menu>
         </AppBar>

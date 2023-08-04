@@ -30,6 +30,7 @@ import TestPage from "./pages/TestPage";
 import DTCGBTpage from "./pages/DTCGBTpage";
 import UnionArenaPage from "./pages/UnionArenaPage";
 import UADecklistSharingPage from "./pages/UADecklistSharingPage";
+import AccountDetails from "./pages/AccountDetailsPage";
 
 smoothscroll.polyfill();
 
@@ -62,6 +63,7 @@ function App() {
         <Routes>
           <Route path="/" />
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="account" element={<AccountDetails/>} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="credits" element={<Community />} />

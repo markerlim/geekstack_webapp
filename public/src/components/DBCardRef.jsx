@@ -29,7 +29,11 @@ const DBCardRef = (props) => {
     }
 
     const handleOpenModal = (document) => {
-        setSelectedCard(document);
+        let currentImage = document.image
+        setSelectedCard({
+            ...document,
+            currentImage: currentImage
+        });
         setOpenModal(true);
     }
 
@@ -126,16 +130,16 @@ const DBCardRef = (props) => {
                     <>
                         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
                             <br></br>
-                            <Button variant={animeFilter === "Code Geass" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Code Geass")}>Code Geass</Button>
-                            <Button variant={animeFilter === "Jujutsu No Kaisen" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Jujutsu No Kaisen")}>Jujutsu No Kaisen</Button>
-                            <Button variant={animeFilter === "Hunter X Hunter" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Hunter X Hunter")}>Hunter X Hunter</Button>
-                            <Button variant={animeFilter === "Idolmaster Shiny Colors" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Idolmaster Shiny Colors")}>Idolmaster Shiny Colors</Button>
-                            <Button variant={animeFilter === "Demon Slayer" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Demon Slayer")}>Demon Slayer</Button>
-                            <Button variant={animeFilter === "Tales of Arise" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Tales of Arise")}>Tales of Arise</Button>
-                            <Button variant={animeFilter === "That Time I Got Reincarnated as a Slime" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("That Time I Got Reincarnated as a Slime")}>That Time I Got Reincarnated as a Slime</Button>
-                            <Button variant={animeFilter === "Me & Roboco" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Me & Roboco")}>Me & Roboco</Button>
-                            <Button variant={animeFilter === "My Hero Academia" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("My Hero Academia")}>My Hero Academia</Button>
-                            <Button variant={animeFilter === "Gintama" ? "contained" : "outlined"} sx={{ backgroundColor: "#a040a0", color: "#ffffff" }} onClick={() => setAnimeFilter("Gintama")}>Gintama</Button>
+                            <Button variant={animeFilter === "Code Geass" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Code Geass")}>Code Geass</Button>
+                            <Button variant={animeFilter === "Jujutsu No Kaisen" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Jujutsu No Kaisen")}>Jujutsu No Kaisen</Button>
+                            <Button variant={animeFilter === "Hunter X Hunter" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Hunter X Hunter")}>Hunter X Hunter</Button>
+                            <Button variant={animeFilter === "Idolmaster Shiny Colors" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Idolmaster Shiny Colors")}>Idolmaster Shiny Colors</Button>
+                            <Button variant={animeFilter === "Demon Slayer" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Demon Slayer")}>Demon Slayer</Button>
+                            <Button variant={animeFilter === "Tales of Arise" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Tales of Arise")}>Tales of Arise</Button>
+                            <Button variant={animeFilter === "That Time I Got Reincarnated as a Slime" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("That Time I Got Reincarnated as a Slime")}>That Time I Got Reincarnated as a Slime</Button>
+                            <Button variant={animeFilter === "Me & Roboco" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Me & Roboco")}>Me & Roboco</Button>
+                            <Button variant={animeFilter === "My Hero Academia" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("My Hero Academia")}>My Hero Academia</Button>
+                            <Button variant={animeFilter === "Gintama" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Gintama")}>Gintama</Button>
                         </Box>
                     </>
                 )}

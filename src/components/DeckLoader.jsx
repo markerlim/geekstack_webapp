@@ -62,6 +62,10 @@ const DeckLoader = () => {
   };
 
   const handleInputChange = (e) => {
+    if (e.target.value.length > 100) {
+      alert("Description should not exceed 100 characters.");
+      return;
+    }
     setDescription(e.target.value);
   };
 
@@ -132,8 +136,6 @@ const DeckLoader = () => {
           image: deck.image,
           description: description,
           selectedCards: selectedCards,
-          displayName: currentUser.displayName,
-          photoURL: currentUser.photoURL,
           uid: currentUser.uid,
           sharedDate: finalDate,
           cards: cardsData, // add cards data to deck document directly
@@ -218,7 +220,7 @@ const DeckLoader = () => {
             </Button>
           </Box>
           <Modal sx={{ display: "flex", justifyContent: "center", alignItems: "center" }} open={open} onClose={handleClose}>
-            <Box sx={{ backgroundColor: "#26252D", color: "white", borderRadius: "30px", padding: "30px", width: "500px", height: "600px", display: "flex", flexDirection: "column", gap: "5px", textAlign: "center", alignItems: "center" }}>
+            <Box sx={{ backgroundColor: "#26252D", color: "white", borderRadius: "30px", padding: "30px", width: "500px", height: "600px", display: "flex", flexDirection: "column", gap: "5px", textAlign: "center", alignItems: "center",overflowY:'auto' }}>
               <span style={{ padding: "10px" }}>Write a short description no more than 80 characters on the key pointers of the deck.</span>
               <TextField
                 label="Description"
@@ -242,6 +244,9 @@ const DeckLoader = () => {
                   },
                   '.MuiInputLabel-outlined': {
                     color: 'white', // changes the label color
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    color: 'white', // changes the label color when typing
                   },
                 }}
               />

@@ -8,8 +8,10 @@ import { SearchOutlined } from '@mui/icons-material';
 
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
-    backgroundColor: "#240052",
     justifyContent: 'space-between',
+    '&.MuiToolbar-root': {
+        background: 'linear-gradient(to right,rgb(44, 25, 80), rgb(15, 23, 42))',
+    }
 });
 
 const Icons = styled(Box)(({ theme }) => ({
@@ -88,6 +90,7 @@ const Navbar = (props) => {
                     horizontal: 'left',
                 }}
             >
+                <MenuItem component={Link} to="/account">Account</MenuItem>
                 <MenuItem component={Link} onClick={handleLogout} to="/login">Logout</MenuItem>
             </Menu>
         </AppBar>

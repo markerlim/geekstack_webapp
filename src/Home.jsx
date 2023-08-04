@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, ButtonBase, MenuItem, Select } from "@mui/material"
+import { Box, Button, ButtonBase, Collapse, IconButton, MenuItem, Select, useTheme } from "@mui/material"
 import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
@@ -7,6 +7,7 @@ import HomepageDashboard from "./components/HomepageDashboard";
 import { Helmet } from "react-helmet";
 import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
+import { ExpandMore } from "@mui/icons-material";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -17,8 +18,8 @@ function handleEventClick(clickInfo) {
 
 function renderEventContent(eventInfo) {
     return {
-        html: eventInfo.event.allDay ? 
-            `<div style="width: 80px; height: 30px;overflow:hidden; border-radius:10px; margin-right:10px;flex: 0 0 auto;"><img src="${eventInfo.event.extendedProps.icon}" style="width:80px;height:auto;"/></div>   ${eventInfo.event.title}` : 
+        html: eventInfo.event.allDay ?
+            `<div style="width: 80px; height: 30px;overflow:hidden; border-radius:10px; margin-right:10px;flex: 0 0 auto;"><img src="${eventInfo.event.extendedProps.icon}" style="width:80px;height:auto;"/></div>   ${eventInfo.event.title}` :
             `${eventInfo.event.title}`
     }
 }
@@ -31,7 +32,7 @@ const Home = () => {
             end: "2023-07-28",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Gintamaicon.jpg",
+            icon: "/icons/UAtags/Gintamaicon.jpg",
         },
         {
             title: "Digimon EX05 - Animal Colosseum",
@@ -39,7 +40,7 @@ const Home = () => {
             end: "2023-08-25",
             backgroundColor: "#41aeeb",
             id: "ruipoDCG",
-            icon:"/icons/UAtags/Digimonicon.jpg",
+            icon: "/icons/UAtags/Digimonicon.jpg",
         },
         {
             title: "Digimon BT15",
@@ -47,7 +48,7 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#41aeeb",
             id: "ruipoDCG",
-            icon:"/icons/UAtags/Digimonicon.jpg",
+            icon: "/icons/UAtags/Digimonicon.jpg",
         },
         {
             title: "UABT12 Bluelock",
@@ -55,7 +56,7 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Bluelockicon.jpg",
+            icon: "/icons/UAtags/Bluelockicon.jpg",
         },
         {
             title: "UABT08 Bleach",
@@ -63,7 +64,7 @@ const Home = () => {
             end: "2023-09-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Bleach1000icon.jpg",
+            icon: "/icons/UAtags/Bleach1000icon.jpg",
         },
         {
             title: "UABT13 Tekken7",
@@ -71,7 +72,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Tekken7icon.jpg",
+            icon: "/icons/UAtags/Tekken7icon.jpg",
         },
         {
             title: "Jujutsu Kaisen New Card Selection",
@@ -79,7 +80,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Jujutsunokaisenicon.jpg",
+            icon: "/icons/UAtags/Jujutsunokaisenicon.jpg",
         },
         {
             title: "Demon Slayer New Card Selection",
@@ -87,7 +88,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Demonslayericon.jpg",
+            icon: "/icons/UAtags/Demonslayericon.jpg",
         },
         {
             title: "Hunter X Hunter EX01",
@@ -95,7 +96,7 @@ const Home = () => {
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Hunterxhuntericon.jpg",
+            icon: "/icons/UAtags/Hunterxhuntericon.jpg",
         },
         {
             title: "Code Geass EX02",
@@ -103,12 +104,14 @@ const Home = () => {
             end: "2023-11-24",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon:"/icons/UAtags/Codegeassicon.jpg",
+            icon: "/icons/UAtags/Codegeassicon.jpg",
         },
     ];
 
     const [filteredEvents, setFilteredEvents] = useState(launchdates); // State to store filtered events
     const [selectedId, setSelectedId] = useState(""); // State to store selected ID
+    const [open, setOpen] = useState(false);
+    const theme = useTheme();
 
     const handleFilter = (event) => {
         const id = event.target.value;
@@ -143,10 +146,19 @@ const Home = () => {
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight:"0px",display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "0px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box width={"80vw"} position={"relative"} sx={{marginRight:"15px"}}>
+                        <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
+                            <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }} href="/digimon"><img style={{ width: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" /></Button>
+                            <Box style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }} href="/unionarena"><img style={{ width: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" /></Button>
+                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} href="/uadecklist">UA Decklist</Button>
+                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} href="/deckbuilder">UA Builder</Button>
+                            </Box>
+                            <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", display: 'none', overflow: 'hidden' }} href="/uadecklist"><img style={{ width: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" /></Button>
+                        </Box>
+                        <Box width={"80vw"} position={"relative"} sx={{ marginRight: "15px" }}>
                             <div>Launch Calendar</div>
                             <FullCalendar
                                 key={selectedId}
@@ -175,36 +187,50 @@ const Home = () => {
                                 <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                             </Select>
                         </Box>
-                        <Box width={"60vw"} sx={{display:"flex", flexDirection:"column",bgcolor:"#26252d",paddingRight:"30px",paddingLeft:"30px",paddingTop:"20px",paddingBottom:"20px",borderRadius:"20px"}}>
-                            <div style={{fontSize:"20px",color:"#10c595"}}><strong>UPDATES ON WEBSITE</strong></div>
-                            <br/>
-                            <div><strong>Current Update:</strong>
-                            <br/>Added UA11BT Gintama
-                            <br/>Added Digimon Card Game up to BT14 without ST (Will take some time to update the rest)
-                            <br/>Do take note that the Digimon Cards may have issue loading.
-                            </div>
-                            <br/>
-                            <div><strong>Next Update:</strong> 
-                            <br/>Addition of Digimon Card Game Deck Builder
-                            <br/>Addition of Bleach and Bluelock (When effects are released)
-                            </div>
+                        <Box width={"60vw"} sx={{ display: "flex", flexDirection: "column", bgcolor: "#26252d", paddingRight: "30px", paddingLeft: "30px", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
+                            <Box sx={{display:'flex',alignItems:'center'}}><div style={{ fontSize: "20px", color: "#10c595" }}><strong>UPDATES ON WEBSITE</strong></div>
+                            <IconButton
+                                onClick={() => setOpen(!open)}
+                                sx={{color:'#f2f3f8', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: theme.transitions.create('transform', { duration: theme.transitions.duration.shortest }) }}
+                            >
+                                <ExpandMore />
+                            </IconButton>
+                            </Box>
+                            <Collapse in={open}>
+                                <br />
+                                <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
+                                    <br />Added Digimon Card Game up to BT14 without ST (Will take some time to update the rest)
+                                    <br />
+                                    <br />Do take note that the Digimon Cards may have issue loading.
+                                    <br />
+                                    <br />Added Decklist Sharing Feature
+                                </div>
+                                <br />
+                                <div><strong style={{ color: '#74CFFF' }}>Next Update:</strong>
+                                    <br />Addition of Digimon Card Game Deck Builder (Facing issues, will have delay)
+                                    <br />
+                                    <br />Addition of Bleach and Bluelock (When effects are released)
+                                    <br />
+                                </div>
+                            </Collapse>
                         </Box>
-                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap:'wrap',marginRight:"15px", gap:{ xs: "20px", sm:"50px" },justifyContent:"center" }}>
-                            <ButtonBase sx={{padding:"1px", display: "flex", flexDirection: "column",}}
+
+                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', marginRight: "15px", gap: { xs: "20px", sm: "50px" }, justifyContent: "center" }}>
+                            <ButtonBase sx={{ padding: "1px", display: "flex", flexDirection: "column", }}
                                 href="https://www.buymeacoffee.com/uniondeck">
                                 <img style={{ width: "200px", borderRadius: "10px" }} src="images/donation.png" alt="donation" />
-                                <br/>
+                                <br />
                                 <span style={{ color: "#f2f3f8" }}>Click or scan to contribute!</span>
                             </ButtonBase>
-                            <Box sx={{flexWrap:"wrap",width:{ xs: "80vw", sm: "40vw" },textJustify:"inter-word",textAlign:"justify"}}>
+                            <Box sx={{ flexWrap: "wrap", width: { xs: "80vw", sm: "40vw" }, textJustify: "inter-word", textAlign: "justify" }}>
                                 I hope that the experience on this website is enjoyable for you and would kindly appreciate any form of donation and contribution.
                                 All money from this website will be used to run and make this website better
-                                <br/>
-                                <a style={{color:"#10c5a3"}} href="/credits">Read more on how your contribution can help!</a>
+                                <br />
+                                <a style={{ color: "#10c5a3" }} href="/credits">Read more on how your contribution can help!</a>
                             </Box>
                         </Box>
                         <Box padding={1}>
-                            <div style={{height:"100px"}}></div>
+                            <div style={{ height: "100px" }}></div>
                         </Box>
                     </Box>
                 </Box>

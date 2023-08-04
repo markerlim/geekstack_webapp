@@ -47,21 +47,22 @@ const BottomNav = () => {
         position: { xs: 'fixed', sm: 'fixed', md: 'static' },
         width: '100%',
         justifyContent: 'space-evenly',
-        bgcolor: '#240056',
-        color: '#10c5a3',
+        bgcolor: '#222032',
+        color: '#9930f3',
         boxShadow: { xs: 1, sm: 1, md: 0 },
         bottom: 0,
         zIndex: { xs: 100, sm: 100, md: 'auto' },
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#210449', gap: "0px" }}>
+        <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px" }}>
           <BottomNavigationAction
             onClick={handleClick}
             label="Games"
             icon={<Style />}
             sx={{
-              color: '#10c5a3',
+              color: '#9930f3',
+              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -78,7 +79,8 @@ const BottomNav = () => {
             label="Builder"
             icon={<Build />}
             sx={{
-              color: '#10c5a3',
+              color: '#9930f3',
+              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -95,7 +97,8 @@ const BottomNav = () => {
             label="Home"
             icon={<Home />}
             sx={{
-              color: '#10c5a3',
+              color: '#9930f3',
+              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -112,7 +115,8 @@ const BottomNav = () => {
             label="Decks"
             icon={<Inventory />}
             sx={{
-              color: '#10c5a3',
+              color: '#9930f3',
+              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -129,7 +133,8 @@ const BottomNav = () => {
             label="Support"
             icon={<VolunteerActivism/>}
             sx={{
-              color: '#10c5a3',
+              color: '#9930f3',
+              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80

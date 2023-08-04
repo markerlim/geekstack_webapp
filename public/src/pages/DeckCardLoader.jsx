@@ -58,7 +58,11 @@ const DeckCardLoader = () => {
   const handleOpenModal = (cardId) => {
     const cardsData = JSON.parse(localStorage.getItem("temporaryDocument"));
     const selectedCardData = cardsData.find((card) => card.cardId === cardId);
-    setSelectedCard(selectedCardData);
+    let currentImage = selectedCardData.image
+    setSelectedCard({
+        ...selectedCardData,
+        currentImage: currentImage
+    });
     setOpenModal(true);
   };
 
