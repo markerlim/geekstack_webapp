@@ -8,6 +8,7 @@ import { Helmet } from "react-helmet";
 import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
 import { ExpandMore } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -153,8 +154,8 @@ const Home = () => {
                             <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }} href="/digimon"><img style={{ width: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" /></Button>
                             <Box style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }} href="/unionarena"><img style={{ width: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" /></Button>
-                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} href="/uadecklist">UA Decklist</Button>
-                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} href="/deckbuilder">UA Builder</Button>
+                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} component={Link} to="/uadecklist">UA Decklist</Button>
+                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} component={Link} to="/deckbuilder">UA Builder</Button>
                             </Box>
                             <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", display: 'none', overflow: 'hidden' }} href="/uadecklist"><img style={{ width: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" /></Button>
                         </Box>

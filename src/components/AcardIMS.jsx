@@ -29,30 +29,70 @@ const AcardIMS = (props) => {
       navigate(-1);
     };
 
-
-    const handleOpenModal = (document) => {
+    const getCurrentImage = (document) => {
         let currentImage = document.image;
-        if ((onlyAltForm || rarityFilter === "ALT") && document.altforms) {
+    
+        // Check if the alternate form should be used
+        if ((onlyAltForm || rarityFilter === "ALT" || altFormIndex[document.cardId] !== undefined) && document.altforms) {
             if (Array.isArray(document.altforms)) {
                 currentImage = document.altforms[altFormIndex[document.cardId] || 0];
             } else if (typeof document.altforms === "string") {
                 currentImage = document.altforms;
             }
-        } else if (altFormIndex[document.cardId] !== undefined) {
-            if (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) {
-                currentImage = document.altforms[altFormIndex[document.cardId]];
-            } else if (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) {
-                currentImage = document.altforms;
-            }
         }
-
+    
+        return currentImage;
+    };
+    
+    const handleOpenModal = (document) => {
+        const currentImage = getCurrentImage(document);
         setSelectedCard({
             ...document,
             currentImage: currentImage
         });
-
         setOpenModal(true);
     };
+    
+    const handleSwipeLeft = () => {
+        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
+        let nextIndex = (currentIndex + 1) % filteredDocuments.length;
+        let nextDocument = filteredDocuments[nextIndex];
+    
+        // If rarityFilter is "ALT", skip documents without alternate forms
+        if (rarityFilter === "ALT") {
+            while (!nextDocument.altforms) {
+                nextIndex = (nextIndex + 1) % filteredDocuments.length;
+                nextDocument = filteredDocuments[nextIndex];
+            }
+        }
+    
+        const currentImage = getCurrentImage(nextDocument);
+        setSelectedCard({
+            ...nextDocument,
+            currentImage: currentImage
+        });
+    };
+    
+    const handleSwipeRight = () => {
+        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
+        let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
+        let prevDocument = filteredDocuments[prevIndex];
+    
+        // If rarityFilter is "ALT", skip documents without alternate forms
+        if (rarityFilter === "ALT") {
+            while (!prevDocument.altforms) {
+                prevIndex = (prevIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
+                prevDocument = filteredDocuments[prevIndex];
+            }
+        }
+    
+        const currentImage = getCurrentImage(prevDocument);
+        setSelectedCard({
+            ...prevDocument,
+            currentImage: currentImage
+        });
+    };    
+
 
     const handleCloseModal = () => {
         setSelectedCard(null);
@@ -103,19 +143,6 @@ const AcardIMS = (props) => {
 
         return boosterFilterMatch && colorFilterMatch && animeFilterMatch && rarityFilterMatch && searchFilterMatch && altFormFilterMatch;
     });
-
-
-    const handleSwipeLeft = () => {
-        const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
-        const nextIndex = (currentIndex + 1) % filteredDocuments.length;
-        setSelectedCard(filteredDocuments[nextIndex]);
-    };
-
-    const handleSwipeRight = () => {
-        const currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
-        const prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
-        setSelectedCard(filteredDocuments[prevIndex]);
-    };
 
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);

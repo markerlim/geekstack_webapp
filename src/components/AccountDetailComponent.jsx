@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth, db, storage } from '../Firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { TextField, Button, Box, IconButton } from "@mui/material";
+import { TextField, Button, Box, IconButton, CircularProgress } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import { updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -11,6 +11,8 @@ const AccountDetails = () => {
     const [photoURLx, setPhotoURLx] = useState("");
     const [selectedImage, setSelectedImage] = useState(null);
     const [err, setErr] = useState(false);
+    const [loading, setLoading] = useState(false); // Loading state
+    const [success, setSuccess] = useState(false); // Success state
 
     useEffect(() => {
         if (auth.currentUser) {
@@ -21,6 +23,7 @@ const AccountDetails = () => {
 
 
     const handleImageChange = async (e) => {
+        setLoading(true); // Start loading
         if (e.target.files[0]) {
             setSelectedImage(e.target.files[0]);
             const file = e.target.files[0];
@@ -50,11 +53,12 @@ const AccountDetails = () => {
                 setErr(true);
             }
         }
+        setLoading(false); // End loading when done
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setLoading(true); // Start loading
         try {
             await updateProfile(auth.currentUser, {
                 displayName: displayNamex,
@@ -68,11 +72,15 @@ const AccountDetails = () => {
                 photoURL: photoURLx
             }, { merge: true }); // merge: true to prevent overwriting the entire document
 
+            setSuccess(true); // Set success when done
+            setTimeout(() => setSuccess(false), 2000); // Hide success message after 2 seconds
+
             setErr(false);
         } catch (err) {
             console.error(err);
             setErr(true);
         }
+        setLoading(false); // End loading when done
     };
 
 
@@ -87,7 +95,7 @@ const AccountDetails = () => {
                         <img src={photoURLx} style={{ width: '250px', backgroundColor: '#26252D' }} alt="displaypic" />
                     </Box>
                     <span style={{ color: '#f2f3f8' }}>Recomended to use a photo that is 200px by 200px</span>
-                    <label style={{ position: "absolute",right:'70px',top:'180px' }} htmlFor="icon-button-file">
+                    <label style={{ position: "absolute", right: '70px', top: '180px' }} htmlFor="icon-button-file">
                         <input
                             id="icon-button-file"
                             type="file"
@@ -137,7 +145,13 @@ const AccountDetails = () => {
                         }}
                     />
                     <Button type="submit"
-                    sx={{padding:"5px",borderRadius:'5px',backgroundColor: '#26252D',color:'#7C4FFF'}}>Save</Button>
+                        sx={{ padding: "5px", borderRadius: '5px', backgroundColor: '#26252D', color: '#7C4FFF' }}>Save</Button>
+                    {loading && (
+                        <CircularProgress /> // Show loader when loading
+                    )}
+                    {success && (
+                        <span style={{ color: "green" }}>Saved successfully!</span> // Show success message when successful
+                    )}
                     {err && <span style={{ color: "red" }}>Something went wrong</span>}
                 </form>
             </Box>

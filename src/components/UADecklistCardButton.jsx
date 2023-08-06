@@ -1,9 +1,10 @@
 import { Box, Drawer, Typography } from "@mui/material";
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { auth, db } from "../Firebase";
 import { Close, Pentagon, ThumbUp } from "@mui/icons-material";
 import { ResponsiveImage } from "./ResponsiveImage";
+import { AuthContext } from "../context/AuthContext";
 
 function formatDate(date) {
   const day = date.getDate();
@@ -21,22 +22,12 @@ function formatDate(date) {
 
 const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
   const [deckData, setDeckData] = useState([]);
-  const [userId, setUserId] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedDeckCards, setSelectedDeckCards] = useState([]);
   const [selectedDeckDescription, setSelectedDeckDescription] = useState("");
 
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        setUserId(user.uid);
-      } else {
-        setUserId(null);
-      }
-    });
-    return unsubscribe; // clean up on unmount
-  }, []);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.user?.uid;
 
   const handleVote = async (id, upvotedUsers = [], event) => {
     event.stopPropagation();
