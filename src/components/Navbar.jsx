@@ -47,7 +47,7 @@ const Navbar = (props) => {
     };
 
     return (
-        <AppBar position="sticky">
+        <AppBar position="fixed">
             <StyledToolbar>
                 <Box p={1} sx={{ display: { xs: "none", sm: "block" } }}><img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>
                 <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{ width: "auto", height: "30px" }} alt="uniondeck" src="/icons/uniondecklogosmall.png" /></Box>

@@ -112,6 +112,10 @@ const Home = () => {
     const [filteredEvents, setFilteredEvents] = useState(launchdates); // State to store filtered events
     const [selectedId, setSelectedId] = useState(""); // State to store selected ID
     const [open, setOpen] = useState(false);
+    const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+    const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
+    const [isDTCGButtonsVisible, setIsDTCGButtonsVisible] = useState(false);
+    const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const theme = useTheme();
 
     const handleFilter = (event) => {
@@ -150,52 +154,112 @@ const Home = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "0px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
-                            <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }} href="/digimon"><img style={{ width: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" /></Button>
-                            <Box style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }} href="/unionarena"><img style={{ width: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" /></Button>
-                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} component={Link} to="/uadecklist">UA Decklist</Button>
-                                <Button sx={{ width: "120px", color: "#7C4FFF", bgcolor: "#26252d" }} component={Link} to="/deckbuilder">UA Builder</Button>
+                        <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                            <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: '75px', overflowX: 'auto', justifyContent: 'center', width: '100vw', }}>
+                                <Button
+                                    sx={{ width: "120px", flex: '0 0 auto', height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }}
+                                    onClick={() => {
+                                        setIsDTCGButtonsVisible(!isDTCGButtonsVisible);
+                                        setIsUAButtonsVisible(false);
+                                        setIsOPTCGButtonsVisible(false);
+                                    }}
+                                >
+                                    <img style={{ height: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" />
+                                </Button>
+                                <Button
+                                    sx={{ width: "120px", flex: '0 0 auto', height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', }}
+                                    onClick={() => {
+                                        setIsUAButtonsVisible(!isUAButtonsVisible);
+                                        setIsDTCGButtonsVisible(false);
+                                        setIsOPTCGButtonsVisible(false);
+                                    }}
+                                >
+                                    <img style={{ height: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" />
+                                </Button>
+                                <Button
+                                    sx={{ width: "120px", flex: '0 0 auto', height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden' }}
+                                    onClick={() => {
+                                        setIsOPTCGButtonsVisible(!isOPTCGButtonsVisible);
+                                        setIsDTCGButtonsVisible(false);
+                                        setIsUAButtonsVisible(false);
+                                    }}
+                                >
+                                    <img style={{ height: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" />
+                                </Button>
                             </Box>
-                            <Button sx={{ width: "120px", height: '75px', color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", display: 'none', overflow: 'hidden' }} href="/uadecklist"><img style={{ width: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" /></Button>
+                            <Box sx={{position:'relative',textAlign:'center',}}>
+                                <Collapse in={isDTCGButtonsVisible}>
+                                    <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center',paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">DTCG<br/>Cardlist</Button>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">DTCG<br/>Decklist</Button>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">DTCG<br/>Builder</Button>
+                                    </Box>
+                                </Collapse>
+                                <Collapse in={isUAButtonsVisible}>
+                                    <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/unionarena">UATCG<br/>Cardlist</Button>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/uadecklist">UATCG<br/>Decklist</Button>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/deckbuilder">UATCG<br/>Builder</Button>
+                                    </Box>
+                                </Collapse>
+                                <Collapse in={isOPTCGButtonsVisible}>
+                                    <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">OPTCG<br/>Cardlist</Button>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">OPTCG<br/>Decklist</Button>
+                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">OPTCG<br/>Builder</Button>
+                                    </Box>
+                                </Collapse>
+                            </Box>
                         </Box>
-                        <Box width={"80vw"} position={"relative"} sx={{ marginRight: "15px" }}>
-                            <div>Launch Calendar</div>
-                            <FullCalendar
-                                key={selectedId}
-                                plugins={[listPlugin]}
-                                initialView={"listYear"}
-                                headerToolbar={{
-                                    start: "title",
-                                    center: "",
-                                    end: "",
-                                }}
-                                height={"40vh"}
-                                events={filteredEvents || launchdates} // Use filteredEvents if available, else use all events
-                                eventClick={handleEventClick}
-                                eventContent={renderEventContent}
-                            />
-                            <Select
-                                value={selectedId}
-                                onChange={handleFilter}
-                                sx={{ position: "absolute", top: 0, right: 0, width: "100px", backgroundColor: "#f2f3f8" }}
-                                displayEmpty
-                            >
-                                <MenuItem value="">
-                                    <em>All</em>
-                                </MenuItem>
-                                <MenuItem value="ruipoUA">UNIONARENA</MenuItem>
-                                <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
-                            </Select>
+                        <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "column", alignItems: 'center', bgcolor: "#26252d", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
+                            <Box sx={{ paddingRight: "30px", paddingLeft: "30px", display: 'flex', alignItems: 'center', alignSelf: 'start' }}>
+                                <div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>LAUNCH CALENDAR</strong></div>
+                                <IconButton
+                                    onClick={() => setIsCalendarVisible(!isCalendarVisible)}
+                                    sx={{ color: '#f2f3f8', transform: isCalendarVisible ? 'rotate(180deg)' : 'rotate(0deg)', transition: theme.transitions.create('transform', { duration: theme.transitions.duration.shortest }) }}
+                                >
+                                    <ExpandMore />
+                                </IconButton>
+                            </Box>
+                            <Collapse in={isCalendarVisible}>
+                                <Box width={{ xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }} position={"relative"}>
+                                    <FullCalendar
+                                        key={selectedId}
+                                        plugins={[listPlugin]}
+                                        initialView={"listYear"}
+                                        headerToolbar={{
+                                            start: "title",
+                                            center: "",
+                                            end: "",
+                                        }}
+                                        height={"40vh"}
+                                        events={filteredEvents || launchdates} // Use filteredEvents if available, else use all events
+                                        eventClick={handleEventClick}
+                                        eventContent={renderEventContent}
+                                    />
+                                    <Select
+                                        value={selectedId}
+                                        onChange={handleFilter}
+                                        sx={{ position: "absolute", top: 0, right: '30px', width: "80px", height: '40px', backgroundColor: "#f2f3f8" }}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="">
+                                            <em>All</em>
+                                        </MenuItem>
+                                        <MenuItem value="ruipoUA">UNIONARENA</MenuItem>
+                                        <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
+                                    </Select>
+                                </Box>
+                            </Collapse>
                         </Box>
-                        <Box width={"60vw"} sx={{ display: "flex", flexDirection: "column", bgcolor: "#26252d", paddingRight: "30px", paddingLeft: "30px", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
-                            <Box sx={{display:'flex',alignItems:'center'}}><div style={{ fontSize: "20px", color: "#10c595" }}><strong>UPDATES ON WEBSITE</strong></div>
-                            <IconButton
-                                onClick={() => setOpen(!open)}
-                                sx={{color:'#f2f3f8', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: theme.transitions.create('transform', { duration: theme.transitions.duration.shortest }) }}
-                            >
-                                <ExpandMore />
-                            </IconButton>
+                        <Box width={{ xs: "70vw", sm: "60vw" }} sx={{ display: "flex", flexDirection: "column", bgcolor: "#26252d", paddingRight: "30px", paddingLeft: "30px", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}><div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>UPDATES ON WEBSITE</strong></div>
+                                <IconButton
+                                    onClick={() => setOpen(!open)}
+                                    sx={{ color: '#f2f3f8', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: theme.transitions.create('transform', { duration: theme.transitions.duration.shortest }) }}
+                                >
+                                    <ExpandMore />
+                                </IconButton>
                             </Box>
                             <Collapse in={open}>
                                 <br />

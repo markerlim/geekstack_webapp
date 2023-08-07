@@ -272,7 +272,7 @@
     color:#121212 ;
 }
 .fc-list-event{
-    background-color: #121212;
+    background-color: #26252d;
     color:#f2f3f8;
 }
 .fc-listYear-view, .fc-list-day th, .fc-event td{
@@ -289,6 +289,9 @@
     display:flex;
     align-items: center;
     flex: 0 0 auto;
+}
+.fc-toolbar-title{
+    margin-left: 30px !important;
 }
 /*UADecklistCardButton*/
 .uatags-effect {

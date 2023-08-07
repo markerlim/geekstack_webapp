@@ -31,6 +31,7 @@ import DTCGBTpage from "./pages/DTCGBTpage";
 import UnionArenaPage from "./pages/UnionArenaPage";
 import UADecklistSharingPage from "./pages/UADecklistSharingPage";
 import AccountDetails from "./pages/AccountDetailsPage";
+import { Box, styled } from "@mui/material";
 
 smoothscroll.polyfill();
 
@@ -57,39 +58,45 @@ function App() {
     return children;
   };
 
+  const GlobalContentStyle = styled(Box)({
+    paddingTop: '64px', // or the height of your AppBar
+  });
+
   return (
     <div id="app-container">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" />
-          <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="account" element={<AccountDetails/>} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="credits" element={<Community />} />
-          <Route path="articles" element={<Articleviewer />} />
-          <Route path="geekhub" element={<Geekhub />} />
-          <Route path="deckbuilder" element={<Deckbuilder />} />
-          <Route path="deckviewer" element={<Deckviewer />} />
-          <Route path="test" element={<TestPage />} />
-          <Route path="/deck/:deckId" element={<DeckCardLoader />} />
-          <Route path="/unionarena/cgh" element={<AcardCGHpage />} />
-          <Route path="/unionarena/hxh" element={<AcardHXHpage />} />
-          <Route path="/unionarena/ims" element={<AcardIMSpage />} />
-          <Route path="/unionarena/jjk" element={<AcardJJKpage />} />
-          <Route path="/unionarena/kmy" element={<AcardKMYpage />} />
-          <Route path="/unionarena/toa" element={<AcardTOApage />} />
-          <Route path="/unionarena/tsk" element={<AcardTSKpage />} />
-          <Route path="/unionarena/btr" element={<AcardBTRpage />} />
-          <Route path="/unionarena/mha" element={<AcardMHApage />} />
-          <Route path="/unionarena/gnt" element={<AcardGNTpage />} />
-          <Route path="unionarena" element={<UnionArenaPage/>} />
-          <Route path="uadecklist" element={<UADecklistSharingPage/>} />
-          <Route path="digimon" element={<DigimonPage/>}/>
-          <Route path="/digimon/:booster" element={<DTCGBTpage/>}/>
-          <Route path="/article01" element={<ArticleUI />} />
-        </Routes>
-      </BrowserRouter>
+      <GlobalContentStyle>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" />
+            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="account" element={<AccountDetails />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="credits" element={<Community />} />
+            <Route path="articles" element={<Articleviewer />} />
+            <Route path="geekhub" element={<Geekhub />} />
+            <Route path="deckbuilder" element={<Deckbuilder />} />
+            <Route path="deckviewer" element={<Deckviewer />} />
+            <Route path="test" element={<TestPage />} />
+            <Route path="/deck/:deckId" element={<DeckCardLoader />} />
+            <Route path="/unionarena/cgh" element={<AcardCGHpage />} />
+            <Route path="/unionarena/hxh" element={<AcardHXHpage />} />
+            <Route path="/unionarena/ims" element={<AcardIMSpage />} />
+            <Route path="/unionarena/jjk" element={<AcardJJKpage />} />
+            <Route path="/unionarena/kmy" element={<AcardKMYpage />} />
+            <Route path="/unionarena/toa" element={<AcardTOApage />} />
+            <Route path="/unionarena/tsk" element={<AcardTSKpage />} />
+            <Route path="/unionarena/btr" element={<AcardBTRpage />} />
+            <Route path="/unionarena/mha" element={<AcardMHApage />} />
+            <Route path="/unionarena/gnt" element={<AcardGNTpage />} />
+            <Route path="unionarena" element={<UnionArenaPage />} />
+            <Route path="uadecklist" element={<UADecklistSharingPage />} />
+            <Route path="digimon" element={<DigimonPage />} />
+            <Route path="/digimon/:booster" element={<DTCGBTpage />} />
+            <Route path="/article01" element={<ArticleUI />} />
+          </Routes>
+        </BrowserRouter>
+      </GlobalContentStyle>
     </div>
   );
 }

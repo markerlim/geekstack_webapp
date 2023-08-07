@@ -100,51 +100,43 @@ const DeckLoader = () => {
     });
   };
 
-  const handleShareDeck = async (deck) => {
+  const handleShareDeck = async (deck, description, selectedCards) => {
     try {
-      if (!deck || !deck.id) {
-        console.error("Deck ID is missing.");
-        return;
-      }
+        if (!deck || !deck.id) {
+            console.error("Deck ID is missing.");
+            return;
+        }
 
-      if (currentUser) {
-        // Create date object in GMT+8 timezone
-        const date = new Date();
-        const offset = 8; // Offset for GMT+8
-        const localTime = date.getTime();
-        const localOffset = date.getTimezoneOffset() * 60000;
-        const utc = localTime + localOffset;
-        const timestamp = utc + (3600000 * offset);
-        const finalDate = new Date(timestamp);
+        if (currentUser) {
+            // Create date object in GMT+8 timezone
+            const date = new Date();
+            const offset = 8; // Offset for GMT+8
+            const localTime = date.getTime();
+            const localOffset = date.getTimezoneOffset() * 60000;
+            const utc = localTime + localOffset;
+            const timestamp = utc + (3600000 * offset);
+            const finalDate = new Date(timestamp);
 
-        // Get the cards of the selected deck from Firestore
-        const cardsSnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deck.id}/cards`));
-        const cardsData = [];
-        cardsSnapshot.forEach((cardDoc) => {
-          cardsData.push({
-            id: cardDoc.id,
-            ...cardDoc.data(),
-          });
-        });
-
-        // Create a new shared deck document in the 'uniondecklist' collection
-        await addDoc(collection(db, "uniondecklist"), {
-          deckName: deck.name,
-          colorCount: deck.colorCount,
-          specialCount: deck.specialCount,
-          finalCount: deck.finalCount,
-          image: deck.image,
-          description: description,
-          selectedCards: selectedCards,
-          uid: currentUser.uid,
-          sharedDate: finalDate,
-          cards: cardsData, // add cards data to deck document directly
-        });
-      }
+            // Create a new shared deck document in the 'uniondecklist' collection
+            await addDoc(collection(db, "uniondecklist"), {
+                deckName: deck.name,
+                colorCount: deck.colorCount,
+                specialCount: deck.specialCount,
+                finalCount: deck.finalCount,
+                image: deck.image,
+                description: description,
+                selectedCards: selectedCards,
+                uid: currentUser.uid,
+                sharedDate: finalDate,
+                cards: cards, // use the cards state directly
+            });
+            console.log(cards,'completed')
+        }
     } catch (error) {
-      console.error("Error sharing deck: ", error);
+        console.error("Error sharing deck: ", error);
     }
-  };
+};
+
 
 
   return (
