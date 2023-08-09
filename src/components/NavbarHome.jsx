@@ -1,13 +1,14 @@
-import { AppBar, styled, Toolbar, Box, Avatar, Menu, MenuItem } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import { AppBar, styled, Toolbar, Box, InputBase, Avatar, Menu, MenuItem, Button } from '@mui/material'
+import React, { useContext, useRef, useState } from 'react'
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { AuthContext } from '../context/AuthContext';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowBack } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import { SearchOutlined } from '@mui/icons-material';
 
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
+    justifyContent: 'space-between',
     '&.MuiToolbar-root': {
         background: 'linear-gradient(to right,rgb(44, 25, 80), rgb(15, 23, 42))',
     }
@@ -31,39 +32,46 @@ const UserBox = styled(Box)(({ theme }) => ({
     }
 }));
 
-const Navbar = (props) => {
+const NavbarHome = (props) => {
     const [open, setOpen] = useState(false)
     const { currentUser } = useContext(AuthContext)
-    const navigate = useNavigate();
-    const location = useLocation();
 
-    const goBack = () => {
-        console.log('clicked back')
-        navigate(-1);
-    };
     const handleLogout = () => {
         signOut(auth);
         localStorage.clear();
     };
 
+    const searchInputRef = useRef(null);
+
+    const handleSearchInputChanged = () => {
+        const searchValue = searchInputRef.current.value;
+        props.onSearch(searchValue);
+    };
+
     return (
         <AppBar position="fixed">
-            <StyledToolbar sx={{position:'relative'}}>
-                <Box p={1} sx={{ display: { xs: 'none', sm: "none", md: "flex" }, fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+            <StyledToolbar sx={{ position: 'relative' }}>
+                <Box p={1} sx={{ display: { xs: "none", sm: "flex" }, fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                     <img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <strong style={{ fontSize: '22px', }}>GEEKSTACK</strong>
                         <span>A Geek's Crib</span>
                     </Box>
                 </Box>
-                <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' },cursor:'pointer' }} onClick={goBack}>
-                    <ArrowBack />
-                </Box>
-                <Box p={1} sx={{ display: { xs: 'flex', sm: "none" } }}>
-                    <img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
-                </Box>
-                <Box sx={{ display: { xs: 'none', sm: 'flex', md: "none" }, justifyContent: 'center', flexDirection: "row", borderRadius: "5px",marginLeft:'-25px'}}>
-                    <img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
+                <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" /></Box>
+                <Box sx={{ display: 'flex', flexDirection: "row", backgroundColor: "#f2f3f8", borderRadius: "5px", paddingTop: "5px", paddingBottom: "5px", paddingLeft: "10px", paddingRight: "10px", marginLeft: "2px", marginRight: "2px" }}>
+                    <InputBase
+                        placeholder='search...'
+                        inputRef={searchInputRef}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSearchInputChanged}
+                        sx={{ textAlign: "center", justifySelf: "flex-end", overflow: 'hidden', borderRadius: "20px" }}
+                    >
+                        <SearchOutlined sx={{ width: "25px" }} />
+                    </Button>
                 </Box>
                 <Icons>
                     <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}
@@ -96,4 +104,4 @@ const Navbar = (props) => {
     );
 };
 
-export default Navbar
+export default NavbarHome

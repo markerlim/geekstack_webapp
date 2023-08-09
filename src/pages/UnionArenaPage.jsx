@@ -3,20 +3,25 @@ import Navbar from "../components/Navbar";
 import BottomNav from "../components/BottomNav"
 import { Box } from "@mui/material"
 import { useState } from "react";
-import HomepageUI from "../components/HomepageUI";
 import UANavBar from "../components/UANavBar";
+import GSearchBar from "../components/ChipSearchBar";
+import UACardlist from "../components/UACardlist";
 
 const UnionArenaPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState([]);
 
-  const handleSearch = (searchValue) => {
-    setSearchQuery(searchValue);
+  const handleFiltersChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  const clearAllFilters = () => {
+    setFilters([]);
+    console.log(filters);
   };
   return (
     <div>
       <Box color={"#f2f3f8"}>
-        <Navbar onSearch={handleSearch} />
-
+        <Navbar />
         <Box>
           <Box>
             <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
@@ -24,8 +29,9 @@ const UnionArenaPage = () => {
             </Box>
             <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
               <UANavBar />
-              <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingBottom: "150px", justifyContent: "center" }}>
-                <HomepageUI searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
+              <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px",paddingTop:'20px', paddingBottom: "150px", justifyContent: "center" }}>
+                <UACardlist filters={filters} />
               </Box>
             </Box>
           </Box>
