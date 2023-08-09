@@ -33,6 +33,7 @@ import UnionArenaPage from "./pages/UnionArenaPage";
 import UADecklistSharingPage from "./pages/UADecklistSharingPage";
 import AccountDetails from "./pages/AccountDetailsPage";
 import { Box, styled } from "@mui/material";
+import OnepiecePage from "./pages/OnepiecePage";
 
 smoothscroll.polyfill();
 
@@ -100,6 +101,7 @@ function App() {
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="digimon" element={<DigimonPage />} />
             <Route path="/digimon/:booster" element={<DTCGBTpage />} />
+            <Route path="onepiece" element={<OnepiecePage />} />
             <Route path="/article01" element={<ArticleUI />} />
           </Routes>
         </BrowserRouter>

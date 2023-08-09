@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const UANavBar = () => {
+const OPTCGNavBar = () => {
     return (
         <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", paddingTop: "10px", paddingBottom: "10px" }}>
             <Button component={Link} to="/unionarena" sx={{ width: "120px", color: "#10c595", bgcolor: "#2f2f2f" }}>
@@ -16,4 +16,4 @@ const UANavBar = () => {
     )
 }
 
-export default UANavBar
+export default OPTCGNavBar

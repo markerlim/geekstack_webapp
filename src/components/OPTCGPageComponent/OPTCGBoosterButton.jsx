@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ButtonBase, IconButton } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
-import { db } from "../Firebase";
+import { useAuth } from "../../context/AuthContext";
+import { db } from "../../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
 import { Star } from "@mui/icons-material";
 
@@ -140,7 +140,7 @@ const customSort = (a, b) => {
   }
 };
 
-const DTCGButtonList = () => {
+const OPTCGButtonList = () => {
   const [buttonData, setButtonData] = useState([]);
   const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/dtcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
 
@@ -187,4 +187,4 @@ const DTCGButtonList = () => {
   );
 };
 
-export default DTCGButtonList;
+export default OPTCGButtonList;

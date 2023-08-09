@@ -5,11 +5,11 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
 import { Helmet } from "react-helmet";
 import "../style.scss";
-import DTCGButtonList from "../components/DTCGBoosterButton";
-import DTCGNavBar from "../components/DigimonPageComponent/DTCGNavBar";
 import GSearchBar from "../components/ChipSearchBar";
+import OPTCGNavBar from "../components/OPTCGPageComponent/OPTCGNavBar";
+import OPTCGButtonList from "../components/OPTCGPageComponent/OPTCGBoosterButton";
 
-const DigimonPage = () => {
+const OnepiecePage = () => {
 
     const [filters, setFilters] = useState([]);
 
@@ -32,10 +32,10 @@ const DigimonPage = () => {
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column",alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
-                        <DTCGNavBar />
+                        <OPTCGNavBar />
                         <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
                         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingBottom: "150px",paddingTop:'30px', justifyContent: "center" }}>
-                            <DTCGButtonList filters={filters} />
+                            <OPTCGButtonList filters={filters} />
                         </Box>
                     </Box>
                 </Box>
@@ -45,4 +45,4 @@ const DigimonPage = () => {
     );
 }
 
-export default DigimonPage
+export default OnepiecePage
