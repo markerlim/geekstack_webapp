@@ -76,16 +76,16 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/digimon">
+                        <ListItemButton component={Link} to="/unionarena">
                             <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
-                                <img src="/icons/digivice.png" width="30px" alt="digivice" />
+                                <img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/unionarena">
+                        <ListItemButton component={Link} to="/digimon">
                             <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
-                                <img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />
+                                <img src="/icons/digivice.png" width="30px" alt="digivice" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

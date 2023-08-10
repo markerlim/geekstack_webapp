@@ -48,33 +48,33 @@ const Navbar = (props) => {
 
     return (
         <AppBar position="fixed">
-            <StyledToolbar sx={{position:'relative'}}>
-                <Box p={1} sx={{ display: { xs: 'none', sm: "none", md: "flex" }, position:'absolute',left:'20px',fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+            <StyledToolbar sx={{ position: 'relative' }}>
+                <Box p={1} sx={{ display: { xs: 'none', sm: "none", md: "flex" }, position: 'absolute', left: '20px', fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                     <img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <strong style={{ fontSize: '22px', }}>GEEKSTACK</strong>
                         <span>A Geek's Crib</span>
                     </Box>
                 </Box>
-                <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' },cursor:'pointer',position:'absolute',left:'20px',zIndex:850  }} onClick={goBack}>
+                <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' }, cursor: 'pointer', position: 'absolute', left: '20px', zIndex: 850 }} onClick={goBack}>
                     <ArrowBack />
                 </Box>
-                <Box p={1} sx={{ display: { xs: 'flex', sm: "none" },width:'100vw',justifyContent: 'center',zIndex:800 }}>
+                <Box p={1} sx={{ display: { xs: 'flex', sm: "none" }, width: '100vw', justifyContent: 'center', zIndex: 800 }}>
                     <img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                 </Box>
-                <Box sx={{ display: { xs: 'none', sm: 'flex', md: "none" }, justifyContent: 'center',width:'100vw',zIndex:800 , flexDirection: "row", borderRadius: "5px",marginLeft:'-25px'}}>
+                <Box sx={{ display: { xs: 'none', sm: 'flex', md: "none" }, justifyContent: 'center', width: '100vw', zIndex: 800, flexDirection: "row", borderRadius: "5px", marginLeft: '-25px' }}>
                     <img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                 </Box>
-                <Box position={'absolute'} sx={{right:'20px'}}>
-                <Icons>
-                    <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}
-                        onClick={e => setOpen(true)} />
-                </Icons>
-                <UserBox onClick={e => setOpen(true)}>
-                    <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}
-                        onClick={e => setOpen(true)} />
-                    <span onClick={e => setOpen(true)}>{currentUser.displayName}</span>
-                </UserBox>
+                <Box position={'absolute'} sx={{ right: '20px',zIndex:850 }}>
+                    <Icons>
+                        <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}
+                            onClick={e => setOpen(true)} />
+                    </Icons>
+                    <UserBox onClick={e => setOpen(true)}>
+                        <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}
+                            onClick={e => setOpen(true)} />
+                        <span onClick={e => setOpen(true)}>{currentUser.displayName}</span>
+                    </UserBox>
                 </Box>
             </StyledToolbar>
             <Menu

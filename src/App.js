@@ -54,7 +54,7 @@ function App() {
 
   // If loading, render a loading component or placeholder
   if (isLoading) {
-    return <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',width:'100%'}}><img width="20%" src="/icons/uniondecklogo.png" alt='loading'/></div>;
+    return <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',width:'100%'}}><Box sx={{width:{xs:'20%',sm:'20%',md:'100px'}}}><img width="100%" src="/icons/geekstackicon.svg" alt='loading'/></Box></div>;
   }
 
   const ProtectedRoute = ({ children }) => {

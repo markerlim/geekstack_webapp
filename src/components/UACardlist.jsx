@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Button } from "@mui/material";
-import { CardModal } from "./CardModal";
 import { ResponsiveImage } from "./ResponsiveImage";
 import ButtonList from "./UnionArenaBoosterButton";
 import { CircularProgress } from '@mui/material';
+import { CardModalSearch } from "./CardModalSearch";
 
 
 const keysToSearch = ['cardNameLower', 'animeLower', 'colorLower', 'cardNameTokens', 'rarityLower', 'boosterLower', 'category', 'cardId', 'basicpower', 'triggerStateLower'];
@@ -88,8 +88,8 @@ const UACardlist = ({ filters }) => {
             )}
             <div className="hide-scrollbar">
                 {loading ? (
-                    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "86vh" }}>
-                        <CircularProgress />
+                    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop:'-30vh', height: "86vh" }}>
+                        <CircularProgress sx={{ color: "#74CFFF" }} />
                         {slowFetch && <Box mt={2}>This field has a large amount of data. Please wait a moment.</Box>}
                     </Box>
                 ) : (
@@ -107,7 +107,7 @@ const UACardlist = ({ filters }) => {
                             </Grid>
                         ))}
                         {selectedCard && (
-                            <CardModal
+                            <CardModalSearch
                                 open={openModal}
                                 onClose={handleCloseModal}
                                 selectedCard={selectedCard}
