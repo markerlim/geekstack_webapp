@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
-import { CardModal } from "./CardModal";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
+import { CardModalSearch } from "./CardModalSearch";
 
 
 const TestRightBar = (props) => {
@@ -152,7 +152,7 @@ const TestRightBar = (props) => {
                         )
                     ))}
                     {selectedCard && (
-                        <CardModal
+                        <CardModalSearch
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}
