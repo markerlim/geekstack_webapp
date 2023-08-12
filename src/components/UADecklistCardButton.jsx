@@ -68,6 +68,7 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
           const formattedDate = formatDate(date);
           decks.push({ id: deckDoc.id, ...data, sharedDate: formattedDate });
         }
+        decks.sort((a, b) => new Date(b.sharedDate) - new Date(a.sharedDate));
         setDeckData(decks);
       } catch (error) {
         console.error("Error fetching deck data: ", error);
@@ -91,6 +92,7 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
         const formattedDate = formatDate(date);
         decks.push({ id: deckDoc.id, ...data, sharedDate: formattedDate });
       }
+      decks.sort((a, b) => new Date(b.sharedDate) - new Date(a.sharedDate));
       setDeckData(decks);
     });
 

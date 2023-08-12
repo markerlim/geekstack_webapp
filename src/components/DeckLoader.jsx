@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs, deleteDoc, doc, addDoc, setDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { Box, Button, ButtonBase, Modal, TextField } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Delete } from "@mui/icons-material";
 
@@ -14,6 +14,8 @@ const DeckLoader = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [cards, setCards] = useState([]);
   const [deckType, setDeckType] = useState(null); // 'tournament' or 'casuals'
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDecks = async () => {
@@ -131,6 +133,7 @@ const DeckLoader = () => {
           cards: cards, // use the cards state directly
         });
         console.log(cards, 'completed')
+        navigate('/uadecklist', { state: { openedDeck: deck.id } });
       }
     } catch (error) {
       console.error("Error sharing deck: ", error);
