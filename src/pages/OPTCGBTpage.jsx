@@ -4,15 +4,14 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
-import { CardDigimonModal } from "../components/DigimonPageComponent/CardDigimonModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowBack } from "@mui/icons-material";
+import { CardOnepieceModal } from "../components/OPTCGPageComponent/CardOnepieceModal";
 
-const DTCGBTpage = () => {
+const OPTCGBTpage = () => {
   const { booster } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
-  
-  const [digimons, setDigimons] = useState([]);
+  const [onepieces, setOnepieces] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [colorFilter, setColorFilter] = useState('');
@@ -25,8 +24,8 @@ const DTCGBTpage = () => {
     navigate(-1);
   };
 
-  const handleOpenModal = (digimon) => {
-    setSelectedCard(digimon);
+  const handleOpenModal = (onepiece) => {
+    setSelectedCard(onepiece);
     setOpenModal(true);
   };
 
@@ -36,15 +35,15 @@ const DTCGBTpage = () => {
   };
 
   const handleSwipeLeft = () => {
-    const currentIndex = digimons.findIndex((doc) => doc.cardid === selectedCard.cardid);
-    const nextIndex = (currentIndex + 1) % digimons.length;
-    setSelectedCard(digimons[nextIndex]);
+    const currentIndex = onepieces.findIndex((doc) => doc.cardid === selectedCard.cardid);
+    const nextIndex = (currentIndex + 1) % onepieces.length;
+    setSelectedCard(onepieces[nextIndex]);
   };
 
   const handleSwipeRight = () => {
-    const currentIndex = digimons.findIndex((doc) => doc.cardid === selectedCard.cardid);
-    const prevIndex = (currentIndex - 1 + digimons.length) % digimons.length;
-    setSelectedCard(digimons[prevIndex]);
+    const currentIndex = onepieces.findIndex((doc) => doc.cardid === selectedCard.cardid);
+    const prevIndex = (currentIndex - 1 + onepieces.length) % onepieces.length;
+    setSelectedCard(onepieces[prevIndex]);
   };
 
   const handleSliderChange = (event, newValue) => {
@@ -52,13 +51,13 @@ const DTCGBTpage = () => {
   };
 
   const fetchData = async (page) => {
-    const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/digimonData?page=${page}&booster=${booster}&secret=${process.env.REACT_APP_SECRET_KEY}`;
+    const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/onepieceData?page=${page}&booster=${booster}&secret=${process.env.REACT_APP_SECRET_KEY}`;
     try {
       const response = await fetch(url);
       const result = await response.json();
       const data = result.data;
 
-      setDigimons((prevData) => {
+      setOnepieces((prevData) => {
         const newData = [...prevData, ...data];
         newData.sort((a, b) => {
           const aId = parseInt(a.cardid.split('-')[1]);
@@ -171,14 +170,14 @@ const DTCGBTpage = () => {
               </Box>
             <div style={{ overflowY: "auto", height: "100vh" }} className="hide-scrollbar">
               <Grid container spacing={2} justifyContent="center">
-                {digimons.filter((digimon) => colorFilter === '' || digimon.color1 === colorFilter || digimon.color2 === colorFilter).map((digimon) => (
-                  <Grid item key={digimon.cardid} >
-                    <Box onClick={() => handleOpenModal(digimon)}>
+                {onepieces.filter((onepiece) => colorFilter === '' || onepiece.color1 === colorFilter || onepiece.color2 === colorFilter).map((onepiece) => (
+                  <Grid item key={onepiece.cardid} >
+                    <Box onClick={() => handleOpenModal(onepiece)}>
                       <img
                         loading="lazy"
-                        src={digimon.images}
+                        src={onepiece.images}
                         draggable="false"
-                        alt={digimon.cardid}
+                        alt={onepiece.cardid}
                         width={imageWidth}
                         height={imageHeight}
                       />
@@ -186,7 +185,7 @@ const DTCGBTpage = () => {
                   </Grid>
                 ))}
                 {selectedCard && (
-                  <CardDigimonModal
+                  <CardOnepieceModal
                     open={openModal}
                     onClose={handleCloseModal}
                     selectedCard={selectedCard}
@@ -205,4 +204,4 @@ const DTCGBTpage = () => {
   );
 }
 
-export default DTCGBTpage
+export default OPTCGBTpage

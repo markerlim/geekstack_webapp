@@ -37,12 +37,6 @@ export const CardOnepieceModal = ({ open, onClose, selectedCard, onSwipeLeft, on
                 <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardid}</Box>
               </Grid>
               <Grid item xs={3}>
-                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Form:</Box>
-              </Grid>
-              <Grid item xs={9}>
-                <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.form}</Box>
-              </Grid>
-              <Grid item xs={3}>
                 <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Attribute:</Box>
               </Grid>
               <Grid item xs={9}>
@@ -59,18 +53,6 @@ export const CardOnepieceModal = ({ open, onClose, selectedCard, onSwipeLeft, on
               </Grid>
               <Grid item xs={9}>
                 <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.effect}</Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>ESS:</Box>
-              </Grid>
-              <Grid item xs={9}>
-                <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.digivolve_effect}</Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Security:</Box>
-              </Grid>
-              <Grid item xs={9}>
-                <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.sec_effect}</Box>
               </Grid>
               <Grid item xs={12}>
                 <Button onClick={onClose}

@@ -142,7 +142,7 @@ const customSort = (a, b) => {
 
 const OPTCGButtonList = () => {
   const [buttonData, setButtonData] = useState([]);
-  const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/dtcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
+  const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/optcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
 
   useEffect(() => {
     const fetchData = async () => {
