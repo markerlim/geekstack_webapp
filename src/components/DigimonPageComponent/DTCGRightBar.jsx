@@ -22,22 +22,28 @@ const DTCGRightBar = ({filteredCards,countArray,setCountArray}) => {
     };
 
     const increase = (cardId) => {
-        setCountArray(prevCount => ({
-            ...prevCount,
-            [cardId]: (prevCount[cardId] || 0) + 1
+        setDigimons(prevDigimons => prevDigimons.map(card => {
+            if (card.cardid === cardId) {
+                return {
+                    ...card,
+                    count: (card.count || 0) + 1
+                };
+            }
+            return card;
         }));
     };
- 
+    
     const decrease = (cardId) => {
-        setCountArray(prevCount => {
-            if (!prevCount[cardId] || prevCount[cardId] <= 0) return prevCount;
-            return {
-                ...prevCount,
-                [cardId]: prevCount[cardId] - 1
-            };
-        });
+        setDigimons(prevDigimons => prevDigimons.map(card => {
+            if (card.cardid === cardId && card.count && card.count > 0) {
+                return {
+                    ...card,
+                    count: card.count - 1
+                };
+            }
+            return card;
+        }));
     };
-
     useEffect(() => {
         const handleStorageChange = (e) => {
             if (e.key === 'filteredCards') {
@@ -81,7 +87,7 @@ const DTCGRightBar = ({filteredCards,countArray,setCountArray}) => {
                                 <div component={Button} onClick={() => decrease(digimon.cardid)} style={{ cursor: "pointer" }}>
                                     <RemoveCircle sx={{ fontSize: 20 }} />
                                 </div>
-                                <span sx={{ fontSize: 20 }}>{countArray[digimon.cardid] || 0}</span>
+                                <span sx={{ fontSize: 20 }}>{digimon.count || 0}</span>
                                 <div component={Button} onClick={() => increase(digimon.cardid)} style={{ cursor: "pointer" }}>
                                     <AddCircle sx={{ fontSize: 20 }} />
                                 </div>

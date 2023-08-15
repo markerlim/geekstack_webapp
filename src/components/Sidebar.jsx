@@ -91,7 +91,7 @@ const Sidebar = () => {
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton component={Link} to="/onepiece">
-                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
+                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center"}}>
                                 <img src="/icons/onepieceicon.png" width="30px" alt="onepiece" />
                             </ListItemIcon>
                         </ListItemButton>

@@ -14,6 +14,8 @@ const DeckLoader = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [cards, setCards] = useState([]);
   const [deckType, setDeckType] = useState(null); // 'tournament' or 'casuals'
+  const [editedDeckName, setEditedDeckName] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -53,6 +55,10 @@ const DeckLoader = () => {
         ...data,
       });
     });
+    const deck = decks.find((d) => d.id === deckId);
+    if (deck) {
+      setEditedDeckName(deck.name);
+    }
     setCards(cardsData);
     setSelectedCards([]);
     setOpen(true);
@@ -63,8 +69,8 @@ const DeckLoader = () => {
   };
 
   const handleInputChange = (e) => {
-    if (e.target.value.length > 100) {
-      alert("Description should not exceed 100 characters.");
+    if (e.target.value.length > 80) {
+      alert("Description should not exceed 80 characters.");
       return;
     }
     setDescription(e.target.value);
@@ -101,6 +107,15 @@ const DeckLoader = () => {
     });
   };
 
+  const handleDeckNameChange = (e) => {
+    if (e.target.value.length > 15) {
+      alert("Deck name should not exceed 15 characters.");
+      return;
+    }
+    setEditedDeckName(e.target.value);
+  };
+
+
   const handleShareDeck = async (deck, description, selectedCards) => {
     try {
       if (!deck || !deck.id) {
@@ -118,9 +133,11 @@ const DeckLoader = () => {
         const timestamp = utc + (3600000 * offset);
         const finalDate = new Date(timestamp);
 
+        const finalDeckName = editedDeckName || deck.name;
+
         // Create a new shared deck document in the 'uniondecklist' collection
         await addDoc(collection(db, "uniondecklist"), {
-          deckName: deck.name,
+          deckName: finalDeckName,
           colorCount: deck.colorCount,
           specialCount: deck.specialCount,
           finalCount: deck.finalCount,
@@ -214,6 +231,36 @@ const DeckLoader = () => {
           </Box>
           <Modal sx={{ display: "flex", justifyContent: "center", alignItems: "center" }} open={open} onClose={handleClose}>
             <Box sx={{ backgroundColor: "#26252D", color: "white", borderRadius: "30px", padding: "30px", width: "500px", height: { xs: '100%', sm: "600px" }, display: "flex", flexDirection: "column", gap: "5px", textAlign: "center", alignItems: "center", overflowY: 'auto' }}>
+              <span>Title of Deck</span>
+              <TextField
+                label="Deck Name"
+                value={editedDeckName}
+                onChange={(e) => handleDeckNameChange(e)}
+                fullWidth
+                maxLength="15"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#7C4FFF', // Border color when not focused
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#7C4FFF', // Border color when hovered over
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#7C4FFF', // Border color when focused (in use)
+                    },
+                  },
+                  '.MuiOutlinedInput-input': {
+                    color: 'white', // changes the text color
+                  },
+                  '.MuiInputLabel-outlined': {
+                    color: 'white', // changes the label color
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    color: 'white', // changes the label color when typing
+                  },
+                }}
+              />
               <span style={{ padding: "10px" }}>Write a short description no more than 80 characters on the key pointers of the deck.</span>
               <TextField
                 label="Description"
@@ -258,14 +305,15 @@ const DeckLoader = () => {
                   </Box>
                 ))}
               </Box>
-              <Box sx={{display:'flex',flexDirection:'column',gap:'10px'}}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <span style={{ padding: "10px" }}>Pick the usage of this deck</span>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
                   <Button
-                    sx={{backgroundColor: deckType === "tournament" ? "#333333" : "#333333",
+                    sx={{
+                      backgroundColor: deckType === "tournament" ? "#333333" : "#333333",
                       color: deckType === "tournament" ? "#7C4FFF" : "#240056",
-                      '&:focus':{
-                        backgroundColor:'#333333',
+                      '&:focus': {
+                        backgroundColor: '#333333',
                       }
                     }}
                     onClick={() => setDeckType("tournament")}
@@ -273,12 +321,13 @@ const DeckLoader = () => {
                     Tournament
                   </Button>
                   <Button
-                    sx={{backgroundColor: deckType === "casuals" ? "#333333" : "#333333",
-                    color: deckType === "casuals" ? "#7C4FFF" : "#240056",
-                    '&:focus':{
-                      backgroundColor:'#333333',
-                    }
-                  }}
+                    sx={{
+                      backgroundColor: deckType === "casuals" ? "#333333" : "#333333",
+                      color: deckType === "casuals" ? "#7C4FFF" : "#240056",
+                      '&:focus': {
+                        backgroundColor: '#333333',
+                      }
+                    }}
                     onClick={() => setDeckType("casuals")}
                   >
                     Casuals

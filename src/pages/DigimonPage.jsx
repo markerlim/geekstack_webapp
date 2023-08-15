@@ -33,7 +33,7 @@ const DigimonPage = () => {
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column",alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
                         <DTCGNavBar />
-                        <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
+                        <Box sx={{display:'none'}}><GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} /></Box>
                         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingBottom: "150px",paddingTop:'30px', justifyContent: "center" }}>
                             <DTCGButtonList filters={filters} />
                         </Box>

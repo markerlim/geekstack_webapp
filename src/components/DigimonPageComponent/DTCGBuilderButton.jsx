@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, ButtonBase, CircularProgress, Grid } from "@mui/material";
 import { CardDigimonModal } from "./CardDigimonModal";
 import { AddCircle, ArrowBack, RemoveCircle } from "@mui/icons-material";
@@ -63,7 +63,7 @@ const customSort = (a, b) => {
   }
 };
 
-const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, setCountArray }) => {
+const DTCGBuilderButtonList = ({ filteredCards, setFilteredCards }) => {
   const [buttonData, setButtonData] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [digimons, setDigimons] = useState([]);
@@ -73,6 +73,7 @@ const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, set
   const [isLoading, setIsLoading] = useState(false);
   const [currentViewedCards, setCurrentViewedCards] = useState([]);
   const [allSelectedCards, setAllSelectedCards] = useState([]);
+  const shouldUpdateFilteredCards = useRef(true);
   const imageHeight = imageWidth * 1.395;
   const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/dtcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
 
@@ -128,80 +129,51 @@ const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, set
       return aId - bId;
     });
 
+    allDigimons = allDigimons.map(digimon => ({
+      ...digimon,
+      count: digimon.count || 0
+    }));
+
     setDigimons(allDigimons);
     setCurrentViewedCards(allDigimons);
     setIsLoading(false);
-  };
-
-  const updateCardCount = (cardsArray, cardId, operation) => {
-    return cardsArray.map(card => {
-        if(card.cardid === cardId) {
-            if (operation === "increase") {
-                card.count = (card.count || 0) + 1;
-            } else if (operation === "decrease" && card.count && card.count > 0) {
-                card.count -= 1;
-            }
-        }
-        return card;
-    });
+    console.log(allDigimons)
+    return allDigimons;
   };
 
   const increase = (cardId) => {
-    setCountArray(prevCount => ({
-      ...prevCount,
-      [cardId]: (prevCount[cardId] || 0) + 1
-    }));
-
-    setCurrentViewedCards(prev => updateCardCount(prev, cardId, "increase"));
-    setAllSelectedCards(prev => updateCardCount(prev, cardId, "increase"));
+    setDigimons(prevDigimons => {
+      const updatedDigimons = prevDigimons.map(digimon => {
+        if (digimon.cardid === cardId) {
+          return { ...digimon, count: (digimon.count || 0) + 1 };
+        }
+        return digimon;
+      });
+      return updatedDigimons;
+    });
   };
 
   const decrease = (cardId) => {
-    setCountArray(prevCount => {
-      if (!prevCount[cardId] || prevCount[cardId] <= 0) return prevCount;
-      return {
-        ...prevCount,
-        [cardId]: prevCount[cardId] - 1
-      };
+    setDigimons(prevDigimons => {
+      const updatedDigimons = prevDigimons.map(digimon => {
+        if (digimon.cardid === cardId && digimon.count && digimon.count > 0) {
+          return { ...digimon, count: digimon.count - 1 };
+        }
+        return digimon;
+      });
+      return updatedDigimons;
     });
-    setCurrentViewedCards(prev => updateCardCount(prev, cardId, "decrease"));
-    setAllSelectedCards(prev => updateCardCount(prev, cardId, "decrease"));
   };
 
   useEffect(() => {
-    const savedCount = localStorage.getItem('cardCount');
-    if (savedCount) {
-      setCountArray(JSON.parse(savedCount));
+    if (shouldUpdateFilteredCards.current) {
+        const cardsWithCount = digimons.filter(digimon => digimon.count && digimon.count > 0);
+        setFilteredCards(cardsWithCount);
     }
+    // Reset the ref for future updates
+    shouldUpdateFilteredCards.current = true;
+}, [digimons]);
 
-    const savedFilteredCards = localStorage.getItem('filteredCards');
-    if (savedFilteredCards) {
-      setFilteredCards(JSON.parse(savedFilteredCards));
-    }
-
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('cardCount', JSON.stringify(countArray));
-  
-    if (digimons.length) {
-      // Filter out the digimons which have a count and that count is greater than 0
-      const cardsWithCounts = digimons.filter(digimon => countArray[digimon.cardid] && countArray[digimon.cardid] > 0);
-        
-      // Combine previous filteredCards with the new cardsWithCounts
-      // Using a Set to ensure no duplicates
-      const combinedCardsSet = new Set([...filteredCards, ...cardsWithCounts]);
-      const combinedCardsArray = [...combinedCardsSet];
-    
-      // Remove the cards from combinedCardsArray where count is zero or not present
-      const finalFilteredCards = combinedCardsArray.filter(card => countArray[card.cardid] && countArray[card.cardid] > 0);
-  
-      setFilteredCards(finalFilteredCards);
-      localStorage.setItem('filteredCards', JSON.stringify(finalFilteredCards));
-    }
-  
-  }, [countArray, digimons]);
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -210,13 +182,8 @@ const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, set
         const result = await response.json();
         const data = result.data;
 
-        // Extract the 'pathname' from each object in the data array
         const extractedPathnames = data.map((item) => item.pathname);
-
-        // Sort the extracted pathnames alphabetically
         extractedPathnames.sort();
-
-        // Create a new array by sorting the original data array based on the sorted pathnames
         const sortedData = extractedPathnames.map((pathname) =>
           data.find((item) => item.pathname === pathname)
         ).sort(customSort);
@@ -226,20 +193,40 @@ const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, set
         console.error("Fetch error data:", error);
       }
     };
-
     fetchData();
   }, [url]);
+
+  useEffect(() => {
+    setCurrentViewedCards(digimons);
+  }, [digimons]);
 
   const handleButtonClick = (booster) => {
     console.log("Button clicked with booster:", booster);
     setIsLoading(true);  // Start the loading process
-    fetchDigimons(booster);
+
+    // After fetching the newDigimons, initialize count for them
+    fetchDigimons(booster).then(newDigimons => {
+        // Filter out already existing digimons
+        const nonExistingDigimons = newDigimons.filter(newDigimon => 
+            !digimons.some(existingDigimon => existingDigimon.cardid === newDigimon.cardid)
+        );
+        
+        const updatedCards = [...digimons, ...nonExistingDigimons.map(digimon => ({
+            ...digimon,
+            count: digimon.count || 0
+        }))];
+
+        setDigimons(updatedCards);
+    });
+
     setIsButtonClicked(true);
-  };
+};
+
 
   const handleClearSelection = () => {
+    shouldUpdateFilteredCards.current = false;
     setIsButtonClicked(false);
-    setDigimons([]); // Clear the digimons data too
+    setDigimons([]); // Clear the digimons data
   };
 
   return (
@@ -263,7 +250,7 @@ const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, set
           {isButtonClicked && (
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <Box>
-                <button onClick={handleClearSelection}><ArrowBack/  ></button>
+                <button onClick={handleClearSelection}><ArrowBack /></button>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
                 {currentViewedCards.map((digimon) => (
@@ -282,7 +269,7 @@ const DTCGBuilderButtonList = ({filteredCards, setFilteredCards, countArray, set
                       <div component={Button} onClick={() => decrease(digimon.cardid)} style={{ cursor: "pointer" }}>
                         <RemoveCircle sx={{ fontSize: 20 }} />
                       </div>
-                      <span sx={{ fontSize: 20 }}>{countArray[digimon.cardid] || 0}</span>
+                      <span sx={{ fontSize: 20 }}>{digimon.count || 0}</span>
                       <div component={Button} onClick={() => increase(digimon.cardid)} style={{ cursor: "pointer" }}>
                         <AddCircle sx={{ fontSize: 20 }} />
                       </div>

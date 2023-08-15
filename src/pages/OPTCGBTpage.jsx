@@ -175,7 +175,7 @@ const OPTCGBTpage = () => {
                     <Box onClick={() => handleOpenModal(onepiece)}>
                       <img
                         loading="lazy"
-                        src={onepiece.images}
+                        src={onepiece.image}
                         draggable="false"
                         alt={onepiece.cardid}
                         width={imageWidth}

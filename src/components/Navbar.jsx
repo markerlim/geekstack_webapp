@@ -53,7 +53,7 @@ const Navbar = (props) => {
                     <img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <strong style={{ fontSize: '22px', }}>GEEKSTACK</strong>
-                        <span>A Geek's Crib</span>
+                        <span>Everything Cards</span>
                     </Box>
                 </Box>
                 <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' }, cursor: 'pointer', position: 'absolute', left: '20px', zIndex: 850 }} onClick={goBack}>
