@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
-import { CardModal } from "./CardModal";
+import { CardDrawer } from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -113,7 +113,8 @@ const AcardTOA = (props) => {
 
     useEffect(() => {
         const fetchDocuments = async () => {
-            const querySnapshot = await getDocs(collection(db, "unionarenatcg"));
+            const filteredQuery = query(collection(db, "unionarenatcg"), where("anime", "==", animeFilter));
+            const querySnapshot = await getDocs(filteredQuery);
             const documentsArray = [];
             const initialAltForms = {};
             querySnapshot.forEach((doc) => {
@@ -125,10 +126,11 @@ const AcardTOA = (props) => {
             });
             setDocuments(documentsArray);
             setAltForms(initialAltForms);
+            console.log(`Number of reads: ${documentsArray.length}`);
         };
-
+    
         fetchDocuments();
-    }, []);
+    }, [animeFilter]);
 
 
     const currentSearchQuery = props.searchQuery;
@@ -400,7 +402,7 @@ const AcardTOA = (props) => {
                             }
                         })}
                     {selectedCard && (
-                        <CardModal
+                        <CardDrawer
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}

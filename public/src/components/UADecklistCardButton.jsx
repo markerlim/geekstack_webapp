@@ -1,8 +1,8 @@
-import { Box, Drawer, Typography } from "@mui/material";
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
+import { Box, Button, Drawer, Modal, TextField, Typography } from "@mui/material";
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, db } from "../Firebase";
-import { Close, Pentagon, ThumbUp } from "@mui/icons-material";
+import { Close, Delete, Pentagon, ThumbUp } from "@mui/icons-material";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +12,8 @@ function formatDate(date) {
   const monthIndex = date.getMonth();
   const year = date.getFullYear();
 
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
   const monthName = monthNames[monthIndex];
@@ -26,6 +26,8 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedDeckCards, setSelectedDeckCards] = useState([]);
   const [selectedDeckDescription, setSelectedDeckDescription] = useState("");
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deckToDelete, setDeckToDelete] = useState(null);
   const navigate = useNavigate();
 
   const authContext = useContext(AuthContext);
@@ -49,6 +51,23 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
     }
   };
 
+  const handleDeleteRequest = (id, event) => {
+    event.stopPropagation();
+    setDeckToDelete(id);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const deckRef = doc(db, 'uniondecklist', deckToDelete);
+      await deleteDoc(deckRef);
+      console.log("Deck successfully deleted!");
+      setConfirmDeleteOpen(false);
+    } catch (error) {
+      console.error("Error deleting deck: ", error);
+    }
+  };
+
   useEffect(() => {
     const fetchDeckData = async () => {
       try {
@@ -68,6 +87,7 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
           const formattedDate = formatDate(date);
           decks.push({ id: deckDoc.id, ...data, sharedDate: formattedDate });
         }
+        decks.sort((a, b) => new Date(b.sharedDate) - new Date(a.sharedDate));
         setDeckData(decks);
       } catch (error) {
         console.error("Error fetching deck data: ", error);
@@ -91,11 +111,13 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
         const formattedDate = formatDate(date);
         decks.push({ id: deckDoc.id, ...data, sharedDate: formattedDate });
       }
+      decks.sort((a, b) => new Date(b.sharedDate) - new Date(a.sharedDate));
       setDeckData(decks);
     });
 
     return unsubscribe;
   }, []);
+
 
   // Apply filters and date filter
   const filteredData = deckData.filter(deck => {
@@ -134,9 +156,9 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
             <Box sx={{ color: "#f2f3f8", display: "flex", flexDirection: "column", gap: "7px", justifyContent: "start", alignItems: "start" }}>
               <Typography sx={{ fontSize: { xs: '18px', sm: "25px" } }}><strong>{deck.deckName}</strong></Typography>
               <Box onClick={(event) => {
-                    event.stopPropagation();
-                    navigate(`/profile/${deck.uid}`)
-                  }}>
+                event.stopPropagation();
+                navigate(`/profile/${deck.uid}`)
+              }}>
                 <Box sx={{ fontSize: { xs: '16px', sm: "20px" }, display: "flex", alignItems: "center" }}><Box sx={{ width: { xs: "20px", sm: "30px" }, height: { xs: "20px", sm: "30px" }, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: { xs: "10px", sm: "15px" } }}>
                   <Box component="img" sx={{ width: { xs: "20px", sm: "30px" } }} src={deck.photoURL} alt={deck.displayName} /></Box>
                   {deck.displayName}
@@ -172,7 +194,7 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
                 {deck.selectedCards[2].id}
               </span>
             </Box>
-            <Box position="absolute" sx={{ top: "20px", flexWrap: "nowrap", right: "20px", display: { xs: 'none', sm: 'block' } }}><span style={{ fontWeight: "900", color: "#7C4FFF" }}>{deck.sharedDate}</span></Box>
+            <Box position="absolute" sx={{ top: "20px", flexWrap: "nowrap", right: "20px", display: { xs: 'none', sm: 'block' } }}><span style={{ fontSize:'15px',fontWeight: "900", color: "#74CFFF" }}>{deck.sharedDate}</span></Box>
             <Box position="absolute" sx={{ bottom: "15px", flexWrap: "nowrap", right: "20px", display: "flex", alignItems: "center" }} onClick={(event) => handleVote(deck.id, deck.upvotedUsers, event)}>
               <span style={{ marginRight: "5px", color: "#f2f3f8", fontSize: "20px" }}>{deck.upvotedUsers?.length || 0}</span>
               <ThumbUp sx={{
@@ -183,6 +205,11 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
                 },
               }} />
             </Box>
+            {userId === deck.uid && (
+              <Box position="absolute" sx={{ bottom:{xs:'60px',sm:"20px"}, left:{xs:'80px',sm:"85px"}, color: '#ff2247'}}>
+                <span onClick={(event) => handleDeleteRequest(deck.id, event)}><Delete/></span>
+              </Box>
+            )}
           </Box>
         </Box>
       ))}
@@ -222,6 +249,20 @@ const UADecklistCardButton = ({ filters, dateFilter, onSelectedCardClick }) => {
           </Box>
         </Box>
       </Drawer>
+      <Modal
+        open={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+      >
+        <Box sx={{ width: '300px', margin: 'auto', marginTop: '20%', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+          <Typography variant="h6" gutterBottom>
+            Are you sure you want to delete this deck?
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+            <Button variant="outlined" onClick={() => setConfirmDeleteOpen(false)}>Cancel</Button>
+            <Button variant="contained" color="primary" onClick={handleConfirmDelete}>Delete</Button>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   )
 }

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
-import { CardModal } from "./CardModal";
+import { CardDrawer} from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Helmet } from "react-helmet";
 
 
@@ -403,7 +403,7 @@ const AcardBTR = (props) => {
                             }
                         })}
                     {selectedCard && (
-                        <CardModal
+                        <CardDrawer
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}

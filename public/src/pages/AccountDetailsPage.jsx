@@ -93,7 +93,7 @@ const AccountDetails = () => {
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
                         <div style={{ height: "1px" }}></div>
-                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingBottom: "150px", justifyContent: "center" }}>
+                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingBottom: "150px", justifyContent: "center"}}>
                             <AccountDetailsComponent />
                             <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", gap: "20px", paddingBottom: "500px", alignItems: "center" }}>
                                 <span style={{ color: '#f2f3f8', }}>Click to view decklist shared:</span>

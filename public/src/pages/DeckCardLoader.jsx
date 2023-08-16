@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
 import { Box, Grid, Stack } from "@mui/material";
-import { CardModal } from "../components/CardModal";
+import { CardDrawer } from "../components/CardDrawer";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
@@ -232,7 +232,7 @@ const DeckCardLoader = () => {
                   ))}
                   <div style={{ height: '300px' }} />
                   {selectedCard && (
-                    <CardModal
+                    <CardDrawer
                       open={openModal}
                       onClose={handleCloseModal}
                       selectedCard={selectedCard}

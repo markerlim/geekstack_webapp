@@ -8,13 +8,8 @@ import UADecklistCardButton from "../components/UADecklistCardButton";
 import UADeckSearchBar from "../components/UADecklistChipBar";
 
 const UADecklistSharingPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState([]);
   const [dateFilter, setDateFilter] = useState([null, null]);
-
-  const handleSearch = (searchValue) => {
-    setSearchQuery(searchValue);
-  };
 
   const handleFiltersChange = (newFilters) => {
     setFilters(newFilters);

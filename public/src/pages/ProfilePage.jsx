@@ -5,11 +5,11 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
 import { Helmet } from "react-helmet";
 import "../style.scss";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../Firebase";
 import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
-import { ArrowCircleDown, ArrowCircleUp } from "@mui/icons-material";
+import { ArrowBack,ArrowCircleDown, ArrowCircleUp } from "@mui/icons-material";
 
 function formatDate(date) {
     const day = date.getDate();
@@ -36,6 +36,11 @@ const ProfilePage = () => {
     const [isDTCGButtonsVisible, setIsDTCGButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const [uaDeckData, setUaDeckData] = useState([]);
+    const navigate = useNavigate();
+
+    const goBack = () => {
+      navigate(-1);
+    };
 
     const imgStyles = {
         width: { xs: '150px', sm: '300px' },
@@ -171,15 +176,19 @@ const ProfilePage = () => {
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
-                        <div style={{ height: "1px" }}></div>
-                        <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", gap: "20px", paddingBottom: "500px", alignItems: "center" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", gap: "20px", paddingBottom: "500px", alignItems: "center", position: 'relative' }}>
+                            <Box sx={{ display:{xs:'flex',sm:'flex',md:'none'},alignItems:'center',gap:'10px',width:'100vw',backgroundColor:'#26252d',paddingLeft:'20px',
+                            paddingTop:'10px',paddingBottom:'10px',marginTop:{xs:'-10px',sm:'5px'},color:'#F2f3f8',fontWeight:'900',}}>
+                                <ArrowBack onClick={goBack}/><span style={{fontSize:'20px'}}>PROFILE</span>
+                            </Box>
+                            <div style={{height:'1px'}}></div>
                             {userData ? (
                                 <>
                                     <Box sx={{ borderRadius: '100px', border: '4px solid #7C4FFF ', overflow: 'hidden', width: '200px', height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <img src={userData.photoURL} style={{ width: '250px', backgroundColor: '#26252D' }} alt="displaypic" />
                                     </Box>
                                     <span style={{ color: '#f2f3f8', width: '200px', backgroundColor: '#26252D', padding: '20px', textAlign: 'center', fontSize: '20px', borderRadius: '10px ' }}>{userData.displayName}</span>
-                                    <span style={{ color: '#f2f3f8',}}>Click to view decklist shared:</span>
+                                    <span style={{ color: '#f2f3f8', }}>Click to view decklist shared:</span>
                                     <Box sx={{ width: '220px', backgroundColor: '#26252D', color: '#f2f3f8', padding: '10px', textAlign: 'center', fontSize: '20px', borderRadius: '10px ', display: 'none', flexDirection: 'row', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
                                         {/* Voting buttons */}
                                         <IconButton
@@ -205,7 +214,7 @@ const ProfilePage = () => {
                                     <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '20px', height: '83.5px', overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
                                         <Button
                                             sx={{
-                                                width: {xs:'auto',sm:"120px"}, flex: '0 0 auto', height: {xs:'50px',sm:"75px"}, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
+                                                width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
                                                     transform: 'scale(1.1)',
                                                     transition: 'all 0.2s ease-in-out'
                                                 }
@@ -220,7 +229,7 @@ const ProfilePage = () => {
                                         </Button>
                                         <Button
                                             sx={{
-                                                width: {xs:'auto',sm:"120px"}, flex: '0 0 auto', height: {xs:'50px',sm:"75px"}, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
+                                                width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
                                                     transform: 'scale(1.1)',
                                                     transition: 'all 0.2s ease-in-out'
                                                 }
@@ -235,7 +244,7 @@ const ProfilePage = () => {
                                         </Button>
                                         <Button
                                             sx={{
-                                                width: {xs:'auto',sm:"120px"}, flex: '0 0 auto', height: {xs:'50px',sm:"75px"}, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
+                                                width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
                                                     transform: 'scale(1.1)',
                                                     transition: 'all 0.2s ease-in-out'
                                                 }
@@ -249,13 +258,13 @@ const ProfilePage = () => {
                                             <img style={{ height: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" />
                                         </Button>
                                     </Box>
-                                    <Box sx={{position:'relative'}}>
-                                        <Collapse sx={{position:"absolute",top:'50%',left:'50%',transform: 'translate(-50%, 0%)'}} in={isDTCGButtonsVisible}>
+                                    <Box sx={{ position: 'relative' }}>
+                                        <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isDTCGButtonsVisible}>
                                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
                                                 Currently Unavailable
                                             </Box>
                                         </Collapse>
-                                        <Collapse sx={{position:"absolute",top:'50%',left:'50%',transform: 'translate(-50%, 0%)'}} in={isUAButtonsVisible}>
+                                        <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isUAButtonsVisible}>
                                             <Box sx={{ width: '100vw', display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
                                                 <Box
                                                     sx={{
@@ -276,7 +285,7 @@ const ProfilePage = () => {
                                                 </Box>
                                             </Box>
                                         </Collapse>
-                                        <Collapse sx={{position:"absolute",top:'50%',left:'50%',transform: 'translate(-50%, 0%)'}} in={isOPTCGButtonsVisible}>
+                                        <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isOPTCGButtonsVisible}>
                                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
                                                 Currently Unavailable
                                             </Box>

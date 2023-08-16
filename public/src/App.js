@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import "./style.scss"
 import "./App.scss"
 import Home from "./Home";
@@ -33,6 +33,9 @@ import UnionArenaPage from "./pages/UnionArenaPage";
 import UADecklistSharingPage from "./pages/UADecklistSharingPage";
 import AccountDetails from "./pages/AccountDetailsPage";
 import { Box, styled } from "@mui/material";
+import OnepiecePage from "./pages/OnepiecePage";
+import OPTCGBTpage from "./pages/OPTCGBTpage";
+import DTCGDeckbuilder from "./pages/DTCGDeckbuilder";
 
 smoothscroll.polyfill();
 
@@ -53,7 +56,7 @@ function App() {
 
   // If loading, render a loading component or placeholder
   if (isLoading) {
-    return <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',width:'100%'}}><img width="20%" src="/icons/uniondecklogo.png" alt='loading'/></div>;
+    return <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',width:'100%'}}><Box sx={{width:{xs:'20%',sm:'20%',md:'100px'}}}><img width="100%" src="/icons/geekstackicon.svg" alt='loading'/></Box></div>;
   }
 
   const ProtectedRoute = ({ children }) => {
@@ -100,6 +103,9 @@ function App() {
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="digimon" element={<DigimonPage />} />
             <Route path="/digimon/:booster" element={<DTCGBTpage />} />
+            <Route path="dtcgbuilder" element={<DTCGDeckbuilder />} />
+            <Route path="onepiece" element={<OnepiecePage />} />
+            <Route path="/onepiece/:booster" element={<OPTCGBTpage />} />
             <Route path="/article01" element={<ArticleUI />} />
           </Routes>
         </BrowserRouter>

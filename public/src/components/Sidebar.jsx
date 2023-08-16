@@ -76,6 +76,13 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/unionarena">
+                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
                         <ListItemButton component={Link} to="/digimon">
                             <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
                                 <img src="/icons/digivice.png" width="30px" alt="digivice" />
@@ -83,9 +90,9 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/unionarena">
-                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
-                                <img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />
+                        <ListItemButton component={Link} to="/onepiece">
+                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center",display:'none'}}>
+                                <img src="/icons/onepieceicon.png" width="30px" alt="onepiece" />
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
