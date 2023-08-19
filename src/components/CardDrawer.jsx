@@ -1,5 +1,5 @@
-import { Close } from "@mui/icons-material";
-import { Box, Button, Drawer, Grid, Modal, Switch, useTheme, Slide } from "@mui/material";
+import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box, Button, Drawer, Grid, Modal, useTheme, useMediaQuery, Collapse } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
@@ -8,6 +8,17 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSize, setShowFullSize] = useState(false);
   const [slidePosition, setSlidePosition] = useState("-100vh");
+
+  const theme = useTheme();
+  const isXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+
+  const getImageWidth = () => {
+    if (isXS) {
+      return '80vw';
+    }
+    return '400px';
+  };
+
 
   useEffect(() => {
     if (open) {
@@ -23,7 +34,7 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
       onClose();
     }, 50);
   };
-  
+
   const swipeHandlers = useSwipeable({
     onSwipedLeft: onSwipeLeft,
     onSwipedRight: onSwipeRight,
@@ -44,7 +55,7 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
           position: { md: 'absolute' },
           top: { md: '50%' },
           left: { md: '50%' },
-          bottom: {xs:slidePosition,sm:slidePosition},
+          bottom: { xs: slidePosition, sm: slidePosition },
           transition: "bottom 300ms ease-in-out",
           transform: { md: 'translate(-50%, -50%)' },
         },
@@ -80,57 +91,59 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
                 <img
                   src={selectedCard.currentImage}
                   alt="Full Size"
-                  style={{ width: "80vw", cursor: "pointer" }}
+                  style={{ width: getImageWidth(), cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}
                 />
               </Box>
             </Modal>
             <span style={{ color: "#f2f3f8" }}>tap card to see full</span>
-            <Box sx={{ color: '#7C4FFF' }}>
-              <Switch
-                checked={showDetails}
-                onClick={() => setShowDetails(!showDetails)}
-                sx={{
-                  '&.Mui-checked': {
-                    color: '#7C4FFF',
-                  },
-                  '&.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: '#7C4FFF',
-                  }
-                }}
-              />
-              {showDetails ? "Shown" : "Hidden"}
+            <Box
+              sx={{
+                backgroundColor: '#c8a2c8',
+                margin: '5px',
+                padding: '10px',
+                borderRadius: '20px',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease-in-out',
+              }}
+              onClick={() => setShowDetails(!showDetails)}
+            >
+              {showDetails ? <Visibility /> : <VisibilityOff />}
             </Box>
           </Box>
           <Box >
             <Grid draggable="false">
               <Grid container rowSpacing={1} columnSpacing={1}>
-                {showDetails && (<>
-                  <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Name:</Box>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardName}</Box>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>ID:</Box>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardId}</Box>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Color:</Box>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.color}</Box>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Traits:</Box>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.traits}</Box>
-                  </Grid>
-                </>)}
+                  {showDetails && (<>
+                    <Grid item xs={3}>
+                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Name:</Box>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardName}</Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>ID:</Box>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardId}</Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Color:</Box>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.color}</Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Traits:</Box>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.traits}</Box>
+                    </Grid>
+                  </>)}
                 <Grid item xs={3}>
                   <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Effect:</Box>
                 </Grid>

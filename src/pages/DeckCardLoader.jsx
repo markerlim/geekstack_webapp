@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
-import { Box, Grid, Stack } from "@mui/material";
+import { Box, Grid, } from "@mui/material";
 import { CardDrawer } from "../components/CardDrawer";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";

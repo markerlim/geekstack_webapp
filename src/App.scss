@@ -12,3 +12,13 @@ html {
   max-width: 100%;
   overflow-x: hidden;
 }
+
+/* Remove outline for all focusable elements */
+*:focus {
+  outline: none;
+}
+
+/* If you're using buttons, sometimes the following might also be necessary for certain browsers */
+button::-moz-focus-inner {
+  border: 0;
+}
