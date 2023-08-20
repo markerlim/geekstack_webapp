@@ -1,0 +1,23 @@
+{
+  "background_color": "#10172c",
+  "description": "Welcome to uniondeck.dev, the ultimate deck builder app for the exciting card game Union Arena! Our app is designed to help you create the best possible deck for your Union Arena battles, with a wide range of features and tools that make deck building easy, fun, and effective.",
+  "display": "standalone",
+  "name": "UnionDeck",
+  "orientation": "portrait",
+  "scope":"\/",
+  "short_name": "UnionDeck",
+  "start_url": "/",
+  "theme_color": "#7c4fff",
+  "icons": [
+      {
+          "src": "/icons/UDIcon.png",
+          "sizes": "74x74",
+          "type": "image/png"
+      },
+      {
+          "src": "/icons/UDIcon_3.png",
+          "sizes": "294x294",
+          "type": "image/png"
+      }
+  ]
+}

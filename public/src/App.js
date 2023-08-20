@@ -36,6 +36,7 @@ import { Box, styled } from "@mui/material";
 import OnepiecePage from "./pages/OnepiecePage";
 import OPTCGBTpage from "./pages/OPTCGBTpage";
 import DTCGDeckbuilder from "./pages/DTCGDeckbuilder";
+import OPTCGDeckbuilder from "./pages/OPTCGDeckbuilder";
 
 smoothscroll.polyfill();
 
@@ -105,6 +106,7 @@ function App() {
             <Route path="/digimon/:booster" element={<DTCGBTpage />} />
             <Route path="dtcgbuilder" element={<DTCGDeckbuilder />} />
             <Route path="onepiece" element={<OnepiecePage />} />
+            <Route path="optcgbuilder" element={<OPTCGDeckbuilder />} />
             <Route path="/onepiece/:booster" element={<OPTCGBTpage />} />
             <Route path="/article01" element={<ArticleUI />} />
           </Routes>

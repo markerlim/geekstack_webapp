@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Collapse, Grid, TextField, Typography } from "@mui/material";
 import { Delete, Save, Sort, SystemUpdateAlt } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
@@ -29,6 +29,8 @@ const DeckBuilderBar = (props) => {
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
+  const [viewDeckbar, setViewDeckbar] = useState(false);
+  const [showPadding, setShowPadding] = useState(false);
 
   const images = [
     "/images/deckimage.jpg",
@@ -66,8 +68,7 @@ const DeckBuilderBar = (props) => {
     (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
     0
   );
-
-  // Filter the cards based on the triggerState that are color
+  // Filter the cards based on the triggerState that are special
   const specialCards = filteredCards.filter(card => card.triggerState === "Special");
 
   const specialCount = specialCards.reduce(
@@ -75,7 +76,7 @@ const DeckBuilderBar = (props) => {
     0
   );
 
-  // Filter the cards based on the triggerState that are color
+  // Filter the cards based on the triggerState that are final
   const finalCards = filteredCards.filter(card => card.triggerState === "Final");
 
   const finalCount = finalCards.reduce(
@@ -266,7 +267,6 @@ const DeckBuilderBar = (props) => {
     }
   };
 
-
   useEffect(() => {
     if (selectedImage && shouldSaveDeck) {
       handleSaveClick(true);
@@ -278,6 +278,21 @@ const DeckBuilderBar = (props) => {
     }
   }, [selectedImage, shouldSaveDeck, handleSaveClick]);
 
+  
+  useEffect(() => {
+    if (viewDeckbar) {
+        setShowPadding(true);
+    } else {
+        // 300ms is the default transition duration for Collapse.
+        // Adjust if you've set a different duration.
+        setTimeout(() => {
+            setShowPadding(false);
+        }, 300);
+    }
+    // Clear the timeout when the component is unmounted
+    return () => clearTimeout();
+}, [viewDeckbar]);
+
   return (
     <Box
       sx={{
@@ -287,106 +302,113 @@ const DeckBuilderBar = (props) => {
         bgcolor: "#f2f3f8",
         color: "#121212",
         zIndex: 1,
+        paddingTop: showPadding ? "10px":"0px",paddingBottom: showPadding ? "10px":"0px",paddingLeft: "10px", paddingRight:"10px",
         ...props.style,
       }}
-      p={2}
     >
-      <Box display={"flex"} flexDirection={"row"} gap={2}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-          <Grid container rowSpacing={1} columnSpacing={1}>
-            <Grid item xs={3}>
-              <TextField
-                label="Deck Name"
-                variant="outlined"
-                size="small"
-                value={deckName}
-                onChange={(event) => setDeckName(event.target.value)}
-                inputProps={{ style: { color: '#121212' } }}
-                sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
-              />
-            </Grid>
-            <Grid item xs={4} sx={{ fontSize: 11, }}>
-              <Grid container rowSpacing={0} columnSpacing={5}>
-                <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
-                  <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
-                  <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
-                    {totalCount}<span className="mobile-hidden">/50</span>
-                  </span>
-                </Grid>
-                <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
-                  <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
-                  <span style={{ color: colorCount > 4 ? "red" : "inherit" }}>
-                    {colorCount}<span className="mobile-hidden">/4</span>
-                  </span>
-                </Grid>
-                <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
-                  <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
-                  <span style={{ color: specialCount > 4 ? "red" : "inherit" }}>
-                    {specialCount}<span className="mobile-hidden">/4</span>
-                  </span>
-                </Grid>
-                <Grid item xs={5} sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
-                  <img src="/icons/TFINAL.png" alt="Final:" />{" "}
-                  <span style={{ color: finalCount > 4 ? "red" : "inherit" }}>
-                    {finalCount}<span className="mobile-hidden">/4</span>
-                  </span>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={4}>
-              <Button sx={{ display: "none" }}>Hide</Button>
-            </Grid>
-          </Grid>
-          <Box>
-            <div style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
-              {Object.entries(stats).map(([energyCost, count]) => (
-                <div key={energyCost} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
-                  <img src={getImageSrc(parseInt(energyCost, 10))} alt={`Energy cost ${energyCost}`} width="30px" height="auto" /><span>:{count}</span>
-                </div>
-              ))}
-            </div>
-          </Box>
-          <Box style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <Button sx={{
-              borderRadius: "5px", backgroundColor: buttonBackgroundColor,
-              "&:hover": {
-                backgroundColor: buttonBackgroundColor, // Set hover background color same as normal state
-              },
-            }} onClick={props.onSortClick}>
-              <Sort sx={{
-                fontSize: "11px", color: buttonFontColor, fontWeight: "600", "&:hover": {
-                  Color: buttonFontColor, // Set hover background color same as normal state
+      <Collapse in={viewDeckbar}>
+        <Box display={"flex"} flexDirection={"row"} gap={2}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
+              <Box>
+                <TextField
+                  label="Deck Name"
+                  variant="outlined"
+                  size="small"
+                  value={deckName}
+                  onChange={(event) => setDeckName(event.target.value)}
+                  inputProps={{ style: { color: '#121212' } }}
+                  sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
+                />
+              </Box>
+              <Box sx={{ fontSize: 11 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                      <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
+                      <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
+                        {totalCount}<span className="mobile-hidden">/50</span>
+                      </span>
+                    </Box>
+                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                      <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
+                      <span style={{ color: colorCount > 4 ? "red" : "inherit" }}>
+                        {colorCount}<span className="mobile-hidden">/4</span>
+                      </span>
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                      <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
+                      <span style={{ color: specialCount > 4 ? "red" : "inherit" }}>
+                        {specialCount}<span className="mobile-hidden">/4</span>
+                      </span>
+                    </Box>
+                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                      <img src="/icons/TFINAL.png" alt="Final:" />{" "}
+                      <span style={{ color: finalCount > 4 ? "red" : "inherit" }}>
+                        {finalCount}<span className="mobile-hidden">/4</span>
+                      </span>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            <Box>
+              <Box style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
+                {Array.from({ length: 11 }).map((_, index) => (
+                  <Box key={index} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
+                    <img src={getImageSrc(index)} alt={`Energy cost ${index}`} width="30px" height="auto" />
+                    <span>:{stats[index] || 0}</span>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+            <Box style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <Button sx={{
+                borderRadius: "5px", backgroundColor: buttonBackgroundColor,
+                "&:hover": {
+                  backgroundColor: buttonBackgroundColor, // Set hover background color same as normal state
                 },
-              }} />
-              <Typography sx={{
-                fontSize: "10px", color: buttonFontColor, fontWeight: "600", "&:hover": {
-                  Color: buttonFontColor, // Set hover background color same as normal state
-                },
-              }} component="div">
-                {props.sortCards ? "Sorted Mode" : "Unsort Mode"}
-              </Typography>
-            </Button>
-            <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={handleClearClick}>
-              <Delete sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
-              <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
-                Clear
-              </Typography>
-            </Button>
-            <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={handleLoadDeckClick}>
-              <SystemUpdateAlt sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
-              <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
-                Load
-              </Typography>
-            </Button>
-            <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={() => handleSaveClick(false)}>
-              <Save sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
-              <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
-                Save
-              </Typography>
-            </Button>
+              }} onClick={props.onSortClick}>
+                <Sort sx={{
+                  fontSize: "11px", color: buttonFontColor, fontWeight: "600", "&:hover": {
+                    Color: buttonFontColor, // Set hover background color same as normal state
+                  },
+                }} />
+                <Typography sx={{
+                  fontSize: "10px", color: buttonFontColor, fontWeight: "600", "&:hover": {
+                    Color: buttonFontColor, // Set hover background color same as normal state
+                  },
+                }} component="div">
+                  {props.sortCards ? "Sorted Mode" : "Unsort Mode"}
+                </Typography>
+              </Button>
+              <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={handleClearClick}>
+                <Delete sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
+                  Clear
+                </Typography>
+              </Button>
+              <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={handleLoadDeckClick}>
+                <SystemUpdateAlt sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
+                  Load
+                </Typography>
+              </Button>
+              <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={() => handleSaveClick(false)}>
+                <Save sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
+                  Save
+                </Typography>
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Box >
+        </Box >
+      </Collapse>
+      <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={() => setViewDeckbar(prev => !prev)}>
+        {viewDeckbar ? <><img style={{ width: '110px' }} alt="gojo" src="http://localhost:3000/icons/gojo_inner.png" /></> : <><img alt="gojo" style={{ width: '30px' }} src="http://localhost:3000/icons/gojo_outer.png" /></>}
+      </Button>
       <Dialog
         open={showConfirmDialog}
         onClose={() => setShowConfirmDialog(false)}
@@ -425,8 +447,6 @@ const DeckBuilderBar = (props) => {
           <br />Please load your deck to view/edit.
         </Alert>
       </Snackbar>
-
-
       <ImagePickerModal
         open={showImagePickerModal}
         handleClose={() => setShowImagePickerModal(false)}
