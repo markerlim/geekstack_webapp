@@ -7,7 +7,6 @@ import { CardDrawer } from "./CardDrawer";
 import { AddCircle, ArrowBack, Refresh, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
-import searchMatch from "./searchUtils";
 
 const DBCardRef = (props) => {
     const [documents, setDocuments] = useState([]);
@@ -78,20 +77,17 @@ const DBCardRef = (props) => {
         });
     };
 
-    const currentSearchQuery = props.searchQuery;
-
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
-        const searchFilterMatch = searchMatch(document, currentSearchQuery);
 
-        return boosterFilterMatch && colorFilterMatch && animeFilterMatch && searchFilterMatch;
+        return boosterFilterMatch && colorFilterMatch && animeFilterMatch;
     });
 
     useEffect(() => {
         const fetchDocuments = async () => {
-            if (boosterFilter === "" && colorFilter === "" && animeFilter === "" && currentSearchQuery === "") {
+            if (boosterFilter === "" && colorFilter === "" && animeFilter === "") {
                 return;
             }
             let docRef = collection(db, "unionarenatcg");
@@ -105,7 +101,7 @@ const DBCardRef = (props) => {
         };
     
         fetchDocuments();
-    }, [animeFilter, currentSearchQuery]);
+    }, [animeFilter]);
 
 
 
@@ -260,12 +256,12 @@ const DBCardRef = (props) => {
                                 alt="loading..."
                                 onClick={() => handleOpenModal(document)}
                             />
-                            <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"}>
-                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
+                            <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{color:'#C8A2C8'}}>
+                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer"}}>
                                     <RemoveCircle sx={{ fontSize: 20 }} />
                                 </div>
-                                <span sx={{ fontSize: 20 }}>{countArray[document.cardId] || 0}</span>
-                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
+                                <div style={{ fontSize: 15 }}>{countArray[document.cardId] || 0}</div>
+                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer"}}>
                                     <AddCircle sx={{ fontSize: 20 }} />
                                 </div>
                             </Box>

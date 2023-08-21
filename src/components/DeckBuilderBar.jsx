@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Collapse, Grid, TextField, Typography } from "@mui/material";
-import { Delete, Save, Sort, SystemUpdateAlt } from "@mui/icons-material";
+import { Delete, Save, Sort, SystemUpdateAlt, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { db, } from "../Firebase";
@@ -228,15 +228,6 @@ const DeckBuilderBar = (props) => {
     setShowDeckLoaderModal(false); // Close the DeckLoader modal
   };
 
-  const sortCards = () => {
-    if (props.onSortCards) {
-      props.onSortCards();
-    }
-  };
-
-  const buttonBackgroundColor = props.sortCards ? "#240056" : "#d0cbdf";
-  const buttonFontColor = props.sortCards ? "#10c5a3" : "#240056";
-
   const getImageSrc = (energycost) => {
     switch (energycost) {
       case 0:
@@ -365,40 +356,21 @@ const DeckBuilderBar = (props) => {
               </Box>
             </Box>
             <Box style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <Button sx={{
-                borderRadius: "5px", backgroundColor: buttonBackgroundColor,
-                "&:hover": {
-                  backgroundColor: buttonBackgroundColor, // Set hover background color same as normal state
-                },
-              }} onClick={props.onSortClick}>
-                <Sort sx={{
-                  fontSize: "11px", color: buttonFontColor, fontWeight: "600", "&:hover": {
-                    Color: buttonFontColor, // Set hover background color same as normal state
-                  },
-                }} />
-                <Typography sx={{
-                  fontSize: "10px", color: buttonFontColor, fontWeight: "600", "&:hover": {
-                    Color: buttonFontColor, // Set hover background color same as normal state
-                  },
-                }} component="div">
-                  {props.sortCards ? "Sorted Mode" : "Unsort Mode"}
-                </Typography>
-              </Button>
-              <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={handleClearClick}>
-                <Delete sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",'&:hover':{bgcolor:'#171614'} }} onClick={handleClearClick}>
+                <Delete sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Clear
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={handleLoadDeckClick}>
-                <SystemUpdateAlt sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",'&:hover':{bgcolor:'#171614'} }} onClick={handleLoadDeckClick}>
+                <SystemUpdateAlt sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Load
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#240056", borderRadius: "5px" }} onClick={() => handleSaveClick(false)}>
-                <Save sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#10c5a3", fontWeight: "600" }} component="div">
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",'&:hover':{bgcolor:'#171614'} }} onClick={() => handleSaveClick(false)}>
+                <Save sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Save
                 </Typography>
               </Button>
@@ -407,7 +379,7 @@ const DeckBuilderBar = (props) => {
         </Box >
       </Collapse>
       <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={() => setViewDeckbar(prev => !prev)}>
-        {viewDeckbar ? <><img style={{ width: '110px' }} alt="gojo" src="http://localhost:3000/icons/gojo_inner.png" /></> : <><img alt="gojo" style={{ width: '30px' }} src="http://localhost:3000/icons/gojo_outer.png" /></>}
+        {viewDeckbar ? <><Visibility/></> : <><VisibilityOff/></>}
       </Button>
       <Dialog
         open={showConfirmDialog}

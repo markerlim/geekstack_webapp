@@ -58,11 +58,9 @@ const BottomNav = () => {
         <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px" }}>
           <BottomNavigationAction
             onClick={handleClick}
-            label="Games"
             icon={<Style />}
             sx={{
               color: '#9930f3',
-              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -76,11 +74,9 @@ const BottomNav = () => {
           <BottomNavigationAction
             component={Link}
             to="/deckbuilder"
-            label="Builder"
             icon={<Build />}
             sx={{
               color: '#9930f3',
-              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -94,11 +90,9 @@ const BottomNav = () => {
           <BottomNavigationAction
             component={Link}
             to="/"
-            label="Home"
             icon={<Home />}
             sx={{
               color: '#9930f3',
-              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -112,11 +106,9 @@ const BottomNav = () => {
           <BottomNavigationAction
             component={Link}
             to="/deckviewer"
-            label="Decks"
             icon={<Inventory />}
             sx={{
               color: '#9930f3',
-              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -130,11 +122,9 @@ const BottomNav = () => {
           <BottomNavigationAction
             component={Link}
             to="/credits"
-            label="Support"
             icon={<VolunteerActivism/>}
             sx={{
               color: '#9930f3',
-              filter: 'drop-shadow(0 0 5px #121212)',
               '@media (max-width:400px)': {
                 // put your styling here
                 minWidth: 'auto', // this will override the default minWidth: 80
@@ -157,6 +147,7 @@ const BottomNav = () => {
         >
           <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
           <MenuItem onClick={handleClose} component={Link} to="/digimon"><img src="/icons/digivice.png" width="30px" alt="digivice" />  Digimon</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/onepiece"><img src="/icons/onepieceicon.png" width="30px" alt="digivice" />  Onepiece</MenuItem>
         </Menu>
       </ThemeProvider>
     </Box>

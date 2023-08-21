@@ -5,7 +5,7 @@ import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
-import { CardModalSearch } from "./CardModalSearch";
+import { CardDrawer } from "./CardDrawer";
 
 
 const TestRightBar = (props) => {
@@ -17,7 +17,11 @@ const TestRightBar = (props) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleOpenModal = (document) => {
-        setSelectedCard(document);
+        let currentImage = document.image
+        setSelectedCard({
+            ...document,
+            currentImage: currentImage
+        });
         setOpenModal(true);
     }
 
@@ -41,7 +45,7 @@ const TestRightBar = (props) => {
             return newArray; // Update the countArray state without triggering the updateFilteredCards function
         });
     };
-    
+
     const decrease = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
@@ -100,32 +104,28 @@ const TestRightBar = (props) => {
     }, [countArray]);
 
     useEffect(() => {
-        if (props.sortCards) {
-          const sorted = [...filteredCards].sort((a, b) => {
+        const sorted = [...filteredCards].sort((a, b) => {
             if (a.category === b.category) {
-              return a.energycost - b.energycost;
+                return a.energycost - b.energycost;
             }
             return a.category.localeCompare(b.category);
-          });
-    
-          setSortedCards(sorted);
-        } else {
-          setSortedCards(filteredCards);
-        }
-      }, [props.sortCards, filteredCards]);
-      
-      useEffect(() => {
+        });
+
+        setSortedCards(sorted);
+    }, [filteredCards]);
+
+    useEffect(() => {
         // This will set the anime filter based on the anime of the first card
         // in the sortedCards array (if there are any cards in the array)
         if (sortedCards.length > 0) {
-          setAnimeFilter(sortedCards[0].anime);
+            setAnimeFilter(sortedCards[0].anime);
         }
-      }, [sortedCards]);
+    }, [sortedCards]);
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
             <br></br>
-            <Grid style={{ overflowY: "auto", height: "100%"}}>
+            <Grid style={{ overflowY: "auto", height: "100%" }}>
                 <Grid container spacing={2} justifyContent="center">
                     {sortedCards.map((document) => (
                         countArray[document.cardId] > 0 && (
@@ -152,7 +152,7 @@ const TestRightBar = (props) => {
                         )
                     ))}
                     {selectedCard && (
-                        <CardModalSearch
+                        <CardDrawer
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}

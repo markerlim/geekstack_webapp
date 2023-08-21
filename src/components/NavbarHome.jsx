@@ -8,6 +8,7 @@ import { SearchOutlined } from '@mui/icons-material';
 
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
+    height:'64px',
     justifyContent: 'space-between',
     '&.MuiToolbar-root': {
         background: 'linear-gradient(to right,rgb(44, 25, 80), rgb(15, 23, 42))',
@@ -55,7 +56,7 @@ const NavbarHome = (props) => {
                     <img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <strong style={{ fontSize: '22px', }}>GEEKSTACK</strong>
-                        <span>A Geek's Crib</span>
+                        <span>Everything Cards</span>
                     </Box>
                 </Box>
                 <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" /></Box>

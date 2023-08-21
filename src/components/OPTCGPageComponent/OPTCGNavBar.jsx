@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 const OPTCGNavBar = () => {
     return (
-        <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", paddingTop: "10px", paddingBottom: "10px" }}>
-            <Button component={Link} to="/optcgbuilder" sx={{ width: "120px", color: "#10c595", bgcolor: "#2f2f2f" }}>
-                <Build /><div style={{ width: "10px" }} />Build
+        <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", paddingTop: "10px", paddingBottom: "10px",justifyContent:"center",bgcolor:'#121212' }}>
+            <Button component={Link} to="/optcgbuilder" sx={{ width: "120px", color: "#c8a2c8", bgcolor: "#171614",fontSize:"13px" }}>
+                <Build sx={{fontSize:"13px"}} /><div style={{ width: "10px" }} />Build
             </Button>
-            <Button component={Link} to="/onepiece" sx={{ width: "120px", color: "#10c595", bgcolor: "#2f2f2f" }}>
-                <Style /><div style={{ width: "10px" }} />Cards
+            <Button component={Link} to="/onepiece" sx={{ width: "120px", color: "#c8a2c8", bgcolor: "#171614",fontSize:"13px" }}>
+                <Style sx={{fontSize:"13px"}}/><div style={{ width: "10px" }} />Cards
             </Button>
         </Box>
     )

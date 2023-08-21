@@ -38,6 +38,7 @@ const UACardlist = ({ filters }) => {
             const arrayFields = ['cardNameTokens']; // specify which keys should be treated as arrays
 
             for (let filter of filters) {
+                filter = filter.toLowerCase(); 
                 let filterMatches = [];
 
                 for (let key of keysToSearch) {

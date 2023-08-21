@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Collapse, } from "@mui/material"
+import { Box, Button, Drawer, } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
@@ -7,11 +7,12 @@ import { Hidden } from "@mui/material";
 import { Helmet } from "react-helmet";
 import OPTCGNavBar from "../components/OPTCGPageComponent/OPTCGNavBar";
 import OPTCGBuilderBar from "../components/OPTCGPageComponent/OPTCGBuilderBar";
-import OPTCGCardlist from "../components/OPTCGPageComponent/OPTCGCardlist";
+import OPTCGBuilderButtonList from "../components/OPTCGPageComponent/OPTCGBuilderButton";
+import OPTCGRightBar from "../components/OPTCGPageComponent/OPTCGRightBar";
 
 const OPTCGDeckbuilder = () => {
-  const [collapseDBCardRef, setCollapseDBCardRef] = useState(false);
-  const toggleCollapse = () => setCollapseDBCardRef(!collapseDBCardRef);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
   const [filteredCards, setFilteredCards] = useState([]);
   const [countArray, setCountArray] = useState([]);
 
@@ -41,37 +42,71 @@ const OPTCGDeckbuilder = () => {
             <Sidebar />
           </Box>
           <Hidden only={['md', 'lg', 'xl']}>
-            <Box bgcolor={"#784C9A"} sx={{ overflowY: 'auto', overflowX: "hidden", height: collapseDBCardRef ? "100%" : "22%", width: '100%' }} className="hide-scrollbar">
-              <OPTCGBuilderBar />
+            <Box bgcolor={"#202023"} sx={{ overflowY: 'auto', overflowX: "hidden", height: '100%', width: '100%', }} className="hide-scrollbar">
+              <OPTCGNavBar sx={{ backgroundColor: '#121212' }} />
+              <OPTCGBuilderBar style={{ width: "100%", top: 0, position: "sticky", }} />
+              <OPTCGRightBar countArray={countArray} setCountArray={setCountArray} filteredCards={filteredCards}/>
               <div style={{ height: "120px" }}></div>
             </Box>
-            <Button onClick={toggleCollapse} sx={{
-              display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#f2f3f8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: "60px",
+            <Button onClick={toggleDrawer} sx={{
+              display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: "60px", borderRadius: '0',
               '&:hover': {
-                backgroundColor: "#240052", // Change this to the desired hover background color
-                color: "#f2f3f8", // Change this to the desired hover text color if needed
+                backgroundColor: "#171614", // Change this to the desired hover background color
+                color: "#c8a2c8", // Change this to the desired hover text color if needed
               },
             }}>
-              {collapseDBCardRef ? "↑ SHOW" : "↓ HIDE"}
+              ↑ SHOW
             </Button>
           </Hidden>
-          <Box flex={6} p={1} sx={{ overflowY: 'auto', display: { xs: collapseDBCardRef ? "none" : "block", sm: collapseDBCardRef ? "none" : "block", md: "block" }, height: '100%', marginLeft: { xs: "0px", sm: "0px", md: "100px" }, }}>
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}><OPTCGNavBar /></Box>
-            <Collapse in={!collapseDBCardRef}>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '30px', justifyContent: 'center' }}>
-                <OPTCGCardlist/>
+          <Hidden mdUp> {/* This will hide the content for screens md (medium) and up */}
+            <Drawer
+              anchor="bottom"
+              open={isDrawerOpen}
+              onClose={toggleDrawer}
+              PaperProps={{
+                style: {
+                  backgroundColor: '#121212', // Match with Box background
+                  borderRadius: '20px 20px 0px 0px'
+                }
+              }}>
+              <Box sx={{
+                width: '100%',
+                maxHeight: '70vh',
+                bgcolor: '#121212',
+                borderRadius: '20px 20px 0px 0px',
+                overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
+              }}>
+                <OPTCGBuilderButtonList countArray={countArray} setCountArray={setCountArray} setFilteredCards={setFilteredCards} />
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
               </Box>
+            </Drawer>
+          </Hidden>
+          <Hidden smDown> {/* This will hide the content for screens sm (small) and down */}
+            <Box flex={6} p={1} sx={{
+              overflowY: 'auto',
+              display: 'block',
+              height: '100%',
+              marginLeft: "100px"
+            }}>
+              <OPTCGNavBar />
+              <OPTCGBuilderButtonList countArray={countArray} setCountArray={setCountArray} setFilteredCards={setFilteredCards} />
               <br></br>
               <br></br>
               <br></br>
               <br></br>
               <br></br>
               <br></br>
-            </Collapse>
-          </Box>
+            </Box>
+          </Hidden>
           <Hidden only={['xs', 'sm']}>
             <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
               <OPTCGBuilderBar />
+              <OPTCGRightBar countArray={countArray} setCountArray={setCountArray} filteredCards={filteredCards}/>
               <br></br>
               <br></br>
               <br></br>

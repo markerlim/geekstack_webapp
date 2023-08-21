@@ -1,10 +1,10 @@
 import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Drawer, Grid, Modal } from "@mui/material";
+import { Box, Button, Drawer, Grid, Modal,} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
 
-export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
+export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSize, setShowFullSize] = useState(false);
   const [slidePosition, setSlidePosition] = useState("-100vh");
@@ -56,7 +56,7 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
             <img
               loading="lazy"
-              src={selectedCard.currentImage}
+              src={selectedCard.image}
               draggable="false"
               alt="test"
               style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
@@ -79,7 +79,7 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
               }}>
                 <Box
                   component='img'
-                  src={selectedCard.currentImage}
+                  src={selectedCard.image}
                   alt="Full Size"
                   sx={{ width:{xs:'80vw',sm:'400px'},cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}
@@ -113,32 +113,14 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
                       <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Name:</Box>
                     </Grid>
                     <Grid item xs={9}>
-                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardName}</Box>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>ID:</Box>
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardId}</Box>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Color:</Box>
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.color}</Box>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Traits:</Box>
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.traits}</Box>
+                      <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardname}</Box>
                     </Grid>
                   </>)}
                 <Grid item xs={3}>
                   <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Effect:</Box>
                 </Grid>
                 <Grid item xs={9}>
-                  <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.effect}</Box>
+                  <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.effects}</Box>
                 </Grid>
                 {showDetails && (<>
                   <Grid item xs={3}>

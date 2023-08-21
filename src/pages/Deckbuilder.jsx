@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Collapse, Stack } from "@mui/material"
+import { Box, Button, Drawer } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DBCardRef from "../components/DBCardRef";
@@ -12,20 +12,9 @@ import { Helmet } from "react-helmet";
 import UANavBar from "../components/UANavBar";
 
 const Deckbuilder = () => {
-  const [collapseDBCardRef, setCollapseDBCardRef] = useState(false);
-  const toggleCollapse = () => setCollapseDBCardRef(!collapseDBCardRef);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (searchValue) => {
-    setSearchQuery(searchValue);
-  };
-
-  const [sortCards, setSortCards] = useState(false);
-
-  const handleSortClick = () => {
-    setSortCards(!sortCards);
-  };
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "webmanifest";
@@ -42,7 +31,7 @@ const Deckbuilder = () => {
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Helmet>
       <Box bgcolor={"#121212"} color={"#f2f3f8"} sx={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
-        <Navbar onSearch={handleSearch} />
+        <Navbar />
         <Box sx={{ display: { xs: "flex", sm: "flex", md: "none" }, flexDirection: "column" }}>
           <BottomNav />
         </Box>
@@ -52,37 +41,76 @@ const Deckbuilder = () => {
               <Sidebar />
             </Box>
             <Hidden only={['md', 'lg', 'xl']}>
-              <Box bgcolor={"#784C9A"} sx={{ overflowY: 'auto', overflowX: "hidden", height: collapseDBCardRef ? "100%" : "22%", width: '100%' }} className="hide-scrollbar">
-                <DeckBuilderBar onSortClick={handleSortClick} sortCards={sortCards} style={{ width: "100%", top: 0, position: "sticky" }} />
-                <TestRightBar sortCards={sortCards} sx={{ top: 0 }} />
+              <Box bgcolor={"#202023"} sx={{ overflowY: 'auto', overflowX: "hidden", height: '100%', width: '100%', }} className="hide-scrollbar">
+                <UANavBar sx={{ backgroundColor: '#121212' }} />
+                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky", }} />
+                <TestRightBar sx={{ top: 0 }} />
                 <div style={{ height: "120px" }}></div>
               </Box>
-              <Button onClick={toggleCollapse} sx={{
-                display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#f2f3f8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: "60px",
+              <Button onClick={toggleDrawer} sx={{
+                display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: "60px", borderRadius: '0',
                 '&:hover': {
-                  backgroundColor: "#240052", // Change this to the desired hover background color
-                  color: "#f2f3f8", // Change this to the desired hover text color if needed
+                  backgroundColor: "#171614", // Change this to the desired hover background color
+                  color: "#c8a2c8", // Change this to the desired hover text color if needed
                 },
               }}>
-                {collapseDBCardRef ? "↑ SHOW" : "↓ HIDE"}
+                ↑ SHOW
               </Button>
             </Hidden>
-            <Box flex={6} p={1} sx={{ overflowY: 'auto', display: { xs: collapseDBCardRef ? "none" : "block", sm: collapseDBCardRef ? "none" : "block", md: "block" }, height: '100%', marginLeft: { xs: "0px", sm: "0px", md: "100px" }, }}>
-              <Collapse in={!collapseDBCardRef}>
+            <Hidden mdUp> {/* This will hide the content for screens md (medium) and up */}
+              <Drawer
+                anchor="bottom"
+                open={isDrawerOpen}
+                onClose={toggleDrawer}
+                PaperProps={{
+                  style: {
+                    backgroundColor: '#121212', // Match with Box background
+                    borderRadius: '20px 20px 0px 0px'
+                  }
+                }}>
+                <Box sx={{
+                  width: '100%',
+                  maxHeight: '70vh',
+                  bgcolor: '#121212',
+                  borderRadius: '20px 20px 0px 0px',
+                  overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
+                }}>
+                  <Box sx={{
+                    paddingRight: '30px',
+                    paddingLeft: '30px',
+                  }}>
+                    <DBCardRef />
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                  </Box>
+                </Box>
+              </Drawer>
+            </Hidden>
+            <Hidden smDown> {/* This will hide the content for screens sm (small) and down */}
+              <Box flex={6} p={1} sx={{
+                overflowY: 'auto',
+                display: 'block',
+                height: '100%',
+                marginLeft: "100px"
+              }}>
                 <UANavBar />
-                <DBCardRef searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                <DBCardRef />
                 <br></br>
                 <br></br>
                 <br></br>
                 <br></br>
                 <br></br>
                 <br></br>
-              </Collapse>
-            </Box>
+              </Box>
+            </Hidden>
             <Hidden only={['xs', 'sm']}>
               <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
-                <DeckBuilderBar onSortClick={handleSortClick} sortCards={sortCards} style={{ width: "100%", top: 0, position: "sticky" }} />
-                <TestRightBar sortCards={sortCards} />
+                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky" }} />
+                <TestRightBar />
                 <br></br>
                 <br></br>
                 <br></br>

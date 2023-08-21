@@ -8,6 +8,7 @@ import { ArrowBack } from '@mui/icons-material';
 
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
+    height:'64px',
     '&.MuiToolbar-root': {
         background: 'linear-gradient(to right,rgb(44, 25, 80), rgb(15, 23, 42))',
     }
@@ -51,7 +52,7 @@ const Navbar = (props) => {
             <StyledToolbar sx={{ position: 'relative' }}>
                 <Box p={1} sx={{ display: { xs: 'none', sm: "none", md: "flex" }, position: 'absolute', left: '20px', fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                     <img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column',paddingTop: "5px", paddingBottom: "5px",}}>
                         <strong style={{ fontSize: '22px', }}>GEEKSTACK</strong>
                         <span>Everything Cards</span>
                     </Box>

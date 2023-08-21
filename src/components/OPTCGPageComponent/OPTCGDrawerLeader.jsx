@@ -1,12 +1,15 @@
 import { Close } from "@mui/icons-material";
-import { Box, Button, Drawer, Modal, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Button, Drawer, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
 
 
 export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedImage }) => {
-    const [showFullSize, setShowFullSize] = useState(false);
+    const [boosterFilter, setBoosterFilter] = useState("");
+    const [colorFilter, setColorFilter] = useState("");
     const [slidePosition, setSlidePosition] = useState(100);
     const [dataList, setDataList] = useState([]);  // Array to store fetched data
+    const boosters = ['OP01', 'OP02', 'OP03', 'OP04', 'OP05'];
+    const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Black'];
 
     const opldrurl = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/onepieceLeader?secret=${process.env.REACT_APP_SECRET_KEY}`;
 
@@ -30,6 +33,14 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
             }, 300); // duration of the animation
         }
     }, [open]);
+
+    const filteredDataList = dataList.filter(item => {
+        const matchesBooster = !boosterFilter || item.booster === boosterFilter;
+        const matchesColor = !colorFilter || item.color === colorFilter;
+
+        return matchesBooster && matchesColor;
+    });
+
 
     const handleClose = () => {
         setTimeout(() => {
@@ -63,9 +74,45 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
             }}
         >
             <Box display="flex" flexDirection="column" minHeight="100%" minWidth={0} overflowY={"auto"} p={3}>
+                <Box display='flex' justifyContent='space-between' mb={2}>
+                    <FormControl variant="outlined" size="small" style={{ marginRight: '15px' }}>
+                        <InputLabel>Booster</InputLabel>
+                        <Select
+                            value={boosterFilter}
+                            onChange={(e) => setBoosterFilter(e.target.value)}
+                            label="Booster"
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {boosters.map(booster => (
+                                <MenuItem key={booster} value={booster}>
+                                    {booster}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl variant="outlined" size="small">
+                        <InputLabel>Color</InputLabel>
+                        <Select
+                            value={colorFilter}
+                            onChange={(e) => setColorFilter(e.target.value)}
+                            label="Color"
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {colors.map(color => (
+                                <MenuItem key={color} value={color}>
+                                    {color}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
                 <Box flexGrow={1} display='flex' flexDirection='column' >
-                    <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', flexWrap:'wrap', justifyContent: 'center', gap: '10px' }}>
-                        {dataList.map((item, index) => (
+                    <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
+                        {filteredDataList.map((item, index) => (
                             <div key={index}>
                                 <img
                                     loading="lazy"
