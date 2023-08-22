@@ -170,13 +170,21 @@
     width: 200%;
 }
 .formContainer {
-    background-color: #240056;
+    background-image: url(http://localhost:3000/images/loginBG1.png);
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size:cover;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
+@media (max-width: 599px){
+    .formWrapper{
+        width:50vw;
+        padding:20px 0px;
+    }
+}
 .formWrapper {
     background-color: white;
     padding: 20px 60px;

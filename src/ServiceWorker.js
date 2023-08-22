@@ -1,0 +1,72 @@
+// Define a name for the current cache version
+const CACHE_NAME = 'v1_cache';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/styles/style.scss',
+  '/styles/App.scss',
+  '/icons/geekstackicon.svg',
+  '/images/deckimage1.jpg',
+  '/images/deckimage2.jpg',
+  '/images/deckimage3.jpg',
+  '/images/deckimage4.jpg',
+  '/images/deckimage5.jpg',
+  '/images/deckimage6.jpg',
+  '/images/deckimage7.jpg',
+  '/images/deckimage8.jpg',
+  '/images/deckimage9.jpg', 
+  '/images/deckimage10.jpg',
+  '/images/deckimage11.jpg',
+  '/images/deckimage12.jpg',
+  '/images/deckimage13.jpg',
+  '/images/deckimage14.jpg',
+  '/images/deckimage15.jpg',
+  'images/HMDTCGButton.jpg',
+  'images/HMOPCGButton.jpg',
+  'images/HMUACGButton.jpg',
+  // ... any other essential static assets
+];
+
+// Install event: cache files and assets
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+// Fetch event: serve cached content or fetch from the network
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response; // If the request matches a cache entry, return the cached response
+        }
+        return fetch(event.request) // Otherwise, fetch from the network
+          .then(fetchResponse => {
+            // Optionally, you can add dynamic caching logic here.
+            // For example, cache certain assets or responses as users navigate your app.
+            return fetchResponse;
+          });
+      })
+  );
+});
+
+// Activate event: clean up old caches
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName); // Delete old cache versions
+          }
+        })
+      );
+    })
+  );
+});

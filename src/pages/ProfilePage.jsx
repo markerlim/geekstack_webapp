@@ -177,10 +177,6 @@ const ProfilePage = () => {
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
                         <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", gap: "20px", paddingBottom: "500px", alignItems: "center", position: 'relative' }}>
-                            <Box sx={{ display:{xs:'flex',sm:'flex',md:'none'},alignItems:'center',gap:'10px',width:'100vw',backgroundColor:'#26252d',paddingLeft:'20px',
-                            paddingTop:'10px',paddingBottom:'10px',marginTop:{xs:'-10px',sm:'5px'},color:'#F2f3f8',fontWeight:'900',}}>
-                                <ArrowBack onClick={goBack}/><span style={{fontSize:'20px'}}>PROFILE</span>
-                            </Box>
                             <div style={{height:'1px'}}></div>
                             {userData ? (
                                 <>
