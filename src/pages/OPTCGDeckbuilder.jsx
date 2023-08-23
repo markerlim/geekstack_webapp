@@ -76,7 +76,7 @@ const OPTCGDeckbuilder = () => {
                 borderRadius: '20px 20px 0px 0px',
                 overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
               }}>
-                <OPTCGBuilderButtonList countArray={countArray} setCountArray={setCountArray} setFilteredCards={setFilteredCards} />
+                <OPTCGBuilderButtonList countArray={countArray} setCountArray={setCountArray} filteredCards={filteredCards} setFilteredCards={setFilteredCards} />
                 <br></br>
                 <br></br>
                 <br></br>
@@ -94,7 +94,7 @@ const OPTCGDeckbuilder = () => {
               marginLeft: "100px"
             }}>
               <OPTCGNavBar />
-              <OPTCGBuilderButtonList countArray={countArray} setCountArray={setCountArray} setFilteredCards={setFilteredCards} />
+              <OPTCGBuilderButtonList countArray={countArray} setCountArray={setCountArray} filteredCards={filteredCards} setFilteredCards={setFilteredCards} />
               <br></br>
               <br></br>
               <br></br>

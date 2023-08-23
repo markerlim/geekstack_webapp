@@ -61,7 +61,7 @@ const customSort = (a, b) => {
     return a.pathname.localeCompare(b.pathname);
   }
 };
-const OPTCGBuilderButtonList = ({ setFilteredCards }) => {
+const OPTCGBuilderButtonList = ({ filteredCards, setFilteredCards }) => {
   const [buttonData, setButtonData] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [onepieces, setOnepieces] = useState([]);
@@ -70,7 +70,6 @@ const OPTCGBuilderButtonList = ({ setFilteredCards }) => {
   const [imageWidth, setImageWidth] = useState(100);
   const [isLoading, setIsLoading] = useState(false);
   const [currentViewedCards, setCurrentViewedCards] = useState([]);
-  const shouldUpdateFilteredCards = useRef(true);
   const imageHeight = imageWidth * 1.395;
   const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/optcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
 
@@ -139,40 +138,6 @@ const OPTCGBuilderButtonList = ({ setFilteredCards }) => {
     return allOnepieces;
   };
 
-  const increase = (cardId) => {
-    setOnepieces(prevonepieces => {
-      const updatedonepieces = prevonepieces.map(onepiece => {
-        if (onepiece.cardid === cardId) {
-          return { ...onepiece, count: (onepiece.count || 0) + 1 };
-        }
-        return onepiece;
-      });
-      return updatedonepieces;
-    });
-  };
-
-  const decrease = (cardId) => {
-    setOnepieces(prevonepieces => {
-      const updatedonepieces = prevonepieces.map(onepiece => {
-        if (onepiece.cardid === cardId && onepiece.count && onepiece.count > 0) {
-          return { ...onepiece, count: onepiece.count - 1 };
-        }
-        return onepiece;
-      });
-      return updatedonepieces;
-    });
-  };
-
-  useEffect(() => {
-    if (shouldUpdateFilteredCards.current) {
-      const cardsWithCount = onepieces.filter(onepiece => onepiece.count && onepiece.count > 0);
-      setFilteredCards(cardsWithCount);
-    }
-    // Reset the ref for future updates
-    shouldUpdateFilteredCards.current = true;
-  }, [onepieces]);
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -199,37 +164,63 @@ const OPTCGBuilderButtonList = ({ setFilteredCards }) => {
   }, [onepieces]);
 
   const handleButtonClick = (booster) => {
-    console.log("Button clicked with booster:", booster);
-    setIsLoading(true);  // Start the loading process
-
-    // After fetching the newonepieces, initialize count for them
+    setIsLoading(true);
     fetchonepieces(booster).then(newonepieces => {
-      // Filter out already existing onepieces
-      const nonExistingonepieces = newonepieces.filter(newonepiece =>
-        !onepieces.some(existingonepiece => existingonepiece.cardid === newonepiece.cardid)
-      );
-
-      const updatedCards = [...onepieces, ...nonExistingonepieces.map(onepiece => ({
-        ...onepiece,
-        count: onepiece.count || 0
-      }))];
-
-      setOnepieces(updatedCards);
+      const updatedOnepieces = newonepieces.map(onepiece => {
+        const existingCard = filteredCards.find(card => card.cardid === onepiece.cardid);
+        return {
+          ...onepiece,
+          count: existingCard ? existingCard.count : 0
+        };
+      });
+      setOnepieces(updatedOnepieces);
+      setIsButtonClicked(true);
+      setIsLoading(false);
     });
-
-    setIsButtonClicked(true);
   };
 
+  const increase = (cardId) => {
+    updateCardCount(cardId, 1);
+  };
+
+  const decrease = (cardId) => {
+    updateCardCount(cardId, -1);
+  };
+
+  const updateCardCount = (cardId, change) => {
+    setOnepieces(prevonepieces => {
+      const updatedonepieces = prevonepieces.map(onepiece => {
+        if (onepiece.cardid === cardId) {
+          const newCount = (onepiece.count || 0) + change;
+          if (newCount > 0) {
+            const updatedFilteredCards = [...filteredCards];
+            const existingCardIndex = updatedFilteredCards.findIndex(card => card.cardid === cardId);
+            if (existingCardIndex !== -1) {
+              updatedFilteredCards[existingCardIndex].count = newCount;
+            } else {
+              updatedFilteredCards.push({ ...onepiece, count: newCount });
+            }
+            setFilteredCards(updatedFilteredCards);
+          } else if (newCount === 0) {
+            setFilteredCards(prevFilteredCards => prevFilteredCards.filter(card => card.cardid !== cardId));
+          }
+          return { ...onepiece, count: newCount };
+        }
+        return onepiece;
+      });
+      return updatedonepieces;
+    });
+  };
+  
 
   const handleClearSelection = () => {
-    shouldUpdateFilteredCards.current = false;
     setIsButtonClicked(false);
     setOnepieces([]); // Clear the onepieces data
   };
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '30px',paddingRight:'30px',paddingLeft:'30px',paddingTop:'20px',justifyContent: 'center', }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '30px', paddingRight: '30px', paddingLeft: '30px', paddingTop: '20px', justifyContent: 'center', }}>
         {!isButtonClicked && buttonData.map((button) => (
           <MyButton
             key={button.pathname}
@@ -264,7 +255,7 @@ const OPTCGBuilderButtonList = ({ setFilteredCards }) => {
                         height={imageHeight}
                       />
                     </Box>
-                    <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{color:'#C8A2C8'}}> 
+                    <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
                       <div component={Button} onClick={() => decrease(onepiece.cardid)} style={{ cursor: "pointer" }}>
                         <RemoveCircle sx={{ fontSize: 20 }} />
                       </div>

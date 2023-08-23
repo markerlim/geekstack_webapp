@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../Firebase";
 import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
-import { ArrowBack,ArrowCircleDown, ArrowCircleUp } from "@mui/icons-material";
+import {ArrowCircleDown, ArrowCircleUp } from "@mui/icons-material";
 
 function formatDate(date) {
     const day = date.getDate();
@@ -37,10 +37,6 @@ const ProfilePage = () => {
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const [uaDeckData, setUaDeckData] = useState([]);
     const navigate = useNavigate();
-
-    const goBack = () => {
-      navigate(-1);
-    };
 
     const imgStyles = {
         width: { xs: '150px', sm: '300px' },

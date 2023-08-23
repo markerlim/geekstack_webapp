@@ -3,7 +3,7 @@ import { Box, Button, Grid } from "@mui/material";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { CardOnepieceModal } from "./CardOnepieceModal";
 
-const OPTCGRightBar = ({filteredCards,countArray,setCountArray}) => {
+const OPTCGRightBar = ({filteredCards}) => {
     console.log(filteredCards)
     const [onepieces, setOnepieces] = useState(filteredCards);
     const [openModal, setOpenModal] = useState(false);
@@ -22,28 +22,28 @@ const OPTCGRightBar = ({filteredCards,countArray,setCountArray}) => {
     };
 
     const increase = (cardId) => {
-        setOnepieces(prevonepieces => prevonepieces.map(card => {
-            if (card.cardid === cardId) {
-                return {
-                    ...card,
-                    count: (card.count || 0) + 1
-                };
+        setOnepieces(prevonepieces => {
+          const updatedonepieces = prevonepieces.map(onepiece => {
+            if (onepiece.cardid === cardId) {
+              return { ...onepiece, count: (onepiece.count || 0) + 1 };
             }
-            return card;
-        }));
-    };
+            return onepiece;
+          });
+          return updatedonepieces;
+        });
+      };
     
-    const decrease = (cardId) => {
-        setOnepieces(prevonepieces => prevonepieces.map(card => {
-            if (card.cardid === cardId && card.count && card.count > 0) {
-                return {
-                    ...card,
-                    count: card.count - 1
-                };
+      const decrease = (cardId) => {
+        setOnepieces(prevonepieces => {
+          const updatedonepieces = prevonepieces.map(onepiece => {
+            if (onepiece.cardid === cardId && onepiece.count && onepiece.count > 0) {
+              return { ...onepiece, count: onepiece.count - 1 };
             }
-            return card;
-        }));
-    };
+            return onepiece;
+          });
+          return updatedonepieces;
+        });
+      };
     useEffect(() => {
         const handleStorageChange = (e) => {
             if (e.key === 'filteredCards') {
@@ -70,13 +70,13 @@ const OPTCGRightBar = ({filteredCards,countArray,setCountArray}) => {
     return (
         <>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px',paddingTop:'20px' }}>
                     {onepieces.map((onepiece) => (
                         <Grid item key={onepiece.cardid}>
                             <Box onClick={() => handleOpenModal(onepiece)}>
                                 <img
                                     loading="lazy"
-                                    src={onepiece.images}
+                                    src={onepiece.image}
                                     draggable="false"
                                     alt={onepiece.cardid}
                                     width={imageWidth}
