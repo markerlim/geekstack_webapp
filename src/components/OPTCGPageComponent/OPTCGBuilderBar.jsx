@@ -1,15 +1,39 @@
 import { MoreVert } from "@mui/icons-material";
-import { Box, Button, Collapse, IconButton, Menu, MenuItem, TextField } from "@mui/material";
+import { Alert, Box, Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { OPTCGLdrCardDrawer } from "./OPTCGDrawerLeader";
+import { useCardState } from "../../context/useCardState";
+import { useAuth } from "../../context/AuthContext";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../Firebase";
+import FullScreenDialogOPTCG from "../../components/OPTCGPageComponent/FullScreenDialogOPTCG";
 
 const OPTCGBuilderBar = () => {
+    const { currentUser } = useAuth();
+    const { filteredCards, setFilteredCards } = useCardState();
+    const [totalCount, setTotalCount] = useState(0);
     const [deckName, setDeckName] = useState("PirateKing!");
-    const [viewDeckbar, setViewDeckbar] = useState(false);
+    const [viewDeckbar, setViewDeckbar] = useState(true);
     const [openModal, setOpenModal] = useState(false);
+    const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState("/OPTCG/OP01JP/OP01-001_p1.webp");
     const [anchorEl, setAnchorEl] = useState(null);
     const [showPadding, setShowPadding] = useState(false);
+    const [saveStatus, setSaveStatus] = useState(null);
+    const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [loadedDeckUid, setLoadedDeckUid] = useState(null);
+    const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
+
+
+    useEffect(() => {
+        const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
+        setFilteredCards(sortedCards);
+
+        const total = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
+        setTotalCount(total);
+    }, [filteredCards]);
+
 
     useEffect(() => {
         if (viewDeckbar) {
@@ -40,6 +64,126 @@ const OPTCGBuilderBar = () => {
     const handleCloseModal = () => {
         setOpenModal(false);
     };
+
+    const handleSaveClick = async (proceed = false) => {
+        if (!proceed && totalCount < 50) {
+            setShowConfirmDialog(true);
+            return;
+        }
+
+        if (!currentUser) {
+            return;
+        }
+
+        const uid = currentUser.uid;
+
+        try {
+            let deckUid;
+            if (!isUpdatingExistingDeck) {
+                const userDocRef = doc(db, "users", uid);
+
+                // Get the decksCounter from the user document
+                const userDocSnapshot = await getDoc(userDocRef);
+                const optcgdecksCounter = userDocSnapshot.get("optcgdecksCounter") || 0;
+
+                // Update the decksCounter for the user
+                await updateDoc(userDocRef, { optcgdecksCounter: optcgdecksCounter + 1 });
+
+                // Generate a new deckuid based on the updated decksCounter
+                deckUid = `gsdeck${String(optcgdecksCounter + 1).padStart(8, "0")}`;
+            } else {
+                deckUid = loadedDeckUid; // Use the loadedDeckUid when updating an existing deck
+            }
+
+            const deckDocRef = doc(db, `users/${uid}/optcgdecks`, deckUid);
+
+            const deckInfo = {
+                deckName: deckName,
+                deckuid: deckUid,
+                deckcover: selectedImage,
+                // Add any other information about the deck as required
+            };
+
+            if (!isUpdatingExistingDeck) {
+                // Create a document for the deck with the new name and deck info
+                await setDoc(deckDocRef, deckInfo);
+            } else {
+                // Update the deck name in the existing document
+                await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
+            }
+
+            const cardsCollectionRef = collection(db, `users/${uid}/optcgdecks/${deckUid}/optcgcards`);
+            console.log(filteredCards)
+            await Promise.all(
+                filteredCards.map(async (card) => {
+                    const cardDocRef = doc(cardsCollectionRef, card.cardid);
+                    const cardData = {
+                        booster: card.booster,
+                        cardfrom: card.cardfrom,
+                        cardname: card.cardname,
+                        cardname_lower: card.cardname_lower,
+                        cardid: card.cardid,
+                        rarity: card.rarity,
+                        rarity_lower: card.rarity_lower,
+                        category: card.category,
+                        cost_life: card.cost_life,
+                        attribute: card.attribute,
+                        attribute_lower: card.attribute_lower,
+                        power: card.power,
+                        counter: card.counter,
+                        color: card.color,
+                        color_lower: card.color_lower,
+                        typing: card.typing,
+                        typing_lower: card.typing_lower,
+                        effects: card.effects,
+                        trigger: card.trigger,
+                        image: card.image,
+                        count: card.count,
+                    };
+
+                    try {
+                        await setDoc(cardDocRef, cardData);
+                        console.log("Card saved successfully:", card.cardId);
+                    } catch (error) {
+                        console.error("Error saving card:", error);
+                    }
+                    console.log(cardData, "test")
+                })
+            );
+
+            console.log("Data saved successfully!");
+            setSaveStatus("success");
+
+            // Reset the component state
+            handleClearClick();
+            setIsUpdatingExistingDeck(false);
+            setLoadedDeckUid(null);
+            setShouldSaveDeck(false); // Reset shouldSaveDeck to false
+        } catch (error) {
+            console.error("Error saving data: ", error);
+            setSaveStatus("error");
+        }
+    };
+
+    const handleProceedSave = () => {
+        setShouldSaveDeck(true);
+        handleSaveClick(true);
+        setShowConfirmDialog(false);
+    };
+
+    const handleLoadDeckClick = () => {
+        setShowDeckLoaderModal(true); // Open the DeckLoader modal
+    };
+
+    const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName) => {
+        setDeckName(loadedDeckName);
+        setLoadedDeckUid(loadedDeckUid); 
+        setIsUpdatingExistingDeck(true); 
+        setShowDeckLoaderModal(false); 
+    };
+    const handleClearClick = () => {
+        setFilteredCards([])
+    }
 
     return (
         <Box sx={{ width: "100%", paddingTop: showPadding ? "10px" : "0px", paddingBottom: showPadding ? "10px" : "0px", paddingLeft: "10px", paddingRight: "10px", backgroundColor: "#F2F3F8", color: "#121212", display: 'flex' }}>
@@ -79,9 +223,9 @@ const OPTCGBuilderBar = () => {
                             </Menu>
                         </Box>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row', gap: '10px' }}>
-                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }}>sort</Button>
-                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }}>save</Button>
-                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }}>load</Button>
+                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClearClick}>clear</Button>
+                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={() => handleSaveClick(false)}>save</Button>
+                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleLoadDeckClick}>load</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }}>export</Button>
                         </Box>
                     </Box>
@@ -90,6 +234,44 @@ const OPTCGBuilderBar = () => {
             <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={() => setViewDeckbar(prev => !prev)}>
                 {viewDeckbar ? <><img style={{ width: '30px' }} alt="nika" src="http://localhost:3000/icons/OPIcon/nika_inner.png" /></> : <><img alt="nika" style={{ width: '30px' }} src="http://localhost:3000/icons/OPIcon/nika_outer.png" /></>}
             </Button>
+            <Dialog
+                open={showConfirmDialog}
+                onClose={() => setShowConfirmDialog(false)}
+            >
+                <DialogTitle>{"Save incomplete deck?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Your deck has less than 50 cards. Do you want to save it anyway?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowConfirmDialog(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={() => handleProceedSave()} color="primary" autoFocus>
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <FullScreenDialogOPTCG
+                open={showDeckLoaderModal}
+                handleClose={() => setShowDeckLoaderModal(false)}
+                handleDeckLoaded={(deckName, deckUid, loadedDeckName) => handleDeckLoaded(deckName, deckUid, loadedDeckName)}
+            />
+            <Snackbar
+                open={saveStatus === "success"}
+                autoHideDuration={6000}
+                onClose={() => setSaveStatus(null)}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                sx={{
+                    height: "100%"
+                }}
+            >
+                <Alert onClose={() => setSaveStatus(null)} severity="success" sx={{ width: '100%' }}>
+                    Deck saved successfully!
+                    <br />Please load your deck to view/edit.
+                </Alert>
+            </Snackbar>
             <OPTCGLdrCardDrawer
                 open={openModal}
                 onClose={handleCloseModal}

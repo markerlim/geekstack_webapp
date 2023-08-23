@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { CardOnepieceModal } from "./CardOnepieceModal";
+import { useCardState } from "../../context/useCardState";
 
-const OPTCGRightBar = ({filteredCards}) => {
-    console.log(filteredCards)
+const OPTCGRightBar = () => {
+    const { filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
     const [onepieces, setOnepieces] = useState(filteredCards);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -21,29 +22,23 @@ const OPTCGRightBar = ({filteredCards}) => {
         setOpenModal(false);
     };
 
-    const increase = (cardId) => {
-        setOnepieces(prevonepieces => {
-          const updatedonepieces = prevonepieces.map(onepiece => {
-            if (onepiece.cardid === cardId) {
-              return { ...onepiece, count: (onepiece.count || 0) + 1 };
+    const modifyCardCount = (cardId, change) => {
+        const updatedCards = filteredCards.map(card => {
+            if (card.cardid === cardId) {
+                // Ensure count is at least 0
+                const newCount = Math.max((card.count || 0) + change, 0);
+                return { ...card, count: newCount };
             }
-            return onepiece;
-          });
-          return updatedonepieces;
-        });
-      };
+            return card;
+        }).filter(card => card.count > 0); // This line filters out the cards with zero count
     
-      const decrease = (cardId) => {
-        setOnepieces(prevonepieces => {
-          const updatedonepieces = prevonepieces.map(onepiece => {
-            if (onepiece.cardid === cardId && onepiece.count && onepiece.count > 0) {
-              return { ...onepiece, count: onepiece.count - 1 };
-            }
-            return onepiece;
-          });
-          return updatedonepieces;
-        });
-      };
+        setFilteredCards(updatedCards);
+    };
+    
+
+    const increase = (cardId) => modifyCardCount(cardId, 1);
+    const decrease = (cardId) => modifyCardCount(cardId, -1);
+
     useEffect(() => {
         const handleStorageChange = (e) => {
             if (e.key === 'filteredCards') {
@@ -66,7 +61,6 @@ const OPTCGRightBar = ({filteredCards}) => {
     }, [filteredCards]);
     
     
-
     return (
         <>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

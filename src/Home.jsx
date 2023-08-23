@@ -8,6 +8,7 @@ import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
 import { ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
 
 function handleEventClick(clickInfo) {
@@ -147,6 +148,7 @@ const Home = () => {
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
+            <PWAPrompt/>
             <Box color={"#f2f3f8"}>
                 <NavbarHome />
                 <Box>
