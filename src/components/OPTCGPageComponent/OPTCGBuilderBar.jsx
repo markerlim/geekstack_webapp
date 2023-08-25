@@ -1,5 +1,5 @@
 import { MoreVert } from "@mui/icons-material";
-import { Alert, Box, Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField } from "@mui/material";
+import { Alert, Box, Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { OPTCGLdrCardDrawer } from "./OPTCGDrawerLeader";
 import { useCardState } from "../../context/useCardState";
@@ -12,11 +12,11 @@ const OPTCGBuilderBar = () => {
     const { currentUser } = useAuth();
     const { filteredCards, setFilteredCards } = useCardState();
     const [totalCount, setTotalCount] = useState(0);
-    const [deckName, setDeckName] = useState("PirateKing!");
+    const [deckName, setDeckName] = useState("NewDeck");
     const [viewDeckbar, setViewDeckbar] = useState(true);
     const [openModal, setOpenModal] = useState(false);
     const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false);
-    const [selectedImage, setSelectedImage] = useState("/OPTCG/OP01JP/OP01-001_p1.webp");
+    const [selectedImage, setSelectedImage] = useState("icons/OPIcon/nika_inner.png");
     const [anchorEl, setAnchorEl] = useState(null);
     const [showPadding, setShowPadding] = useState(false);
     const [saveStatus, setSaveStatus] = useState(null);
@@ -24,6 +24,7 @@ const OPTCGBuilderBar = () => {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [loadedDeckUid, setLoadedDeckUid] = useState(null);
     const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
+    const [tooltipOpen, setTooltipOpen] = useState(true);
 
 
     useEffect(() => {
@@ -59,6 +60,11 @@ const OPTCGBuilderBar = () => {
 
     const handleOpenModal = () => {
         setOpenModal(true);
+    };
+
+    const handleBoxClick = () => {
+        setTooltipOpen(false); // Hide the tooltip when the box is clicked
+        handleOpenModal();
     };
 
     const handleCloseModal = () => {
@@ -143,7 +149,7 @@ const OPTCGBuilderBar = () => {
 
                     try {
                         await setDoc(cardDocRef, cardData);
-                        console.log("Card saved successfully:", card.cardId);
+                        console.log("Card saved successfully:", card.cardid);
                     } catch (error) {
                         console.error("Error saving card:", error);
                     }
@@ -156,6 +162,7 @@ const OPTCGBuilderBar = () => {
 
             // Reset the component state
             handleClearClick();
+            handleMenuClose();
             setIsUpdatingExistingDeck(false);
             setLoadedDeckUid(null);
             setShouldSaveDeck(false); // Reset shouldSaveDeck to false
@@ -175,28 +182,35 @@ const OPTCGBuilderBar = () => {
         setShowDeckLoaderModal(true); // Open the DeckLoader modal
     };
 
-    const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName) => {
-        setDeckName(loadedDeckName);
-        setLoadedDeckUid(loadedDeckUid); 
-        setIsUpdatingExistingDeck(true); 
-        setShowDeckLoaderModal(false); 
+    const handleDeckLoaded = (deckUid, deckname, deckcover) => {
+        setDeckName(deckname);
+        setSelectedImage(deckcover);
+        setLoadedDeckUid(deckUid);
+        setIsUpdatingExistingDeck(true);
+        setShowDeckLoaderModal(false);
+        handleMenuClose();
     };
     const handleClearClick = () => {
         setFilteredCards([])
+        setSelectedImage("icons/OPIcon/nika_inner.png")
+        setDeckName("NewDeck")
+        handleMenuClose();
     }
 
     return (
         <Box sx={{ width: "100%", paddingTop: showPadding ? "10px" : "0px", paddingBottom: showPadding ? "10px" : "0px", paddingLeft: "10px", paddingRight: "10px", backgroundColor: "#F2F3F8", color: "#121212", display: 'flex' }}>
             <Collapse in={viewDeckbar}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
-                    <Box sx={{
-                        width: { xs: '60px', sm: '95px' }, height: { xs: '60px', sm: '95px' }, flex: '0 0 auto',
-                        border: '4px solid #4a2f99', overflow: 'hidden', borderRadius: '10px',
-                        display: 'flex', justifyContent: 'center', alignItems: 'center'
-                    }}
-                        onClick={() => handleOpenModal()}>
-                        <img style={{ width: '110%', marginTop: '40%' }} src={selectedImage} alt="ldr" />
-                    </Box>
+                    <Tooltip title="Click to change the deck cover!" open={selectedImage === "icons/OPIcon/nika_inner.png" && tooltipOpen}>
+                        <Box sx={{
+                            width: { xs: '60px', sm: '95px' }, height: { xs: '60px', sm: '95px' }, flex: '0 0 auto',
+                            border: '4px solid #4a2f99', overflow: 'hidden', borderRadius: '10px',
+                            display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer',
+                        }}
+                            onClick={handleBoxClick}>
+                            <img style={{ width: '110%', marginTop: '40%' }} src={selectedImage} alt="ldr" />
+                        </Box>
+                    </Tooltip>
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' }, gap: '10px' }}>
                         <TextField
                             label="Deck Name"
@@ -216,23 +230,21 @@ const OPTCGBuilderBar = () => {
                                 open={Boolean(anchorEl)}
                                 onClose={handleMenuClose}
                             >
-                                <MenuItem onClick={handleMenuClose}>sort</MenuItem>
-                                <MenuItem onClick={handleMenuClose}>save</MenuItem>
-                                <MenuItem onClick={handleMenuClose}>load</MenuItem>
-                                <MenuItem onClick={handleMenuClose}>export</MenuItem>
+                                <MenuItem onClick={handleClearClick}>clear</MenuItem>
+                                <MenuItem onClick={() => handleSaveClick(false)}>save</MenuItem>
+                                <MenuItem onClick={handleLoadDeckClick}>load</MenuItem>
                             </Menu>
                         </Box>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row', gap: '10px' }}>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClearClick}>clear</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={() => handleSaveClick(false)}>save</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleLoadDeckClick}>load</Button>
-                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }}>export</Button>
                         </Box>
                     </Box>
                 </Box>
             </Collapse>
             <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={() => setViewDeckbar(prev => !prev)}>
-                {viewDeckbar ? <><img style={{ width: '30px' }} alt="nika" src="http://localhost:3000/icons/OPIcon/nika_inner.png" /></> : <><img alt="nika" style={{ width: '30px' }} src="http://localhost:3000/icons/OPIcon/nika_outer.png" /></>}
+                {viewDeckbar ? <><img style={{ width: '30px' }} alt="nika" src="icons/OPIcon/nika_inner.png" /></> : <><img alt="nika" style={{ width: '30px' }} src="icons/OPIcon/nika_outer.png" /></>}
             </Button>
             <Dialog
                 open={showConfirmDialog}
@@ -256,7 +268,7 @@ const OPTCGBuilderBar = () => {
             <FullScreenDialogOPTCG
                 open={showDeckLoaderModal}
                 handleClose={() => setShowDeckLoaderModal(false)}
-                handleDeckLoaded={(deckName, deckUid, loadedDeckName) => handleDeckLoaded(deckName, deckUid, loadedDeckName)}
+                handleDeckLoaded={(deckUid, deckname, deckcover) => handleDeckLoaded(deckUid, deckname, deckcover)}
             />
             <Snackbar
                 open={saveStatus === "success"}
