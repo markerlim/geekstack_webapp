@@ -10,7 +10,7 @@ function GSearchBar({onFiltersChange, clearAllFilters}) {
     const [filters, setFilters] = useState([]);
 
     const handleInputChange = (event) => {  
-        setInputValue(event.target.value);
+        setInputValue(event.target.value.toLowerCase());
     };
 
     const handleKeyPress = (event) => {

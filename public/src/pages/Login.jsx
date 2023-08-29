@@ -77,10 +77,10 @@ const Login = () => {
             </Box>
             <Box className="formWrapper">
                 <span className="title">Welcome to the place for Cards!</span>
-                <form onSubmit={handleSubmit}>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <button>Login</button>
+                <form style={{display:'flex',flexDirection:'column',alignItems:'center'}} onSubmit={handleSubmit}>
+                    <input style={{width:'200px'}} type="email" placeholder="Email" />
+                    <input style={{width:'200px'}} type="password" placeholder="Password" />
+                    <button style={{width:'200px',borderRadius:'10px'}}>Login</button>
                     {err && <span style={{ color: "red" }}>something went wrong</span>}
                 </form>
                 <button style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 4, border: "none", padding: 5, cursor: "pointer", borderRadius: "5px", backgroundColor: "#784C9A", color: "#f2f3f8" }} onClick={handleGoogleSignIn}>
@@ -123,8 +123,8 @@ const Login = () => {
                         </svg>
                     </Box>
                 </Box>
-                <Box>Should there be queries, you may find the developer via Discord, user Aegis</Box>
-                <Box>Disclaimer: Assets found on this websites are from Bandai we do not own any of it.</Box>
+                <Box sx={{fontSize:{xs:'10px',sm:'10px',md:'15px'},paddingLeft:'10px',paddingRight:'10px'}}>Should there be queries, you may find us on discord via Aegis or DPPChannel</Box>
+                <Box sx={{fontSize:{xs:'10px',sm:'10px',md:'15px'},paddingLeft:'10px',paddingRight:'10px'}}>Disclaimer: Assets found on this websites are from Bandai we do not own any of it.</Box>
             </Box>
         </Box>
     )

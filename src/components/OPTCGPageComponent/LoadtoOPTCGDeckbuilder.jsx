@@ -4,41 +4,28 @@ import { db } from "../../Firebase";
 import { Box, Button, ButtonBase } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { Delete } from "@mui/icons-material";
-import { useCardState } from "../../context/useCardState";
+import { useCardState } from "../../context/useCardStateOnepiece";
 
-const LoadtoOPTCGDeckbuilder = ({ onDeckLoaded }) => {
+const LoadtoOPTCGDeckbuilder = ({ handleDeckLoaded }) => {
   const { currentUser } = useAuth();
   const { setFilteredCards } = useCardState();
   const [decks, setDecks] = useState([]);
 
-  const loadDeckCards = async (deckId) => {
-    const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/optcgdecks/${deckId}/optcgcards`));
-    const cards = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      cards.push({
-        id: doc.id,
-        ...data,
-      });
-    });
-    return cards;
-  };
-
   const handleDeckClick = async (deck) => {
-    const cards = await loadDeckCards(deck.id);
-    const newFilteredCards = [];
+    // Fetch the cards associated with the deck from the database
+    const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/optcgdecks/${deck.id}/optcgcards`));
+    
+    // Convert the fetched data to an array of cards
+    const cards = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+    })).sort((a, b) => a.cost_life - b.cost_life);
 
-    cards.forEach((card) => {
-      const existingCardIndex = newFilteredCards.findIndex((newCard) => newCard.id === card.id);
-      if (existingCardIndex !== -1) {
-        newFilteredCards[existingCardIndex].count += card.count;
-      } else {
-        newFilteredCards.push(card);
-      }
-    });
-    setFilteredCards(newFilteredCards);
-    onDeckLoaded(deck.deckuid, deck.name, deck.deckcover);
-  };
+    // Set the state directly with the fetched cards
+    setFilteredCards(cards);
+    // Execute any additional logic after loading the deck (like triggering side-effects)
+    handleDeckLoaded(deck.deckuid, deck.name, deck.deckcover);
+};
 
   const handleDeleteDeck = async (deckId) => {
     try {
@@ -60,12 +47,14 @@ const LoadtoOPTCGDeckbuilder = ({ onDeckLoaded }) => {
       const deckDocs = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        deckDocs.push({
-          id: doc.id,
-          name: data.deckName,
-          deckcover: data.deckcover,
-          ...data,
-        });
+        if (doc.id !== "placeholder") {
+          deckDocs.push({
+            id: doc.id,
+            name: data.deckName,
+            deckcover: data.deckcover,
+            ...data,
+          });
+        }
       });
       setDecks(deckDocs);
     };
@@ -123,7 +112,6 @@ const LoadtoOPTCGDeckbuilder = ({ onDeckLoaded }) => {
             <Delete/>
           </Button>
         </Box>
-
       ))}
     </Box>
   );

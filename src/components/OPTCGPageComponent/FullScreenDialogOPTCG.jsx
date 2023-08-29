@@ -42,7 +42,7 @@ const FullScreenDialogOPTCG = ({ open, handleClose, handleDeckLoaded }) => {
           </Toolbar>
         </AppBar>
         <Box width="100%" height="100%"> {/* Add a Box component with 100% width and height */}
-          <LoadtoOPTCGDeckbuilder onDeckLoaded={handleDeckLoaded} />
+          <LoadtoOPTCGDeckbuilder handleDeckLoaded={handleDeckLoaded} />
         </Box>
       </Dialog>
     </div>

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, ButtonBase, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Slider } from "@mui/material";
 import { AddCircle, ArrowBack, RemoveCircle } from "@mui/icons-material";
 import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
-import { useCardState } from "../../context/useCardState";
+import { useCardState } from "../../context/useCardStateOnepiece";
 
 const MyButton = ({ alt, imageSrc, imgWidth, onClick }) => {
   return (
@@ -62,10 +62,9 @@ const customSort = (a, b) => {
     return a.pathname.localeCompare(b.pathname);
   }
 };
-const OPTCGBuilderButtonList = () => {
+const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,setChangeClick }) => {
   const { filteredCards, setFilteredCards } = useCardState();
   const [buttonData, setButtonData] = useState([]);
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [onepieces, setOnepieces] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -73,9 +72,54 @@ const OPTCGBuilderButtonList = () => {
   const [imageWidth, setImageWidth] = useState(100);
   const [isLoading, setIsLoading] = useState(false);
   const [currentViewedCards, setCurrentViewedCards] = useState([]);
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const imageHeight = imageWidth * 1.395;
   const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/optcgboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
   const colors = ["Red", "Blue", "Green", "Purple", "Black", "Yellow"]
+  const parameters = {
+    color_lower: ["red", "blue", "green", "yellow", "purple", "black"],
+    attribute_lower: ["slash", "ranged", "special", "wisdom", "strike"],
+    rarity_lower: ["c", "uc", "r", "sr", "alt", "l", "l-alt", "sp", "manga"],
+    typing_lower_token: [],
+    cardname_lower_token: [],
+    booster_lower: ["op01", "op02", "op03", "op04", "op05", "st01", "st02", "st03", "st04", "st05", "st06", "st07", "st08", "st09", "st10"], // Same here
+    category: ["character", "event", "stage"]
+  }
+  const transformFilters = () => {
+    if (!filters || filters.length === 0) return {};
+
+    let transformedFilters = {};
+
+    for (let key in parameters) {
+      for (let filter of filters) {
+        if (parameters[key].includes(filter)) {
+          if (!transformedFilters[key]) transformedFilters[key] = [];
+          transformedFilters[key].push(filter);
+        }
+      }
+    }
+
+    // Check for words that weren't matched to predefined values
+    for (let filter of filters) {
+      let matched = false;
+      for (let key in parameters) {
+        if (parameters[key].includes(filter)) {
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        // If a filter value isn't found in any parameter, add it to typing_lower_token and cardname_lower_token
+        if (!transformedFilters['typing_lower_token']) transformedFilters['typing_lower_token'] = [];
+        transformedFilters['typing_lower_token'].push(filter);
+
+        if (!transformedFilters['cardname_lower_token']) transformedFilters['cardname_lower_token'] = [];
+        transformedFilters['cardname_lower_token'].push(filter);
+      }
+    }
+    return transformedFilters;
+  }
 
   const handleOpenModal = (onepiece) => {
     setSelectedCard(onepiece);
@@ -183,6 +227,73 @@ const OPTCGBuilderButtonList = () => {
     });
   };
 
+  const fetchSearchData = async (page) => {
+    setShouldFetch(false);
+    const transformedFilters = transformFilters();
+
+    // Construct the filterString directly from the transformedFilters
+    const filterPairs = Object.entries(transformedFilters).map(([key, values]) => {
+      const valueString = values.map(val => `"${val}"`).join(",");
+      return `"${key}":[${valueString}]`;  // Add the double quotes around the key and value
+    });
+    const filterString = `{${filterPairs.join(",")}}`;
+
+    // Let's log the raw filterString for verification
+    console.log("Raw filter string:", filterString);
+
+    // URL encode the filter string
+    const encodedFilterString = encodeURIComponent(filterString);
+
+    const surl = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/onepieceSearchData?page=${page}&filters=${encodedFilterString}&secret=${process.env.REACT_APP_SECRET_KEY}`;
+    console.log("Constructed URL:", surl);
+
+    try {
+      const response = await fetch(surl);
+      const result = await response.json();
+      const data = result.data;
+
+      // If the search returns more than 500 cards, then discard the results
+      if (data.length > 500 || (result.totalCount && result.totalCount > 500)) {
+        console.warn("API returned more than 500 cards.");
+        setOnepieces([]);
+        return;
+      }
+
+      setOnepieces((prevData) => {
+        const newData = [...prevData, ...data];
+        newData.sort((a, b) => {
+          const aId = parseInt(a.cardid.split('-')[1]);
+          const bId = parseInt(b.cardid.split('-')[1]);
+          return aId - bId;
+        });
+        return newData;
+      });
+
+      // Replace pageSize with your actual page size
+      const pageSize = 20;
+      if (data.length === pageSize) {
+        // More data is available. Increment currentPage.
+        setCurrentPage(page + 1);
+        setShouldFetch(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setOnepieces([]);
+    setShouldFetch(true);
+  }, [filters]);
+
+  useEffect(() => {
+    if (filters.length !== 0 && shouldFetch) {
+      fetchSearchData(currentPage);
+    }
+  }, [currentPage, filters, shouldFetch]);
+
+
   const modifyCardCount = (cardId, change) => {
     const existingCard = filteredCards.find(card => card.cardid === cardId);
 
@@ -207,35 +318,11 @@ const OPTCGBuilderButtonList = () => {
         setFilteredCards(prevFilteredCards => [...prevFilteredCards, { ...newCard, count: 1 }]);
       }
     }
+    setChangeClick(prevState => !prevState);
   };
 
   const increase = (cardId) => modifyCardCount(cardId, 1);
   const decrease = (cardId) => modifyCardCount(cardId, -1);
-
-  const sliderStyles = {
-    root: {
-      color: '#c8a2c8', // Change the color of the slider track and thumb
-      width: 250, // Adjust the width of the slider
-      padding: '10px 0',
-    },
-    thumb: {
-      height: 24, // Adjust the size of the thumb
-      width: 24,
-      backgroundColor: '#fff', // Color of the thumb
-      border: '2px solid currentColor',
-      '&:hover, &.Mui-focusVisible': {
-        boxShadow: 'inherit',
-      },
-    },
-    track: {
-      height: 8, // Adjust the height of the track
-      borderRadius: 4,
-    },
-    rail: {
-      height: 8, // Adjust the height of the rail (inactive part)
-      borderRadius: 4,
-    },
-  };
 
   useEffect(() => {
     setOnepieces(prevOnepieces => {
@@ -263,17 +350,18 @@ const OPTCGBuilderButtonList = () => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '30px', paddingRight: '30px', paddingTop:{xs:'30px',sm:'30px',md:'0px'}, paddingLeft: '30px', paddingBottom: '20px', justifyContent: 'center', }}>
-        {!isButtonClicked && buttonData.map((button) => (
-          <MyButton
-            key={button.pathname}
-            alt={button.alt}
-            imageSrc={button.imageSrc}
-            imgWidth={button.imgWidth}
-            onClick={() => handleButtonClick(button.pathname)}
-          />
-        ))}
-      </Box>
+      {filters.length === 0 && (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '30px', paddingRight: '30px', paddingTop: { xs: '30px', sm: '30px', md: '0px' }, paddingLeft: '30px', paddingBottom: '20px', justifyContent: 'center', }}>
+          {!isButtonClicked && buttonData.map((button) => (
+            <MyButton
+              key={button.pathname}
+              alt={button.alt}
+              imageSrc={button.imageSrc}
+              imgWidth={button.imgWidth}
+              onClick={() => handleButtonClick(button.pathname)}
+            />
+          ))}
+        </Box>)}
       {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <CircularProgress />
@@ -281,7 +369,7 @@ const OPTCGBuilderButtonList = () => {
       ) : (
         <>
           {isButtonClicked && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop:{md:'-20px'},position: 'relative' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: { md: '-20px' }, position: 'relative' }}>
               <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, justifyContent: 'center' }}>
                 <Slider
                   sx={{
@@ -453,6 +541,42 @@ const OPTCGBuilderButtonList = () => {
                 </FormControl>
                 <Button onClick={handleClearSelection}><ArrowBack sx={{ color: '#c8a2c8' }} /></Button>
               </Box>
+            </Box>
+          )}
+          {filters.length !== 0 && (
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
+              {onepieces.map((onepiece) => (
+                <Grid item >
+                  <Box onClick={() => handleOpenModal(onepiece)} key={onepiece.cardid}>
+                    <img
+                      loading="lazy"
+                      src={onepiece.image}
+                      draggable="false"
+                      alt={onepiece.cardid}
+                      width={imageWidth}
+                      height={imageHeight}
+                    />
+                  </Box>
+                  <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
+                    <div component={Button} onClick={() => decrease(onepiece.cardid)} style={{ cursor: "pointer" }}>
+                      <RemoveCircle sx={{ fontSize: 20 }} />
+                    </div>
+                    <span sx={{ fontSize: 20 }}>{onepiece.count || 0}</span>
+                    <div component={Button} onClick={() => increase(onepiece.cardid)} style={{ cursor: "pointer" }}>
+                      <AddCircle sx={{ fontSize: 20 }} />
+                    </div>
+                  </Box>
+                </Grid>
+              ))}
+              {selectedCard && (
+                <OPTCGCardDrawer
+                  open={openModal}
+                  onClose={handleCloseModal}
+                  selectedCard={selectedCard}
+                  onSwipeLeft={handleSwipeLeft}
+                  onSwipeRight={handleSwipeRight}
+                />
+              )}
             </Box>
           )}
         </>

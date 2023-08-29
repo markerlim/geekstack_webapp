@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
-import { useCardState } from "../../context/useCardState";
+import { useCardState } from "../../context/useCardStateOnepiece";
 import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
 
-const OPTCGRightBar = () => {
+const OPTCGRightBar = ({setChangeClick}) => {
     const { filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
-    const [onepieces, setOnepieces] = useState(filteredCards);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [imageWidth] = useState(100); // you can remove setImageWidth if you're not using it elsewhere
@@ -33,39 +32,17 @@ const OPTCGRightBar = () => {
         }).filter(card => card.count > 0);
 
         setFilteredCards(updatedCards);
+        setChangeClick(prevState => !prevState);
     };
-
 
     const increase = (cardId) => modifyCardCount(cardId, 1);
     const decrease = (cardId) => modifyCardCount(cardId, -1);
-
-    useEffect(() => {
-        const handleStorageChange = (e) => {
-            if (e.key === 'filteredCards') {
-                const updatedCards = e.newValue ? JSON.parse(e.newValue) : [];
-                setOnepieces(updatedCards); // Update the onepieces state
-            }
-        };
-
-        // Listen to storage events across tabs
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            // Clean up the event listener
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
-
-    useEffect(() => {
-        setOnepieces(filteredCards);
-    }, [filteredCards]);
-
-
+    
     return (
         <>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px', paddingTop: '20px' }}>
-                    {onepieces.map((onepiece) => (
+                    {filteredCards.map((onepiece) => (
                         <Grid item key={onepiece.cardid}>
                             <Box onClick={() => handleOpenModal(onepiece)}>
                                 <img

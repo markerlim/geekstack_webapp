@@ -22,6 +22,7 @@ const OPTCGBTpage = () => {
   const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Black'];
 
   const goBack = () => {
+    setOnepieces([]);
     navigate(-1);
   };
 
@@ -81,7 +82,6 @@ const OPTCGBTpage = () => {
 
   useEffect(() => {
     fetchData(currentPage);
-    console.log(currentPage, "shown")
   }, [currentPage]);
 
 
@@ -173,7 +173,7 @@ const OPTCGBTpage = () => {
                 />
               </Box>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "center", paddingTop: "3px", paddingBottom: "10px" }}>
+            <Box sx={{ display: {xs:'none',sm:'none',md:"flex"}, justifyContent: "center", paddingTop: "3px", paddingBottom: "10px" }}>
               <Button sx={{
                 fontSize: 10,
                 height: 20,
@@ -189,7 +189,7 @@ const OPTCGBTpage = () => {
             <div style={{ overflowY: "auto", height: "100vh" }} className="hide-scrollbar">
               <Grid container spacing={2} justifyContent="center">
                 {onepieces.filter(onepiece => !colorFilter || onepiece.color === colorFilter).map((onepiece) => (
-                  <Grid item key={onepiece.cardid} >
+                  <Grid item key={onepiece._id} >
                     <Box onClick={() => handleOpenModal(onepiece)}>
                       <img
                         loading="lazy"

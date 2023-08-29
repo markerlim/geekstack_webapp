@@ -2,13 +2,13 @@ import { MoreVert } from "@mui/icons-material";
 import { Alert, Box, Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { OPTCGLdrCardDrawer } from "./OPTCGDrawerLeader";
-import { useCardState } from "../../context/useCardState";
+import { useCardState } from "../../context/useCardStateOnepiece";
 import { useAuth } from "../../context/AuthContext";
-import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../Firebase";
 import FullScreenDialogOPTCG from "../../components/OPTCGPageComponent/FullScreenDialogOPTCG";
 
-const OPTCGBuilderBar = () => {
+const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
     const { currentUser } = useAuth();
     const { filteredCards, setFilteredCards } = useCardState();
     const [totalCount, setTotalCount] = useState(0);
@@ -27,14 +27,23 @@ const OPTCGBuilderBar = () => {
     const [tooltipOpen, setTooltipOpen] = useState(true);
 
 
+    const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
+
+    const sorttotalCount = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
+
+
     useEffect(() => {
-        const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
-        setFilteredCards(sortedCards);
-
-        const total = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
-        setTotalCount(total);
-    }, [filteredCards]);
-
+        if (changeClick === true) {
+            setFilteredCards(sortedCards);
+            setTotalCount(sorttotalCount);
+            console.log("Card count changed! TRUE");
+        }
+        if (changeClick === false) {
+            setFilteredCards(sortedCards);
+            setTotalCount(sorttotalCount);
+            console.log("Card count changed! FALSE");
+        }
+    }, [changeClick]);
 
     useEffect(() => {
         if (viewDeckbar) {
@@ -70,7 +79,52 @@ const OPTCGBuilderBar = () => {
     const handleCloseModal = () => {
         setOpenModal(false);
     };
+    const createNewDeck = async (uid) => {
+        const userDocRef = doc(db, "users", uid);
 
+        // Get the decksCounter from the user document
+        const userDocSnapshot = await getDoc(userDocRef);
+        const optcgdecksCounter = userDocSnapshot.get("optcgdecksCounter") || 0;
+
+        // Update the decksCounter for the user
+        await updateDoc(userDocRef, { optcgdecksCounter: optcgdecksCounter + 1 });
+
+        // Generate a new deckuid based on the updated decksCounter
+        const deckUid = `gsdeck${String(optcgdecksCounter + 1).padStart(8, "0")}`;
+        const deckDocRef = doc(db, `users/${uid}/optcgdecks`, deckUid);
+
+        const deckInfo = {
+            deckName: deckName,
+            deckuid: deckUid,
+            deckcover: selectedImage,
+            // Add any other information about the deck as required
+        };
+        // Create a document for the deck with the new name and deck info
+        await setDoc(deckDocRef, deckInfo);
+
+        // Create a placeholder document in the `optcgdeck` collection if it doesn't exist yet
+        const placeholderRef = doc(db, `users/${uid}/optcgdecks`, "placeholder");
+        if (!(await getDoc(placeholderRef)).exists()) {
+            await setDoc(placeholderRef, {
+                placeholder: true
+                // any other default values you'd like to set
+            });
+        }
+
+        return deckUid; // return this value so we can use it in handleSaveClick
+    };
+    const updateExistingDeck = async (uid, deckUid) => {
+        const deckDocRef = doc(db, `users/${uid}/optcgdecks`, deckUid);
+
+        const deckInfo = {
+            deckName: deckName,
+            deckuid: deckUid,
+            deckcover: selectedImage,
+            // Add any other information about the deck as required
+        };
+        // Update the deck name in the existing document
+        await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
+    };
     const handleSaveClick = async (proceed = false) => {
         if (!proceed && totalCount < 50) {
             setShowConfirmDialog(true);
@@ -86,40 +140,16 @@ const OPTCGBuilderBar = () => {
         try {
             let deckUid;
             if (!isUpdatingExistingDeck) {
-                const userDocRef = doc(db, "users", uid);
-
-                // Get the decksCounter from the user document
-                const userDocSnapshot = await getDoc(userDocRef);
-                const optcgdecksCounter = userDocSnapshot.get("optcgdecksCounter") || 0;
-
-                // Update the decksCounter for the user
-                await updateDoc(userDocRef, { optcgdecksCounter: optcgdecksCounter + 1 });
-
-                // Generate a new deckuid based on the updated decksCounter
-                deckUid = `gsdeck${String(optcgdecksCounter + 1).padStart(8, "0")}`;
+                deckUid = await createNewDeck(uid);
             } else {
-                deckUid = loadedDeckUid; // Use the loadedDeckUid when updating an existing deck
-            }
-
-            const deckDocRef = doc(db, `users/${uid}/optcgdecks`, deckUid);
-
-            const deckInfo = {
-                deckName: deckName,
-                deckuid: deckUid,
-                deckcover: selectedImage,
-                // Add any other information about the deck as required
-            };
-
-            if (!isUpdatingExistingDeck) {
-                // Create a document for the deck with the new name and deck info
-                await setDoc(deckDocRef, deckInfo);
-            } else {
-                // Update the deck name in the existing document
-                await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
+                deckUid = loadedDeckUid;
+                await updateExistingDeck(uid, deckUid);
             }
 
             const cardsCollectionRef = collection(db, `users/${uid}/optcgdecks/${deckUid}/optcgcards`);
-            console.log(filteredCards)
+            const existingCardSnapshot = await getDocs(cardsCollectionRef);
+            const existingCards = existingCardSnapshot.docs.map(doc => doc.data().cardid);
+
             await Promise.all(
                 filteredCards.map(async (card) => {
                     const cardDocRef = doc(cardsCollectionRef, card.cardid);
@@ -149,7 +179,7 @@ const OPTCGBuilderBar = () => {
 
                     try {
                         await setDoc(cardDocRef, cardData);
-                        console.log("Card saved successfully:", card.cardId);
+                        console.log("Card saved successfully:", card.cardid);
                     } catch (error) {
                         console.error("Error saving card:", error);
                     }
@@ -157,12 +187,17 @@ const OPTCGBuilderBar = () => {
                 })
             );
 
+            for (const cardId of existingCards) {
+                if (!filteredCards.some(card => card.cardid === cardId)) {
+                    const cardToDeleteRef = doc(cardsCollectionRef, cardId);
+                    await deleteDoc(cardToDeleteRef);
+                    console.log("Card deleted:", cardId);
+                }
+            }
+
             console.log("Data saved successfully!");
             setSaveStatus("success");
-
             // Reset the component state
-            handleClearClick();
-            handleMenuClose();
             setIsUpdatingExistingDeck(false);
             setLoadedDeckUid(null);
             setShouldSaveDeck(false); // Reset shouldSaveDeck to false
@@ -171,32 +206,38 @@ const OPTCGBuilderBar = () => {
             setSaveStatus("error");
         }
     };
-
     const handleProceedSave = () => {
         setShouldSaveDeck(true);
         handleSaveClick(true);
         setShowConfirmDialog(false);
     };
-
     const handleLoadDeckClick = () => {
         setShowDeckLoaderModal(true); // Open the DeckLoader modal
     };
-
     const handleDeckLoaded = (deckUid, deckname, deckcover) => {
-        console.log("setting", deckname)
         setDeckName(deckname);
         setSelectedImage(deckcover);
         setLoadedDeckUid(deckUid);
         setIsUpdatingExistingDeck(true);
         setShowDeckLoaderModal(false);
+        setChangeClick(prevState => !prevState);
         handleMenuClose();
     };
     const handleClearClick = () => {
-        setFilteredCards([])
-        setSelectedImage("icons/OPIcon/nika_inner.png")
-        setDeckName("NewDeck")
+        setFilteredCards([]);
+        setIsUpdatingExistingDeck(false);
+        setTotalCount(0);
+        setSelectedImage("icons/OPIcon/nika_inner.png");
+        setDeckName("NewDeck");
         handleMenuClose();
     }
+
+    useEffect(() => {
+        if (saveStatus === "success") {
+            handleClearClick();
+            console.log("cleared")
+        }
+    }, [saveStatus]);
 
     return (
         <Box sx={{ width: "100%", paddingTop: showPadding ? "10px" : "0px", paddingBottom: showPadding ? "10px" : "0px", paddingLeft: "10px", paddingRight: "10px", backgroundColor: "#F2F3F8", color: "#121212", display: 'flex' }}>
@@ -222,6 +263,7 @@ const OPTCGBuilderBar = () => {
                             inputProps={{ style: { color: '#121212' } }}
                             sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
                         />
+                        <span>Total: {totalCount}</span>
                         <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
                             <IconButton onClick={handleMenuOpen}>
                                 <MoreVert />

@@ -9,11 +9,24 @@ import OPTCGNavBar from "../components/OPTCGPageComponent/OPTCGNavBar";
 import OPTCGBuilderBar from "../components/OPTCGPageComponent/OPTCGBuilderBar";
 import OPTCGBuilderButtonList from "../components/OPTCGPageComponent/OPTCGBuilderButton";
 import OPTCGRightBar from "../components/OPTCGPageComponent/OPTCGRightBar";
-import { CardStateProvider } from "../context/useCardState";
+import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
+import GSearchBar from "../components/ChipSearchBar";
 
 const OPTCGDeckbuilder = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+  const [changeClick, setChangeClick] = useState(false);
+  const [filters, setFilters] = useState([]);
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+  const handleFiltersChange = (newFilters) => {
+      setFilters(newFilters);
+  };
+
+  const clearAllFilters = () => {
+    setFilters([]);
+    console.log(filters);
+};
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -35,7 +48,7 @@ const OPTCGDeckbuilder = () => {
         <Box sx={{ display: { xs: "flex", sm: "flex", md: "none" }, flexDirection: "column" }}>
           <BottomNav />
         </Box>
-        <CardStateProvider>
+        <CardStateProviderOnepiece>
           <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "column", md: "row" }, flex: 1, height: '100%' }}>
             <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
               <Sidebar />
@@ -43,9 +56,9 @@ const OPTCGDeckbuilder = () => {
             <Hidden only={['md', 'lg', 'xl']}>
               <Box bgcolor={"#202023"} sx={{ overflowY: 'auto', overflowX: "hidden", height: '100%', width: '100%', }} className="hide-scrollbar">
                 <OPTCGNavBar sx={{ backgroundColor: '#121212' }} />
-                <OPTCGBuilderBar style={{ width: "100%", top: 0, position: "sticky", }} />
-                <OPTCGRightBar />
-                <div style={{ height: "10px" }}></div>
+                <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick} style={{ width: "100%", top: 0, position: "sticky", }} />
+                <OPTCGRightBar setChangeClick={setChangeClick} />
+                <div style={{ height: "120px" }}></div>
               </Box>
               <Button onClick={toggleDrawer} sx={{
                 display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: "60px", borderRadius: '0',
@@ -75,7 +88,11 @@ const OPTCGDeckbuilder = () => {
                   borderRadius: '20px 20px 0px 0px',
                   overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
                 }}>
-                  <OPTCGBuilderButtonList />
+                  {!isButtonClicked && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center',paddingBottom:'10px' }}>
+                    <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters}/>
+                  </Box>)}
+                  <OPTCGBuilderButtonList filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                 </Box>
               </Drawer>
             </Hidden>
@@ -87,7 +104,11 @@ const OPTCGDeckbuilder = () => {
                 marginLeft: "100px"
               }}>
                 <OPTCGNavBar />
-                <OPTCGBuilderButtonList />
+                {!isButtonClicked && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center',paddingBottom:'10px' }}>
+                    <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters}/>
+                  </Box>)}
+                <OPTCGBuilderButtonList filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick}  />
                 <br />
                 <br />
                 <br />
@@ -97,8 +118,10 @@ const OPTCGDeckbuilder = () => {
             </Hidden>
             <Hidden only={['xs', 'sm']}>
               <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
-                <OPTCGBuilderBar />
-                <OPTCGRightBar />
+                <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick}/>
+                <OPTCGRightBar setChangeClick={setChangeClick} />
+                <br></br>
+                <br></br>
                 <br></br>
                 <br></br>
                 <br></br>
@@ -114,7 +137,7 @@ const OPTCGDeckbuilder = () => {
               </Box>
             </Hidden>
           </Box>
-        </CardStateProvider>
+        </CardStateProviderOnepiece>
       </Box>
     </div>
 

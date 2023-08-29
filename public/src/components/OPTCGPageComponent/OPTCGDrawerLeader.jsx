@@ -1,6 +1,5 @@
 import { Close } from "@mui/icons-material";
 import { Box, Button, Dialog, Drawer, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useRef } from "react";
 import { useEffect, useState } from "react";
 
 
@@ -38,11 +37,11 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
 
     const filteredDataList = dataList.filter(item => {
         const matchesBooster = !boosterFilter || item.booster === boosterFilter;
-        const matchesColor = !colorFilter || item.color === colorFilter;
-
+        const colorArray = typeof item.color === 'string' ? item.color.split('/') : [];
+        const matchesColor = !colorFilter || colorArray.includes(colorFilter);
+    
         return matchesBooster && matchesColor;
     });
-
 
     const handleClose = () => {
         setTimeout(() => {
@@ -53,31 +52,12 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [dialogImageSrc, setDialogImageSrc] = useState(null);
     const [dialogEffect, setDialogEffect] = useState(null);
-    const pressTimer = useRef();
 
-    const handleMouseDown = (imageSrc, effects) => {
-        pressTimer.current = setTimeout(() => {
-            setDialogImageSrc(imageSrc);
-            setDialogEffect(effects)
-            setIsDialogOpen(true);
-        }, 500);  // 1000ms = 1 second
-    };
-
-    const handleMouseUp = () => {
-        clearTimeout(pressTimer.current);
-    };
-
-    const handleTouchStart = (e,imageSrc, effects) => {
-        e.preventDefault();
-        pressTimer.current = setTimeout(() => {
-            setDialogImageSrc(imageSrc);
-            setDialogEffect(effects)
-            setIsDialogOpen(true);
-        }, 500);
-    };
-
-    const handleTouchEnd = () => {
-        clearTimeout(pressTimer.current);
+    const handleContextMenu = (e, imageSrc, effects) => {
+        e.preventDefault();  // prevent the context menu from actually appearing
+        setDialogImageSrc(imageSrc);
+        setDialogEffect(effects);
+        setIsDialogOpen(true);
     };
 
     return (
@@ -200,11 +180,7 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
                     </Box>
                     <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
                         {filteredDataList.map((item, index) => (
-                            <div key={index}
-                                onMouseDown={() => handleMouseDown(item.image, item.effects)}  // Pass the image source to the handler
-                                onMouseUp={handleMouseUp}
-                                onTouchStart={(e) => handleTouchStart(e, item.image, item.effects)}  // Pass the image source to the handler
-                                onTouchEnd={handleTouchEnd}>
+                            <div key={index} onContextMenu={(e) => handleContextMenu(e, item.image, item.effects)}>
                                 <img
                                     loading="lazy"
                                     src={item.image}
@@ -330,9 +306,9 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
                 onClose={() => setIsDialogOpen(false)}
                 PaperProps={{ sx: { backgroundColor: '#121212' } }}
             >
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px',gap:'10px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px', gap: '10px' }}>
                     <img src={dialogImageSrc} alt="Selected" style={{ width: '220px' }} />
-                    <span style={{color:'#ffffff'}}>{dialogEffect}</span>
+                    <span style={{ color: '#ffffff' }}>{dialogEffect}</span>
                 </Box>
             </Dialog>
         </Drawer >
