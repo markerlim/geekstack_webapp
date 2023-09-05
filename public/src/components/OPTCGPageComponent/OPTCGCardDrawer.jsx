@@ -54,15 +54,15 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
       <Box display="flex" flexDirection="column" minHeight="100%" minWidth={0} overflowY={"auto"} p={3}>
         <Box flexGrow={1} display='flex' flexDirection='column' >
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <img
+            <Box
+              component={'img'}
               loading="lazy"
               src={selectedCard.image}
               draggable="false"
               alt="test"
-              style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
+              sx={{ width: {xs:"100px",sm:"150px",md:"250px"}, height: {xs:"140.6175px",sm:"210.92625px",md:"351.54375px"}, borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
               onClick={() => setShowFullSize(true)}
             />
-
             {/* Modal for Full Size Image */}
             <Modal
               open={showFullSize}

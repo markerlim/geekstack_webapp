@@ -82,6 +82,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,s
     attribute_lower: ["slash", "ranged", "special", "wisdom", "strike"],
     rarity_lower: ["c", "uc", "r", "sr", "alt", "l", "l-alt", "sp", "manga"],
     typing_lower_token: [],
+    typing_lower:[],
     cardname_lower_token: [],
     booster_lower: ["op01", "op02", "op03", "op04", "op05", "st01", "st02", "st03", "st04", "st05", "st06", "st07", "st08", "st09", "st10"], // Same here
     category: ["character", "event", "stage"]
@@ -116,6 +117,9 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,s
 
         if (!transformedFilters['cardname_lower_token']) transformedFilters['cardname_lower_token'] = [];
         transformedFilters['cardname_lower_token'].push(filter);
+
+        if (!transformedFilters['typing_lower']) transformedFilters['typing_lower'] = [];
+        transformedFilters['typing_lower'].push(filter);
       }
     }
     return transformedFilters;

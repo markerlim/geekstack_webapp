@@ -83,13 +83,6 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/digimon">
-                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
-                                <img src="/icons/digivice.png" width="30px" alt="digivice" />
-                            </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
                         <ListItemButton component={Link} to="/onepiece">
                             <ListItemIcon sx={{ justifyContent: "center", alignItems: "center"}}>
                                 <img src="/icons/onepieceicon.png" width="30px" alt="onepiece" />

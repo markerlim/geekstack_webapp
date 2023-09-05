@@ -29,30 +29,6 @@ function renderEventContent(eventInfo) {
 const Home = () => {
     const launchdates = [
         {
-            title: "UABT11 Gintama",
-            start: "2023-07-28",
-            end: "2023-07-28",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/Gintamaicon.jpg",
-        },
-        {
-            title: "Digimon EX05 - Animal Colosseum",
-            start: "2023-08-25",
-            end: "2023-08-25",
-            backgroundColor: "#41aeeb",
-            id: "ruipoDCG",
-            icon: "/icons/UAtags/Digimonicon.jpg",
-        },
-        {
-            title: "Digimon BT15",
-            start: "2023-09-29",
-            end: "2023-09-29",
-            backgroundColor: "#41aeeb",
-            id: "ruipoDCG",
-            icon: "/icons/UAtags/Digimonicon.jpg",
-        },
-        {
             title: "UABT12 Bluelock",
             start: "2023-09-29",
             end: "2023-09-29",
@@ -115,7 +91,6 @@ const Home = () => {
     const [open, setOpen] = useState(false);
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
     const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
-    const [isDTCGButtonsVisible, setIsDTCGButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const theme = useTheme();
 
@@ -157,32 +132,16 @@ const Home = () => {
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
-                            <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: { xs: '60px', sm: "85px" }, overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
+                            <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: { xs: '77px', sm: "165px" }, overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
                                 <Button
                                     sx={{
-                                        width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
-                                            transform: 'scale(1.1)',
-                                            transition: 'all 0.2s ease-in-out'
-                                        }
-                                    }}
-                                    onClick={() => {
-                                        setIsDTCGButtonsVisible(!isDTCGButtonsVisible);
-                                        setIsUAButtonsVisible(false);
-                                        setIsOPTCGButtonsVisible(false);
-                                    }}
-                                >
-                                    <img style={{ height: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" />
-                                </Button>
-                                <Button
-                                    sx={{
-                                        width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
+                                        width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', height: { xs: '70px', sm: "112.5px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
                                             transform: 'scale(1.1)',
                                             transition: 'all 0.2s ease-in-out'
                                         }
                                     }}
                                     onClick={() => {
                                         setIsUAButtonsVisible(!isUAButtonsVisible);
-                                        setIsDTCGButtonsVisible(false);
                                         setIsOPTCGButtonsVisible(false);
                                     }}
                                 >
@@ -190,14 +149,13 @@ const Home = () => {
                                 </Button>
                                 <Button
                                     sx={{
-                                        width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
+                                        width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', height: { xs: '70px', sm: "112.5px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
                                             transform: 'scale(1.1)',
                                             transition: 'all 0.2s ease-in-out'
                                         }
                                     }}
                                     onClick={() => {
                                         setIsOPTCGButtonsVisible(!isOPTCGButtonsVisible);
-                                        setIsDTCGButtonsVisible(false);
                                         setIsUAButtonsVisible(false);
                                     }}
                                 >
@@ -205,13 +163,6 @@ const Home = () => {
                                 </Button>
                             </Box>
                             <Box sx={{ position: 'relative', textAlign: 'center' }}>
-                                <Collapse in={isDTCGButtonsVisible}>
-                                    <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/digimon">DTCG<br />Cardlist</Button>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">DTCG<br />Decklist</Button>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">DTCG<br />Builder</Button>
-                                    </Box>
-                                </Collapse>
                                 <Collapse in={isUAButtonsVisible}>
                                     <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
                                         <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/unionarena">UATCG<br />Cardlist</Button>
@@ -264,7 +215,6 @@ const Home = () => {
                                             <em>All</em>
                                         </MenuItem>
                                         <MenuItem value="ruipoUA">UNIONARENA</MenuItem>
-                                        <MenuItem value="ruipoDCG">DIGIMON</MenuItem>
                                     </Select>
                                 </Box>
                             </Collapse>
