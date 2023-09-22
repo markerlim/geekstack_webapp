@@ -135,6 +135,8 @@ const DeckLoader = () => {
 
         const finalDeckName = editedDeckName || deck.name;
 
+        const animecode = selectedCards[0]?.id?.substring(0, 3).toLowerCase() || "";
+
         // Create a new shared deck document in the 'uniondecklist' collection
         await addDoc(collection(db, "uniondecklist"), {
           deckName: finalDeckName,
@@ -148,6 +150,7 @@ const DeckLoader = () => {
           sharedDate: finalDate,
           deckType: deckType,
           cards: cards, // use the cards state directly
+          animecode: animecode,
         });
         console.log(cards, 'completed')
         navigate('/uadecklist', { state: { openedDeck: deck.id } });

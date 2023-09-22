@@ -14,7 +14,26 @@ import GSearchBar from "../components/ChipSearchBar";
 
 const OPTCGDeckbuilder = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+  const toggleDrawer = () => {
+    if (isDrawerOpen) {
+      // The drawer is currently open and will be closed
+      // Save the state to sessionStorage
+      const stateToSave = JSON.stringify({ filters });
+      sessionStorage.setItem('drawerState', stateToSave);
+    } else {
+      // The drawer is currently closed and will be opened
+      // Restore the state from sessionStorage
+      const savedState = sessionStorage.getItem('drawerState');
+      if (savedState) {
+        const parsedState = JSON.parse(savedState);
+        setIsButtonClicked(false);
+        setFilters(parsedState.filters);
+      }
+    }
+  
+    // Toggle the drawer open/closed state
+    setIsDrawerOpen(!isDrawerOpen);
+  };
   const [changeClick, setChangeClick] = useState(false);
   const [filters, setFilters] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
@@ -86,6 +105,8 @@ const OPTCGDeckbuilder = () => {
                   maxHeight: '70vh',
                   bgcolor: '#121212',
                   borderRadius: '20px 20px 0px 0px',
+                  paddingTop:'10px',
+                  paddingBottom:'30px',
                   overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
                 }}>
                   {!isButtonClicked && (
@@ -117,7 +138,7 @@ const OPTCGDeckbuilder = () => {
               </Box>
             </Hidden>
             <Hidden only={['xs', 'sm']}>
-              <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
+              <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto',overflowX:'hidden', height: '100%' }} className="hide-scrollbar">
                 <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick}/>
                 <OPTCGRightBar setChangeClick={setChangeClick} />
                 <br></br>

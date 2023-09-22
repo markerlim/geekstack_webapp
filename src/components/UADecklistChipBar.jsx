@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Refresh } from '@mui/icons-material';
 
 
@@ -85,68 +83,6 @@ function UADeckSearchBar({ onFiltersChange, onDateChange, dateFilter, filters: i
                         },
                     }}
                 />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                        label="Start Date"
-                        value={dateRange[0]}
-                        onChange={(newValue) => handleDateChange([newValue, dateRange[1]])}
-                        renderInput={(props) => <TextField {...props} />}
-                        sx={{
-                            backgroundColor: '#26252D',
-                            borderRadius: '10px',
-                            '& input': {
-                                color: '#f2f3f8',
-                            },
-                            '& label': {
-                                color: '#f2f3f8',
-                            },
-                            '& label.Mui-focused': {
-                                color: '#f2f3f8',
-                            },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent',
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent',
-                                },
-                            },
-                        }}
-                    />
-                    <DatePicker
-                        label="End Date"
-                        value={dateRange[1]}
-                        onChange={(newValue) => handleDateChange([dateRange[0], newValue])}
-                        renderInput={(props) => <TextField {...props} />}
-                        sx={{
-                            backgroundColor: '#26252D',
-                            borderRadius: '10px',
-                            '& input': {
-                                color: '#f2f3f8',
-                            },
-                            '& label': {
-                                color: '#f2f3f8',
-                            },
-                            '& label.Mui-focused': {
-                                color: '#f2f3f8',
-                            },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent',
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent',
-                                },
-                            },
-                        }}
-                    />
-                </LocalizationProvider>
                 <Box sx={{ display: 'flex', justifyContent: 'center'}}>
                     <button
                         onClick={clearAllFilters}

@@ -60,7 +60,7 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
               src={selectedCard.image}
               draggable="false"
               alt="test"
-              sx={{ width: {xs:"100px",sm:"150px",md:"250px"}, height: {xs:"140.6175px",sm:"210.92625px",md:"351.54375px"}, borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
+              sx={{ width: { xs: "100px", sm: "150px", md: "250px" }, height: { xs: "140.6175px", sm: "210.92625px", md: "351.54375px" }, borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
               onClick={() => setShowFullSize(true)}
             />
             {/* Modal for Full Size Image */}
@@ -108,6 +108,12 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
           <Box >
             <Grid draggable="false">
               <Grid container rowSpacing={1} columnSpacing={1}>
+                <Grid item xs={3}>
+                  <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Id:</Box>
+                </Grid>
+                <Grid item xs={9}>
+                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardid}</Box>
+                  </Grid>
                 {showDetails && (<>
                   <Grid item xs={3}>
                     <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Name:</Box>

@@ -331,6 +331,32 @@ const UADecklistCardButton = ({ filters, onSelectedCardClick }) => {
           </Box>
         </Modal>
       </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => (isPaginating ? prev : prev - 1))}
+          sx={{
+            color: '#c8a2c8',
+            '&.Mui-disabled': {
+              color: '#614d61'
+            }
+          }}
+        >
+          Prev
+        </Button>
+        <Button
+          disabled={!canPaginateNext}
+          onClick={() => setCurrentPage((prev) => (isPaginating ? prev : prev + 1))}
+          sx={{
+            color: '#c8a2c8',
+            '&.Mui-disabled': {
+              color: '#614d61'
+            }
+          }}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   )
 }

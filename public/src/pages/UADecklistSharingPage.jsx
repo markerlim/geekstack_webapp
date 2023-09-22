@@ -1,7 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import BottomNav from "../components/BottomNav"
-import { Box } from "@mui/material"
+import { Box, Button } from "@mui/material"
 import { useState } from "react";
 import UANavBar from "../components/UANavBar";
 import UADecklistCardButton from "../components/UADecklistCardButton";
@@ -25,6 +25,12 @@ const UADecklistSharingPage = () => {
     setDateFilter(newDateRange);
   };
 
+  const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt']
+
+  const setFilter = (filter) => {
+    setFilters([filter]);
+  };
+
   return (
     <div>
       <Box color={"#f2f3f8"}>
@@ -36,9 +42,16 @@ const UADecklistSharingPage = () => {
             </Box>
             <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
               <UANavBar />
-              <UADeckSearchBar filters={filters} onFiltersChange={handleFiltersChange} dateFilter={dateFilter} onDateChange={handleDateChange}/>
-              <Box sx={{ display: "flex", flexDirection: "row", paddingBottom: "150px",marginTop:"10px",justifyContent: "center" }}>
-                <UADecklistCardButton filters={filters} dateFilter={dateFilter} onSelectedCardClick={handleSelectedCardClick}/>
+              <UADeckSearchBar filters={filters} onFiltersChange={handleFiltersChange} dateFilter={dateFilter} onDateChange={handleDateChange} />
+              <Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row',justifyContent:'center',flexWrap:'wrap'}}>
+                  {animecode.map(code => (
+                    <Button key={code} onClick={() => setFilter(code)} sx={{ color: '#c8a2c8', fontSize:{xs:'10px',sm:'16px'} }}>{code.toUpperCase()}</Button>
+                  ))}
+                </Box>
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "row", paddingBottom: "150px", marginTop: "10px", justifyContent: "center" }}>
+                <UADecklistCardButton filters={filters} dateFilter={dateFilter} onSelectedCardClick={handleSelectedCardClick} />
               </Box>
             </Box>
           </Box>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material';
@@ -9,6 +9,14 @@ function GSearchBar({onFiltersChange, clearAllFilters}) {
     const [inputValue, setInputValue] = useState("");
     const [filters, setFilters] = useState([]);
 
+    useEffect(() => {
+        const savedFilters = sessionStorage.getItem('filters');
+        if (savedFilters) {
+            const parsedFilters = JSON.parse(savedFilters);
+            setFilters(parsedFilters);
+        }
+    }, [onFiltersChange]);
+
     const handleInputChange = (event) => {  
         setInputValue(event.target.value.toLowerCase());
     };
@@ -18,6 +26,7 @@ function GSearchBar({onFiltersChange, clearAllFilters}) {
             const newFilters = [...filters, inputValue];
             setFilters(newFilters);
             onFiltersChange(newFilters);
+            sessionStorage.setItem('filters', JSON.stringify(newFilters));
             setInputValue('');
             event.preventDefault();
         }
@@ -26,6 +35,7 @@ function GSearchBar({onFiltersChange, clearAllFilters}) {
     const internalClearAllFilters = () => {
         setFilters([]);
         onFiltersChange([]);
+        sessionStorage.removeItem('filters');
         if (clearAllFilters) clearAllFilters();  // This is in case you also have external logic tied to this function
     };
 
@@ -33,6 +43,7 @@ function GSearchBar({onFiltersChange, clearAllFilters}) {
         const newFilters = filters.filter((filter) => filter !== filterToDelete);
         setFilters(newFilters);
         onFiltersChange(newFilters);
+        sessionStorage.setItem('filters', JSON.stringify(newFilters));
     };
 
     return (

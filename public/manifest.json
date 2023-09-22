@@ -1,7 +1,7 @@
 {
-    "short_name": "UnionDeck",
-    "name": "UnionDeck",
-    "description": "Welcome to uniondeck.dev, the ultimate deck builder app for the exciting card game Union Arena! Our app is designed to help you create the best possible deck for your Union Arena battles, with a wide range of features and tools that make deck building easy, fun, and effective.",
+    "short_name": "Geekstack",
+    "name": "Geekstack",
+    "description": "Step into the world of geekstack.dev, your premier destination for Union Arena and One Piece Card Game deck-building insights. Utilize our user-friendly tools to craft unbeatable decks, explore top strategies, and connect with a community of enthusiasts. Elevate your gameplay and become a master strategist with geekstack.dev - where every card counts.",
     "icons": [
         {
             "src": "https://uniondeck.dev/icons/GEEKSTACK192.png",

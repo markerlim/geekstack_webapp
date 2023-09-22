@@ -3,7 +3,7 @@ import { Box, Button, Dialog, Drawer, FormControl, InputLabel, MenuItem, Select 
 import { useEffect, useState } from "react";
 
 
-export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedImage }) => {
+export const OPTCGLdrCardDrawer = ({ open, onClose, setSelectedImage, setSelectedCardid }) => {
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [slidePosition, setSlidePosition] = useState(100);
@@ -188,7 +188,8 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, selectedImage, setSelectedIm
                                     alt="test"
                                     style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
                                     onClick={() => {
-                                        setSelectedImage(item.image)
+                                        setSelectedImage(item.image);
+                                        setSelectedCardid(item.cardid);
                                         onClose();
                                     }}
                                 />

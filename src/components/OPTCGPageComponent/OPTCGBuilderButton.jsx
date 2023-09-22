@@ -264,7 +264,8 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,s
       }
 
       setOnepieces((prevData) => {
-        const newData = [...prevData, ...data];
+        const filteredData = data.filter(card => card.category !== "leader");
+        const newData = [...prevData, ...filteredData];
         newData.sort((a, b) => {
           const aId = parseInt(a.cardid.split('-')[1]);
           const bId = parseInt(b.cardid.split('-')[1]);
@@ -373,7 +374,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,s
       ) : (
         <>
           {isButtonClicked && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: { md: '-20px' }, position: 'relative' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: {md: '-20px' }, position: 'relative' }}>
               <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, justifyContent: 'center' }}>
                 <Slider
                   sx={{
@@ -478,7 +479,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,s
                   />
                 )}
               </Box>
-              <Box sx={{ position: 'sticky', bottom: 0, backgroundColor: '#121212', display: { xs: 'flex', sm: 'flex', md: 'none' }, paddingTop: '10px', paddingBottom: '10px', justifyContent: 'flex-end', alignItems: 'center' }}>
+              <Box sx={{ position: 'sticky', bottom: '-30px', backgroundColor: '#121212', display: { xs: 'flex', sm: 'flex', md: 'none' }, paddingTop: '10px', paddingBottom: '10px', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <Slider
                   sx={{
                     width: '200px',

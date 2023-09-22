@@ -25,7 +25,6 @@ import AcardGNTpage from "./pages/AcardGNTpage";
 import Articleviewer from "./pages/Articleviewer";
 import DigimonPage from "./pages/DigimonPage";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import Geekhub from "./pages/Geekhub";
 import ArticleUI from "./pages/ArticleUI";
 import TestPage from "./pages/TestPage";
 import DTCGBTpage from "./pages/DTCGBTpage";
@@ -85,7 +84,6 @@ function App() {
             <Route path="register" element={<Register />} />
             <Route path="credits" element={<Community />} />
             <Route path="articles" element={<Articleviewer />} />
-            <Route path="geekhub" element={<Geekhub />} />
             <Route path="deckbuilder" element={<Deckbuilder />} />
             <Route path="deckviewer" element={<Deckviewer />} />
             <Route path="test" element={<TestPage />} />

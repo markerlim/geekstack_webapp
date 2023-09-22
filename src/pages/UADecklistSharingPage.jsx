@@ -25,7 +25,7 @@ const UADecklistSharingPage = () => {
     setDateFilter(newDateRange);
   };
 
-  const animecode = ['cgh','jjk','htr','ims','kmy','toa','tsk','btr','mha','gnt']
+  const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt']
 
   const setFilter = (filter) => {
     setFilters([filter]);
@@ -44,9 +44,11 @@ const UADecklistSharingPage = () => {
               <UANavBar />
               <UADeckSearchBar filters={filters} onFiltersChange={handleFiltersChange} dateFilter={dateFilter} onDateChange={handleDateChange} />
               <Box>
-                {animecode.map(code => (
-                  <Button key={code} onClick={() => setFilter(code)} sx={{color: '#c8a2c8',}}>{code.toUpperCase()}</Button>
-                ))}
+                <Box sx={{ display: 'flex', flexDirection: 'row',justifyContent:'center',flexWrap:'wrap'}}>
+                  {animecode.map(code => (
+                    <Button key={code} onClick={() => setFilter(code)} sx={{ color: '#c8a2c8', fontSize:{xs:'10px',sm:'16px'} }}>{code.toUpperCase()}</Button>
+                  ))}
+                </Box>
               </Box>
               <Box sx={{ display: "flex", flexDirection: "row", paddingBottom: "150px", marginTop: "10px", justifyContent: "center" }}>
                 <UADecklistCardButton filters={filters} dateFilter={dateFilter} onSelectedCardClick={handleSelectedCardClick} />

@@ -24,7 +24,7 @@ const LoadtoOPTCGDeckbuilder = ({ handleDeckLoaded }) => {
     // Set the state directly with the fetched cards
     setFilteredCards(cards);
     // Execute any additional logic after loading the deck (like triggering side-effects)
-    handleDeckLoaded(deck.deckuid, deck.name, deck.deckcover);
+    handleDeckLoaded(deck.deckuid, deck.name, deck.deckcover, deck.deckldrid);
 };
 
   const handleDeleteDeck = async (deckId) => {
@@ -52,6 +52,7 @@ const LoadtoOPTCGDeckbuilder = ({ handleDeckLoaded }) => {
             id: doc.id,
             name: data.deckName,
             deckcover: data.deckcover,
+            deckldrid: data.deckldrid,
             ...data,
           });
         }

@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton } from "@mui/material"
+import { Box } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import AcardBTR from "../components/AcardBTR";
 import { Helmet } from "react-helmet";
-import { Favorite } from "@mui/icons-material";
 
 const AcardBTRpage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isFavorited, setIsFavorited] = useState(false);
 
   const handleSearch = (searchValue) => {
     setSearchQuery(searchValue);
-  };
-
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited);
   };
 
   useEffect(() => {

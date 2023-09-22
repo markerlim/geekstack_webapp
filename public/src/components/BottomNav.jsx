@@ -36,6 +36,10 @@ const BottomNav = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+  }
+  
 
   return (
     <Box
@@ -55,7 +59,7 @@ const BottomNav = () => {
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px" }}>
+        <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px",paddingBottom: isIOS() ? '20px' : '0px', }}>
           <BottomNavigationAction
             onClick={handleClick}
             icon={<Style />}
