@@ -123,7 +123,7 @@ const Home = () => {
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
-            <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false}/>
+            <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"}>
                 <NavbarHome />
                 <Box>
@@ -131,7 +131,7 @@ const Home = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "0px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                             <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: { xs: '77px', sm: "165px" }, overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
                                 <Button
                                     sx={{
@@ -231,21 +231,16 @@ const Home = () => {
                             <Collapse in={open}>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Launch Onepiece with OP05 alongside with deckbuilder
+                                    <br />Launched Bleach and Bluelock
                                     <br />
-                                    <br />
-                                    <br />Added Decklist Sharing Feature
                                 </div>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Next Update:</strong>
-                                    <br />Addition of Digimon Card Game Deck Builder (Facing issues, will have delay)
-                                    <br />
-                                    <br />Addition of Bleach and Bluelock (When effects are released)
+                                    <br />Addition of New Card Selection and New Extra Booster (When effects are released)
                                     <br />
                                 </div>
                             </Collapse>
                         </Box>
-
                         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', marginRight: "15px", gap: { xs: "20px", sm: "50px" }, justifyContent: "center" }}>
                             <ButtonBase sx={{ padding: "1px", display: "flex", flexDirection: "column", }}
                                 href="https://www.buymeacoffee.com/uniondeck">

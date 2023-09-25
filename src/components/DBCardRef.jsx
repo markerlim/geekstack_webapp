@@ -133,9 +133,11 @@ const DBCardRef = (props) => {
                             <Button variant={animeFilter === "Demon Slayer" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Demon Slayer")}>Demon Slayer</Button>
                             <Button variant={animeFilter === "Tales of Arise" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Tales of Arise")}>Tales of Arise</Button>
                             <Button variant={animeFilter === "That Time I Got Reincarnated as a Slime" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("That Time I Got Reincarnated as a Slime")}>That Time I Got Reincarnated as a Slime</Button>
+                            <Button variant={animeFilter === "Bleach: Thousand-Year Blood War" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Bleach: Thousand-Year Blood War")}>Bleach: Thousand-Year Blood War</Button>
                             <Button variant={animeFilter === "Me & Roboco" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Me & Roboco")}>Me & Roboco</Button>
                             <Button variant={animeFilter === "My Hero Academia" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("My Hero Academia")}>My Hero Academia</Button>
                             <Button variant={animeFilter === "Gintama" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Gintama")}>Gintama</Button>
+                            <Button variant={animeFilter === "Bluelock" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Bluelock")}>Bluelock</Button>
                         </Box>
                     </>
                 )}
@@ -167,8 +169,11 @@ const DBCardRef = (props) => {
                                 <MenuItem value="UA05BT">UA05BT</MenuItem>
                                 <MenuItem value="UA06BT">UA06BT</MenuItem>
                                 <MenuItem value="UA07BT">UA07BT</MenuItem>
+                                <MenuItem value="UA08BT">UA08BT</MenuItem>
                                 <MenuItem value="UA09BT">UA09BT</MenuItem>
                                 <MenuItem value="UA10BT">UA10BT</MenuItem>
+                                <MenuItem value="UA11BT">UA11BT</MenuItem>
+                                <MenuItem value="UA12BT">UA12BT</MenuItem>
                                 <MenuItem value="UA01ST">UA01ST</MenuItem>
                                 <MenuItem value="UA02ST">UA02ST</MenuItem>
                                 <MenuItem value="UA03ST">UA03ST</MenuItem>
@@ -176,8 +181,11 @@ const DBCardRef = (props) => {
                                 <MenuItem value="UA05ST">UA05ST</MenuItem>
                                 <MenuItem value="UA06ST">UA06ST</MenuItem>
                                 <MenuItem value="UA07ST">UA07ST</MenuItem>
+                                <MenuItem value="UA08ST">UA08ST</MenuItem>
                                 <MenuItem value="UA09ST">UA09ST</MenuItem>
                                 <MenuItem value="UA10ST">UA10ST</MenuItem>
+                                <MenuItem value="UA11ST">UA11ST</MenuItem>
+                                <MenuItem value="UA12ST">UA12ST</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl sx={{ margin: 1 }}>

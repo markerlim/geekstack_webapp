@@ -5,7 +5,7 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav";
 import { Helmet } from "react-helmet";
 import "../style.scss";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { db } from "../Firebase";
 import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
@@ -36,7 +36,6 @@ const ProfilePage = () => {
     const [isDTCGButtonsVisible, setIsDTCGButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const [uaDeckData, setUaDeckData] = useState([]);
-    const navigate = useNavigate();
 
     const imgStyles = {
         width: { xs: '150px', sm: '300px' },

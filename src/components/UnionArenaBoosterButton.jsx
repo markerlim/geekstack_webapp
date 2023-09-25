@@ -152,6 +152,12 @@ const ButtonList = () => {
       imgWidth: "110%",
     },
     {
+      pathname: "blc",
+      alt: "bleach: thousand-year blood war",
+      imageSrc: "/images/deckimage8.jpg",
+      imgWidth: "110%",
+    },
+    {
       pathname: "btr",
       alt: "me & robocco",
       imageSrc: "/images/deckimage9.jpg",
@@ -167,6 +173,12 @@ const ButtonList = () => {
       pathname: "gnt",
       alt: "gintama",
       imageSrc: "/images/deckimage11.jpg",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "blk",
+      alt: "bluelock",
+      imageSrc: "/images/deckimage12.jpg",
       imgWidth: "110%",
     },
   ];

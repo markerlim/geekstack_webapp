@@ -150,7 +150,18 @@ const BottomNav = () => {
           TransitionComponent={Transition}
         >
           <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
-          <MenuItem onClick={handleClose} component={Link} to="/digimon"><img src="/icons/digivice.png" width="30px" alt="digivice" />  Digimon</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/onepiece"><img src="/icons/onepieceicon.png" width="30px" alt="digivice" />  Onepiece</MenuItem>
+        </Menu>
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          TransitionComponent={Transition}
+        >
+          <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
           <MenuItem onClick={handleClose} component={Link} to="/onepiece"><img src="/icons/onepieceicon.png" width="30px" alt="digivice" />  Onepiece</MenuItem>
         </Menu>
       </ThemeProvider>
