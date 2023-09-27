@@ -25,7 +25,7 @@ const UADecklistSharingPage = () => {
     setDateFilter(newDateRange);
   };
 
-  const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt']
+  const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt','blc', 'blk']
 
   const setFilter = (filter) => {
     setFilters([filter]);

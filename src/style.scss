@@ -317,3 +317,28 @@
     background-color: #001146;
     transition: all 0.2s ease-in-out;
   }
+/*HomepageDashboard*/
+.socialmediabtn{
+    cursor: pointer;
+    width:40px;
+    height:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color:#f2f3f8;
+    border-radius:10px;
+    transition: 0.2s ease-in-out;
+}
+#socialmediabtnlarge{
+    width:60px;
+    height:60px;
+}
+.socialmediabtn:hover{
+    border-radius: 20px;
+    transition: 0.2s ease-in-out;
+}
+#socialmediabtnlarge:hover{
+    border-radius: 30px;
+    transition: 0.2s ease-in-out;
+}
+

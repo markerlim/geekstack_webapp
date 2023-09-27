@@ -8,6 +8,9 @@ import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
 import { ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
 
@@ -24,6 +27,24 @@ function renderEventContent(eventInfo) {
             `<div style="width: 80px; height: 30px;overflow:hidden; border-radius:10px; margin-right:10px;flex: 0 0 auto;"><img src="${eventInfo.event.extendedProps.icon}" style="width:80px;height:auto;"/></div>   ${eventInfo.event.title}` :
             `${eventInfo.event.title}`
     }
+}
+
+function CustomDot({ onClick, active }) {
+    return (
+        <Box
+            component={'span'}
+            sx={{
+                display: 'inline-block',
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                background: active ? 'black' : 'white',
+                margin: '5px',
+                cursor: 'pointer'
+            }}
+            onClick={onClick}
+        />
+    );
 }
 
 const Home = () => {
@@ -45,12 +66,28 @@ const Home = () => {
             icon: "/icons/UAtags/Bleach1000icon.jpg",
         },
         {
+            title: "ST11 STARTER DECK -Side Uta ",
+            start: "2023-10-07",
+            end: "2023-10-07",
+            backgroundColor: "#bb0504",
+            id: "ruipoOP",
+            icon: "/icons/UAtags/Onepieceicon.jpg",
+        },
+        {
             title: "UABT13 Tekken7",
             start: "2023-10-27",
             end: "2023-10-27",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
             icon: "/icons/UAtags/Tekken7icon.jpg",
+        },
+        {
+            title: "UABT14 Dr Stone",
+            start: "2023-12-22",
+            end: "2023-12-22",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/Drstoneicon.jpg",
         },
         {
             title: "Jujutsu Kaisen New Card Selection",
@@ -85,7 +122,18 @@ const Home = () => {
             icon: "/icons/UAtags/Codegeassicon.jpg",
         },
     ];
-
+    const settings = {
+        customPaging: function (i) {
+            return (
+                <CustomDot />
+            );
+        },
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
     const [filteredEvents, setFilteredEvents] = useState(launchdates); // State to store filtered events
     const [selectedId, setSelectedId] = useState(""); // State to store selected ID
     const [open, setOpen] = useState(false);
@@ -93,6 +141,24 @@ const Home = () => {
     const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const theme = useTheme();
+
+    const imageData = [
+        { src: 'latestreleasebanner/bluelocknewrelease.jpg', path: '/unionarena/blk' },
+        { src: 'latestreleasebanner/bleachnewrelease.jpg', path: '/unionarena/blc' },
+        { src: 'latestreleasebanner/op05newrelease.jpg', path: '/onepiece/OP05' },
+        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece' }
+    ];
+
+    const comingsoonData = [
+        { src: 'comingsoonbanner/UABT13.webp' },
+        { src: 'comingsoonbanner/UABT14.webp' },
+        { src: 'comingsoonbanner/UABT15.webp' },
+        { src: 'comingsoonbanner/UABT16.webp' },
+        { src: 'comingsoonbanner/UABT17.webp' },
+        { src: 'comingsoonbanner/UABT18.webp' },
+        { src: 'comingsoonbanner/UABT19.webp' },
+        { src: 'comingsoonbanner/UABT20.webp' },
+    ];
 
     const handleFilter = (event) => {
         const id = event.target.value;
@@ -126,9 +192,9 @@ const Home = () => {
             <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"}>
                 <NavbarHome />
-                <Box>
+                <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "0px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
@@ -179,6 +245,22 @@ const Home = () => {
                                 </Collapse>
                             </Box>
                         </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: '-20px' }}>
+                            <span style={{ fontSize: "20px", color: "#F2F3F8", display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', textAlign: 'center' }}>
+                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', }} />
+                                <strong>LATEST RELEASE</strong>
+                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', }} />
+                            </span>
+                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                                <Slider {...settings}>
+                                    {imageData.map((image, index) => (
+                                        <Link key={index} to={image.path}>
+                                            <Box component={'img'} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
+                                        </Link>
+                                    ))}
+                                </Slider>
+                            </Box>
+                        </Box>
                         <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "column", alignItems: 'center', bgcolor: "#26252d", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
                             <Box sx={{ paddingRight: "30px", paddingLeft: "30px", display: 'flex', alignItems: 'center', alignSelf: 'start' }}>
                                 <div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>LAUNCH CALENDAR</strong></div>
@@ -218,6 +300,23 @@ const Home = () => {
                                     </Select>
                                 </Box>
                             </Collapse>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: '-20px' }}>
+                            <span style={{ fontSize: "20px", color: "#F2F3F8", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', marginRight: '20px', }} />
+                                <Box style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                                    <strong>COMING SOON IN</strong>
+                                    <img src="images/UAlogo.webp" alt="unionarena" style={{ width: '100px', height: 'auto' }} />
+                                </Box>
+                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', }} />
+                            </span>
+                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                                <Slider {...settings}>
+                                    {comingsoonData.map((image, index) => (
+                                        <Box component={'img'} key={index} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
+                                    ))}
+                                </Slider>
+                            </Box>
                         </Box>
                         <Box width={{ xs: "70vw", sm: "60vw" }} sx={{ display: "flex", flexDirection: "column", bgcolor: "#26252d", paddingRight: "30px", paddingLeft: "30px", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}><div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>UPDATES ON WEBSITE</strong></div>

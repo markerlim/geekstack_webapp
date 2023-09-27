@@ -90,6 +90,7 @@ function App() {
             <Route path="deckviewer" element={<Deckviewer />} />
             <Route path="test" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
+            <Route path="unionarena" element={<UnionArenaPage />} />
             <Route path="/unionarena/cgh" element={<AcardCGHpage />} />
             <Route path="/unionarena/hxh" element={<AcardHXHpage />} />
             <Route path="/unionarena/ims" element={<AcardIMSpage />} />
@@ -102,7 +103,6 @@ function App() {
             <Route path="/unionarena/mha" element={<AcardMHApage />} />
             <Route path="/unionarena/gnt" element={<AcardGNTpage />} />
             <Route path="/unionarena/blk" element={<AcardBLKpage />} />
-            <Route path="unionarena" element={<UnionArenaPage />} />
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="digimon" element={<DigimonPage />} />
             <Route path="/digimon/:booster" element={<DTCGBTpage />} />
