@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
 import { CardDrawer } from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
@@ -10,20 +10,25 @@ import { Helmet } from "react-helmet";
 
 
 const AcardJJK = (props) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const booster = queryParams.get("booster") || ""; 
+    const uppercaseBooster = booster.toUpperCase();   
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [imageWidth, setImageWidth] = useState(100); //store value of slider
     const imageHeight = imageWidth * 1.395;
-    const [boosterFilter, setBoosterFilter] = useState("");
+    const [boosterFilter, setBoosterFilter] = useState(uppercaseBooster || "");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
     const [animeFilter, setAnimeFilter] = useState("Jujutsu No Kaisen");
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
-    const navigate = useNavigate();
-    const location = useLocation();
+    const isMedium = useMediaQuery('(min-width:900px)');
+
 
     const goBack = () => {
         navigate(-1);
@@ -31,7 +36,7 @@ const AcardJJK = (props) => {
 
     const getCurrentImage = (document) => {
         let currentImage = document.image;
-    
+
         // Check if the alternate form should be used
         if ((onlyAltForm || rarityFilter === "ALT" || altFormIndex[document.cardId] !== undefined) && document.altforms) {
             if (Array.isArray(document.altforms)) {
@@ -40,10 +45,10 @@ const AcardJJK = (props) => {
                 currentImage = document.altforms;
             }
         }
-    
+
         return currentImage;
     };
-    
+
     const handleOpenModal = (document) => {
         const currentImage = getCurrentImage(document);
         setSelectedCard({
@@ -52,12 +57,12 @@ const AcardJJK = (props) => {
         });
         setOpenModal(true);
     };
-    
+
     const handleSwipeLeft = () => {
         let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         let nextIndex = (currentIndex + 1) % filteredDocuments.length;
         let nextDocument = filteredDocuments[nextIndex];
-    
+
         // If rarityFilter is "ALT", skip documents without alternate forms
         if (rarityFilter === "ALT") {
             while (!nextDocument.altforms) {
@@ -65,19 +70,19 @@ const AcardJJK = (props) => {
                 nextDocument = filteredDocuments[nextIndex];
             }
         }
-    
+
         const currentImage = getCurrentImage(nextDocument);
         setSelectedCard({
             ...nextDocument,
             currentImage: currentImage
         });
     };
-    
+
     const handleSwipeRight = () => {
         let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         let prevDocument = filteredDocuments[prevIndex];
-    
+
         // If rarityFilter is "ALT", skip documents without alternate forms
         if (rarityFilter === "ALT") {
             while (!prevDocument.altforms) {
@@ -85,13 +90,13 @@ const AcardJJK = (props) => {
                 prevDocument = filteredDocuments[prevIndex];
             }
         }
-    
+
         const currentImage = getCurrentImage(prevDocument);
         setSelectedCard({
             ...prevDocument,
             currentImage: currentImage
         });
-    };    
+    };
 
 
     const handleCloseModal = () => {
@@ -128,7 +133,7 @@ const AcardJJK = (props) => {
             setAltForms(initialAltForms);
             console.log(`Number of reads: ${documentsArray.length}`);
         };
-    
+
         fetchDocuments();
     }, [animeFilter]);
 
@@ -233,6 +238,7 @@ const AcardJJK = (props) => {
                             </MenuItem>
                             <MenuItem value="UA02BT">UA02BT</MenuItem>
                             <MenuItem value="UA02ST">UA02ST</MenuItem>
+                            <MenuItem value="UA02NC">UA02NC</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl sx={{ margin: 1 }}>
@@ -255,6 +261,7 @@ const AcardJJK = (props) => {
                                 <em>None</em>
                             </MenuItem>
                             <MenuItem value="ALT">Alt ART</MenuItem>
+                            <MenuItem value="SP">SP</MenuItem>
                             <MenuItem value="SR">SR</MenuItem>
                             <MenuItem value="R">R</MenuItem>
                             <MenuItem value="U">U</MenuItem>
@@ -334,6 +341,7 @@ const AcardJJK = (props) => {
                             padding: 1, // Adjust the padding as needed 
                             backgroundColor: "#f2f3f8",
                             color: "#240052",
+                            display: isMedium ? 'normal' : 'none',
                             '&:hover': {
                                 backgroundColor: "#240052", // Change this to the desired hover background color
                                 color: "#f2f3f8", // Change this to the desired hover text color if needed

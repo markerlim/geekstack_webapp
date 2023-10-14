@@ -52,27 +52,12 @@ const NavbarHome = (props) => {
     return (
         <AppBar position="fixed">
             <StyledToolbar sx={{ position: 'relative' }}>
-                <Box p={1} sx={{ display: { xs: "none", sm: "flex" }, fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                <Box p={1} sx={{ display:'flex', fontFamily: 'League Spartan', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                     <img style={{ width: "auto", height: "50px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <strong style={{ fontSize: '22px', }}>GEEKSTACK</strong>
                         <span>Everything Cards</span>
                     </Box>
-                </Box>
-                <Box p={1} sx={{ display: { xs: "block", sm: "none" } }}><img style={{ width: "auto", height: "40px" }} alt="uniondeck" src="/icons/geekstackicon.svg" /></Box>
-                <Box sx={{ display: 'flex', flexDirection: "row", backgroundColor: "#f2f3f8", borderRadius: "5px", paddingTop: "5px", paddingBottom: "5px", paddingLeft: "10px", paddingRight: "10px", marginLeft: "2px", marginRight: "2px" }}>
-                    <InputBase
-                        placeholder='search...'
-                        inputRef={searchInputRef}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSearchInputChanged}
-                        sx={{ textAlign: "center", justifySelf: "flex-end", overflow: 'hidden', borderRadius: "20px" }}
-                    >
-                        <SearchOutlined sx={{ width: "25px" }} />
-                    </Button>
                 </Box>
                 <Icons>
                     <Avatar sx={{ width: 30, height: 30 }} src={currentUser.photoURL}

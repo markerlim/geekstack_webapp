@@ -18,6 +18,6 @@
     "background_color": "#1D1D1D",
     "theme_color": "#C8A2C8",
     "display": "standalone",
-    "orientation": "any",
+    "orientation": "portrait",
     "scope": "/"
 }

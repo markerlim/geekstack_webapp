@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Box, Button } from "@mui/material"
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
+import NavbarHome from "../components/NavbarHome";
 
 const Community = () => {
     useEffect(() => {
@@ -22,7 +22,7 @@ const Community = () => {
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
             <Box color={"#f2f3f8"}>
-                <Navbar />
+                <NavbarHome />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
                         <Sidebar />

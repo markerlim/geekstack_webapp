@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   BottomNavigation,
   BottomNavigationAction,
   createTheme,
   ThemeProvider,
-  Menu,
-  MenuItem,
-  Slide,
 } from '@mui/material';
-import { Build, Home, Inventory, Style, VolunteerActivism } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 
 const customTheme = createTheme({
   components: {
@@ -21,149 +18,170 @@ const customTheme = createTheme({
     },
   },
 });
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const BottomNav = () => {
+  const location = useLocation();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
   }
-  
+
+  const isActive = (paths) => {
+    if (Array.isArray(paths)) {
+      return paths.some(path => location.pathname === path);
+    }
+    return location.pathname === paths;
+  };
 
   return (
     <Box
-      flex={2}
       p={0}
       sx={{
         display: { xs: 'block', sm: 'block', md: 'none' },
-        height: '60px',
+        height: '70px',
         position: { xs: 'fixed', sm: 'fixed', md: 'static' },
         width: '100%',
         justifyContent: 'space-evenly',
         bgcolor: '#222032',
-        color: '#9930f3',
+        color: '#7C4FFF',
         boxShadow: { xs: 1, sm: 1, md: 0 },
         bottom: 0,
         zIndex: { xs: 100, sm: 100, md: 'auto' },
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px",paddingBottom: isIOS() ? '20px' : '0px', }}>
+        <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px", paddingBottom: isIOS() ? '35px' : '0px', paddingTop: '5px' }}>
           <BottomNavigationAction
-            onClick={handleClick}
-            icon={<Style />}
-            sx={{
-              color: '#9930f3',
-              '@media (max-width:400px)': {
-                // put your styling here
-                minWidth: 'auto', // this will override the default minWidth: 80
-                padding: '6px 3px', // decrease padding
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.6rem', // decrease font size
-                },
-              }
-            }}
-          />
-          <BottomNavigationAction
-            component={Link}
-            to="/deckbuilder"
-            icon={<Build />}
-            sx={{
-              color: '#9930f3',
-              '@media (max-width:400px)': {
-                // put your styling here
-                minWidth: 'auto', // this will override the default minWidth: 80
-                padding: '6px 3px', // decrease padding
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.6rem', // decrease font size
-                },
-              }
-            }}
-          />
-          <BottomNavigationAction
+            disableRipple
             component={Link}
             to="/"
-            icon={<Home />}
+            icon={
+              <img
+                src="https://geekstack.dev/icons/bottomnav/HomeSelected.svg"
+                alt="home"
+                style={{
+                  width: "30px",
+                  filter: isActive('/') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  transition: 'filter 0.3s ease-in-out'
+                }}
+              />
+            }
+            label="Home"
             sx={{
-              color: '#9930f3',
-              '@media (max-width:400px)': {
-                // put your styling here
-                minWidth: 'auto', // this will override the default minWidth: 80
-                padding: '6px 3px', // decrease padding
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.6rem', // decrease font size
-                },
+              color: isActive('/') ? '#7C4FFF' : '#555555',
+              '& .bottom-nav-icon': { // Target the icon class
+                marginBottom: '10px' // Increase the margin-bottom to push the label down
+              },
+              '& .MuiBottomNavigationAction-label': { // Target the label class
+                marginTop: '5px' // Increase the margin-top to push the label further down
               }
             }}
           />
           <BottomNavigationAction
+            disableRipple
             component={Link}
-            to="/deckviewer"
-            icon={<Inventory />}
+            to="/list"
+            icon={
+              <img
+                src="https://geekstack.dev/icons/bottomnav/DecklibrarySelected.svg"
+                alt="library"
+                style={{
+                  width: "30px",
+                  filter: isActive(['/list', '/unionarena', '/onepiece']) ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  transition: 'filter 0.3s'
+                }}
+              />
+            }
+            label="Library"
             sx={{
-              color: '#9930f3',
-              '@media (max-width:400px)': {
-                // put your styling here
-                minWidth: 'auto', // this will override the default minWidth: 80
-                padding: '6px 3px', // decrease padding
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.6rem', // decrease font size
-                },
+              color: isActive(['/list', '/unionarena', '/onepiece']) ? '#7C4FFF' : '#555555',
+              '& .bottom-nav-icon': { // Target the icon class
+                marginBottom: '10px' // Increase the margin-bottom to push the label down
+              },
+              '& .MuiBottomNavigationAction-label': { // Target the label class
+                marginTop: '5px' // Increase the margin-top to push the label further down
               }
             }}
           />
           <BottomNavigationAction
+            disableRipple
+            component={Link}
+            to="/deckbuilder"
+            icon={
+              <img
+                src="https://geekstack.dev/icons/bottomnav/DeckcreateSelected.svg"
+                alt="create"
+                style={{
+                  width: "30px",
+                  filter: isActive(['/deckbuilder', '/optcgbuilder']) ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  transition: 'filter 0.3s'
+                }}
+              />
+            }
+            label="Create"
+            sx={{
+              color: isActive(['/deckbuilder', '/optcgbuilder']) ? '#7C4FFF' : '#555555',
+              '& .bottom-nav-icon': { // Target the icon class
+                marginBottom: '10px' // Increase the margin-bottom to push the label down
+              },
+              '& .MuiBottomNavigationAction-label': { // Target the label class
+                marginTop: '5px' // Increase the margin-top to push the label further down
+              }
+            }}
+          />
+          <BottomNavigationAction
+            disableRipple
+            component={Link}
+            to="/news"
+            icon={
+              <img
+                src="https://geekstack.dev/icons/bottomnav/NewsSelected.svg"
+                alt="news"
+                style={{
+                  width: "30px",
+                  filter: isActive('/news') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  transition: 'filter 0.3s'
+                }}
+              />
+            }
+            label="News"
+            sx={{
+              color: isActive('/news') ? '#7C4FFF' : '#555555',
+              '& .bottom-nav-icon': { // Target the icon class
+                marginBottom: '10px' // Increase the margin-bottom to push the label down
+              },
+              '& .MuiBottomNavigationAction-label': { // Target the label class
+                marginTop: '5px' // Increase the margin-top to push the label further down
+              }
+            }}
+          />
+          <BottomNavigationAction
+            disableRipple
             component={Link}
             to="/credits"
-            icon={<VolunteerActivism/>}
+            icon={
+              <img
+                src="https://geekstack.dev/icons/bottomnav/FAQSelected.svg"
+                alt="FAQ"
+                style={{
+                  width: "30px",
+                  filter: isActive('/credits') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  transition: 'filter 0.3s'
+                }}
+              />
+            }
+            label="FAQ"
             sx={{
-              color: '#9930f3',
-              '@media (max-width:400px)': {
-                // put your styling here
-                minWidth: 'auto', // this will override the default minWidth: 80
-                padding: '6px 3px', // decrease padding
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.6rem', // decrease font size
-                },
+              color: isActive('/credits') ? '#7C4FFF' : '#555555',
+              '& .bottom-nav-icon': { // Target the icon class
+                marginBottom: '10px' // Increase the margin-bottom to push the label down
+              },
+              '& .MuiBottomNavigationAction-label': { // Target the label class
+                marginTop: '5px' // Increase the margin-top to push the label further down
               }
             }}
           />
         </BottomNavigation>
-        <Menu
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          TransitionComponent={Transition}
-        >
-          <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
-          <MenuItem onClick={handleClose} component={Link} to="/onepiece"><img src="/icons/onepieceicon.png" width="30px" alt="digivice" />  Onepiece</MenuItem>
-        </Menu>
-        <Menu
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          TransitionComponent={Transition}
-        >
-          <MenuItem onClick={handleClose} component={Link} to="/unionarena"><img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />  Union Arena</MenuItem>
-          <MenuItem onClick={handleClose} component={Link} to="/onepiece"><img src="/icons/onepieceicon.png" width="30px" alt="digivice" />  Onepiece</MenuItem>
-        </Menu>
       </ThemeProvider>
     </Box>
   );

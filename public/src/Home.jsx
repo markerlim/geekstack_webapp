@@ -90,6 +90,14 @@ const Home = () => {
             icon: "/icons/UAtags/Drstoneicon.jpg",
         },
         {
+            title: "UABT Sword Art Online",
+            start: "2024-01-26",
+            end: "2024-01-26",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/SAOicon.jpg",
+        },
+        {
             title: "Jujutsu Kaisen New Card Selection",
             start: "2023-10-27",
             end: "2023-10-27",
@@ -121,6 +129,14 @@ const Home = () => {
             id: "ruipoUA",
             icon: "/icons/UAtags/Codegeassicon.jpg",
         },
+        {
+            title: "The IDOLM@STER Shiny Colors EX03",
+            start: "2023-12-22",
+            end: "2023-12-22",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/Idolmastericon.jpg",
+        },
     ];
     const settings = {
         customPaging: function (i) {
@@ -143,10 +159,12 @@ const Home = () => {
     const theme = useTheme();
 
     const imageData = [
+        { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
+        { src: 'latestreleasebanner/kmyncnewrelease.jpg', path: '/unionarena/kmy?booster=ua01nc' },
+        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece' },
         { src: 'latestreleasebanner/bluelocknewrelease.jpg', path: '/unionarena/blk' },
         { src: 'latestreleasebanner/bleachnewrelease.jpg', path: '/unionarena/blc' },
         { src: 'latestreleasebanner/op05newrelease.jpg', path: '/onepiece/OP05' },
-        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece' }
     ];
 
     const comingsoonData = [
@@ -197,7 +215,7 @@ const Home = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop:'-10px',gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                             <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: { xs: '77px', sm: "165px" }, overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
                                 <Button
                                     sx={{
@@ -245,18 +263,24 @@ const Home = () => {
                                 </Collapse>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: '-20px' }}>
-                            <span style={{ fontSize: "20px", color: "#F2F3F8", display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'center', textAlign: 'center' }}>
-                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', }} />
-                                <strong>LATEST RELEASE</strong>
-                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', }} />
-                            </span>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '-30px' }}>
+                            <img src="images/LATEST RELEASE.png" alt="latestrelease" style={{ width: "300px" }} />
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                                 <Slider {...settings}>
                                     {imageData.map((image, index) => (
                                         <Link key={index} to={image.path}>
                                             <Box component={'img'} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
                                         </Link>
+                                    ))}
+                                </Slider>
+                            </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                            <img src="images/COMINGSOON.png" alt="comingsoon" style={{width:'300px'}}/>
+                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                                <Slider {...settings}>
+                                    {comingsoonData.map((image, index) => (
+                                        <Box component={'img'} key={index} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
                                     ))}
                                 </Slider>
                             </Box>
@@ -297,26 +321,10 @@ const Home = () => {
                                             <em>All</em>
                                         </MenuItem>
                                         <MenuItem value="ruipoUA">UNIONARENA</MenuItem>
+                                        <MenuItem value="ruipoOP">ONEPIECE</MenuItem>
                                     </Select>
                                 </Box>
                             </Collapse>
-                        </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: '-20px' }}>
-                            <span style={{ fontSize: "20px", color: "#F2F3F8", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', marginRight: '20px', }} />
-                                <Box style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                                    <strong>COMING SOON IN</strong>
-                                    <img src="images/UAlogo.webp" alt="unionarena" style={{ width: '100px', height: 'auto' }} />
-                                </Box>
-                                <div style={{ height: '1px', width: '100px', backgroundColor: '#F2F3F8', }} />
-                            </span>
-                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
-                                <Slider {...settings}>
-                                    {comingsoonData.map((image, index) => (
-                                        <Box component={'img'} key={index} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
-                                    ))}
-                                </Slider>
-                            </Box>
                         </Box>
                         <Box width={{ xs: "70vw", sm: "60vw" }} sx={{ display: "flex", flexDirection: "column", bgcolor: "#26252d", paddingRight: "30px", paddingLeft: "30px", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}><div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>UPDATES ON WEBSITE</strong></div>

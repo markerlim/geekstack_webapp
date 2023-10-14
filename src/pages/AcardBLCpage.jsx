@@ -44,7 +44,7 @@ const AcardBLCpage = () => {
           >
             <AcardBLC searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </Box>
-          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
+          <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <BottomNav />
           </Box>
         </Box>

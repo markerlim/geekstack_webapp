@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
 import { CardDrawer } from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
@@ -10,20 +10,24 @@ import { Helmet } from "react-helmet";
 
 
 const AcardKMY = (props) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const booster = queryParams.get("booster") || "";
+    const uppercaseBooster = booster.toUpperCase();   
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [imageWidth, setImageWidth] = useState(100); //store value of slider
     const imageHeight = imageWidth * 1.395;
-    const [boosterFilter, setBoosterFilter] = useState("");
+    const [boosterFilter, setBoosterFilter] = useState(uppercaseBooster || "");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
     const [animeFilter, setAnimeFilter] = useState("Demon Slayer");
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
-    const navigate = useNavigate();
-    const location = useLocation();
+    const isMedium = useMediaQuery('(min-width:900px)');
   
     const goBack = () => {
       navigate(-1);
@@ -233,6 +237,7 @@ const AcardKMY = (props) => {
                             </MenuItem>
                             <MenuItem value="UA05BT">UA05BT</MenuItem>
                             <MenuItem value="UA05ST">UA05ST</MenuItem>
+                            <MenuItem value="UA01NC">UA01NC</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl sx={{ margin: 1 }}>
@@ -255,6 +260,7 @@ const AcardKMY = (props) => {
                                 <em>None</em>
                             </MenuItem>
                             <MenuItem value="ALT">Alt ART</MenuItem>
+                            <MenuItem value="SP">SP</MenuItem>
                             <MenuItem value="SR">SR</MenuItem>
                             <MenuItem value="R">R</MenuItem>
                             <MenuItem value="U">U</MenuItem>
@@ -334,6 +340,7 @@ const AcardKMY = (props) => {
                             padding: 1, // Adjust the padding as needed 
                             backgroundColor: "#f2f3f8",
                             color: "#240052",
+                            display: isMedium ? 'normal' : 'none',
                             '&:hover': {
                                 backgroundColor: "#240052", // Change this to the desired hover background color
                                 color: "#f2f3f8", // Change this to the desired hover text color if needed

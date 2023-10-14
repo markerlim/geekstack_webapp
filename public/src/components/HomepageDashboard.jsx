@@ -119,7 +119,7 @@ const HomepageDashboard = () => {
             <p style={{fontSize:'15px'}}>Hi all, please start using <a href="www.geekstack.dev">www.geekstack.dev</a> instead of www.uniondeck.dev if you have not! :D
             <br/>We use discord for communication, tiktok for sharing video guides on navigating the website and buy me a coffee for donations.
             </p>
-            <Box sx={{ color: "#ffffff", display: 'flex', flexDirection: 'row', gap: '10px',justifyContent:'end',background:"url(images/articlebg/JJKBG.jpg)",padding:'10px' }}>
+            <Box sx={{ color: "#ffffff", display: 'flex', flexDirection: 'row', gap: '10px',justifyContent:'center',background:"url(images/articlebg/JJKBG.jpg)",padding:'10px' }}>
               <Box sx={{ display: { xs: 'flex', sm: 'flex', md: 'none' }, flexDirection: 'row', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
                 <Box component={Link} to="https://discord.gg/wUZCZB9aM3" className="socialmediabtn">
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="17" viewBox="0 0 22 17" fill="none">

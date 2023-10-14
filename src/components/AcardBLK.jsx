@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button, Slider } from "@mui/material";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
 import { CardDrawer} from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
@@ -22,6 +22,7 @@ const AcardBLK = (props) => {
     const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
+    const isMedium = useMediaQuery('(min-width:900px)');
     const navigate = useNavigate();
     const location = useLocation();
   
@@ -336,6 +337,7 @@ const AcardBLK = (props) => {
                             padding: 1, // Adjust the padding as needed 
                             backgroundColor: "#f2f3f8",
                             color: "#240052",
+                            display: isMedium ? 'normal' : 'none',
                             '&:hover': {
                                 backgroundColor: "#240052", // Change this to the desired hover background color
                                 color: "#f2f3f8", // Change this to the desired hover text color if needed
