@@ -4,28 +4,28 @@ import { db } from "../../Firebase";
 import { Box, Button, ButtonBase } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { Delete } from "@mui/icons-material";
-import { useCardState } from "../../context/useCardStateOnepiece";
+import { useOPCardState } from "../../context/useCardStateOnepiece";
 
 const LoadtoOPTCGDeckbuilder = ({ handleDeckLoaded }) => {
   const { currentUser } = useAuth();
-  const { setFilteredCards } = useCardState();
+  const { setFilteredCards } = useOPCardState();
   const [decks, setDecks] = useState([]);
 
   const handleDeckClick = async (deck) => {
     // Fetch the cards associated with the deck from the database
     const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/optcgdecks/${deck.id}/optcgcards`));
-    
+
     // Convert the fetched data to an array of cards
     const cards = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
+      id: doc.id,
+      ...doc.data(),
     })).sort((a, b) => a.cost_life - b.cost_life);
 
     // Set the state directly with the fetched cards
     setFilteredCards(cards);
     // Execute any additional logic after loading the deck (like triggering side-effects)
     handleDeckLoaded(deck.deckuid, deck.name, deck.deckcover, deck.deckldrid);
-};
+  };
 
   const handleDeleteDeck = async (deckId) => {
     try {
@@ -68,7 +68,7 @@ const LoadtoOPTCGDeckbuilder = ({ handleDeckLoaded }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        justifyContent:"center",
+        justifyContent: "center",
         flexWrap: "wrap",
         color: "#121212",
         overflowY: "auto",
@@ -110,7 +110,7 @@ const LoadtoOPTCGDeckbuilder = ({ handleDeckLoaded }) => {
               handleDeleteDeck(deck.id);
             }}
           >
-            <Delete/>
+            <Delete />
           </Button>
         </Box>
       ))}

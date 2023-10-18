@@ -161,7 +161,7 @@ const Home = () => {
     const imageData = [
         { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
         { src: 'latestreleasebanner/kmyncnewrelease.jpg', path: '/unionarena/kmy?booster=ua01nc' },
-        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece' },
+        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece/OPST11' },
         { src: 'latestreleasebanner/bluelocknewrelease.jpg', path: '/unionarena/blk' },
         { src: 'latestreleasebanner/bleachnewrelease.jpg', path: '/unionarena/blc' },
         { src: 'latestreleasebanner/op05newrelease.jpg', path: '/onepiece/OP05' },
@@ -338,12 +338,12 @@ const Home = () => {
                             <Collapse in={open}>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Launched Bleach and Bluelock
+                                    <br />Launched New Card Selection for Demon Slayer and Jujutsu No Kaisen
                                     <br />
                                 </div>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Next Update:</strong>
-                                    <br />Addition of New Card Selection and New Extra Booster (When effects are released)
+                                    <br />Addition of New Extra Booster and Tekken (When effects are released)
                                     <br />
                                 </div>
                             </Collapse>

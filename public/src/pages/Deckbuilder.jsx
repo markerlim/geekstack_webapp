@@ -14,6 +14,9 @@ import UANavBar from "../components/UANavBar";
 const Deckbuilder = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+  }
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -48,7 +51,7 @@ const Deckbuilder = () => {
                 <div style={{ height: "120px" }}></div>
               </Box>
               <Button onClick={toggleDrawer} sx={{
-                display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: "70px", borderRadius: '0',
+                display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: isIOS() ? "80px":"70px", borderRadius: '0',
                 '&:hover': {
                   backgroundColor: "#171614", // Change this to the desired hover background color
                   color: "#c8a2c8", // Change this to the desired hover text color if needed

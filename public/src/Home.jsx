@@ -338,12 +338,12 @@ const Home = () => {
                             <Collapse in={open}>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Launched Bleach and Bluelock
+                                    <br />Launched New Card Selection for Demon Slayer and Jujutsu No Kaisen
                                     <br />
                                 </div>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Next Update:</strong>
-                                    <br />Addition of New Card Selection and New Extra Booster (When effects are released)
+                                    <br />Addition of New Extra Booster and Tekken (When effects are released)
                                     <br />
                                 </div>
                             </Collapse>

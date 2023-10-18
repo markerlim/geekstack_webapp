@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, ButtonBase, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Slider } from "@mui/material";
 import { AddCircle, ArrowBack, RemoveCircle } from "@mui/icons-material";
 import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
-import { useCardState } from "../../context/useCardStateOnepiece";
+import { useOPCardState } from "../../context/useCardStateOnepiece";
 
 const MyButton = ({ alt, imageSrc, imgWidth, onClick }) => {
   return (
@@ -63,7 +63,7 @@ const customSort = (a, b) => {
   }
 };
 const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,setChangeClick }) => {
-  const { filteredCards, setFilteredCards } = useCardState();
+  const { filteredCards, setFilteredCards } = useOPCardState();
   const [buttonData, setButtonData] = useState([]);
   const [onepieces, setOnepieces] = useState([]);
   const [openModal, setOpenModal] = useState(false);

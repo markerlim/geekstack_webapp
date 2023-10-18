@@ -4,10 +4,10 @@ import React, { createContext, useContext, useState } from 'react';
 const CardStateContextOnepiece = createContext();
 
 // Custom hook to use CardState
-export const useCardState = () => {
+export const useOPCardState = () => {
   const context = useContext(CardStateContextOnepiece);
   if (!context) {
-    throw new Error('useCardState must be used within a CardStateProvider');
+    throw new Error('useOPCardState must be used within a CardStateProvider');
   }
   return context;
 };

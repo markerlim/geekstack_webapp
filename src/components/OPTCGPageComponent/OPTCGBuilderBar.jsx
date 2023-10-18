@@ -2,17 +2,18 @@ import { MoreVert } from "@mui/icons-material";
 import { Alert, Box, Button, CircularProgress, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { OPTCGLdrCardDrawer } from "./OPTCGDrawerLeader";
-import { useCardState } from "../../context/useCardStateOnepiece";
+import { useOPCardState } from "../../context/useCardStateOnepiece";
 import { useAuth } from "../../context/AuthContext";
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../Firebase";
 import FullScreenDialogOPTCG from "../../components/OPTCGPageComponent/FullScreenDialogOPTCG";
 import { toJpeg } from 'html-to-image';
 import OPTCGExport from "./OnepieceExportTemplate";
+import { useLocation } from "react-router-dom";
 
 const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
     const { currentUser } = useAuth();
-    const { filteredCards, setFilteredCards } = useCardState();
+    const { filteredCards, setFilteredCards } = useOPCardState();
     const [totalCount, setTotalCount] = useState(0);
     const [deckName, setDeckName] = useState("NewDeck");
     const [viewDeckbar, setViewDeckbar] = useState(true);
@@ -25,12 +26,15 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
     const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [loadedDeckUid, setLoadedDeckUid] = useState(null);
-    const [selectedCardid, setSelectedCardid]=useState(null);
+    const [selectedCardid, setSelectedCardid] = useState(null);
     const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
     const [tooltipOpen, setTooltipOpen] = useState(true);
     const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
     const sorttotalCount = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
 
     console.log(currentUser)
     useEffect(() => {
@@ -217,6 +221,7 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
     const handleLoadDeckClick = () => {
         setShowDeckLoaderModal(true); // Open the DeckLoader modal
     };
+
     const handleDeckLoaded = (deckUid, deckname, deckcover, deckldrid) => {
         setDeckName(deckname);
         setSelectedImage(deckcover);
@@ -240,11 +245,11 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
             alert("You cannot export a deck with less than 50 cards.");
             return;
         }
-    
+
         setIsExporting(true);
-    
+
         const componentRef = document.querySelector('#OPTCGExport');
-    
+
         if (componentRef) {
             toJpeg(componentRef, { quality: 0.8 })
                 .then((dataUrl) => {
@@ -270,7 +275,6 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
         }
         handleMenuClose();
     };
-    
 
     const handleClipboard = () => {
         const clipboardString = filteredCards.map(card => `${card.count}x${card.cardid}`).join('\n');
@@ -286,6 +290,42 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
             });
         handleMenuClose();
     }
+
+    useEffect(() => {
+        // Check for 'deckId' parameter in the URL
+        const deckUid = searchParams.get("deckUid");
+        const fetchDeckData = async () => {
+            // Fetch the deck information using the deckUid
+            const deckSnapshot = await getDoc(doc(db, `users/${currentUser.uid}/optcgdecks`, deckUid));
+            const deck = deckSnapshot.data();
+
+            // If the deck doesn't exist, return early
+            if (!deck) return;
+
+            const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/optcgdecks/${deckUid}/optcgcards`));
+
+            // Convert the fetched data to an array of cards
+            const cards = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            })).sort((a, b) => a.cost_life - b.cost_life);
+
+            // Set the state directly with the fetched cards
+            setFilteredCards(cards);
+            setTotalCount(cards.reduce((acc, card) => acc + (card.count || 0), 0));
+            // Update other states with the deck information
+            setDeckName(deck.deckName || "NewDeck"); // Using "NewDeck" as a fallback
+            setSelectedImage(deck.deckcover || "icons/OPIcon/nika_inner.png"); // Fallback to a default image
+            setSelectedCardid(deck.deckldrid || null); // null as a fallback if no deck leader ID is provided
+            setLoadedDeckUid(deckUid);
+            setIsUpdatingExistingDeck(true);
+            
+        };
+
+        if (deckUid) {
+            fetchDeckData();
+        }
+    }, [location]);
 
     useEffect(() => {
         if (saveStatus === "success") {
@@ -334,16 +374,16 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
                                 <MenuItem onClick={handleExportClick}>export</MenuItem>
                                 <MenuItem onClick={handleClipboard}>OPsim</MenuItem>
                             </Menu>
-                            {isExporting && <Box sx={{display:'flex',alignItems:'center'}}>
-                                <CircularProgress size={'10px'} sx={{color:'#7C4FFF'}} />
-                                </Box>}
+                            {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />
+                            </Box>}
                         </Box>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row', gap: '10px' }}>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClearClick}>clear</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={() => handleSaveClick(false)}>save</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleLoadDeckClick}>load</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleExportClick}>export
-                            {isExporting && <CircularProgress size={'10px'} sx={{color:'#FFFFFF'}} />}</Button>
+                                {isExporting && <CircularProgress size={'10px'} sx={{ color: '#FFFFFF' }} />}</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClipboard}>OPsim</Button>
                         </Box>
                     </Box>
@@ -395,8 +435,8 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
                 onClose={handleCloseModal}
                 setSelectedCardid={setSelectedCardid}
                 setSelectedImage={setSelectedImage} />
-            <Box sx={{position:"absolute",overflow:'hidden',top:-30000,zIndex:-1000}}>
-                <OPTCGExport filteredCards={filteredCards} selectedImage={selectedImage} currentUser={currentUser}/>
+            <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
+                <OPTCGExport filteredCards={filteredCards} selectedImage={selectedImage} currentUser={currentUser} />
             </Box>
         </Box>
     )

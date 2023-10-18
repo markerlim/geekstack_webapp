@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
-import { useCardState } from "../../context/useCardStateOnepiece";
+import { useOPCardState } from "../../context/useCardStateOnepiece";
 import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
 
 const OPTCGRightBar = ({setChangeClick}) => {
-    const { filteredCards, setFilteredCards } = useCardState(); // Use useCardState hook
+    const { filteredCards, setFilteredCards } = useOPCardState(); // Use useOPCardState hook
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [imageWidth] = useState(100); // you can remove setImageWidth if you're not using it elsewhere

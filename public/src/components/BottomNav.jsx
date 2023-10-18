@@ -46,11 +46,12 @@ const BottomNav = () => {
         color: '#7C4FFF',
         boxShadow: { xs: 1, sm: 1, md: 0 },
         bottom: 0,
+        paddingBottom: isIOS() ? '10px' : '0px',
         zIndex: { xs: 100, sm: 100, md: 'auto' },
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#222032', gap: "0px", paddingBottom: isIOS() ? '35px' : '0px', paddingTop: '5px' }}>
+        <BottomNavigation sx={{ bgcolor: '#222032',  paddingTop: '5px' }}>
           <BottomNavigationAction
             disableRipple
             component={Link}
@@ -68,6 +69,8 @@ const BottomNav = () => {
             }
             label="Home"
             sx={{
+              padding:0,
+              minWidth:'42px',
               color: isActive('/') ? '#7C4FFF' : '#555555',
               '& .bottom-nav-icon': { // Target the icon class
                 marginBottom: '10px' // Increase the margin-bottom to push the label down
@@ -94,6 +97,8 @@ const BottomNav = () => {
             }
             label="Library"
             sx={{
+              padding:0,
+              minWidth:'42px',
               color: isActive(['/list', '/unionarena', '/onepiece']) ? '#7C4FFF' : '#555555',
               '& .bottom-nav-icon': { // Target the icon class
                 marginBottom: '10px' // Increase the margin-bottom to push the label down
@@ -120,6 +125,8 @@ const BottomNav = () => {
             }
             label="Create"
             sx={{
+              padding:0,
+              minWidth:'42px',
               color: isActive(['/deckbuilder', '/optcgbuilder']) ? '#7C4FFF' : '#555555',
               '& .bottom-nav-icon': { // Target the icon class
                 marginBottom: '10px' // Increase the margin-bottom to push the label down
@@ -146,6 +153,8 @@ const BottomNav = () => {
             }
             label="News"
             sx={{
+              padding:0,
+              minWidth:'42px',
               color: isActive('/news') ? '#7C4FFF' : '#555555',
               '& .bottom-nav-icon': { // Target the icon class
                 marginBottom: '10px' // Increase the margin-bottom to push the label down
@@ -172,6 +181,8 @@ const BottomNav = () => {
             }
             label="FAQ"
             sx={{
+              padding:0,
+              minWidth:'42px',
               color: isActive('/credits') ? '#7C4FFF' : '#555555',
               '& .bottom-nav-icon': { // Target the icon class
                 marginBottom: '10px' // Increase the margin-bottom to push the label down
