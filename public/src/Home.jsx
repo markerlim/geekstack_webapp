@@ -161,7 +161,7 @@ const Home = () => {
     const imageData = [
         { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
         { src: 'latestreleasebanner/kmyncnewrelease.jpg', path: '/unionarena/kmy?booster=ua01nc' },
-        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece' },
+        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece/OPST11' },
         { src: 'latestreleasebanner/bluelocknewrelease.jpg', path: '/unionarena/blk' },
         { src: 'latestreleasebanner/bleachnewrelease.jpg', path: '/unionarena/blc' },
         { src: 'latestreleasebanner/op05newrelease.jpg', path: '/onepiece/OP05' },

@@ -1,11 +1,13 @@
 
 import BottomNav from "../components/BottomNav"
-import { Box, Button, ButtonBase } from "@mui/material"
+import { Box, Button, } from "@mui/material"
 
 import NavbarHome from "../components/NavbarHome";
 import { Link } from "react-router-dom";
 import Decklibrarybtn from "../components/DeckLibraryButtons";
 import { LibraryBooks } from "@mui/icons-material";
+import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
+import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
 
 const Listofcards = () => {
     return (
@@ -17,7 +19,7 @@ const Listofcards = () => {
                         <Box sx={{ display: 'flex', flexDirection: "column", gap: '15px', justifyContent: 'left' }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingLeft: 'calc(5vw)', paddingRight: 'calc(5vw)' }}>
                                 <span style={{ display: 'flex', alignItems: 'center' }}><LibraryBooks style={{ marginRight: '10px' }} />Libraries</span>
-                                <Link to="/test" style={{display:'none'}}>view all</Link>
+                                <Link to="/test" style={{ display: 'none' }}>view all</Link>
                             </Box>
                             <Box sx={{ width: '100vw', display: "flex", flexWrap: "nowrap", overflow: "auto", height: 'auto', }} className="hide-scrollbar">
                                 <div style={{ paddingLeft: '5vw' }}>
@@ -46,11 +48,17 @@ const Listofcards = () => {
                                 </div>
                             </Box>
                         </Box>
-                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }} />
-                        <Box overflowX={'auto'}>
+                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
+                        <Box overflowX={'auto'} sx={{height:{xs:'400px'}}}>
                             <Decklibrarybtn />
                         </Box>
-                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }} />
+                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
+                        <Box overflowX={'auto'} sx={{height:{xs:'400px'}}}>
+                            <CardStateProviderOnepiece>
+                                <OPDecklibrarybtn />
+                            </CardStateProviderOnepiece>
+                        </Box>
+                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <div style={{ height: '1px', padding: '20px' }}>
                             <br />
                         </div>

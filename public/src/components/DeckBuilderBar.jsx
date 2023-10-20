@@ -19,7 +19,7 @@ import ImagePickerModal from "./ImagePickerModal";
 
 const DeckBuilderBar = (props) => {
   const { currentUser } = useAuth();
-  const { countArray, setCountArray, filteredCards } = useCardState();
+  const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState();
   const [deckName, setDeckName] = useState("myDeckId");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false); // State to manage the visibility of the DeckLoader modal
@@ -29,7 +29,7 @@ const DeckBuilderBar = (props) => {
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
-  const [viewDeckbar, setViewDeckbar] = useState(false);
+  const [viewDeckbar, setViewDeckbar] = useState(true);
   const [showPadding, setShowPadding] = useState(false);
 
   const images = [
@@ -58,6 +58,7 @@ const DeckBuilderBar = (props) => {
     setLoadedDeckUid(null); // Clear the loadedDeckUid
     setIsUpdatingExistingDeck(false); // Set isUpdatingExistingDeck to false
     setSelectedImage(null);
+    setFilteredCards([]);
   };
 
   const totalCount = Object.values(countArray).reduce(
@@ -67,14 +68,12 @@ const DeckBuilderBar = (props) => {
 
   // Filter the cards based on the triggerState that are color
   const colorCards = filteredCards.filter(card => card.triggerState === "Color");
-
   const colorCount = colorCards.reduce(
     (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
     0
   );
   // Filter the cards based on the triggerState that are special
   const specialCards = filteredCards.filter(card => card.triggerState === "Special");
-
   const specialCount = specialCards.reduce(
     (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
     0
@@ -82,7 +81,6 @@ const DeckBuilderBar = (props) => {
 
   // Filter the cards based on the triggerState that are final
   const finalCards = filteredCards.filter(card => card.triggerState === "Final");
-
   const finalCount = finalCards.reduce(
     (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
     0
@@ -98,7 +96,7 @@ const DeckBuilderBar = (props) => {
   };
 
   const stats = calculateStats();
-
+  
   const handleSaveClick = async (proceed = false) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);

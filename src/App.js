@@ -41,6 +41,7 @@ import OPTCGDeckbuilder from "./pages/OPTCGDeckbuilder";
 import Listofcards from "./pages/Listofcards";
 import Listofnews from "./pages/Listofnews";
 import AcardTKNpage from "./pages/AcardTKNpage";
+import FAQPage from "./pages/FAQPage";
 
 smoothscroll.polyfill();
 
@@ -93,6 +94,7 @@ function App() {
             <Route path="deckviewer" element={<Deckviewer />} />
             <Route path="list" element={<Listofcards/>}/>
             <Route path="news" element={<Listofnews/>}/>
+            <Route path="faq" element={<FAQPage />} />
             <Route path="test" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
             <Route path="unionarena" element={<UnionArenaPage />} />

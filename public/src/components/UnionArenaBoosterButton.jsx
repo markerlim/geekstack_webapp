@@ -122,7 +122,7 @@ const ButtonList = () => {
       imgWidth: "110%",
     },
     {
-      pathname: "hxh",
+      pathname: "htr",
       alt: "hunter x hunter",
       imageSrc: "/images/deckimage3.jpg",
       imgWidth: "110%",

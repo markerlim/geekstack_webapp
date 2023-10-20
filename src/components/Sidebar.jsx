@@ -1,44 +1,40 @@
 import React from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
-import { Article, Build, Diversity2, Home, Inventory, Style, VolunteerActivism } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { Article, Inventory} from '@mui/icons-material'
+import { Link, useLocation } from 'react-router-dom'
 
 
 const Sidebar = () => {
+
+    const location = useLocation();
+
+    const isActive = (paths) => {
+        if (Array.isArray(paths)) {
+            return paths.some(path => location.pathname === path);
+        }
+        return location.pathname === paths;
+    };
     return (
         <Box position="fixed" sx={{ display: { sm: "none", md: "flex" }, height: "100vh", overflow: "hidden", backgroundColor: '#26252D', paddingTop: "100px", width: "100px", marginTop: "-80px", justifyContent: "center", zIndex: 100 }}>
             <Box>
                 <List>
                     <ListItem sx={{ bottomMargin: "20px" }} disablePadding>
                         <ListItemButton component={Link} to="/">
-                            <ListItemIcon sx={{
-                                justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
-                                    filter: 'drop-shadow(0 0 5px #121212)'
-                                }
+                            <ListItemIcon disableRipple sx={{
+                                justifyContent: "center", alignItems: "center",
                             }}>
-                                <Home sx={{ color: "#7C4FFF" }} alt="home" />
-                            </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/deckbuilder">
-                            <ListItemIcon sx={{
-                                justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
-                                    filter: 'drop-shadow(0 0 5px #121212)'
-                                }
-                            }}>
-                                <Build sx={{ color: "#7C4FFF" }} alt="deckbuilder" />
-                            </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton sx={{ display: "none" }} component={Link} to="/geekhub">
-                            <ListItemIcon sx={{
-                                justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
-                                    filter: 'drop-shadow(0 0 5px #121212)'
-                                }
-                            }}>
-                                <Diversity2 sx={{ color: "#7C4FFF" }} alt="geekhub" />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Box component={'img'} src="https://geekstack.dev/icons/bottomnav/HomeSelected.svg"
+                                        alt="home"
+                                        sx={{
+                                            width: "30px",
+                                            filter: isActive('/') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                            transition: 'filter 0.3s ease-in-out',
+                                            padding: 0,
+                                        }}
+                                    />
+                                    <Box component={'span'} sx={{ color: isActive('/') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>Home</Box>
+                                </Box>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
@@ -49,7 +45,40 @@ const Sidebar = () => {
                                     filter: 'drop-shadow(0 0 5px #121212)'
                                 }
                             }}>
-                                <Inventory sx={{ color: "#7C4FFF" }} alt="deck views" />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Inventory sx={{ color: isActive('/deckviewer') ? '#7C4FFF' : '#555555' }} alt="deck views" />
+                                    <Box component={'span'} sx={{ color: isActive('/deckviewer') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>UA Decks</Box>
+                                </Box>
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/unionarena">
+                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Box component={'img'} src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" sx={{
+                                        width: "30px",
+                                        filter: isActive('/unionarena') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                        transition: 'filter 0.3s ease-in-out',
+                                        padding: 0,
+                                    }} />
+                                    <Box component={'span'} sx={{ color: isActive('/unionarena') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>Union Arena</Box>
+                                </Box>
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/onepiece">
+                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Box component={'img'} src="/icons/onepieceicon.png" width="30px" alt="onepiece" sx={{
+                                        width: "30px",
+                                        filter: isActive('/onepiece') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                        transition: 'filter 0.3s ease-in-out',
+                                        padding: 0,
+                                    }} />
+                                    <Box component={'span'} sx={{ color: isActive('/onepiece') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>One Piece</Box>
+                                </Box>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
@@ -65,27 +94,42 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/news">
+                            <ListItemIcon sx={{
+                                justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
+                                    filter: 'drop-shadow(0 0 5px #121212)'
+                                }
+                            }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Box component={'img'} src="https://geekstack.dev/icons/bottomnav/NewsSelected.svg"
+                                        alt="FAQ"
+                                        style={{
+                                            width: "30px",
+                                            filter: isActive('/news') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                            transition: 'filter 0.3s'
+                                        }} />
+                                    <Box component={'span'} sx={{ color: isActive('/news') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>News</Box>
+                                </Box>
+                            </ListItemIcon>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
                         <ListItemButton component={Link} to="/credits">
                             <ListItemIcon sx={{
                                 justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
                                     filter: 'drop-shadow(0 0 5px #121212)'
                                 }
                             }}>
-                                <VolunteerActivism sx={{ color: "#7C4FFF" }} alt="disclaimer" />
-                            </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/unionarena">
-                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
-                                <img src="/icons/unionarenaicon.ico" width="30px" alt="unionarena" />
-                            </ListItemIcon>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/onepiece">
-                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center"}}>
-                                <img src="/icons/onepieceicon.png" width="30px" alt="onepiece" />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Box component={'img'} src="https://geekstack.dev/icons/bottomnav/FAQSelected.svg"
+                                        alt="FAQ"
+                                        style={{
+                                            width: "30px",
+                                            filter: isActive('/credits') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                            transition: 'filter 0.3s'
+                                        }} />
+                                    <Box component={'span'} sx={{ color: isActive('/credits') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>FAQ</Box>
+                                </Box>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>

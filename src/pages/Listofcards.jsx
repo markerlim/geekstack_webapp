@@ -49,15 +49,16 @@ const Listofcards = () => {
                             </Box>
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
-                        <Box overflowX={'auto'}>
+                        <Box overflowX={'auto'} sx={{height:{xs:'400px'}}}>
                             <Decklibrarybtn />
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
-                        <Box overflowX={'auto'}>
+                        <Box overflowX={'auto'} sx={{height:{xs:'400px'}}}>
                             <CardStateProviderOnepiece>
                                 <OPDecklibrarybtn />
                             </CardStateProviderOnepiece>
                         </Box>
+                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <div style={{ height: '1px', padding: '20px' }}>
                             <br />
                         </div>

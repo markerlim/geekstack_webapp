@@ -167,14 +167,14 @@ const BottomNav = () => {
           <BottomNavigationAction
             disableRipple
             component={Link}
-            to="/credits"
+            to="/FAQ"
             icon={
               <img
                 src="https://geekstack.dev/icons/bottomnav/FAQSelected.svg"
                 alt="FAQ"
                 style={{
                   width: "30px",
-                  filter: isActive('/credits') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive('/FAQ') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s'
                 }}
               />
@@ -183,7 +183,7 @@ const BottomNav = () => {
             sx={{
               padding:0,
               minWidth:'42px',
-              color: isActive('/credits') ? '#7C4FFF' : '#555555',
+              color: isActive('/FAQ') ? '#7C4FFF' : '#555555',
               '& .bottom-nav-icon': { // Target the icon class
                 marginBottom: '10px' // Increase the margin-bottom to push the label down
               },
