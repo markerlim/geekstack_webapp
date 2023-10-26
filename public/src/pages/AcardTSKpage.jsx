@@ -30,11 +30,11 @@ const AcardTSKpage = () => {
       <Box color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
         <Box>
-            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-            <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"18px",paddingRight:"18px"}}>
-              <AcardTSK searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-            </Box>
-          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
+          <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
+          <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" } }}>
+            <AcardTSK searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </Box>
+          <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
         </Box>
       </Box>
     </div>

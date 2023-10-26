@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
+import AcardTKN from "../components/AcardTKN";
 
 const AcardTKNpage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,11 +30,11 @@ const AcardTKNpage = () => {
       <Box color={"#f2f3f8"}>
         <Navbar onSearch={handleSearch} />
         <Box>
-            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-            <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"18px",paddingRight:"18px",display:'flex',justifyContent:'center',alignItems:'center',height:'calc(100vh - 154px)'}}>
-              <img src="/comingsoonbanner/CMGSOON.png" alt="comingsoon"/>
-            </Box>
-          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
+          <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
+          <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" } }}>
+            <AcardTKN searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </Box>
+          <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>
         </Box>
       </Box>
     </div>

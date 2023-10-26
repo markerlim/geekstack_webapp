@@ -12,7 +12,7 @@ const DBCardRef = (props) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const { countArray, setCountArray, setFilteredCards,animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
+    const { countArray, setCountArray, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
 
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
@@ -41,8 +41,6 @@ const DBCardRef = (props) => {
         setOpenModal(false);
     };
 
-    const MAX_COUNT = 4;
-
     const updateFilteredCards = (updatedCountArray) => {
         const newFilteredCards = documents.filter((doc) => updatedCountArray[doc.cardId] > 0)
             .map((doc) => ({ ...doc, count: updatedCountArray[doc.cardId] }));
@@ -53,10 +51,15 @@ const DBCardRef = (props) => {
     const increase = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
+
+            // Get the specific card's banRatio
+            const card = documents.find(doc => doc.cardId === cardId);
+            const cardMaxCount = card ? card.banRatio : 0;  // default to 0 if card is not found
+
             if (!newArray[cardId]) {
                 newArray[cardId] = 0;
             }
-            if (newArray[cardId] < MAX_COUNT) {
+            if (newArray[cardId] < cardMaxCount) {
                 newArray[cardId]++;
             }
             setToLocalStorage("countArray", newArray);
@@ -91,7 +94,7 @@ const DBCardRef = (props) => {
                 return;
             }
             let docRef = collection(db, "unionarenatcg");
-    
+
             const querySnapshot = await getDocs(docRef);
             const documentsArray = [];
             querySnapshot.forEach((doc) => {
@@ -99,25 +102,40 @@ const DBCardRef = (props) => {
             });
             setDocuments(documentsArray);
         };
-    
+
         fetchDocuments();
     }, [animeFilter]);
 
 
 
     useEffect(() => {
-        if(animeFilter !== "") {
+        if (animeFilter !== "") {
             return;
         }
-    
+
         const initialCountArray = documents.reduce((accumulator, document) => {
             accumulator[document.cardId] = 0;
             return accumulator;
         }, {});
-    
+
         setCountArray(initialCountArray);
     }, [documents, animeFilter]);
-    
+
+    const animeData = [
+        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST'], colorsets: ['Red', 'Green', 'Purple'] },
+        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC'], colorsets: ['Blue', 'Yellow', 'Purple'] },
+        { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
+        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
+        { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC'], colorsets: ['Red', 'Yellow', 'Purple'] },
+        { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'] },
+        { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST'], colorsets: ['Blue', 'Green', 'Yellow'] },
+        { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
+        { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'] },
+        { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST'], colorsets: ['Red', 'Green', 'Purple'] },
+        { filter: 'Gintama', sets: ['UA11BT', 'UA11ST'], colorsets: ['Red', 'Purple', 'Yellow'] },
+        { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
+        { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'] },
+    ]
 
     return (
         <div>
@@ -126,18 +144,14 @@ const DBCardRef = (props) => {
                     <>
                         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
                             <br></br>
-                            <Button variant={animeFilter === "Code Geass" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Code Geass")}>Code Geass</Button>
-                            <Button variant={animeFilter === "Jujutsu No Kaisen" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Jujutsu No Kaisen")}>Jujutsu No Kaisen</Button>
-                            <Button variant={animeFilter === "Hunter X Hunter" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Hunter X Hunter")}>Hunter X Hunter</Button>
-                            <Button variant={animeFilter === "Idolmaster Shiny Colors" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Idolmaster Shiny Colors")}>Idolmaster Shiny Colors</Button>
-                            <Button variant={animeFilter === "Demon Slayer" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Demon Slayer")}>Demon Slayer</Button>
-                            <Button variant={animeFilter === "Tales of Arise" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Tales of Arise")}>Tales of Arise</Button>
-                            <Button variant={animeFilter === "That Time I Got Reincarnated as a Slime" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("That Time I Got Reincarnated as a Slime")}>That Time I Got Reincarnated as a Slime</Button>
-                            <Button variant={animeFilter === "Bleach: Thousand-Year Blood War" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Bleach: Thousand-Year Blood War")}>Bleach: Thousand-Year Blood War</Button>
-                            <Button variant={animeFilter === "Me & Roboco" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Me & Roboco")}>Me & Roboco</Button>
-                            <Button variant={animeFilter === "My Hero Academia" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("My Hero Academia")}>My Hero Academia</Button>
-                            <Button variant={animeFilter === "Gintama" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Gintama")}>Gintama</Button>
-                            <Button variant={animeFilter === "Bluelock" ? "contained" : "outlined"} sx={{ backgroundColor: "#222032", color: "#9930f3" }} onClick={() => setAnimeFilter("Bluelock")}>Bluelock</Button>
+                            {animeData.map((anime) => (
+                                <Button
+                                    variant={animeFilter === anime.filter ? "contained" : "outlined"}
+                                    sx={{ backgroundColor: "#222032", color: "#9930f3" }}
+                                    onClick={() => setAnimeFilter(anime.filter)}>
+                                    {anime.filter}
+                                </Button>
+                            ))}
                         </Box>
                     </>
                 )}
@@ -162,30 +176,13 @@ const DBCardRef = (props) => {
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                <MenuItem value="UA01BT">UA01BT</MenuItem>
-                                <MenuItem value="UA02BT">UA02BT</MenuItem>
-                                <MenuItem value="UA03BT">UA03BT</MenuItem>
-                                <MenuItem value="UA04BT">UA04BT</MenuItem>
-                                <MenuItem value="UA05BT">UA05BT</MenuItem>
-                                <MenuItem value="UA06BT">UA06BT</MenuItem>
-                                <MenuItem value="UA07BT">UA07BT</MenuItem>
-                                <MenuItem value="UA08BT">UA08BT</MenuItem>
-                                <MenuItem value="UA09BT">UA09BT</MenuItem>
-                                <MenuItem value="UA10BT">UA10BT</MenuItem>
-                                <MenuItem value="UA11BT">UA11BT</MenuItem>
-                                <MenuItem value="UA12BT">UA12BT</MenuItem>
-                                <MenuItem value="UA01ST">UA01ST</MenuItem>
-                                <MenuItem value="UA02ST">UA02ST</MenuItem>
-                                <MenuItem value="UA03ST">UA03ST</MenuItem>
-                                <MenuItem value="UA04ST">UA04ST</MenuItem>
-                                <MenuItem value="UA05ST">UA05ST</MenuItem>
-                                <MenuItem value="UA06ST">UA06ST</MenuItem>
-                                <MenuItem value="UA07ST">UA07ST</MenuItem>
-                                <MenuItem value="UA08ST">UA08ST</MenuItem>
-                                <MenuItem value="UA09ST">UA09ST</MenuItem>
-                                <MenuItem value="UA10ST">UA10ST</MenuItem>
-                                <MenuItem value="UA11ST">UA11ST</MenuItem>
-                                <MenuItem value="UA12ST">UA12ST</MenuItem>
+                                {animeData
+                                    .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                    .flatMap(anime => anime.sets) // Get the sets for the matched anime and flatten the result
+                                    .map(set => (
+                                        <MenuItem key={set} value={set}>{set}</MenuItem>
+                                    ))
+                                }
                             </Select>
                         </FormControl>
                         <FormControl sx={{ margin: 1 }}>
@@ -207,11 +204,13 @@ const DBCardRef = (props) => {
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                <MenuItem value="Red">Red</MenuItem>
-                                <MenuItem value="Blue">Blue</MenuItem>
-                                <MenuItem value="Green">Green</MenuItem>
-                                <MenuItem value="Yellow">Yellow</MenuItem>
-                                <MenuItem value="Purple">Purple</MenuItem>
+                                {animeData
+                                    .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                    .flatMap(anime => anime.colorsets) // Get the sets for the matched anime and flatten the result
+                                    .map(colorset => (
+                                        <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>
+                                    ))
+                                }
                             </Select>
                         </FormControl>
                         <Button
@@ -256,7 +255,7 @@ const DBCardRef = (props) => {
             <Grid container spacing={2} justifyContent="center">
                 {animeFilter !== "" && filteredDocuments.map((document, index) => (
                     <Grid item key={document.cardId}>
-                        <Box >
+                        <Box sx={{ position: 'relative' }} >
                             <ResponsiveImage
                                 loading="lazy"
                                 src={document.image}
@@ -264,12 +263,19 @@ const DBCardRef = (props) => {
                                 alt="loading..."
                                 onClick={() => handleOpenModal(document)}
                             />
-                            <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{color:'#C8A2C8'}}>
-                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer"}}>
+                            {
+                                document.banRatio !== "4" && (
+                                    <Box sx={{ width: '25px', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
+                                        {document.banRatio}
+                                    </Box>
+                                )
+                            }
+                            <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
+                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
                                     <RemoveCircle sx={{ fontSize: 20 }} />
                                 </div>
                                 <div style={{ fontSize: 15 }}>{countArray[document.cardId] || 0}</div>
-                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer"}}>
+                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
                                     <AddCircle sx={{ fontSize: 20 }} />
                                 </div>
                             </Box>

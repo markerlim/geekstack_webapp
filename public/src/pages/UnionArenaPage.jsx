@@ -32,6 +32,7 @@ const UnionArenaPage = () => {
               <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
               <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px",paddingTop:'20px', paddingBottom: "150px", justifyContent: "center" }}>
                 <UACardlist filters={filters} />
+                <br/>
               </Box>
             </Box>
           </Box>

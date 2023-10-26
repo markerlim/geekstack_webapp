@@ -38,8 +38,6 @@ const AcardBTRpage = () => {
           <Box
             sx={{
               marginLeft: { xs: "0px", sm: "0px", md: "100px" },
-              paddingLeft: "18px",
-              paddingRight: "18px"
             }}
           >
             <AcardBTR searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

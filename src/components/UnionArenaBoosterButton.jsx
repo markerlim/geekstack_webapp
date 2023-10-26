@@ -181,6 +181,12 @@ const ButtonList = () => {
       imageSrc: "/images/deckimage12.jpg",
       imgWidth: "110%",
     },
+    {
+      pathname: "tkn",
+      alt: "tekken 7",
+      imageSrc: "/images/deckimage13.jpg",
+      imgWidth: "110%",
+    },
   ];
 
   return (

@@ -14,7 +14,7 @@ const AcardKMY = (props) => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const booster = queryParams.get("booster") || "";
-    const uppercaseBooster = booster.toUpperCase();   
+    const uppercaseBooster = booster.toUpperCase();
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -28,14 +28,14 @@ const AcardKMY = (props) => {
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
     const isMedium = useMediaQuery('(min-width:900px)');
-  
+
     const goBack = () => {
-      navigate(-1);
+        navigate(-1);
     };
 
     const getCurrentImage = (document) => {
         let currentImage = document.image;
-    
+
         // Check if the alternate form should be used
         if ((onlyAltForm || rarityFilter === "ALT" || altFormIndex[document.cardId] !== undefined) && document.altforms) {
             if (Array.isArray(document.altforms)) {
@@ -44,10 +44,10 @@ const AcardKMY = (props) => {
                 currentImage = document.altforms;
             }
         }
-    
+
         return currentImage;
     };
-    
+
     const handleOpenModal = (document) => {
         const currentImage = getCurrentImage(document);
         setSelectedCard({
@@ -56,12 +56,12 @@ const AcardKMY = (props) => {
         });
         setOpenModal(true);
     };
-    
+
     const handleSwipeLeft = () => {
         let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         let nextIndex = (currentIndex + 1) % filteredDocuments.length;
         let nextDocument = filteredDocuments[nextIndex];
-    
+
         // If rarityFilter is "ALT", skip documents without alternate forms
         if (rarityFilter === "ALT") {
             while (!nextDocument.altforms) {
@@ -69,19 +69,19 @@ const AcardKMY = (props) => {
                 nextDocument = filteredDocuments[nextIndex];
             }
         }
-    
+
         const currentImage = getCurrentImage(nextDocument);
         setSelectedCard({
             ...nextDocument,
             currentImage: currentImage
         });
     };
-    
+
     const handleSwipeRight = () => {
         let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         let prevDocument = filteredDocuments[prevIndex];
-    
+
         // If rarityFilter is "ALT", skip documents without alternate forms
         if (rarityFilter === "ALT") {
             while (!prevDocument.altforms) {
@@ -89,13 +89,13 @@ const AcardKMY = (props) => {
                 prevDocument = filteredDocuments[prevIndex];
             }
         }
-    
+
         const currentImage = getCurrentImage(prevDocument);
         setSelectedCard({
             ...prevDocument,
             currentImage: currentImage
         });
-    };    
+    };
 
     const handleCloseModal = () => {
         setSelectedCard(null);
@@ -131,7 +131,7 @@ const AcardKMY = (props) => {
             setAltForms(initialAltForms);
             console.log(`Number of reads: ${documentsArray.length}`);
         };
-    
+
         fetchDocuments();
     }, [animeFilter]);
 
@@ -208,13 +208,16 @@ const AcardKMY = (props) => {
         }
     }, [onlyAltForm, documents]);
 
+    function isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+      }
 
     return (
-        <div>
+        <div style={{position:'relative'}}>
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
-            <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
+            <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, flexDirection: "column", justifyContent: "center", marginBottom: 2, alignItems: "center" }}>
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <FormControl sx={{ margin: 1 }}>
                         <Select
@@ -353,6 +356,9 @@ const AcardKMY = (props) => {
                 </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+                <Box sx={{ paddingTop: '20px', paddingBottom: '20px', textAlign: 'center', display: { xs: 'block', sm: 'block', md: 'none' } }}>
+                    <span>Demon Slayer</span>
+                </Box>
                 <Grid container spacing={2} justifyContent="center">
                     {filteredDocuments
                         .filter(document => !(rarityFilter === 'ALT' && (!document.altforms || document.altforms.length === 0 || document.altforms === '')))
@@ -361,7 +367,7 @@ const AcardKMY = (props) => {
                                 const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
                                 return altForms.map((form, index) => (
                                     <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative",cursor:"pointer" }} height={imageHeight} width={imageWidth}>
+                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
                                             <img
                                                 loading="lazy"
                                                 src={form}
@@ -376,7 +382,7 @@ const AcardKMY = (props) => {
                             } else {
                                 return (
                                     <Grid item key={document.cardId} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative",cursor:"pointer" }} height={imageHeight} width={imageWidth}>
+                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
                                             <img
                                                 loading="lazy"
                                                 src={
@@ -419,6 +425,128 @@ const AcardKMY = (props) => {
                 </Grid>
                 <div style={{ height: '200px' }} />
             </div>
+            <Box sx={{
+                display: { xs: 'flex', sm: 'flex', md: 'none' }, position: 'fixed', backgroundColor: '#121212',
+                width: '100vw', bottom: isIOS() ? '80px' : '70px', justifyContent: "center", alignItems: "center"
+            }}>
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <FormControl sx={{ margin: 1 }}>
+                        <Select
+                            sx={{
+                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                fontSize: 11, width: "60px", height: "30px",
+                                '& .MuiSelect-icon': {
+                                    display: "none",
+                                    position: "absolute"
+                                },
+                            }}
+                            value={boosterFilter}
+                            onChange={(event) => setBoosterFilter(event.target.value)}
+                            displayEmpty // Add this prop to display the placeholder when the value is empty
+                            renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="UA05BT">UA05BT</MenuItem>
+                            <MenuItem value="UA05ST">UA05ST</MenuItem>
+                            <MenuItem value="UA01NC">UA01NC</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ margin: 1 }}>
+                        <Select
+                            sx={{
+                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                fontSize: 11, width: "60px", height: "30px",
+                                '& .MuiSelect-icon': {
+                                    display: "none",
+                                    position: "absolute"
+                                },
+                            }}
+                            value={rarityFilter}
+                            onChange={(event) => setRarityFilter(event.target.value)}
+                            displayEmpty // Add this prop to display the placeholder when the value is empty
+                            renderValue={(selectedValue) => selectedValue || 'Rarity'} // Add this prop to display the placeholder text when the value is empty
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="ALT">Alt ART</MenuItem>
+                            <MenuItem value="SP">SP</MenuItem>
+                            <MenuItem value="SR">SR</MenuItem>
+                            <MenuItem value="R">R</MenuItem>
+                            <MenuItem value="U">U</MenuItem>
+                            <MenuItem value="C">C</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ margin: 1 }}>
+                        <Select
+                            sx={{
+                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                fontSize: 11, width: "60px", height: "30px",
+                                '& .MuiSelect-icon': {
+                                    display: "none",
+                                    position: "absolute"
+                                },
+                            }}
+                            value={colorFilter}
+                            onChange={(event) => setColorFilter(event.target.value)}
+                            displayEmpty // Add this prop to display the placeholder when the value is empty
+                            renderValue={(selectedValue) => selectedValue || 'Color'}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="Red">Red</MenuItem>
+                            <MenuItem value="Yellow">Yellow</MenuItem>
+                            <MenuItem value="Purple">Purple</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button
+                        sx={{
+                            minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                            width: 30, // Change this value to adjust the width
+                            height: 20,
+                            margin: 1,
+                            padding: 1, // Adjust the padding as needed 
+                            backgroundColor: "#f2f3f8",
+                            color: "#240052",
+                            '&:hover': {
+                                backgroundColor: "#240052", // Change this to the desired hover background color
+                                color: "#f2f3f8", // Change this to the desired hover text color if needed
+                            },
+                        }}
+                        onClick={resetFilters}
+                    >
+                        <Refresh sx={{ fontSize: 15 }} />
+                    </Button>
+                    <Box sx={{ width: 100 }}>
+                        <Slider
+                            value={imageWidth}
+                            onChange={handleSliderChange}
+                            aria-labelledby="continuous-slider"
+                            valueLabelDisplay="auto"
+                            min={75}
+                            max={250}
+                            sx={{
+                                '& .MuiSlider-thumb': {
+                                    color: '#F2F3F8', // color of the thumb
+                                },
+                                '& .MuiSlider-track': {
+                                    color: '#F2F3F8', // color of the track
+                                },
+                                '& .MuiSlider-rail': {
+                                    color: '#F2F3F8', // color of the rail
+                                },
+                                margin: 1,
+                            }}
+                        />
+                    </Box>
+                </Box>
+            </Box>
         </div >
     );
 };

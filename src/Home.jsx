@@ -159,16 +159,14 @@ const Home = () => {
     const theme = useTheme();
 
     const imageData = [
+        { src: 'latestreleasebanner/htrvol2newrelease.jpg', path: '/unionarena/htr?booster=ex01bt' },
+        { src: 'latestreleasebanner/tekkennewrelease.jpg', path: '/unionarena/tkn' },
         { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
         { src: 'latestreleasebanner/kmyncnewrelease.jpg', path: '/unionarena/kmy?booster=ua01nc' },
         { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece/OPST11' },
-        { src: 'latestreleasebanner/bluelocknewrelease.jpg', path: '/unionarena/blk' },
-        { src: 'latestreleasebanner/bleachnewrelease.jpg', path: '/unionarena/blc' },
-        { src: 'latestreleasebanner/op05newrelease.jpg', path: '/onepiece/OP05' },
     ];
 
     const comingsoonData = [
-        { src: 'comingsoonbanner/UABT13.webp' },
         { src: 'comingsoonbanner/UABT14.webp' },
         { src: 'comingsoonbanner/UABT15.webp' },
         { src: 'comingsoonbanner/UABT16.webp' },
@@ -350,7 +348,7 @@ const Home = () => {
                         </Box>
                         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', marginRight: "15px", gap: { xs: "20px", sm: "50px" }, justifyContent: "center" }}>
                             <ButtonBase sx={{ padding: "1px", display: "flex", flexDirection: "column", }}
-                                href="https://www.buymeacoffee.com/uniondeck">
+                                href="https://www.buymeacoffee.com/geekstack">
                                 <img style={{ width: "200px", borderRadius: "10px" }} src="images/donation.png" alt="donation" />
                                 <br />
                                 <span style={{ color: "#f2f3f8" }}>Click or scan to contribute!</span>

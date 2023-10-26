@@ -38,13 +38,11 @@ const AcardBLKpage = () => {
           <Box
             sx={{
               marginLeft: { xs: "0px", sm: "0px", md: "100px" },
-              paddingLeft: "18px",
-              paddingRight: "18px"
             }}
           >
             <AcardBLK searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           </Box>
-          <Box flex={2} sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
+          <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <BottomNav />
           </Box>
         </Box>

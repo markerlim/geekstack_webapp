@@ -47,7 +47,7 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
     setCountArray(newCountArray);
     setFilteredCards(newFilteredCards);
 
-    onDeckLoaded(deck.id, deck.deckuid, deck.name);
+    onDeckLoaded(deck.id, deck.deckuid, deck.name, deck.image);
   };
 
   const handleDeleteDeck = async (deckId) => {
