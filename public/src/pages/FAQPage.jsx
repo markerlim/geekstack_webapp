@@ -12,6 +12,7 @@ import FAQSupportGeekstack from "../components/FAQComponents/SupportGeekstack";
 const FAQPage = () => {
     const FAQdata = [
         { content: <FAQAccountEdit />, des: 'How to edit account details?' },
+        { content:<FAQReportError/>, des: 'How to report errors?'},
         { content: <FAQSupportGeekstack />, des: 'How to support Geekstack?' },
     ]
     const [openDrawer, setOpenDrawer] = useState(false);

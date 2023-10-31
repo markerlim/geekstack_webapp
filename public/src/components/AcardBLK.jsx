@@ -155,14 +155,23 @@ const AcardBLK = (props) => {
     const handleFormChange = (event, document) => {
         event.stopPropagation(); // Prevent event from bubbling up
         setAltFormIndex(prev => {
-            const currentFormIndex = prev[document.cardId] || 0;
+            // Check if the document.cardId exists in the prev state
+            if (prev[document.cardId] === undefined) {
+                return {
+                    ...prev,
+                    [document.cardId]: 0
+                };
+            }
+
             let altFormsLength = 0;
             if (Array.isArray(document.altforms)) {
                 altFormsLength = document.altforms.length;
             } else if (typeof document.altforms === "string") {
                 altFormsLength = 1; // Consider the original form and the alt form
             }
+            const currentFormIndex = prev[document.cardId];
             const newFormIndex = (currentFormIndex + 1) % (altFormsLength + 1); // Add 1 to account for the original form
+
             return {
                 ...prev,
                 [document.cardId]: newFormIndex,
@@ -209,10 +218,10 @@ const AcardBLK = (props) => {
 
     function isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
-      }
+    }
 
     return (
-        <div style={{position:'relative'}}>
+        <div style={{ position: 'relative' }}>
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
@@ -388,7 +397,7 @@ const AcardBLK = (props) => {
                                                             document.image
                                                 }
                                                 draggable="false"
-                                                alt={document.cardId}
+                                                alt={document.cardName}
                                                 width={imageWidth}
                                                 height={imageHeight}
                                             />
@@ -397,13 +406,13 @@ const AcardBLK = (props) => {
                                             <button
                                                 onClick={(event) => handleFormChange(event, document)}
                                                 style={{
-                                                    position: "absolute", backgroundColor: "#f2f3f8",
-                                                    border: "none", borderRadius: "100px",
-                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.2}px`, height: `${imageWidth * 0.2}px`,
+                                                    position: "absolute", backgroundColor: "#7C4FFF",
+                                                    border: "3px #934fff solid", borderRadius: "100px",
+                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.3}px`, height: `${imageWidth * 0.3}px`,
                                                     display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
                                                 }}
                                             >
-                                                <SwapHoriz sx={{ fontSize: "20px" }} />
+                                                <SwapHoriz sx={{ fontSize: "20px", color: '#F2f3f8' }} />
                                             </button>
                                         ) : null}
                                     </Grid>
@@ -423,7 +432,7 @@ const AcardBLK = (props) => {
                 <div style={{ height: '200px' }} />
             </div>
             <Box sx={{
-                display: { xs: 'flex', sm: 'flex', md: 'none' }, position: 'absolute', backgroundColor: '#121212',
+                display: { xs: 'flex', sm: 'flex', md: 'none' }, position: 'fixed', backgroundColor: '#121212',
                 width: '100vw', bottom: isIOS() ? '80px' : '70px', justifyContent: "center", alignItems: "center"
             }}>
                 <FormControl sx={{ margin: 1 }}>

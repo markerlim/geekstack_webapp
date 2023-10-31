@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Collapse, TextField, Typography } from "@mui/material";
-import { Delete, Save, SystemUpdateAlt, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box, Button, CircularProgress, Collapse, IconButton, Menu, MenuItem, TextField, Typography } from "@mui/material";
+import { Delete, ImportExport, MoreVert, Save, SystemUpdateAlt, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { db, } from "../Firebase";
@@ -15,6 +15,8 @@ import { collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ImagePickerModal from "./ImagePickerModal";
+import { toJpeg } from "html-to-image";
+import UATCGExport from "./UAExportTemplate";
 
 
 const DeckBuilderBar = (props) => {
@@ -31,6 +33,9 @@ const DeckBuilderBar = (props) => {
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
   const [viewDeckbar, setViewDeckbar] = useState(true);
   const [showPadding, setShowPadding] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportImage, setExportImage] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const images = [
     "/images/deckimage.jpg",
@@ -49,6 +54,13 @@ const DeckBuilderBar = (props) => {
     "/images/deckimage13.jpg",
     "/images/deckimage14.jpg",
   ];
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleClearClick = () => {
     setCountArray({});
@@ -96,7 +108,43 @@ const DeckBuilderBar = (props) => {
   };
 
   const stats = calculateStats();
-  
+
+  const handleExportClick = () => {
+    if (totalCount < 50) {
+      alert("You cannot export a deck with less than 50 cards.");
+      return;
+    }
+
+    setIsExporting(true);
+
+    const componentRef = document.querySelector('#UATCGExport');
+
+    if (componentRef) {
+      toJpeg(componentRef, { quality: 0.8 })
+        .then((dataUrl) => {
+          fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = 'decklist.jpg';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            });
+        })
+        .catch((error) => {
+          console.error('oops, something went wrong!', error);
+        })
+        .finally(() => {
+          setIsExporting(false);
+        });
+    }
+    handleMenuClose();
+  };
+
   const handleSaveClick = async (proceed = false) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
@@ -205,6 +253,7 @@ const DeckBuilderBar = (props) => {
       setIsUpdatingExistingDeck(false);
       setLoadedDeckUid(null);
       setShouldSaveDeck(false); // Reset shouldSaveDeck to false
+      handleMenuClose();
     } catch (error) {
       console.error("Error saving data: ", error);
       setSaveStatus("error");
@@ -215,17 +264,20 @@ const DeckBuilderBar = (props) => {
     setShouldSaveDeck(true);
     handleSaveClick(true);
     setShowConfirmDialog(false);
+    handleMenuClose();
   };
 
   const handleLoadDeckClick = () => {
     setShowDeckLoaderModal(true); // Open the DeckLoader modal
+    handleMenuClose();
   };
 
-  const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName) => {
+  const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName, loadedDeckImage) => {
     // Handle the deck loaded from DeckLoader
     // You can update the DeckBuilderBar state here based on the loadedDeck data
     setDeckName(loadedDeckName);
     setLoadedDeckUid(loadedDeckUid); // Update the loadedDeckUid
+    setExportImage(loadedDeckImage);
     setIsUpdatingExistingDeck(true); //Update the previousDeckName
     setShowDeckLoaderModal(false); // Close the DeckLoader modal
   };
@@ -271,20 +323,20 @@ const DeckBuilderBar = (props) => {
     }
   }, [selectedImage, shouldSaveDeck, handleSaveClick]);
 
-  
+
   useEffect(() => {
     if (viewDeckbar) {
-        setShowPadding(true);
+      setShowPadding(true);
     } else {
-        // 300ms is the default transition duration for Collapse.
-        // Adjust if you've set a different duration.
-        setTimeout(() => {
-            setShowPadding(false);
-        }, 300);
+      // 300ms is the default transition duration for Collapse.
+      // Adjust if you've set a different duration.
+      setTimeout(() => {
+        setShowPadding(false);
+      }, 300);
     }
     // Clear the timeout when the component is unmounted
     return () => clearTimeout();
-}, [viewDeckbar]);
+  }, [viewDeckbar]);
 
   return (
     <Box
@@ -295,7 +347,7 @@ const DeckBuilderBar = (props) => {
         bgcolor: "#f2f3f8",
         color: "#121212",
         zIndex: 1,
-        paddingTop: showPadding ? "10px":"0px",paddingBottom: showPadding ? "10px":"0px",paddingLeft: "10px", paddingRight:"10px",
+        paddingTop: showPadding ? "10px" : "0px", paddingBottom: showPadding ? "10px" : "0px", paddingLeft: "10px", paddingRight: "10px",
         ...props.style,
       }}
     >
@@ -357,31 +409,58 @@ const DeckBuilderBar = (props) => {
                 ))}
               </Box>
             </Box>
-            <Box style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",'&:hover':{bgcolor:'#171614'} }} onClick={handleClearClick}>
+            <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: "row", alignItems: "center", gap: '5px' }}>
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={handleClearClick}>
                 <Delete sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
                 <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Clear
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",'&:hover':{bgcolor:'#171614'} }} onClick={handleLoadDeckClick}>
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={handleLoadDeckClick}>
                 <SystemUpdateAlt sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
                 <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Load
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",'&:hover':{bgcolor:'#171614'} }} onClick={() => handleSaveClick(false)}>
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={() => handleSaveClick(false)}>
                 <Save sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
                 <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Save
                 </Typography>
               </Button>
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={handleExportClick}>
+                <ImportExport sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
+                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
+                  Export
+                </Typography>
+                {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />
+                </Box>}
+              </Button>
             </Box>
+          </Box>
+          <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
+            <IconButton onClick={handleMenuOpen}>
+              <MoreVert />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleClearClick}>clear</MenuItem>
+              <MenuItem onClick={() => handleSaveClick(false)}>save</MenuItem>
+              <MenuItem onClick={handleLoadDeckClick}>load</MenuItem>
+              <MenuItem onClick={handleExportClick}>export</MenuItem>
+            </Menu>
+            {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />
+            </Box>}
           </Box>
         </Box >
       </Collapse>
       <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={() => setViewDeckbar(prev => !prev)}>
-        {viewDeckbar ? <><Visibility/></> : <><VisibilityOff/></>}
+        {viewDeckbar ? <><Visibility /></> : <><VisibilityOff /></>}
       </Button>
       <Dialog
         open={showConfirmDialog}
@@ -405,7 +484,7 @@ const DeckBuilderBar = (props) => {
       <FullScreenDialog
         open={showDeckLoaderModal}
         handleClose={() => setShowDeckLoaderModal(false)}
-        handleDeckLoaded={(deckName, deckUid, loadedDeckName) => handleDeckLoaded(deckName, deckUid, loadedDeckName)}
+        handleDeckLoaded={(deckName, deckUid, loadedDeckName, deckimage) => handleDeckLoaded(deckName, deckUid, loadedDeckName, deckimage)}
       />
       <Snackbar
         open={saveStatus === "success"}
@@ -430,7 +509,10 @@ const DeckBuilderBar = (props) => {
           setShowImagePickerModal(false); // Close the ImagePickerModal upon selection
         }}
       />
-    </Box >
+      <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
+        <UATCGExport filteredCards={filteredCards} exportImage={exportImage} currentUser={currentUser} />
+      </Box>
+    </Box>
   );
 
 };

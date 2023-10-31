@@ -155,14 +155,23 @@ const AcardGNT = (props) => {
     const handleFormChange = (event, document) => {
         event.stopPropagation(); // Prevent event from bubbling up
         setAltFormIndex(prev => {
-            const currentFormIndex = prev[document.cardId] || 0;
+            // Check if the document.cardId exists in the prev state
+            if (prev[document.cardId] === undefined) {
+                return {
+                    ...prev,
+                    [document.cardId]: 0
+                };
+            }
+
             let altFormsLength = 0;
             if (Array.isArray(document.altforms)) {
                 altFormsLength = document.altforms.length;
             } else if (typeof document.altforms === "string") {
                 altFormsLength = 1; // Consider the original form and the alt form
             }
+            const currentFormIndex = prev[document.cardId];
             const newFormIndex = (currentFormIndex + 1) % (altFormsLength + 1); // Add 1 to account for the original form
+
             return {
                 ...prev,
                 [document.cardId]: newFormIndex,
@@ -209,10 +218,10 @@ const AcardGNT = (props) => {
 
     function isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
-      }
+    }
 
     return (
-        <div style={{position:'relative'}}>
+        <div style={{ position: 'relative' }}>
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
@@ -388,7 +397,7 @@ const AcardGNT = (props) => {
                                                             document.image
                                                 }
                                                 draggable="false"
-                                                alt={document.cardId}
+                                                alt={document.cardName}
                                                 width={imageWidth}
                                                 height={imageHeight}
                                             />
@@ -397,13 +406,13 @@ const AcardGNT = (props) => {
                                             <button
                                                 onClick={(event) => handleFormChange(event, document)}
                                                 style={{
-                                                    position: "absolute", backgroundColor: "#f2f3f8",
-                                                    border: "none", borderRadius: "100px",
-                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.2}px`, height: `${imageWidth * 0.2}px`,
+                                                    position: "absolute", backgroundColor: "#7C4FFF",
+                                                    border: "3px #934fff solid", borderRadius: "100px",
+                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.3}px`, height: `${imageWidth * 0.3}px`,
                                                     display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
                                                 }}
                                             >
-                                                <SwapHoriz sx={{ fontSize: "20px" }} />
+                                                <SwapHoriz sx={{ fontSize: "20px", color: '#F2f3f8' }} />
                                             </button>
                                         ) : null}
                                     </Grid>
@@ -427,118 +436,118 @@ const AcardGNT = (props) => {
                 width: '100vw', bottom: isIOS() ? '80px' : '70px', justifyContent: "center", alignItems: "center"
             }}>
                 <FormControl sx={{ margin: 1 }}>
-                        <Select
-                            sx={{
-                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                                fontSize: 11, width: "60px", height: "30px",
-                                '& .MuiSelect-icon': {
-                                    display: "none",
-                                    position: "absolute"
-                                },
-                            }}
-                            value={boosterFilter}
-                            onChange={(event) => setBoosterFilter(event.target.value)}
-                            displayEmpty // Add this prop to display the placeholder when the value is empty
-                            renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="UA11BT">UA11BT</MenuItem>
-                            <MenuItem value="UA11ST">UA11ST</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ margin: 1 }}>
-                        <Select
-                            sx={{
-                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                                fontSize: 11, width: "60px", height: "30px",
-                                '& .MuiSelect-icon': {
-                                    display: "none",
-                                    position: "absolute"
-                                },
-                            }}
-                            value={rarityFilter}
-                            onChange={(event) => setRarityFilter(event.target.value)}
-                            displayEmpty // Add this prop to display the placeholder when the value is empty
-                            renderValue={(selectedValue) => selectedValue || 'Rarity'} // Add this prop to display the placeholder text when the value is empty
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="ALT">Alt ART</MenuItem>
-                            <MenuItem value="SR">SR</MenuItem>
-                            <MenuItem value="R">R</MenuItem>
-                            <MenuItem value="U">U</MenuItem>
-                            <MenuItem value="C">C</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ margin: 1 }}>
-                        <Select
-                            sx={{
-                                display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                                whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                                fontSize: 11, width: "60px", height: "30px",
-                                '& .MuiSelect-icon': {
-                                    display: "none",
-                                    position: "absolute"
-                                },
-                            }}
-                            value={colorFilter}
-                            onChange={(event) => setColorFilter(event.target.value)}
-                            displayEmpty // Add this prop to display the placeholder when the value is empty
-                            renderValue={(selectedValue) => selectedValue || 'Color'}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="Red">Red</MenuItem>
-                            <MenuItem value="Purple">Purple</MenuItem>
-                            <MenuItem value="Yellow">Yellow</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
+                    <Select
                         sx={{
-                            minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
-                            width: 30, // Change this value to adjust the width
-                            height: 20,
-                            margin: 1,
-                            padding: 1, // Adjust the padding as needed 
-                            backgroundColor: "#f2f3f8",
-                            color: "#240052",
-                            '&:hover': {
-                                backgroundColor: "#240052", // Change this to the desired hover background color
-                                color: "#f2f3f8", // Change this to the desired hover text color if needed
+                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                            fontSize: 11, width: "60px", height: "30px",
+                            '& .MuiSelect-icon': {
+                                display: "none",
+                                position: "absolute"
                             },
                         }}
-                        onClick={resetFilters}
+                        value={boosterFilter}
+                        onChange={(event) => setBoosterFilter(event.target.value)}
+                        displayEmpty // Add this prop to display the placeholder when the value is empty
+                        renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
                     >
-                        <Refresh sx={{ fontSize: 15 }} />
-                    </Button>
-                    <Box sx={{ width: 100 }}>
-                        <Slider
-                            value={imageWidth}
-                            onChange={handleSliderChange}
-                            aria-labelledby="continuous-slider"
-                            valueLabelDisplay="auto"
-                            min={75}
-                            max={250}
-                            sx={{
-                                '& .MuiSlider-thumb': {
-                                    color: '#F2F3F8', // color of the thumb
-                                },
-                                '& .MuiSlider-track': {
-                                    color: '#F2F3F8', // color of the track
-                                },
-                                '& .MuiSlider-rail': {
-                                    color: '#F2F3F8', // color of the rail
-                                },
-                                margin: 1,
-                            }}
-                        />
-                    </Box>
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="UA11BT">UA11BT</MenuItem>
+                        <MenuItem value="UA11ST">UA11ST</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ margin: 1 }}>
+                    <Select
+                        sx={{
+                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                            fontSize: 11, width: "60px", height: "30px",
+                            '& .MuiSelect-icon': {
+                                display: "none",
+                                position: "absolute"
+                            },
+                        }}
+                        value={rarityFilter}
+                        onChange={(event) => setRarityFilter(event.target.value)}
+                        displayEmpty // Add this prop to display the placeholder when the value is empty
+                        renderValue={(selectedValue) => selectedValue || 'Rarity'} // Add this prop to display the placeholder text when the value is empty
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="ALT">Alt ART</MenuItem>
+                        <MenuItem value="SR">SR</MenuItem>
+                        <MenuItem value="R">R</MenuItem>
+                        <MenuItem value="U">U</MenuItem>
+                        <MenuItem value="C">C</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ margin: 1 }}>
+                    <Select
+                        sx={{
+                            display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                            whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                            fontSize: 11, width: "60px", height: "30px",
+                            '& .MuiSelect-icon': {
+                                display: "none",
+                                position: "absolute"
+                            },
+                        }}
+                        value={colorFilter}
+                        onChange={(event) => setColorFilter(event.target.value)}
+                        displayEmpty // Add this prop to display the placeholder when the value is empty
+                        renderValue={(selectedValue) => selectedValue || 'Color'}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="Red">Red</MenuItem>
+                        <MenuItem value="Purple">Purple</MenuItem>
+                        <MenuItem value="Yellow">Yellow</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button
+                    sx={{
+                        minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                        width: 30, // Change this value to adjust the width
+                        height: 20,
+                        margin: 1,
+                        padding: 1, // Adjust the padding as needed 
+                        backgroundColor: "#f2f3f8",
+                        color: "#240052",
+                        '&:hover': {
+                            backgroundColor: "#240052", // Change this to the desired hover background color
+                            color: "#f2f3f8", // Change this to the desired hover text color if needed
+                        },
+                    }}
+                    onClick={resetFilters}
+                >
+                    <Refresh sx={{ fontSize: 15 }} />
+                </Button>
+                <Box sx={{ width: 100 }}>
+                    <Slider
+                        value={imageWidth}
+                        onChange={handleSliderChange}
+                        aria-labelledby="continuous-slider"
+                        valueLabelDisplay="auto"
+                        min={75}
+                        max={250}
+                        sx={{
+                            '& .MuiSlider-thumb': {
+                                color: '#F2F3F8', // color of the thumb
+                            },
+                            '& .MuiSlider-track': {
+                                color: '#F2F3F8', // color of the track
+                            },
+                            '& .MuiSlider-rail': {
+                                color: '#F2F3F8', // color of the rail
+                            },
+                            margin: 1,
+                        }}
+                    />
+                </Box>
             </Box>
         </div >
     );

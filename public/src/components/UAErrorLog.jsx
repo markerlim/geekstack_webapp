@@ -37,7 +37,7 @@ const ErrorLog = ({ selectedCard, onSubmitSuccess  }) => {
         console.log("clicked")
         const errorLogID = generateErrorLogId();
         const reportDetails = issue === "Translation" ? newTranslation : details;
-        fetch("http://localhost:5000/submitErrorLog",{
+        fetch("https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/submitErrorLog",{
             method:'POST',
             headers:{
                 "Accept":"application/json",

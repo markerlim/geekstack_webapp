@@ -113,7 +113,7 @@ export const CardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRi
                 margin: '5px',
                 padding: '10px',
                 borderRadius: '20px',
-                display: 'none',
+                display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
