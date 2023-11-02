@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Geekstack is a deckbuilding platform with a few card games.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It is also important to note that a strong emphasis is placed on user experience as a Progessive Web App
 
 ## Available Scripts
 
