@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, ButtonBase, Collapse, IconButton, MenuItem, Select, useTheme } from "@mui/material"
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
@@ -50,31 +50,7 @@ function CustomDot({ onClick, active }) {
 const Home = () => {
     const launchdates = [
         {
-            title: "UABT12 Bluelock",
-            start: "2023-09-29",
-            end: "2023-09-29",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/Bluelockicon.jpg",
-        },
-        {
-            title: "UABT08 Bleach",
-            start: "2023-09-29",
-            end: "2023-09-29",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/Bleach1000icon.jpg",
-        },
-        {
-            title: "ST11 STARTER DECK -Side Uta ",
-            start: "2023-10-07",
-            end: "2023-10-07",
-            backgroundColor: "#bb0504",
-            id: "ruipoOP",
-            icon: "/icons/UAtags/Onepieceicon.jpg",
-        },
-        {
-            title: "UABT13 Tekken7",
+            title: "UA13BT Tekken7",
             start: "2023-10-27",
             end: "2023-10-27",
             backgroundColor: "#bb0504",
@@ -82,7 +58,7 @@ const Home = () => {
             icon: "/icons/UAtags/Tekken7icon.jpg",
         },
         {
-            title: "UABT14 Dr Stone",
+            title: "UA14BT Dr Stone",
             start: "2023-12-22",
             end: "2023-12-22",
             backgroundColor: "#bb0504",
@@ -90,12 +66,20 @@ const Home = () => {
             icon: "/icons/UAtags/Drstoneicon.jpg",
         },
         {
-            title: "UABT Sword Art Online",
+            title: "UAXXBT Sword Art Online",
             start: "2024-01-26",
             end: "2024-01-26",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
             icon: "/icons/UAtags/SAOicon.jpg",
+        },
+        {
+            title: "UAXXBT SYNDUALITY Noir",
+            start: "2024-02-23",
+            end: "2024-02-23",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/Synnoiricon.jpg",
         },
         {
             title: "Jujutsu Kaisen New Card Selection",
@@ -156,25 +140,34 @@ const Home = () => {
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
     const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
+    const [imageData,setImageData] = useState([]);
+    const [comingsoonData,setComingsoonData] = useState([]);
     const theme = useTheme();
 
-    const imageData = [
-        { src: 'latestreleasebanner/htrvol2newrelease.jpg', path: '/unionarena/htr?booster=ex01bt' },
-        { src: 'latestreleasebanner/tekkennewrelease.jpg', path: '/unionarena/tkn' },
-        { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
-        { src: 'latestreleasebanner/kmyncnewrelease.jpg', path: '/unionarena/kmy?booster=ua01nc' },
-        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece/OPST11' },
-    ];
-
-    const comingsoonData = [
-        { src: 'comingsoonbanner/UABT14.webp' },
-        { src: 'comingsoonbanner/UABT15.webp' },
-        { src: 'comingsoonbanner/UABT16.webp' },
-        { src: 'comingsoonbanner/UABT17.webp' },
-        { src: 'comingsoonbanner/UABT18.webp' },
-        { src: 'comingsoonbanner/UABT19.webp' },
-        { src: 'comingsoonbanner/UABT20.webp' },
-    ];
+    const imagedataurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getLatestRelease"
+    useEffect(() => {
+        fetch(imagedataurl)
+            .then(response => response.json())
+            .then(data => {
+                const sortedData = data.sort((a, b) => a.order - b.order);
+                setImageData(sortedData);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
+    const comingsoonurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getComingSoon"
+    useEffect(() => {
+        fetch(comingsoonurl)
+            .then(response => response.json())
+            .then(data => {
+                const sortedData = data.sort((a, b) => a.order - b.order);
+                setComingsoonData(sortedData);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     const handleFilter = (event) => {
         const id = event.target.value;
@@ -213,7 +206,7 @@ const Home = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop:'-10px',gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: '-10px', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                             <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: { xs: '77px', sm: "165px" }, overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
                                 <Button
                                     sx={{
@@ -274,7 +267,7 @@ const Home = () => {
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                            <img src="images/COMINGSOON.png" alt="comingsoon" style={{width:'300px'}}/>
+                            <img src="images/COMINGSOON.png" alt="comingsoon" style={{ width: '300px' }} />
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                                 <Slider {...settings}>
                                     {comingsoonData.map((image, index) => (
@@ -298,7 +291,18 @@ const Home = () => {
                                     <FullCalendar
                                         key={selectedId}
                                         plugins={[listPlugin]}
-                                        initialView={"listYear"}
+                                        initialDate={'2023-01-01'}
+                                        views={{
+                                            multiYear: {
+                                                type: 'list',
+                                                duration: { years: 2 }
+                                            }
+                                        }}
+                                        initialView="multiYear"
+                                        validRange={{
+                                            start: '2023-01-01',
+                                            end: '2024-12-31'
+                                        }}
                                         headerToolbar={{
                                             start: "title",
                                             center: "",
