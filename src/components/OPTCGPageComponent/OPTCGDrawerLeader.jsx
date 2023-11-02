@@ -7,7 +7,7 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, setSelectedImage, setSelecte
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [slidePosition, setSlidePosition] = useState(100);
-    const [dataList, setDataList] = useState([]);  // Array to store fetched data
+    const [dataList, setDataList] = useState([]); 
     const boosters = ['OP01', 'OP02', 'OP03', 'OP04', 'OP05', 'OPST01'
         , 'OPST02', 'OPST03', 'OPST04', 'OPST05', 'OPST06', 'OPST07', 'OPST08', 'OPST09', 'OPST10'];
     const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Black'];
@@ -18,7 +18,7 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, setSelectedImage, setSelecte
         fetch(opldrurl)
             .then(response => response.json())
             .then(data => {
-                setDataList(data.data);  // Assuming data is an array
+                setDataList(data.data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
