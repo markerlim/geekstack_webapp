@@ -42,6 +42,7 @@ import Listofcards from "./pages/Listofcards";
 import Listofnews from "./pages/Listofnews";
 import AcardTKNpage from "./pages/AcardTKNpage";
 import FAQPage from "./pages/FAQPage";
+import AcardFormatpage from "./pages/AcardFormatpage.jsx";
 
 smoothscroll.polyfill();
 
@@ -98,6 +99,7 @@ function App() {
             <Route path="test" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
             <Route path="unionarena" element={<UnionArenaPage />} />
+            <Route path="ua/:animecode" element={<AcardFormatpage/>}/>
             <Route path="unionarena/cgh" element={<AcardCGHpage />} />
             <Route path="unionarena/htr" element={<AcardHTRpage />} />
             <Route path="unionarena/ims" element={<AcardIMSpage />} />
