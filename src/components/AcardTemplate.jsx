@@ -7,6 +7,7 @@ import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from "react-helmet";
+import { CardDrawerTest } from "./CardDrawerTest";
 
 
 const AcardFormat = ({ searchQuery, setSearchQuery }) => {
@@ -132,7 +133,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             if (prev[document.cardId] === undefined) {
                 return {
                     ...prev,
-                    [document.cardId]: 0
+                    [document.cardId]: 1
                 };
             }
 
@@ -431,7 +432,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                                                             document.image
                                                 }
                                                 draggable="false"
-                                                alt={document.cardName}
+                                                alt={`Card of ${document.cardName} from ${document.anime}`}
                                                 width={imageWidth}
                                                 height={imageHeight}
                                             />
@@ -454,7 +455,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                             }
                         })}
                     {selectedCard && (
-                        <CardDrawer
+                        <CardDrawerTest
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}
