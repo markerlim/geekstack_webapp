@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
+import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery, Modal } from "@mui/material";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -132,7 +132,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             if (prev[document.cardId] === undefined) {
                 return {
                     ...prev,
-                    [document.cardId]: 1
+                    [document.cardId]: 0
                 };
             }
 
@@ -247,7 +247,6 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                 console.error('Error fetching data:', error);
             });
     }, [animecode]);
-
 
     return (
         <div style={{ position: 'relative' }}>
@@ -407,7 +406,8 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                                 const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
                                 return altForms.map((form, index) => (
                                     <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
+                                        <Box onClick={() => handleOpenModal(document)}
+                                            sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
                                             <img
                                                 loading="lazy"
                                                 src={form}

@@ -5,7 +5,7 @@ import { Box, Grid, Button } from "@mui/material";
 import { ResponsiveImage } from "./ResponsiveImage";
 import ButtonList from "./UnionArenaBoosterButton";
 import { CircularProgress } from '@mui/material';
-import { CardModalSearch } from "./CardModalSearch";
+import { CardDrawerNF } from "./CardDrawerFormatted";
 
 
 const keysToSearch = ['cardNameLower', 'animeLower', 'colorLower', 'cardNameTokens', 'rarityLower', 'boosterLower', 'category', 'cardId', 'basicpower', 'triggerStateLower'];
@@ -17,8 +17,16 @@ const UACardlist = ({ filters }) => {
     const [loading, setLoading] = useState(true);
     const [slowFetch, setSlowFetch] = useState(false);
 
+    const getCurrentImage = (document) => {
+        let currentImage = document.image;
+        return currentImage;
+    };
     const handleOpenModal = (document) => {
-        setSelectedCard(document);
+        const currentImage = getCurrentImage(document);
+        setSelectedCard({
+            ...document,
+            currentImage: currentImage
+        });
         setOpenModal(true);
     };
 
@@ -26,6 +34,8 @@ const UACardlist = ({ filters }) => {
         setSelectedCard(null);
         setOpenModal(false);
     };
+
+
 
     useEffect(() => {
         const fetchDocuments = async () => {
@@ -108,7 +118,7 @@ const UACardlist = ({ filters }) => {
                             </Grid>
                         ))}
                         {selectedCard && (
-                            <CardModalSearch
+                            <CardDrawerNF
                                 open={openModal}
                                 onClose={handleCloseModal}
                                 selectedCard={selectedCard}

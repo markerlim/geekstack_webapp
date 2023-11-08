@@ -5,7 +5,7 @@ import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
-import { CardDrawer } from "./CardDrawer";
+import { CardDrawerNF } from "./CardDrawerFormatted";
 
 
 const TestRightBar = (props) => {
@@ -152,7 +152,7 @@ const TestRightBar = (props) => {
                         )
                     ))}
                     {selectedCard && (
-                        <CardDrawer
+                        <CardDrawerNF
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}

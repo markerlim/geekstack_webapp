@@ -3,10 +3,10 @@ import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, FormControl, Grid, MenuItem, Select } from "@mui/material";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
-import { CardDrawer } from "./CardDrawer";
 import { AddCircle, ArrowBack, Refresh, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
+import { CardDrawerNF } from "./CardDrawerFormatted";
 
 const DBCardRef = (props) => {
     const [documents, setDocuments] = useState([]);
@@ -283,7 +283,7 @@ const DBCardRef = (props) => {
                     </Grid>
                 ))}
                 {selectedCard && (
-                    <CardDrawer
+                    <CardDrawerNF
                         open={openModal}
                         onClose={handleCloseModal}
                         selectedCard={selectedCard}

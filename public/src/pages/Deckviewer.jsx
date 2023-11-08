@@ -26,9 +26,9 @@ const Deckviewer = () => {
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box height={"86vh"} sx={{marginLeft: { xs: "0px", sm: "0px", md: "100px" },paddingLeft:"15px",paddingRight:"15px"}}><DeckLoader />
+                    <Box height={"86vh"} sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px" }}><DeckLoader />
                     </Box>
-                    </Box>
+                </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>
             </Box>
         </div>

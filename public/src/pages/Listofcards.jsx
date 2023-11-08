@@ -8,6 +8,7 @@ import Decklibrarybtn from "../components/DeckLibraryButtons";
 import { LibraryBooks } from "@mui/icons-material";
 import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
 import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
+import { CardStateProvider } from "../context/useCardState";
 
 const Listofcards = () => {
     return (
@@ -49,11 +50,11 @@ const Listofcards = () => {
                             </Box>
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
-                        <Box overflowX={'auto'} sx={{height:{xs:'400px'}}}>
+                        <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>
                             <Decklibrarybtn />
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
-                        <Box overflowX={'auto'} sx={{height:{xs:'400px'}}}>
+                        <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>
                             <CardStateProviderOnepiece>
                                 <OPDecklibrarybtn />
                             </CardStateProviderOnepiece>

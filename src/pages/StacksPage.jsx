@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { Box } from "@mui/material"
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import BottomNav from "../components/BottomNav"
-import DeckLoader from "../components/DeckLoader";
+import BottomNav from "../components/BottomNav";
 import { Helmet } from "react-helmet";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import PWAPrompt from 'react-ios-pwa-prompt'
+import NavbarHome from "../components/NavbarHome";
+import StackCard from "../components/StacksPageComponent/StackCard";
 
-const Deckviewer = () => {
+const StacksPage = () => {
     useEffect(() => {
         const link = document.createElement("link");
         link.rel = "webmanifest";
@@ -17,16 +20,19 @@ const Deckviewer = () => {
             document.head.removeChild(link);
         };
     }, []);
+
     return (
         <div>
             <Helmet>
                 <meta name="apple-mobile-web-app-capable" content="yes" />
             </Helmet>
+            <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"}>
-                <Navbar />
-                <Box>
+                <NavbarHome />
+                <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box height={"86vh"} sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px" }}><DeckLoader />
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
+                        <StackCard />
                     </Box>
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>
@@ -35,4 +41,4 @@ const Deckviewer = () => {
     );
 }
 
-export default Deckviewer
+export default StacksPage
