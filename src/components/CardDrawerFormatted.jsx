@@ -5,7 +5,7 @@ import { useSwipeable } from "react-swipeable";
 import ErrorLog from "./UAErrorLog";
 
 
-export const CardDrawerTest = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
+export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSize, setShowFullSize] = useState(false);
   const [openErrorLog, setOpenErrorLog] = useState(false);
@@ -67,17 +67,17 @@ export const CardDrawerTest = ({ open, onClose, selectedCard, onSwipeLeft, onSwi
   
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
-    "[Double Block]": "/icons/UAtags/CTBlkx2.png",
-    "[Double Attack]": "/icons/UAtags/CTAtkx2.png",
+    "[Block x2]": "/icons/UAtags/CTBlkx2.png",
+    "[Attack x2]": "/icons/UAtags/CTAtkx2.png",
     "[Snipe]": "/icons/UAtags/CTSnipe.png",
     "[Impact +1]": "/icons/UAtags/CTImpact+1.png",
     "[Step]": "/icons/UAtags/CTStep.png",
     "[Damage 2]": "/icons/UAtags/CTDmg2.png",
+    "[Damage 3]": "/icons/UAtags/CTDmg3.png",
     "[Impact Negate]": "/icons/UAtags/CTImpactNegate.png",
     "(Once Per Turn)": "/icons/UAtags/CTOncePerTurn.png",
     "(Rest this card)": "/icons/UAtags/CTRestThisCard.png",
     "(Retire this card)": "/icons/UAtags/CTRetirethiscard.png",
-    "(When in Front Line)": "/icons/UAtags/CTWhenInFrontLine.png",
     "(When In Front Line)": "/icons/UAtags/CTWhenInFrontLine.png",
     "(Pay 1 AP)": "/icons/UAtags/CTPay1AP.png",
     "[Raid]": "/icons/UAtags/CTRaid.png",

@@ -12,18 +12,6 @@ import { setToLocalStorage } from "./components/LocalStorage/localStorageHelper"
 import Deckviewer from "./pages/Deckviewer";
 import DeckCardLoader from "./pages/DeckCardLoader";
 import smoothscroll from "smoothscroll-polyfill";
-import AcardCGHpage from "./pages/AcardCGHpage";
-import AcardHTRpage from "./pages/AcardHTRpage";
-import AcardIMSpage from "./pages/AcardIMSpage";
-import AcardJJKpage from "./pages/AcardJJKpage";
-import AcardKMYpage from "./pages/AcardKMYpage";
-import AcardTOApage from "./pages/AcardTOApage";
-import AcardTSKpage from "./pages/AcardTSKpage";
-import AcardBLCpage from "./pages/AcardBLCpage";
-import AcardBTRpage from "./pages/AcardBTRpage";
-import AcardMHApage from "./pages/AcardMHApage";
-import AcardGNTpage from "./pages/AcardGNTpage";
-import AcardBLKpage from "./pages/AcardBLKpage";
 import Articleviewer from "./pages/Articleviewer";
 import DigimonPage from "./pages/DigimonPage";
 import ProfilePage from "./pages/ProfilePage.jsx";
@@ -40,7 +28,6 @@ import DTCGDeckbuilder from "./pages/DTCGDeckbuilder";
 import OPTCGDeckbuilder from "./pages/OPTCGDeckbuilder";
 import Listofcards from "./pages/Listofcards";
 import Listofnews from "./pages/Listofnews";
-import AcardTKNpage from "./pages/AcardTKNpage";
 import FAQPage from "./pages/FAQPage";
 import AcardFormatpage from "./pages/AcardFormatpage.jsx";
 
@@ -99,20 +86,7 @@ function App() {
             <Route path="test" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
             <Route path="unionarena" element={<UnionArenaPage />} />
-            <Route path="ua/:animecode" element={<AcardFormatpage/>}/>
-            <Route path="unionarena/cgh" element={<AcardCGHpage />} />
-            <Route path="unionarena/htr" element={<AcardHTRpage />} />
-            <Route path="unionarena/ims" element={<AcardIMSpage />} />
-            <Route path="unionarena/jjk" element={<AcardJJKpage />} />
-            <Route path="unionarena/kmy" element={<AcardKMYpage />} />
-            <Route path="unionarena/toa" element={<AcardTOApage />} />
-            <Route path="unionarena/tsk" element={<AcardTSKpage />} />
-            <Route path="unionarena/blc" element={<AcardBLCpage />} />
-            <Route path="unionarena/btr" element={<AcardBTRpage />} />
-            <Route path="unionarena/mha" element={<AcardMHApage />} />
-            <Route path="unionarena/gnt" element={<AcardGNTpage />} />
-            <Route path="unionarena/blk" element={<AcardBLKpage />} />
-            <Route path="unionarena/tkn" element={<AcardTKNpage />} />
+            <Route path="unionarena/:animecode" element={<AcardFormatpage/>}/>
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="digimon" element={<DigimonPage />} />
             <Route path="/digimon/:booster" element={<DTCGBTpage />} />

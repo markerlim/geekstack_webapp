@@ -2,17 +2,18 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
-import { CardDrawer } from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from "react-helmet";
+import { CardDrawerNF } from "./CardDrawerFormatted";
 
 
 const AcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [carddata, setCarddata] = useState([]);
     const uaboosterurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getUABoosterDatabase"
-    const { animecode } = useParams();
+    const { animecode: rawAnimecode } = useParams();
+    const animecode = rawAnimecode.toUpperCase();
     const [listOfBoosters, setListofBoosters] = useState([]);
     const [listOfColors, setListofColors] = useState([]);
     const [listOfRarities, setListofRarities] = useState([]);
@@ -131,7 +132,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             if (prev[document.cardId] === undefined) {
                 return {
                     ...prev,
-                    [document.cardId]: 0
+                    [document.cardId]: 1
                 };
             }
 
@@ -207,13 +208,13 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             .then(response => response.json())
             .then(data => {
                 setCarddata(data);
-    
+
                 // After fetching the card data, find the anime details based on the animecode
                 const animeDetails = data.find(data => data.animecode === animecode);
-    
+
                 if (animeDetails) {
                     const currentAnime = animeDetails.currentAnime;
-    
+
                     // Fetch documents using the currentAnime directly
                     const fetchDocuments = async () => {
                         const filteredQuery = query(collection(db, "unionarenatcg"), where("anime", "==", currentAnime));
@@ -231,10 +232,10 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                         setAltForms(initialAltForms);
                         console.log(`Number of reads: ${documentsArray.length}`);
                     };
-    
+
                     fetchDocuments();
-    
-                    // Set other details
+
+                    setAnimeFilter(animeDetails.currentAnime);
                     setListofBoosters(animeDetails.listofboosters || []);
                     setListofColors(animeDetails.listofcolors || []);
                     setListofRarities(animeDetails.listofrarities || []);
@@ -246,7 +247,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                 console.error('Error fetching data:', error);
             });
     }, [animecode]);
-    
+
 
     return (
         <div style={{ position: 'relative' }}>
@@ -430,7 +431,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                                                             document.image
                                                 }
                                                 draggable="false"
-                                                alt={document.cardName}
+                                                alt={`Card of ${document.cardName} from ${document.anime}`}
                                                 width={imageWidth}
                                                 height={imageHeight}
                                             />
@@ -453,7 +454,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                             }
                         })}
                     {selectedCard && (
-                        <CardDrawer
+                        <CardDrawerNF
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}

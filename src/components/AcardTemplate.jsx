@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
-import { CardDrawer } from "./CardDrawer";
 import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
 import searchMatch from "./searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from "react-helmet";
-import { CardDrawerTest } from "./CardDrawerTest";
+import { CardDrawerNF } from "./CardDrawerFormatted";
 
 
 const AcardFormat = ({ searchQuery, setSearchQuery }) => {
@@ -236,7 +235,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
 
                     fetchDocuments();
 
-                    // Set other details
+                    setAnimeFilter(animeDetails.currentAnime);
                     setListofBoosters(animeDetails.listofboosters || []);
                     setListofColors(animeDetails.listofcolors || []);
                     setListofRarities(animeDetails.listofrarities || []);
@@ -455,7 +454,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                             }
                         })}
                     {selectedCard && (
-                        <CardDrawerTest
+                        <CardDrawerNF
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}
