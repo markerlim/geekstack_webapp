@@ -132,7 +132,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             if (prev[document.cardId] === undefined) {
                 return {
                     ...prev,
-                    [document.cardId]: 0
+                    [document.cardId]: 1
                 };
             }
 
@@ -151,6 +151,9 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             };
         });
     };
+    useEffect(()=>{
+        console.log(altFormIndex)
+    },[altFormIndex])
     useEffect(() => {
         if (onlyAltForm) {
             setAltForms(prev => {
