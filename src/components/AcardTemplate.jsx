@@ -126,7 +126,6 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
         setImageWidth(newValue);
     };
     const handleFormChange = (event, document) => {
-        console.log(altFormIndex);
         event.stopPropagation(); // Prevent event from bubbling up
         setAltFormIndex(prev => {
             // Check if the document.cardId exists in the prev state
@@ -152,6 +151,9 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             };
         });
     };
+    useEffect(()=>{
+        console.log(altFormIndex)
+    },[altFormIndex])
     useEffect(() => {
         if (onlyAltForm) {
             setAltForms(prev => {
