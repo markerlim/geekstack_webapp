@@ -5,6 +5,8 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import DeckLoader from "../components/DeckLoader";
 import { Helmet } from "react-helmet";
+import Decklibrarybtn from "../components/DeckLibraryButtons";
+import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
 
 const Deckviewer = () => {
     useEffect(() => {
@@ -26,7 +28,9 @@ const Deckviewer = () => {
                 <Navbar />
                 <Box>
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box height={"86vh"} sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px" }}><DeckLoader />
+                    <Box height={"86vh"} sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },display:'flex',flexDirection:"column" }}>
+                        <br/>
+                        <Decklibrarybtn />
                     </Box>
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>

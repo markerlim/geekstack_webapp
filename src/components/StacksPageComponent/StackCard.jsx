@@ -11,7 +11,7 @@ const StackCard = () => {
         content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
     }]
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100vw', gap: '15px', paddingTop: '20px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', width:{xs:'100vw',sm:'100vw',md:'calc(100vw - 100px)'}, gap: '15px', paddingTop: '20px' }}>
             {dataset.map((data) => (<>
                 <Box sx={{ width: '100vw', paddingLeft: '30px', display: 'flex', flexDirection: 'column', gap: '1px' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '7px', alignItems: 'top' }}>

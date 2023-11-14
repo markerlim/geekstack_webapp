@@ -24,7 +24,6 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
     return cards;
   };
 
-
   const handleDeckClick = async (deck) => {
     const cards = await loadDeckCards(deck.id);
 
@@ -92,7 +91,7 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        justifyContent:"center",
+        justifyContent: "center",
         flexWrap: "wrap",
         color: "#121212",
         overflowY: "auto",
@@ -134,7 +133,7 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
               handleDeleteDeck(deck.id);
             }}
           >
-            <Delete/>
+            <Delete />
           </Button>
         </Box>
 

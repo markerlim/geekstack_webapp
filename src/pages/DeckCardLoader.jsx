@@ -264,7 +264,7 @@ const DeckCardLoader = () => {
                   }
                 </div>
                 <br></br>
-                <Box width="100%" textAlign="center"><button onClick={exportDeckAsJpeg} style={{ cursor: "pointer" }}>Export as JPEG</button></Box>
+                <Box width="100%" textAlign="center">Export Function is now in deckbuilder and moving forward this page will phase out soon as we upgrade our interface.</Box>
               </Box>
             </Box>
           </Box>

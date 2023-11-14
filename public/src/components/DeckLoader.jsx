@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs, deleteDoc, doc, addDoc, setDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { Box, Button, ButtonBase, Modal, TextField } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Delete } from "@mui/icons-material";
 
@@ -15,8 +15,6 @@ const DeckLoader = () => {
   const [cards, setCards] = useState([]);
   const [deckType, setDeckType] = useState(null); // 'tournament' or 'casuals'
   const [editedDeckName, setEditedDeckName] = useState("");
-
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,7 +112,6 @@ const DeckLoader = () => {
     }
     setEditedDeckName(e.target.value);
   };
-
 
   const handleShareDeck = async (deck, description, selectedCards) => {
     try {

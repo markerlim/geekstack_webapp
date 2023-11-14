@@ -11,12 +11,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FullScreenDialog from "./FullScreenDialog";
-import { collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ImagePickerModal from "./ImagePickerModal";
 import { toJpeg } from "html-to-image";
 import UATCGExport from "./UAExportTemplate";
+import { useLocation } from "react-router-dom";
 
 
 const DeckBuilderBar = (props) => {
@@ -27,6 +28,7 @@ const DeckBuilderBar = (props) => {
   const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false); // State to manage the visibility of the DeckLoader modal
   const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
   const [loadedDeckUid, setLoadedDeckUid] = useState(null);
+  const [deckDetails, setDeckDetails] =useState([]);
   const [saveStatus, setSaveStatus] = useState(null);
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -36,6 +38,10 @@ const DeckBuilderBar = (props) => {
   const [isExporting, setIsExporting] = useState(false);
   const [exportImage, setExportImage] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const [deckUidParams, setDeckUidParams] = useState(searchParams.get("deckUid") || "");
+  const [loadedFromParams, setLoadedFromParams] = useState(false);
 
   const images = [
     "/images/deckimage.jpg",
@@ -57,11 +63,9 @@ const DeckBuilderBar = (props) => {
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
   const handleClearClick = () => {
     setCountArray({});
     setToLocalStorage("countArray", {});
@@ -71,13 +75,15 @@ const DeckBuilderBar = (props) => {
     setIsUpdatingExistingDeck(false); // Set isUpdatingExistingDeck to false
     setSelectedImage(null);
     setFilteredCards([]);
+    setDeckUidParams("");
+    const currentPath = window.location.pathname;
+    window.history.pushState({}, '', currentPath);
   };
 
   const totalCount = Object.values(countArray).reduce(
     (accumulator, count) => accumulator + count,
     0
   );
-
   // Filter the cards based on the triggerState that are color
   const colorCards = filteredCards.filter(card => card.triggerState === "Color");
   const colorCount = colorCards.reduce(
@@ -90,14 +96,12 @@ const DeckBuilderBar = (props) => {
     (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
     0
   );
-
   // Filter the cards based on the triggerState that are final
   const finalCards = filteredCards.filter(card => card.triggerState === "Final");
   const finalCount = finalCards.reduce(
     (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
     0
   );
-
   const calculateStats = () => {
     const energyCounts = filteredCards.reduce((acc, card) => {
       acc[card.energycost] = (acc[card.energycost] || 0) + card.count;
@@ -106,9 +110,7 @@ const DeckBuilderBar = (props) => {
 
     return energyCounts;
   };
-
   const stats = calculateStats();
-
   const handleExportClick = () => {
     if (totalCount < 50) {
       alert("You cannot export a deck with less than 50 cards.");
@@ -144,7 +146,6 @@ const DeckBuilderBar = (props) => {
     }
     handleMenuClose();
   };
-
   const handleSaveClick = async (proceed = false) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
@@ -220,21 +221,31 @@ const DeckBuilderBar = (props) => {
           } else {
             if (card) {
               const cardData = {
+                altforms: card.altforms,
                 anime: card.anime,
+                animeLower: card.animeLower,
                 apcost: card.apcost,
+                banRatio: card.banRatio,
                 basicpower: card.basicpower,
                 booster: card.booster,
+                boosterLower: card.boosterLower,
                 cardId: card.cardId,
                 cardName: card.cardName,
+                cardNameLower: card.cardNameLower,
+                cardNameTokens: card.cardNameTokens,
                 category: card.category,
                 color: card.color,
+                colorLower: card.colorLower,
                 effect: card.effect,
                 energycost: card.energycost,
                 energygen: card.energygen,
                 image: card.image,
+                rarity: card.rarity,
+                rarityLower: card.rarityLower,
                 traits: card.traits,
                 trigger: card.trigger,
                 triggerState: card.triggerState,
+                triggerStateLower: card.triggerStateLower,
                 count: cardCount,
               };
               await setDoc(cardDocRef, cardData);
@@ -259,16 +270,17 @@ const DeckBuilderBar = (props) => {
       setSaveStatus("error");
     }
   };
-
   const handleProceedSave = () => {
     setShouldSaveDeck(true);
     handleSaveClick(true);
     setShowConfirmDialog(false);
     handleMenuClose();
   };
-
   const handleLoadDeckClick = () => {
     setShowDeckLoaderModal(true); // Open the DeckLoader modal
+    setDeckUidParams("");
+    const currentPath = window.location.pathname;
+    window.history.pushState({}, '', currentPath);
     handleMenuClose();
   };
 
@@ -312,6 +324,40 @@ const DeckBuilderBar = (props) => {
     }
   };
 
+  const fetchDeckDetails = async (deckUid) => {
+    if (!currentUser || !deckUid) {
+      return;
+    }
+
+    const uid = currentUser.uid;
+    try {
+      const deckRef = doc(db, `users/${uid}/decks`, deckUid);
+      const deckSnapshot = await getDoc(deckRef);
+
+      if (deckSnapshot.exists()) {
+        const data = deckSnapshot.data();
+        return {
+          id: deckSnapshot.id,
+          name: data.deckName,
+          description: data.description,
+          colorCount: data.colorCount,
+          specialCount: data.specialCount,
+          finalCount: data.finalCount,
+          image: data.image,
+          ...data,
+        };
+      } else {
+        // Handle the case where the deck does not exist
+        console.log("No such deck!");
+        return null;
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error("Error fetching deck details: ", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (selectedImage && shouldSaveDeck) {
       handleSaveClick(true);
@@ -323,6 +369,61 @@ const DeckBuilderBar = (props) => {
     }
   }, [selectedImage, shouldSaveDeck, handleSaveClick]);
 
+  const loadDeckCards = async (deckId) => {
+    const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deckId}/cards`));
+    const cards = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      cards.push({
+        id: doc.id,
+        ...data,
+      });
+    });
+    return cards;
+  };
+  const handleDeckClick = async (deck) => {
+    const cards = await loadDeckCards(deck.id);
+
+    const newCountArray = {};
+    const newFilteredCards = [];
+
+    cards.forEach((card) => {
+      // Update newCountArray with the new count for each card
+      newCountArray[card.id] = (newCountArray[card.id] || 0) + card.count;
+
+      // Update newFilteredCards
+      const existingCardIndex = newFilteredCards.findIndex((newCard) => newCard.id === card.id);
+      if (existingCardIndex !== -1) {
+        newFilteredCards[existingCardIndex].count += card.count;
+      } else {
+        newFilteredCards.push(card);
+      }
+    });
+    // Update CardState with the new countArray and filteredCards values
+    setCountArray(newCountArray);
+    setFilteredCards(newFilteredCards);
+    handleDeckLoaded(deck.id, deck.deckuid, deck.name, deck.image);
+  };
+  
+  useEffect(() => {
+    const loadDeckData = async () => {
+      if (deckUidParams && deckUidParams.trim() !== "") {
+        try {
+          // Assuming fetchDeckDetails is an async function that returns deck details
+          const deckDetails = await fetchDeckDetails(deckUidParams);
+          if (deckDetails) {
+            // Call handleDeckClick with the fetched deck details
+            await handleDeckClick(deckDetails);
+          }
+        } catch (error) {
+          console.error("Error loading deck details:", error);
+        }
+      }
+    };
+  
+    loadDeckData();
+  }, [deckUidParams]); // Dependency array includes deckUidParams
+  
 
   useEffect(() => {
     if (viewDeckbar) {
@@ -485,6 +586,9 @@ const DeckBuilderBar = (props) => {
         open={showDeckLoaderModal}
         handleClose={() => setShowDeckLoaderModal(false)}
         handleDeckLoaded={(deckName, deckUid, loadedDeckName, deckimage) => handleDeckLoaded(deckName, deckUid, loadedDeckName, deckimage)}
+        loadedFromParams={loadedFromParams}
+        setLoadedFromParams={setLoadedFromParams}
+        deckDetails={deckDetails}
       />
       <Snackbar
         open={saveStatus === "success"}

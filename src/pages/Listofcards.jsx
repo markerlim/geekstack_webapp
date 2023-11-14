@@ -4,7 +4,7 @@ import { Box, Button, } from "@mui/material"
 
 import NavbarHome from "../components/NavbarHome";
 import { Link } from "react-router-dom";
-import Decklibrarybtn from "../components/DeckLibraryButtons";
+import DecklibrarybtnMobile from "../components/DeckLibraryButtonsMobile";
 import { LibraryBooks } from "@mui/icons-material";
 import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
 import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
@@ -51,7 +51,7 @@ const Listofcards = () => {
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>
-                            <Decklibrarybtn />
+                            <DecklibrarybtnMobile />
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>

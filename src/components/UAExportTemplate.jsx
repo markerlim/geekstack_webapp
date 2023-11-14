@@ -17,7 +17,7 @@ const UATCGExport = ({ filteredCards, exportImage, currentUser }) => {
                     alt="boosterset"
                     style={{ width: '300px', height: 'auto', borderRadius: '20px', border: '10px #7C4FFF solid' }}
                 />
-                <Box style={{ color: '#FFFFFF', fontSize: '30px' }}>
+                <Box style={{ color: '#FFFFFF', fontSize: '30px', flex:'0 0 auto' }}>
                     {currentUser.displayName.length > 15 ? `${currentUser.displayName.substring(0, 15)}...` : currentUser.displayName}
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>

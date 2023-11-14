@@ -245,6 +245,14 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                 } else {
                     console.error(`No anime details found for code: ${animecode}`);
                 }
+
+                const queryParams = new URLSearchParams(window.location.search);
+                const boosterParam = queryParams.get('booster');
+            
+                // Set the booster filter if the parameter exists
+                if (boosterParam) {
+                    setBoosterFilter(boosterParam.toUpperCase());
+                }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);

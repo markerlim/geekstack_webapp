@@ -14,7 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullScreenDialog = ({ open, handleClose, handleDeckLoaded }) => {
+const FullScreenDialog = ({ open, handleClose, handleDeckLoaded, loadedFromParams, setLoadedFromParams, deckUidParams}) => {
   return (
     <div>
       <Dialog
@@ -42,7 +42,7 @@ const FullScreenDialog = ({ open, handleClose, handleDeckLoaded }) => {
           </Toolbar>
         </AppBar>
         <Box width="100%" height="100%"> {/* Add a Box component with 100% width and height */}
-          <LoadtoDeckbuilder onDeckLoaded={handleDeckLoaded} />
+          <LoadtoDeckbuilder onDeckLoaded={handleDeckLoaded}/>
         </Box>
       </Dialog>
     </div>

@@ -67,11 +67,13 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
   
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
+    "[Impact]": "/icons/UAtags/CTImpact.png",
     "[Block x2]": "/icons/UAtags/CTBlkx2.png",
     "[Attack x2]": "/icons/UAtags/CTAtkx2.png",
     "[Snipe]": "/icons/UAtags/CTSnipe.png",
     "[Impact +1]": "/icons/UAtags/CTImpact+1.png",
     "[Step]": "/icons/UAtags/CTStep.png",
+    "[Damage]": "/icons/UAtags/CTDmg.png",
     "[Damage 2]": "/icons/UAtags/CTDmg2.png",
     "[Damage 3]": "/icons/UAtags/CTDmg3.png",
     "[Impact Negate]": "/icons/UAtags/CTImpactNegate.png",
@@ -80,6 +82,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[Retire this card]": "/icons/UAtags/CTRetirethiscard.png",
     "[Place 1 card from hand to Outside Area]":"/icons/UAtags/CT1HandtoOA.png",
     "[When In Front Line]": "/icons/UAtags/CTWhenInFrontLine.png",
+    "[When In Energy Line]": "/icons/UAtags/CTWhenInEnergyLine.png",
     "[Pay 1 AP]": "/icons/UAtags/CTPay1AP.png",
     "[Raid]": "/icons/UAtags/CTRaid.png",
     "[On Play]": "/icons/UAtags/CTOnPlay.png",

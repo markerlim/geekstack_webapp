@@ -63,7 +63,7 @@ const Home = () => {
             end: "2023-12-22",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Drstoneicon.jpg",
+            icon: "/icons/UAtags/DrStoneicon.jpg",
         },
         {
             title: "UAXXBT Sword Art Online",

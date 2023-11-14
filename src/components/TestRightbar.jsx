@@ -6,6 +6,7 @@ import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
 import { CardDrawerNF } from "./CardDrawerFormatted";
+import { useParams } from "react-router-dom";
 
 
 const TestRightBar = (props) => {
@@ -30,15 +31,18 @@ const TestRightBar = (props) => {
         setOpenModal(false);
     };
 
-    const MAX_COUNT = 4;
-
     const increase = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
+
+            // Get the specific card's banRatio
+            const card = filteredCards.find(doc => doc.cardId === cardId);
+            const cardMaxCount = card ? card.banRatio : 0;  // default to 0 if card is not found
+
             if (!newArray[cardId]) {
                 newArray[cardId] = 0;
             }
-            if (newArray[cardId] < MAX_COUNT) {
+            if (newArray[cardId] < cardMaxCount) {
                 newArray[cardId]++;
             }
             setToLocalStorage("countArray", newArray);
@@ -56,7 +60,6 @@ const TestRightBar = (props) => {
             return newArray; // Update the countArray state without triggering the updateFilteredCards function
         });
     };
-
 
     const handleLocalStorageUpdate = (event) => {
         if (event.key === "filteredCards") {
@@ -87,7 +90,6 @@ const TestRightBar = (props) => {
             setSnackbarOpen(false);
         }
     }, [filteredCards]);
-
 
     useEffect(() => {
         const initialCountArray = documents.reduce((accumulator, document) => {
