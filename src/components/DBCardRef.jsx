@@ -265,7 +265,7 @@ const DBCardRef = (props) => {
                             />
                             {
                                 document.banRatio !== "4" && (
-                                    <Box sx={{ width: '25px', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
+                                    <Box sx={{ width: '25px',color:'#f2f3f8', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
                                         {document.banRatio}
                                     </Box>
                                 )

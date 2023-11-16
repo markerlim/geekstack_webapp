@@ -6,8 +6,6 @@ import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
 import { CardDrawerNF } from "./CardDrawerFormatted";
-import { useParams } from "react-router-dom";
-
 
 const TestRightBar = (props) => {
     const [documents, setDocuments] = useState([]);
@@ -112,7 +110,7 @@ const TestRightBar = (props) => {
             }
             return a.category.localeCompare(b.category);
         });
-
+        console.log(filteredCards,'just a test');
         setSortedCards(sorted);
     }, [filteredCards]);
 
@@ -132,7 +130,7 @@ const TestRightBar = (props) => {
                     {sortedCards.map((document) => (
                         countArray[document.cardId] > 0 && (
                             <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
-                                <Box>
+                                <Box sx={{position:'relative'}}>
                                     <ResponsiveImage
                                         loading="lazy"
                                         src={document.image}
@@ -140,6 +138,13 @@ const TestRightBar = (props) => {
                                         alt="loading..."
                                         onClick={() => handleOpenModal(document)}
                                     />
+                                    {
+                                        document.banRatio !== "4" && (
+                                            <Box sx={{ width: '25px', color: '#f2f3f8', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
+                                                {document.banRatio}
+                                            </Box>
+                                        )
+                                    }
                                     <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"}>
                                         <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
                                             <RemoveCircle sx={{ fontSize: 20 }} />
