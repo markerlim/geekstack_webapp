@@ -81,6 +81,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[Rest this card]": "/icons/UAtags/CTRestThisCard.png",
     "[Retire this card]": "/icons/UAtags/CTRetirethiscard.png",
     "[Place 1 card from hand to Outside Area]":"/icons/UAtags/CT1HandtoOA.png",
+    "[Place 2 card from hand to Outside Area]":"/icons/UAtags/CT2HandtoOA.png",
     "[When In Front Line]": "/icons/UAtags/CTWhenInFrontLine.png",
     "[When In Energy Line]": "/icons/UAtags/CTWhenInEnergyLine.png",
     "[Pay 1 AP]": "/icons/UAtags/CTPay1AP.png",

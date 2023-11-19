@@ -174,6 +174,7 @@ const HomepageDashboard = () => {
         </div>
       )}
       <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", paddingLeft: "15px", paddingRight: "15px", gap: "20px", height: { xs: 248, sm: 360 }, }}>
+        <Box sx={{width:'30px'}}></Box>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <CircularProgress />
@@ -218,6 +219,7 @@ const HomepageDashboard = () => {
             <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You currently have no favourites. Do star them to add the pages to your favorite.</span>
           </Box>
         )}
+        <Box sx={{width:'30px'}}></Box>
       </Box>
     </>
   );
