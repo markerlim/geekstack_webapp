@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "../components/NavbarHome";
 import StackCard from "../components/StacksPageComponent/StackCard";
+import CardStackFlood from "../components/StacksPageComponent/CardStackFlood";
 
 const StacksPage = () => {
     useEffect(() => {
@@ -32,7 +33,7 @@ const StacksPage = () => {
                 <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
-                        <StackCard />
+                        <CardStackFlood />
                     </Box>
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>

@@ -340,12 +340,13 @@ const Home = () => {
                             <Collapse in={open}>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Launched New Card Selection for Demon Slayer and Jujutsu No Kaisen
+                                    <br />Release of UNION ARENA EX02BT 
+                                    <br />Release of ONEPIECE OP06
                                     <br />
                                 </div>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Next Update:</strong>
-                                    <br />Addition of New Extra Booster and Tekken (When effects are released)
+                                    <br />-
                                     <br />
                                 </div>
                             </Collapse>

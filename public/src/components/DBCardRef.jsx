@@ -122,7 +122,7 @@ const DBCardRef = (props) => {
     }, [documents, animeFilter]);
 
     const animeData = [
-        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST'], colorsets: ['Red', 'Green', 'Purple'] },
+        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST','EX02BT'], colorsets: ['Red', 'Green','Blue', 'Purple'] },
         { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC'], colorsets: ['Blue', 'Yellow', 'Purple'] },
         { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
         { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
@@ -265,7 +265,7 @@ const DBCardRef = (props) => {
                             />
                             {
                                 document.banRatio !== "4" && (
-                                    <Box sx={{ width: '25px', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
+                                    <Box sx={{ width: '25px',color:'#f2f3f8', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
                                         {document.banRatio}
                                     </Box>
                                 )
