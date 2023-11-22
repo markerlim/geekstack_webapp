@@ -122,7 +122,7 @@ const DBCardRef = (props) => {
     }, [documents, animeFilter]);
 
     const animeData = [
-        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST','EX02BT'], colorsets: ['Red', 'Green','Blue', 'Purple'] },
+        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST','EX02BT'], colorsets: ['Red', 'Green','Blue','Purple'] },
         { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC'], colorsets: ['Blue', 'Yellow', 'Purple'] },
         { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
         { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST'], colorsets: ['Red', 'Blue', 'Yellow'] },

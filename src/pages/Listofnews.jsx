@@ -8,6 +8,7 @@ import Sidebar from "../components/Sidebar";
 
 const Listofnews = () => {
     const imageData = [
+        { src: 'latestreleasebanner/cghvol2newrelease.jpg', path: '/unionarena/cgh?booster=ex02bt' },
         { src: 'latestreleasebanner/htrvol2newrelease.jpg', path: '/unionarena/htr?booster=ex01bt' },
         { src: 'latestreleasebanner/tekkennewrelease.jpg', path: '/unionarena/tkn' },
         { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
