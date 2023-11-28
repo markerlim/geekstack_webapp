@@ -24,7 +24,7 @@ const OPTCGCardlist = ({ filters }) => {
     typing_lower_token: [],
     typing_lower: [],
     cardname_lower_token: [],
-    booster_lower: ["op01", "op02", "op03", "op04", "op05", "st01", "st02", "st03", "st04", "st05", "st06", "st07", "st08", "st09", "st10"], // Same here
+    booster_lower: ["op01", "op02", "op03", "op04", "op05", "op06", "st01", "st02", "st03", "st04", "st05", "st06", "st07", "st08", "st09", "st10", "st11", "st12"], // Same here
     category: ["character", "event", "stage"]
   }
 
