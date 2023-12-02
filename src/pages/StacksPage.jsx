@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "../components/NavbarHome";
-import StackCard from "../components/StacksPageComponent/StackCard";
 import CardStackFlood from "../components/StacksPageComponent/CardStackFlood";
 
 const StacksPage = () => {

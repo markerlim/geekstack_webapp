@@ -68,11 +68,11 @@ const LeakOfTheDay = () => {
     };
 
     const dataset = [{
-        src: '/UD/JJK-2-004.webp', photoURL: '/UD/JJK-2-004.webp', name: 'Admin',
-        content: 'New Card Leak', effect: '[Your Turn] [When In Front Line] If there is a <Getou Suguru> on the same line, this character gains [Damage 2].\n[On Retire] Look at the top 3 card of your deck. Reveal up to 1 <Gojo Satoru>, <Ieiri Shoko> or <Getou Suguru> card among them and add it to your hand. Place the remaining at the bottom of your deck in any order. If you added a card, place 1 card from your hand to the Outside Area.'
+        src: 'https://firebasestorage.googleapis.com/v0/b/geek-stack.appspot.com/o/cardleaks%2FDST-1-107-LEAK.png?alt=media&token=f7756c84-7bb5-460d-9596-1a850dc5abf0', photoURL: '/UD/JJK-2-004.webp', name: 'Admin',
+        content: 'New Card Leak', effect: '[Raid] <Ishigami Senku> (active this character, you may move it to the frontline).\n[On Play] Choose up to 1 character on your area with a face-down card under it, add the face-down card under that character to your hand and place 1 card from your hand to the Outside Area. Set the chosen character to active.\n[On Retire] You may place 1 <Revival Fluid> from your hand to the Outside Area. If you did, play this character to your area rested or add it to your hand.'
     }, {
-        src: '/UD/JJK-2-003.webp', photoURL: '/UD/JJK-2-003.webp', name: 'Admin',
-        content: 'New Card Leak', effect: '[Your Turn] [When In Front Line] If there is a <Gojo Satoru> on the same line, this character and all <Gojo Satoru> on your Front Line gets +500 BP.\n[Activate Main] [Place 1 card from hand to Outside Area] [Once Per Turn] This character gains [This character also generates energy on the Front Line] during this turn. '
+        src: 'https://firebasestorage.googleapis.com/v0/b/geek-stack.appspot.com/o/cardleaks%2FDST-1-105-LEAK.png?alt=media&token=1249feb3-4af3-425c-9140-4af43b7e93fc', photoURL: '/UD/JJK-2-003.webp', name: 'Admin',
+        content: 'New Card Leak', effect: 'If there is face-down card under this character, it may not active.\n[Impact 1] (When attacks and wins the battle, it deals 1 damage to your opponent)\n[Your Turn] This character gets +1000 BP.\n[On Play] Place the top card of your deck under this character face-down.'
     }]
     const settings = {
         customPaging: function (i) {
@@ -157,30 +157,30 @@ const LeakOfTheDay = () => {
         <Box sx={{ width: '100vw', height: '240px' }}>
             <Slider {...settings}>
                 {dataset.map((data, index) => (
-                    <Box sx={{ backgroundColor: '#26262d', height: '270px', display: 'flex !important', justifyContent: 'center', alignItems: 'center' }}>
+                    <Box sx={{ backgroundColor: '#26262d', height: '250px', display: 'flex !important', justifyContent: 'center', alignItems: 'center' }}>
                         <Box key={index} sx={{
                             paddingTop: '0px', flex: '0 0 auto',
                             width: '200px',
-                            height: data.src ? '230px' : '120px',
-                            backgroundColor: '#f2f3f8',
+                            height: '200px',
+                            backgroundColor: '#121212',
                             borderRadius: '10px',
                             position: 'relative',
-                            border: 'none',
+                            border: '3px solid #7C4FFF',
                             overflow: 'hidden',
                         }}
                             onClick={() => handleDrawerOpen(data)}>
                             <Box sx={{ width: 'inherit', height: data.src ? '140px' : '0px', display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#26262d', overflow: 'hidden', }}>
                                 {data.src && <img src={data.src} alt='name' style={{ width: '200px', height: 'calc(200px * 1.395)', marginTop: '-45px' }} />}
                             </Box>
-                            <Box sx={{ display: 'flex', flexDirection: 'row', position: 'absolute', left: '0px', top: data.src ? '120px' : '0px', }}>
-                                <Box sx={{ borderRadius: '30px', border: '3px solid #f2f3f8', width: '40px', height: '40px', overflow: 'hidden' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', position: 'absolute', left: '5px',gap:'5px', top: '120px' }}>
+                                <Box sx={{ borderRadius: '30px', border: '3px solid #121212', width: '40px', height: '40px', overflow: 'hidden' }}>
                                     <img src={data.photoURL} alt={data.photoURL} style={{ width: '40px', height: 'auto' }} />
                                 </Box>
-                                <Box sx={{ fontSize: '14px', color: '#121212', fontWeight: '900', marginTop: data.src ? '22px' : '10px', }}>{data.name}</Box>
+                                <Box sx={{ fontSize: '14px', color: '#f2f8fc', fontWeight: '900', marginTop: data.src ? '22px' : '10px', }}>{data.name}</Box>
                             </Box>
                             <Box sx={{
                                 display: 'flex', flexDirection: 'column', gap: '7px', width: '160px',
-                                color: '#121212', height: data.src ? '70px' : '100px', fontSize: '10px', paddingLeft: '10px', paddingRight: '5px', justifyContent: 'start', flex: 'none'
+                                color: '#f2f8fc', fontSize: '10px', paddingLeft: '10px', paddingRight: '5px', justifyContent: 'start', flex: 'none'
                             }}>
                                 <Box sx={{ height: data.src ? '16px' : '40px', }}></Box>
                                 {data.content.split('\n').map((line, i) => (
@@ -198,7 +198,7 @@ const LeakOfTheDay = () => {
                 ))}
             </Slider>
             <SwipeableDrawer anchor="right" open={drawerOpen} onClose={handleDrawerClose} onSwipeRight={handleDrawerClose} onSwipeableClose={handleDrawerClose} onSwiped={handleSwipe}>
-                <Box sx={{ width: 'calc(95vw - 60px)', height: 'calc(100vh - 60px)', padding: '30px', backgroundColor: '#26252d',overflowY:'auto' }}>
+                <Box sx={{ width: 'calc(95vw - 60px)', height: 'calc(100vh - 60px)', padding: '30px', backgroundColor: '#26252d', overflowY: 'auto' }}>
                     {drawerImageData && (
                         <img src={drawerImageData} alt="Drawer Content" style={{ width: '100%', height: 'auto' }} />
                     )}
@@ -209,7 +209,7 @@ const LeakOfTheDay = () => {
                                 color: "#000000",
                                 padding: 1,
                                 fontSize: '14px',
-                                borderRadius:'5px'
+                                borderRadius: '5px'
                             }}
                         >
                             {drawerEffectData.split('\n').map((line, index) => (
@@ -220,13 +220,13 @@ const LeakOfTheDay = () => {
                             ))}
                         </Box>
                     )}
-                    <Box sx={{ position: 'absolute', bottom: '0%',right:'0%', display: 'flex', alignItems: 'center' }}>
-                        <IconButton onClick={handlePrevImage} sx={{ color: 'white' }}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent:'right',alignItems: 'center' }}>
+                        <Box onClick={handlePrevImage} sx={{ color: 'white', backgroundColor: '#240056', borderRadius: '0px', padding: '10px' }}>
                             <ChevronLeft />
-                        </IconButton>
-                        <IconButton onClick={handleNextImage} sx={{ color: 'white' }}>
+                        </Box>
+                        <Box onClick={handleNextImage} sx={{ color: 'white', backgroundColor: '#240056', borderRadius: '0px', padding: '10px' }}>
                             <ChevronRight />
-                        </IconButton>
+                        </Box>
                     </Box>
                 </Box>
             </SwipeableDrawer>
