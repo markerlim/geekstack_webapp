@@ -220,7 +220,7 @@ const Home = () => {
                 <NavbarHome />
                 <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: '-10px', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
@@ -271,12 +271,12 @@ const Home = () => {
                                 </Collapse>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px',paddingBottom:'30px' }}>
-                            <img src="images/CARD LEAKS.png" alt="latestrelease" style={{ width: "300px",alignSelf:'center' }} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', gap: '10px', paddingTop: '20px', paddingBottom: '50px' }}>
+                            <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingLeft: '20px' }}><strong>CARD LEAKS</strong></Box>
                             <LeakOfTheDay />
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                            <img src="images/LATEST RELEASE.png" alt="latestrelease" style={{ width: "300px" }} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column',backgroundColor: '#121212', width:'100vw',paddingBottom:'40px',paddingTop:'20px',alignItems: 'center', gap: '10px' }}>
+                            <Box sx={{ fontSize: "20px", color: "#F2F8FC", }}><strong>LATEST RELEASE</strong></Box>
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                                 <Slider {...settings}>
                                     {imageData.map((image, index) => (
