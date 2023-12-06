@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { Pentagon, Refresh, Send } from "@mui/icons-material";
 import { ResponsiveImage } from "./../ResponsiveImage";
 import CardFunctions from "./SingleCardStackFunc";
-import { arrayUnion, doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../Firebase";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useEffect } from "react";
 import CommentPill from "./CommentPill";
+import CommentPillSubbar from "./CommentPillSubbar";
+import { useRef } from "react";
 
 const SingleCardStack = (grpdata, index) => {
     const data = grpdata.data;
@@ -16,6 +18,10 @@ const SingleCardStack = (grpdata, index) => {
     const [commentText, setCommentText] = useState("");
     const [comments, setComments] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showAllComments, setShowAllComments] = useState(false);
+    const inputRef = useRef(null);
+
+    const maxVisibleComments = 3;
 
     const authContext = useContext(AuthContext);
     const displayName = authContext.currentUser?.displayName;
@@ -67,6 +73,28 @@ const SingleCardStack = (grpdata, index) => {
         }
     };
 
+    const handleDeleteComment = async (commentIndex) => {
+        console.log('deleting')
+        try {
+            // Optimistically update the UI
+            setComments((prevComments) => prevComments.filter((_, index) => index !== commentIndex));
+
+            const deckRef = doc(db, "uniondecklist", data.id);
+            await updateDoc(deckRef, {
+                comments: comments.filter((_, index) => index !== commentIndex),
+            });
+        } catch (error) {
+            console.error("Error deleting comment in Firestore: ", error);
+
+            // If the backend deletion fails, revert the optimistic update
+            setComments((prevComments) => [...prevComments]);
+        }
+    };
+
+    const handleSeeMoreToggle = () => {
+        setShowAllComments(!showAllComments);
+    };
+
     useEffect(() => {
         const fetchComments = async () => {
             try {
@@ -84,6 +112,7 @@ const SingleCardStack = (grpdata, index) => {
             fetchComments();
         }
     }, [drawerOpen, data.id]);
+
 
     function replaceTagsWithIcons(line) {
         let replacedLine = line;
@@ -153,7 +182,7 @@ const SingleCardStack = (grpdata, index) => {
         <>
             <Box key={index} sx={{
                 paddingTop: '0px',
-                height: !data.description ? '200px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
+                height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
                 width: '100%', // Adjust width to fill the column
                 backgroundColor: '#26262d',
                 borderRadius: '10px',
@@ -184,8 +213,8 @@ const SingleCardStack = (grpdata, index) => {
                     <Box sx={{ fontSize: '14px', color: '#f2f8fc', fontWeight: '900', marginTop: data.selectedCards[0].imagesrc ? '22px' : '10px', }}>{data.displayName}</Box>
                 </Box>
                 <Box sx={{
-                    display: 'flex', flexDirection: 'column', gap: '7px', width: '160px',
-                    color: '#f2f8fc', height: !data.description ? '30px' : (data.selectedCards[0].imagesrc ? '70px' : '100px'), fontSize: '10px', paddingLeft: '10px', paddingRight: '10px', justifyContent: 'start', flex: 'none'
+                    display: 'flex', flexDirection: 'column', gap: '7px', width: '150px',
+                    color: '#f2f8fc', height: !data.description ? '35px' : (data.selectedCards[0].imagesrc ? '70px' : '100px'), fontSize: '10px', paddingLeft: '10px', paddingRight: '10px', justifyContent: 'start', flex: 'none'
                 }}>
                     <Box sx={{ height: !data.description ? '16px' : (data.selectedCards[0].imagesrc ? '25px' : '40px') }}></Box>
                     {data.description && data.description.split('\n').map((line, i) => (
@@ -196,7 +225,7 @@ const SingleCardStack = (grpdata, index) => {
                     ))}
                 </Box>
                 <Box sx={{ color: '#D3D3D3', paddingBottom: '20px' }}>
-                    <CardFunctions deck={data} />
+                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef}/>
                 </Box>
             </Box>
             <SwipeableDrawer
@@ -224,28 +253,42 @@ const SingleCardStack = (grpdata, index) => {
                         </Box>) : null}
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                         <Typography sx={{ color: '#f2f8fc' }}>Comments</Typography>
-                        {data.comments && data.comments.length > 0 ? (
-                            <List sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {comments.map((comment, index) => (
-                                    <ListItem key={index} sx={{ padding: "2px", display: 'flex', alignItems: 'start' }}>
-                                        <ListItemAvatar sx={{ paddingTop: '6px' }}>
-                                            <Avatar src={comment.photoURL} alt={`avatar-${index}`}/>
-                                        </ListItemAvatar>
-                                        <CommentPill comment={comment} comments={comments} index={index} isSubmitting={isSubmitting}/>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        ) : null}
+                        <List sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {comments.slice(0, showAllComments ? comments.length : maxVisibleComments).map((comment, index) => (
+                                <ListItem key={index} sx={{ padding: "2px", display: 'flex', alignItems: 'start' }}>
+                                    <ListItemAvatar sx={{ paddingTop: '6px' }}>
+                                        <Avatar src={comment.photoURL} alt={`avatar-${index}`} />
+                                    </ListItemAvatar>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '7px' }}>
+                                        <CommentPill
+                                            comment={comment}
+                                            comments={comments}
+                                            index={index}
+                                            isSubmitting={isSubmitting} />
+                                        <CommentPillSubbar
+                                            index={index}
+                                            handleDeleteComment={handleDeleteComment}
+                                            comment={comment} />
+                                    </Box>
+                                </ListItem>
+                            ))}
+                        </List>
+                        {comments.length > maxVisibleComments && (
+                            <Typography onClick={handleSeeMoreToggle} sx={{ color: '#74CFFF', fontSize: '12px', padding: '0', alignSelf: 'flex-end' }}>
+                                {showAllComments ? 'See Less' : 'See More'}
+                            </Typography>
+                        )}
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', padding: '8px', backgroundColor: '#4e4e4e', borderRadius: '5px', gap: '8px', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', padding: '8px', backgroundColor: '#1f1f1f', borderRadius: '5px', gap: '8px', alignItems: 'center' }}>
                         <Input
                             placeholder="Add a comment"
+                            inputRef={inputRef}
                             value={commentText}
                             onChange={(e) => setCommentText(e.target.value)}
                             sx={{ width: '90%', color: '#f2f8fc' }}
                         />
                         <Box onClick={isSubmitting ? null : handleCommentSubmit}
-                            sx={{ color: isSubmitting ? '#909394' : '#74CFFF', cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
+                            sx={{ color: isSubmitting ? '#909394' : '#C8A2C8', cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
                             <Send />
                         </Box>
                     </Box>

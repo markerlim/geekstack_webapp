@@ -5,8 +5,8 @@ import {
     FavoriteBorderOutlined,
     ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Input, Button, Typography, Modal } from "@mui/material";
-import React, { useContext, useState, useCallback } from "react";
+import { Box, Button, Typography, Modal } from "@mui/material";
+import React, { useContext, useState, useCallback, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import {
     arrayRemove,
@@ -15,18 +15,26 @@ import {
     doc,
     getFirestore,
     runTransaction,
-    updateDoc,
 } from "firebase/firestore";
 import { db } from "../../Firebase";
 
-const CardFunctions = ({ deck }) => {
+const CardFunctions = ({ deck, handleDrawerOpen, inputRef }) => {
     const authContext = useContext(AuthContext);
     const userId = authContext.currentUser?.uid;
     const [deckToDelete, setDeckToDelete] = useState(null);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [isLiked, setIsLiked] = useState(deck.upvotedUsers?.includes(userId));
-    const [commentText, setCommentText] = useState("");
-    const [comments, setComments] = useState(deck.comments || []);
+
+    const handleOpen = () => {
+        handleDrawerOpen(deck);
+        setTimeout(() => {
+            if (inputRef.current) {
+                console.log('current')
+              inputRef.current.focus();
+            }
+          }, 300);
+    };
+    
 
     const handleDeleteRequest = (id, event) => {
         event.stopPropagation();
@@ -82,14 +90,14 @@ const CardFunctions = ({ deck }) => {
                 sx={{
                     display: "flex",
                     flexDirection: "row", // Change to column layout for comments
-                    gap: "5px",
+                    gap: "10px",
                     paddingLeft: "10px",
                     color: "#4e4e4e",
                 }}
             >
                 <Box onClick={(event) => handleLikes(event)}>
                     {isLiked ? (
-                        <Favorite sx={{ color: "#74CFFF" }} />
+                        <Favorite sx={{ color: "#7C4FFF" }} />
                     ) : (
                         <FavoriteBorderOutlined
                             sx={{
@@ -105,11 +113,11 @@ const CardFunctions = ({ deck }) => {
                         />
                     )}
                 </Box>
-                <CommentOutlined />
+                <CommentOutlined onClick={handleOpen} />
                 <ShareOutlined />
                 {userId === deck.uid && (
                     <Box onClick={(event) => handleDeleteRequest(deck.id, event)}>
-                        <DeleteOutlined />
+                        <DeleteOutlined sx={{ color: '#e33c58', opacity: '70%' }} />
                     </Box>
                 )}
             </Box>

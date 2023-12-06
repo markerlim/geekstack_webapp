@@ -184,7 +184,7 @@ const CardStackFlood = () => {
                         ref={index === leftColumnCards.length - 1 ? lastCardRef : null} // Set the ref for the last card
                         sx={{
                             paddingTop: '0px',
-                            height: !data.description ? '200px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
+                            height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
                             borderRadius: '10px',
                             width: '170px',
                             position: 'relative',
@@ -202,7 +202,7 @@ const CardStackFlood = () => {
                         ref={index === rightColumnCards.length - 1 ? lastCardRef : null} // Set the ref for the last card
                         sx={{
                             paddingTop: '0px',
-                            height: !data.description ? '200px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
+                            height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
                             width: '170px',
                             borderRadius: '10px',
                             position: 'relative',
