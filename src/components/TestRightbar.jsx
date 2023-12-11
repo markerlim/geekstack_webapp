@@ -32,11 +32,12 @@ const TestRightBar = (props) => {
     const increase = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
-
+    
             // Get the specific card's banRatio
             const card = filteredCards.find(doc => doc.cardId === cardId);
-            const cardMaxCount = card ? card.banRatio : 0;  // default to 0 if card is not found
-
+            // Use nullish coalescing to provide a default value of 4 if card.banRatio is not found
+            const cardMaxCount = card?.banRatio ?? 4;
+    
             if (!newArray[cardId]) {
                 newArray[cardId] = 0;
             }
@@ -47,6 +48,7 @@ const TestRightBar = (props) => {
             return newArray; // Update the countArray state without triggering the updateFilteredCards function
         });
     };
+    
 
     const decrease = (cardId) => {
         setCountArray((prevCountArray) => {
@@ -110,7 +112,6 @@ const TestRightBar = (props) => {
             }
             return a.category.localeCompare(b.category);
         });
-        console.log(filteredCards,'just a test');
         setSortedCards(sorted);
     }, [filteredCards]);
 
@@ -139,7 +140,7 @@ const TestRightBar = (props) => {
                                         onClick={() => handleOpenModal(document)}
                                     />
                                     {
-                                        document.banRatio !== "4" && (
+                                        document.banRatio !== "4" && document.banRatio != null && (
                                             <Box sx={{ width: '25px', color: '#f2f3f8', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
                                                 {document.banRatio}
                                             </Box>

@@ -74,6 +74,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[Impact +1]": "/icons/UAtags/CTImpact+1.png",
     "[Step]": "/icons/UAtags/CTStep.png",
     "[Damage]": "/icons/UAtags/CTDmg.png",
+    "[Damage +1]": "/icons/UAtags/CTDmg+1.png",
     "[Damage 2]": "/icons/UAtags/CTDmg2.png",
     "[Damage 3]": "/icons/UAtags/CTDmg3.png",
     "[Impact Negate]": "/icons/UAtags/CTImpactNegate.png",

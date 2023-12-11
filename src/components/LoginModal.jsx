@@ -71,11 +71,11 @@ const LoginModal = () => {
     if (loading) return <div><CircularProgress /></div>;
     return (
         <Box className="formWrapper">
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1px', alignItems: 'center', justifyContent: 'center', marginTop: { xs: '-90px' } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1px', alignItems: 'center', justifyContent: 'center' }}>
                 <div className="logo">
                     <Box p={1}><img style={{ width: "auto", height: "80px" }} alt="uniondeck" src="/icons/geekstackicon.svg" /></Box>
                 </div>
-                <div style={{ fontFamily: 'league spartan', fontSize: '30px', color: '#ffffff' }}><strong>GEEKSTACK</strong></div>
+                <div style={{ fontFamily: 'league spartan', fontSize: '30px', color: '#121212' }}><strong>GEEKSTACK</strong></div>
             </Box>
             <span className="title">Welcome to the place for Cards!</span>
             <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={handleSubmit}>

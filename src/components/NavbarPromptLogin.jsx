@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppBar, styled, Toolbar, Box, Avatar, Menu, MenuItem, Modal } from '@mui/material';
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
@@ -33,7 +33,7 @@ const UserBox = styled(Box)(({ theme }) => ({
     },
 }));
 
-const Navbar = () => {
+const NavbarPrompt = () => {
     const [open, setOpen] = useState(false);
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -47,6 +47,20 @@ const Navbar = () => {
         signOut(auth);
         localStorage.clear();
     };
+
+    const handleClose = () => {
+        // Check if the user is logged in before allowing the modal to be closed
+        if (currentUser) {
+            setOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        // Check if the user is not logged in
+        if (!currentUser) {
+            setOpen(true);
+        }
+    }, [currentUser]);
 
     return (
         <AppBar position="fixed">
@@ -112,7 +126,7 @@ const Navbar = () => {
                         <>
                             <span style={{ cursor: 'pointer' }} onClick={() => setOpen(true)}>Login</span>
                             {/* Render the LoginModal for unlogged-in state */}
-                            <Modal open={open} onClose={() => setOpen(false)} sx={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                            <Modal open={open} onClose={handleClose} sx={{display:'flex',justifyContent:'center',alignItems:'center'}}>
                                 <LoginModal />
                             </Modal>
                         </>
@@ -123,4 +137,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default NavbarPrompt;

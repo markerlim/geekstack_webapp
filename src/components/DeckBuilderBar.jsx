@@ -59,6 +59,11 @@ const DeckBuilderBar = (props) => {
     "/images/deckimage12.jpg",
     "/images/deckimage13.jpg",
     "/images/deckimage14.jpg",
+    "/images/deckimage15.jpg",
+    "/images/deckimage16.jpg",
+    "/images/deckimage17.jpg",
+    "/images/deckimage18.jpg",
+    "/images/deckimage19.jpg",
   ];
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
