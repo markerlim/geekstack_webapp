@@ -67,7 +67,7 @@ const Home = () => {
             icon: "/icons/UAtags/DrStoneicon.jpg",
         },
         {
-            title: "UAXXBT Sword Art Online",
+            title: "UA15BT Sword Art Online",
             start: "2024-01-26",
             end: "2024-01-26",
             backgroundColor: "#bb0504",
@@ -75,7 +75,7 @@ const Home = () => {
             icon: "/icons/UAtags/SAOicon.jpg",
         },
         {
-            title: "UAXXBT SYNDUALITY Noir",
+            title: "UA16BT SYNDUALITY Noir",
             start: "2024-02-23",
             end: "2024-02-23",
             backgroundColor: "#bb0504",
@@ -270,10 +270,6 @@ const Home = () => {
                                     </Box>
                                 </Collapse>
                             </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', gap: '10px', paddingTop: '20px', paddingBottom: '50px' }}>
-                            <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingLeft: '20px' }}><strong>CARD LEAKS</strong></Box>
-                            <LeakOfTheDay />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column',backgroundColor: '#121212', width:'100vw',paddingBottom:'40px',paddingTop:'20px',alignItems: 'center', gap: '10px' }}>
                             <Box sx={{ fontSize: "20px", color: "#F2F8FC", }}><strong>LATEST RELEASE</strong></Box>
