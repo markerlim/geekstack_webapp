@@ -125,7 +125,7 @@ const DBCardRef = (props) => {
         { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST','EX02BT'], colorsets: ['Red', 'Green','Blue','Purple'] },
         { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC'], colorsets: ['Blue', 'Yellow', 'Purple'] },
         { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
-        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
+        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'] },
         { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC'], colorsets: ['Red', 'Yellow', 'Purple'] },
         { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'] },
         { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST'], colorsets: ['Blue', 'Green', 'Yellow'] },
@@ -135,6 +135,7 @@ const DBCardRef = (props) => {
         { filter: 'Gintama', sets: ['UA11BT', 'UA11ST'], colorsets: ['Red', 'Purple', 'Yellow'] },
         { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
         { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'] },
+        { filter: 'Dr. Stone', sets: ['UA14BT', 'UA14ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
     ]
 
     return (

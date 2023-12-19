@@ -1,141 +1,215 @@
+import React, { useEffect, useRef } from "react";
 import { Box } from "@mui/material";
-import React from "react";
-import { MoreHoriz } from "@mui/icons-material";
+import SingleCardStack from "./SingleCardStack";
+import { onSnapshot, query, collection, orderBy, limit, startAfter, getDocs, where } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from "../../Firebase";
+
+function formatDate(date) {
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const monthName = monthNames[monthIndex];
+
+    return `${day} ${monthName} ${year}`;
+}
 
 const CardStackFlood = () => {
-    const dataset = [{
-        src: '/UD/JJK-2-004.webp', photoURL: '/UD/JJK-2-004.webp', name: 'Satoru Gojo',
-        content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
-    }, {
-        src: '/UD/JJK-2-003.webp', photoURL: '/UD/JJK-2-003.webp', name: 'Suguru Getou',
-        content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
-    }, {
-        src: '/UD/JJK-2-004.webp', photoURL: '/UD/JJK-2-004.webp', name: 'Satoru Gojo',
-        content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
-    }, {
-        src: '', photoURL: '/UD/JJK-2-003.webp', name: 'Suguru Getou',
-        content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
-    }, {
-        src: '/UD/JJK-2-003.webp', photoURL: '/UD/JJK-2-003.webp', name: 'Suguru Getou',
-        content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
-    }, {
-        src: '/UD/JJK-2-003.webp', photoURL: '/UD/JJK-2-003.webp', name: 'Suguru Getou',
-        content: 'What a great deck to play with!\nHope to be able to play here again!\nDefinitely an enjoyable experience.',
-    }]
-    const leftColumnCards = dataset.filter((_, index) => index % 2 === 0);
-    const rightColumnCards = dataset.filter((_, index) => index % 2 !== 0);
+    const [deckData, setDeckData] = React.useState([]);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [isPaginating, setIsPaginating] = React.useState(false);
+    const [canPaginateNext, setCanPaginateNext] = React.useState(true);
+    const itemsPerPage = 10;
+    const querySnapshotRef = useRef(null);
+    const querySnapshotStackRef = useRef([]);
+    const [filters, setFilters] = React.useState([]);
+    const lastCardRef = useRef(null);
+
+    const handleFiltersChange = (newFilters) => {
+        setFilters(newFilters);
+    };
+
+    const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt', 'blc', 'blk'];
+
+    const setFilter = (filter) => {
+        setFilters([filter]);
+    };
+
+    const fetchDeckData = async () => {
+        setIsPaginating(true);
+        try {
+            let lastSharedDate;
+
+            if (currentPage > querySnapshotStackRef.current.length) {
+                if (querySnapshotRef.current && querySnapshotRef.current.docs.length > 0) {
+                    lastSharedDate = querySnapshotRef.current.docs[querySnapshotRef.current.docs.length - 1].data().sharedDate;
+                    querySnapshotStackRef.current.push(lastSharedDate);
+                }
+            } else {
+                lastSharedDate = querySnapshotStackRef.current[querySnapshotStackRef.current.length - 2];
+                querySnapshotStackRef.current.pop();
+            }
+
+            console.log(filters);
+
+            let deckQuery;
+
+            if (filters.length > 0) {
+                deckQuery = query(
+                    collection(db, "uniondecklist"),
+                    orderBy("sharedDate", "desc"),
+                    limit(itemsPerPage),
+                    ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
+                    where('animecode', 'in', filters),
+                );
+            } else {
+                deckQuery = query(
+                    collection(db, "uniondecklist"),
+                    orderBy("sharedDate", "desc"),
+                    limit(itemsPerPage),
+                    ...(lastSharedDate ? [startAfter(lastSharedDate)] : [])
+                );
+            }
+
+            const newQuerySnapshot = await getDocs(deckQuery);
+            if (newQuerySnapshot.docs.length > 0) {
+                querySnapshotRef.current = newQuerySnapshot;
+            }
+
+            console.log('Number of docs returned:', newQuerySnapshot.docs.length);
+            setCanPaginateNext(newQuerySnapshot.docs.length === itemsPerPage);
+
+            const docsCount = querySnapshotRef.current.docs.length;
+            if (docsCount === 0) {
+                setIsPaginating(false);
+                return; // No more documents to fetch
+            }
+
+            const newDeckData = [];
+            for (let deckDoc of querySnapshotRef.current.docs) {
+                const data = deckDoc.data();
+                if (data.uid) {
+                    const userDoc = await getDoc(doc(db, 'users', data.uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        data.photoURL = userData.photoURL;
+                        data.displayName = userData.displayName;
+                    }
+                }
+                const date = data.sharedDate.toDate();
+                const formattedDate = formatDate(date);
+                newDeckData.push({ id: deckDoc.id, ...data, sharedDate: formattedDate });
+            }
+
+            newDeckData.sort((a, b) => new Date(b.sharedDate) - new Date(a.sharedDate));
+
+            // Update deck data
+            setDeckData((prevDeckData) => [...prevDeckData, ...newDeckData]);
+
+        } catch (error) {
+            console.error("Error fetching deck data: ", error);
+        }
+        setIsPaginating(false);
+    };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !isPaginating && canPaginateNext) {
+                    console.log('Triggering Pagination');
+                    setIsPaginating(true);
+                    setCurrentPage((prevPage) => prevPage + 1);
+                }
+            },
+            { threshold: 0.2 }
+        );
+
+        if (lastCardRef.current) {
+            observer.observe(lastCardRef.current);
+        }
+
+        return () => {
+            if (lastCardRef.current) {
+                observer.unobserve(lastCardRef.current);
+            }
+        };
+    }, [lastCardRef, isPaginating, canPaginateNext]);
+
+    useEffect(() => {
+        if (isPaginating) {
+            fetchDeckData();
+        }
+        console.log('Paginating');
+    }, [isPaginating]);
+
+    useEffect(() => {
+        // Set up real-time listener
+        const changelistener = onSnapshot(collection(db, "uniondecklist"), snapshot => {
+            fetchDeckData();  // This will re-fetch the data whenever there's a change in the Firestore collection.
+        });
+
+        return () => {
+            // Clean up the listener when the component unmounts
+            changelistener();
+        };
+    }, []);
+
+    const leftColumnCards = deckData.filter((_, index) => index % 2 === 0);
+    const rightColumnCards = deckData.filter((_, index) => index % 2 !== 0);
+
     return (
-        <Box sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent:'center',
-            gap: '10px',
-            overflow: 'auto',
-            alignItems: 'start',
-            height: 'calc(100vh - 204px)',
-            paddingBottom: '50px',
-            paddingTop: '20px',
-            width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' },
-        }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column',alignItems:'center', gap: '10px' }}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: '10px',
+                overflow: 'auto',
+                alignItems: 'start',
+                height: '80vh', // Adjusted height
+                paddingBottom: '50px',
+                paddingTop: '20px',
+                width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' },
+            }}
+        >
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                 {leftColumnCards.map((data, index) => (
-                    <Box key={index} sx={{
-                        paddingTop: '0px',
-                        height: data.src ? '230px' : '120px',
-                        backgroundColor: '#f2f3f8',
-                        borderRadius: '10px',
-                        width:'170px',
-                        position: 'relative',
-                        overflow: 'hidden',
-                    }}>
-                        <>
-                            <Box key={index} sx={{
-                                paddingTop: '0px',
-                                height: data.src ? '230px' : '120px',
-                                width: '100%', // Adjust width to fill the column
-                                backgroundColor: '#f2f3f8',
-                                borderRadius: '10px',
-                                position: 'relative',
-                                border: 'none',
-                                overflow: 'hidden',
-                            }}>
-                                <Box sx={{ width: 'inherit', height: data.src ? '140px' : '0px', display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#26262d', overflow: 'hidden', }}>
-                                    {data.src && <img src={data.src} alt='name' style={{ width: '200px', height: 'calc(200px * 1.395)', marginTop: '-45px' }} />}
-                                </Box>
-                                <Box sx={{ display: 'flex', flexDirection: 'row', position: 'absolute', left: '0px', top: data.src ? '120px' : '0px', }}>
-                                    <Box sx={{ borderRadius: '30px', border: '3px solid #f2f3f8', width: '40px', height: '40px', overflow: 'hidden' }}>
-                                        <img src={data.photoURL} alt={data.photoURL} style={{ width: '40px', height: 'auto' }} />
-                                    </Box>
-                                    <Box sx={{ fontSize: '14px', color: '#121212', fontWeight: '900', marginTop: data.src ? '22px' : '10px', }}>{data.name}</Box>
-                                </Box>
-                                <Box sx={{
-                                    display: 'flex', flexDirection: 'column', gap: '7px', width: '160px',
-                                    color: '#121212', height: data.src ? '70px' : '100px', fontSize: '10px', paddingLeft: '10px', paddingRight: '5px', justifyContent: 'start', flex: 'none'
-                                }}>
-                                    <Box sx={{ height: data.src ? '16px' : '40px', }}></Box>
-                                    {data.content.split('\n').map((line, i) => (
-                                        <React.Fragment key={i}>
-                                            {line}
-                                            <br />
-                                        </React.Fragment>
-                                    ))}
-                                </Box>
-                                <Box sx={{ position: "absolute", right: '10px', bottom: '0px', color: '#D3D3D3' }}>
-                                    <MoreHoriz />
-                                </Box>
-                            </Box>
-                        </>
+                    <Box
+                        key={index}
+                        ref={index === leftColumnCards.length - 1 ? lastCardRef : null} // Set the ref for the last card
+                        sx={{
+                            paddingTop: '0px',
+                            height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
+                            borderRadius: '10px',
+                            width: '170px',
+                            position: 'relative',
+                            overflow: 'hidden',
+                        }}
+                    >
+                        <SingleCardStack data={data} index={index} />
                     </Box>
                 ))}
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column',alignItems:'center', gap: '10px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                 {rightColumnCards.map((data, index) => (
-                    <Box key={index} sx={{
-                        paddingTop: '0px',
-                        height: data.src ? '230px' : '120px',
-                        width:'170px',
-                        backgroundColor: '#f2f3f8',
-                        borderRadius: '10px',
-                        position: 'relative',
-                        overflow: 'hidden',
-                    }}>
-                        <>
-                            <Box key={index} sx={{
-                                paddingTop: '0px',
-                                height: data.src ? '230px' : '120px',
-                                width: '100%', // Adjust width to fill the column
-                                backgroundColor: '#f2f3f8',
-                                borderRadius: '10px',
-                                position: 'relative',
-                                border: 'none',
-                                overflow: 'hidden',
-                            }}>
-                                <Box sx={{ width: 'inherit', height: data.src ? '140px' : '0px', display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#26262d', overflow: 'hidden', }}>
-                                    {data.src && <img src={data.src} alt='name' style={{ width: '200px', height: 'calc(200px * 1.395)', marginTop: '-45px' }} />}
-                                </Box>
-                                <Box sx={{ display: 'flex', flexDirection: 'row', position: 'absolute', left: '0px', top: data.src ? '120px' : '0px', }}>
-                                    <Box sx={{ borderRadius: '30px', border: '3px solid #f2f3f8', width: '40px', height: '40px', overflow: 'hidden' }}>
-                                        <img src={data.photoURL} alt={data.photoURL} style={{ width: '40px', height: 'auto' }} />
-                                    </Box>
-                                    <Box sx={{ fontSize: '14px', color: '#121212', fontWeight: '900', marginTop: data.src ? '22px' : '10px', }}>{data.name}</Box>
-                                </Box>
-                                <Box sx={{
-                                    display: 'flex', flexDirection: 'column', gap: '7px', width: '160px',
-                                    color: '#121212', height: data.src ? '70px' : '100px', fontSize: '10px', paddingLeft: '10px', paddingRight: '5px', justifyContent: 'start', flex: 'none'
-                                }}>
-                                    <Box sx={{ height: data.src ? '16px' : '40px', }}></Box>
-                                    {data.content.split('\n').map((line, i) => (
-                                        <React.Fragment key={i}>
-                                            {line}
-                                            <br />
-                                        </React.Fragment>
-                                    ))}
-                                </Box>
-                                <Box sx={{ position: "absolute", right: '10px', bottom: '0px', color: '#D3D3D3' }}>
-                                    <MoreHoriz />
-                                </Box>
-                            </Box>
-                        </>
+                    <Box
+                        key={index}
+                        ref={index === rightColumnCards.length - 1 ? lastCardRef : null} // Set the ref for the last card
+                        sx={{
+                            paddingTop: '0px',
+                            height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
+                            width: '170px',
+                            borderRadius: '10px',
+                            position: 'relative',
+                            overflow: 'hidden',
+                        }}
+                    >
+                        <SingleCardStack data={data} index={index} />
                     </Box>
                 ))}
             </Box>
@@ -143,4 +217,4 @@ const CardStackFlood = () => {
     );
 };
 
-export default CardStackFlood
+export default CardStackFlood;

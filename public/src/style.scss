@@ -170,7 +170,7 @@
     width: 200%;
 }
 .formContainer {
-    background-image: url(http://localhost:3000/images/loginBG1.png);
+    background-image: url(http://geekstack.dev/images/loginBG1.png);
     background-repeat: no-repeat;
     background-position: 50% 100%;
     background-size:cover;
@@ -344,5 +344,8 @@
 #socialmediabtnlarge:hover{
     border-radius: 30px;
     transition: 0.2s ease-in-out;
+}
+.MuiInput-underline{
+    color:'#f2f8fc';
 }
 

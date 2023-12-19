@@ -187,6 +187,12 @@ const ButtonList = () => {
       imageSrc: "/images/deckimage13.jpg",
       imgWidth: "110%",
     },
+    {
+      pathname: "dst",
+      alt: "dr. stone",
+      imageSrc: "/images/deckimage14.jpg",
+      imgWidth: "110%",
+    },
   ];
 
   return (

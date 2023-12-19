@@ -35,8 +35,6 @@ const UACardlist = ({ filters }) => {
         setOpenModal(false);
     };
 
-
-
     useEffect(() => {
         const fetchDocuments = async () => {
             setLoading(true); // Start loading

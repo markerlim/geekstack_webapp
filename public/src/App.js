@@ -54,7 +54,12 @@ function App() {
     return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100%' }}><Box sx={{ width: { xs: '20%', sm: '20%', md: '100px' } }}><img width="100%" src="/icons/geekstackicon.svg" alt='loading' /></Box></div>;
   }
 
-  const ProtectedRoute = ({ children }) => {
+  const ProtectedRoute = ({ children, path }) => {
+
+    if (path === '/unionarena') {
+      return children;
+    }
+
     if (!currentUser) {
       return <Navigate to="/login" />;
     }
@@ -87,7 +92,7 @@ function App() {
             <Route path="faq" element={<FAQPage />} />
             <Route path="test" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
-            <Route path="unionarena" element={<UnionArenaPage />} />
+            <Route path="unionarena" element={<ProtectedRoute path="/unionarena"><UnionArenaPage /></ProtectedRoute>}/>
             <Route path="unionarena/:animecode" element={<AcardFormatpage />} />
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="digimon" element={<DigimonPage />} />

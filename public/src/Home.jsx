@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
+import LeakOfTheDay from "./components/LeakOfTheDay";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -38,7 +39,7 @@ function CustomDot({ onClick, active }) {
                 width: '10px',
                 height: '10px',
                 borderRadius: '50%',
-                background: active ? 'black' : 'white',
+                background: active ? '#7c4fff' : '#26262d',
                 margin: '5px',
                 cursor: 'pointer'
             }}
@@ -66,7 +67,7 @@ const Home = () => {
             icon: "/icons/UAtags/DrStoneicon.jpg",
         },
         {
-            title: "UAXXBT Sword Art Online",
+            title: "UA15BT Sword Art Online",
             start: "2024-01-26",
             end: "2024-01-26",
             backgroundColor: "#bb0504",
@@ -74,7 +75,7 @@ const Home = () => {
             icon: "/icons/UAtags/SAOicon.jpg",
         },
         {
-            title: "UAXXBT SYNDUALITY Noir",
+            title: "UA16BT SYNDUALITY Noir",
             start: "2024-02-23",
             end: "2024-02-23",
             backgroundColor: "#bb0504",
@@ -124,24 +125,40 @@ const Home = () => {
     ];
     const settings = {
         customPaging: function (i) {
-            return (
-                <CustomDot />
-            );
+            return <CustomDot key={i} active={i === currentSlide} onClick={() => setCurrentSlide(i)} />;
         },
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
+        afterChange: (index) => {
+            setCurrentSlide(index);
+        },
     };
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const settings1 = {
+        customPaging: function (i) {
+            return <CustomDot key={i} active={i === currentSlide1} onClick={() => setCurrentSlide1(i)} />;
+        },
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        afterChange: (index) => {
+            setCurrentSlide1(index);
+        },
+    };
+    const [currentSlide1, setCurrentSlide1] = useState(0);
     const [filteredEvents, setFilteredEvents] = useState(launchdates); // State to store filtered events
     const [selectedId, setSelectedId] = useState(""); // State to store selected ID
     const [open, setOpen] = useState(false);
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
     const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
-    const [imageData,setImageData] = useState([]);
-    const [comingsoonData,setComingsoonData] = useState([]);
+    const [imageData, setImageData] = useState([]);
+    const [comingsoonData, setComingsoonData] = useState([]);
     const theme = useTheme();
 
     const imagedataurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getLatestRelease"
@@ -203,7 +220,7 @@ const Home = () => {
                 <NavbarHome />
                 <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
-                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: '-10px', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
@@ -254,8 +271,8 @@ const Home = () => {
                                 </Collapse>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '-30px' }}>
-                            <img src="images/LATEST RELEASE.png" alt="latestrelease" style={{ width: "300px" }} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column',backgroundColor: '#121212', width:'100vw',paddingBottom:'40px',paddingTop:'20px',alignItems: 'center', gap: '10px' }}>
+                            <Box sx={{ fontSize: "20px", color: "#F2F8FC", }}><strong>LATEST RELEASE</strong></Box>
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                                 <Slider {...settings}>
                                     {imageData.map((image, index) => (
@@ -269,7 +286,7 @@ const Home = () => {
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                             <img src="images/COMINGSOON.png" alt="comingsoon" style={{ width: '300px' }} />
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
-                                <Slider {...settings}>
+                                <Slider {...settings1}>
                                     {comingsoonData.map((image, index) => (
                                         <Box component={'img'} key={index} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
                                     ))}
@@ -340,7 +357,7 @@ const Home = () => {
                             <Collapse in={open}>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Release of UNION ARENA EX02BT 
+                                    <br />Release of UNION ARENA EX02BT
                                     <br />Release of ONEPIECE OP06
                                     <br />
                                 </div>
