@@ -3,10 +3,8 @@ import { Box } from "@mui/material"
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
-import DeckLoader from "../components/DeckLoader";
 import { Helmet } from "react-helmet";
 import Decklibrarybtn from "../components/DeckLibraryButtons";
-import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
 
 const Deckviewer = () => {
     useEffect(() => {
@@ -31,6 +29,7 @@ const Deckviewer = () => {
                     <Box height={"86vh"} sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" },display:'flex',flexDirection:"column" }}>
                         <br/>
                         <Decklibrarybtn />
+                        <Box sx={{height:'200px'}}/>
                     </Box>
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>

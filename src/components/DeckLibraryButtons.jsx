@@ -179,7 +179,7 @@ const Decklibrarybtn = () => {
         </Box>
       ) : (
         <Box sx={{ width: '100vw', display: "flex", flexDirection: 'row',alignItems:'start', flexWrap: 'nowrap',overflow:'visible', height:'calc(100vh - 84px)'}} className="hide-scrollbar">
-          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:'center',gap: '20px',width:{xs:'100vw',sm:'100vw',md:'calc(100vw - 100px)'},flexWrap:'wrap'}}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:'center',gap: '20px',width:{xs:'100vw',sm:'100vw',md:'calc(100vw - 100px)'},flexWrap:'wrap',paddingBottom:'100px'}}>
             {decks.length === 0 ? (
               <Box style={{ textAlign: 'center', color: '#f2f3f8', padding: '20px' }}>
                 No Union Arena Deck Created
