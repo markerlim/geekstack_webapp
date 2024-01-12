@@ -1,17 +1,15 @@
-import { Avatar, Box, Button, CircularProgress, Input, List, ListItem, ListItemAvatar, ListItemText, Modal, SwipeableDrawer, Typography } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { ArrowBack, BookmarkBorderOutlined, CommentOutlined, FavoriteBorderOutlined, Pentagon, Refresh, Search, Send } from "@mui/icons-material";
+import { Avatar, Box, Input, List, ListItem, ListItemAvatar, SwipeableDrawer, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { ArrowBack, BookmarkBorderOutlined, CommentOutlined, FavoriteBorderOutlined, Pentagon, Search, Send } from "@mui/icons-material";
 import { ResponsiveImage } from "./../ResponsiveImage";
 import CardFunctions from "./SingleCardStackFunc";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../Firebase";
-import { useEffect } from "react";
 import CommentPill from "./CommentPill";
+import CommentPillSubbar from "./CommentPillSubbar";
 import { useRef } from "react";
 
-const SingleCardStack = ({grpdata, index, uid }) => {
+const SingleCardStackMongo = ({ grpdata, index, uid }) => {
     const data = grpdata;
-    console.log('xxx')
+    console.log(data);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [comments, setComments] = useState([]);
@@ -21,21 +19,19 @@ const SingleCardStack = ({grpdata, index, uid }) => {
 
     const maxVisibleComments = 3;
 
-
-    const handleDrawerOpen = useCallback(() => {
+    const handleDrawerOpen = (data) => {
         setDrawerOpen(true);
-      }, []);
-      
-      const handleDrawerClose = useCallback(() => {
+    };
+
+    const handleDrawerClose = () => {
         setDrawerOpen(false);
         setCommentText("");
         setComments([]);
         setIsSubmitting(false);
-      }, []);
+    };
 
-    const handleCommentSubmit = async (uid) => {
-        console.log('logging comments');
-        const newComment = { uid: uid, text: commentText, timestamp: new Date() };
+    const handleCommentSubmit = async () => {
+        const newComment = { text: commentText, timestamp: new Date(), uid: uid };
 
         // Optimistically update the UI
         setComments((prevComments) => [...prevComments, newComment]);
@@ -44,70 +40,44 @@ const SingleCardStack = ({grpdata, index, uid }) => {
 
         try {
             // Simulate backend delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            const deckRef = doc(db, "uniondecklist", data.id);
-            await updateDoc(deckRef, {
-                comments: arrayUnion(newComment),
+            // Build the URL for your API endpoint with _id as a query parameter
+            const apiUrl = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/addComment?secret=${process.env.REACT_APP_SECRET_KEY}&_id=${data._id}`;
+            console.log(apiUrl);
+
+            const response = await fetch(apiUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Request-Headers': '*',
+                    'Authorization': `Api-key ${process.env.MONGODB_STACKCONTENT_API}`, // Replace with your actual API key
+                },
+                body: JSON.stringify(newComment), // Send the new comment as JSON in the request body
+                credentials: "include",
             });
 
-            // If the backend update is successful, get the updated comments
-            const updatedDeckSnapshot = await getDoc(deckRef);
-            const updatedComments = updatedDeckSnapshot.data().comments || [];
-
-            setComments(updatedComments);
-
-            // If the backend update is successful, setIsSubmitting to false
-            setIsSubmitting(false);
+            if (response.ok) {
+                // If the API call is successful, update the UI
+                setIsSubmitting(false);
+            } else {
+                // Handle API error
+                console.error('API request failed:', response.statusText);
+                // Revert the optimistic update
+                setComments((prevComments) => prevComments.slice(0, -1));
+                setIsSubmitting(false);
+            }
         } catch (error) {
-            console.error("Error updating comments in Firestore: ", error);
-
-            // If the backend update fails, revert the optimistic update
+            console.error('Error sending API request:', error);
+            // Revert the optimistic update
             setComments((prevComments) => prevComments.slice(0, -1));
             setIsSubmitting(false);
-        }
-    };
-
-    const handleDeleteComment = async (commentIndex) => {
-        console.log('deleting')
-        try {
-            // Optimistically update the UI
-            setComments((prevComments) => prevComments.filter((_, index) => index !== commentIndex));
-
-            const deckRef = doc(db, "uniondecklist", data.id);
-            await updateDoc(deckRef, {
-                comments: comments.filter((_, index) => index !== commentIndex),
-            });
-        } catch (error) {
-            console.error("Error deleting comment in Firestore: ", error);
-
-            // If the backend deletion fails, revert the optimistic update
-            setComments((prevComments) => [...prevComments]);
         }
     };
 
     const handleSeeMoreToggle = () => {
         setShowAllComments(!showAllComments);
     };
-
-    useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const deckRef = doc(db, "uniondecklist", data.id);
-                const deckSnapshot = await getDoc(deckRef);
-                const fetchedComments = deckSnapshot.data().comments || [];
-
-                setComments(fetchedComments);
-            } catch (error) {
-                console.error("Error fetching comments from Firestore: ", error);
-            }
-        };
-
-        if (drawerOpen) {
-            fetchComments();
-        }
-    }, [drawerOpen]);
-
 
     function replaceTagsWithIcons(line) {
         let replacedLine = line;
@@ -220,7 +190,7 @@ const SingleCardStack = ({grpdata, index, uid }) => {
                     ))}
                 </Box>
                 <Box sx={{ color: '#D3D3D3', paddingBottom: '20px' }}>
-                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef}/>
+                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef} />
                 </Box>
             </Box>
             <SwipeableDrawer
@@ -285,8 +255,10 @@ const SingleCardStack = ({grpdata, index, uid }) => {
                                             comment={comment}
                                             comments={comments}
                                             index={index}
-                                            isSubmitting={isSubmitting}
-                                            handleDeleteComment={handleDeleteComment} />
+                                            isSubmitting={isSubmitting} />
+                                        <CommentPillSubbar
+                                            index={index}
+                                            comment={comment} />
                                     </Box>
                                 </ListItem>
                             ))}
@@ -307,7 +279,7 @@ const SingleCardStack = ({grpdata, index, uid }) => {
                             onChange={(e) => setCommentText(e.target.value)}
                             sx={{ width: '90%', color: '#f2f8fc' }}
                         />
-                        <Box onClick={isSubmitting ? null : () => handleCommentSubmit(uid)}
+                        <Box onClick={isSubmitting ? null : handleCommentSubmit}
                             sx={{ color: isSubmitting ? '#909394' : '#C8A2C8', cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
                             <Send />
                         </Box>
@@ -325,4 +297,4 @@ const SingleCardStack = ({grpdata, index, uid }) => {
     )
 }
 
-export default SingleCardStack;
+export default SingleCardStackMongo;

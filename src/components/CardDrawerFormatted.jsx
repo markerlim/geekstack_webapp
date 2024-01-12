@@ -67,6 +67,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
   
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
+    "[Impact 2]": "/icons/UAtags/CTImpact2.png",
     "[Impact]": "/icons/UAtags/CTImpact.png",
     "[Block x2]": "/icons/UAtags/CTBlkx2.png",
     "[Attack x2]": "/icons/UAtags/CTAtkx2.png",

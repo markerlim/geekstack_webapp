@@ -283,7 +283,7 @@ const Home = () => {
                                 </Slider>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',paddingBottom:'30px' }}>
                             <img src="images/COMINGSOON.png" alt="comingsoon" style={{ width: '300px' }} />
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
                                 <Slider {...settings1}>

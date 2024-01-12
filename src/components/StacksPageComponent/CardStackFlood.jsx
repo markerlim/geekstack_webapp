@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import SingleCardStack from "./SingleCardStack";
 import { onSnapshot, query, collection, orderBy, limit, startAfter, getDocs, where } from 'firebase/firestore';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../../Firebase";
+import { AuthContext } from "../../context/AuthContext";
 
 function formatDate(date) {
     const day = date.getDate();
@@ -20,19 +21,22 @@ function formatDate(date) {
 }
 
 const CardStackFlood = () => {
-    const [deckData, setDeckData] = React.useState([]);
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const [isPaginating, setIsPaginating] = React.useState(false);
-    const [canPaginateNext, setCanPaginateNext] = React.useState(true);
+    const [deckData, setDeckData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isPaginating, setIsPaginating] = useState(false);
+    const [canPaginateNext, setCanPaginateNext] = useState(true);
     const itemsPerPage = 10;
     const querySnapshotRef = useRef(null);
     const querySnapshotStackRef = useRef([]);
-    const [filters, setFilters] = React.useState([]);
+    const [filters, setFilters] = useState([]);
     const lastCardRef = useRef(null);
 
     const handleFiltersChange = (newFilters) => {
         setFilters(newFilters);
     };
+
+    const authContext = useContext(AuthContext);
+    const uid = authContext.currentUser?.uid;
 
     const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt', 'blc', 'blk'];
 
@@ -177,7 +181,7 @@ const CardStackFlood = () => {
                 width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' },
             }}
         >
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',paddingBottom:'20px' }}>
                 {leftColumnCards.map((data, index) => (
                     <Box
                         key={index}
@@ -191,11 +195,11 @@ const CardStackFlood = () => {
                             overflow: 'hidden',
                         }}
                     >
-                        <SingleCardStack data={data} index={index} />
+                        <SingleCardStack grpdata={data} index={index} uid={uid}/>
                     </Box>
                 ))}
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',paddingBottom:'20px'  }}>
                 {rightColumnCards.map((data, index) => (
                     <Box
                         key={index}
@@ -209,7 +213,7 @@ const CardStackFlood = () => {
                             overflow: 'hidden',
                         }}
                     >
-                        <SingleCardStack data={data} index={index} />
+                        <SingleCardStack grpdata={data} index={index} uid={uid}/>
                     </Box>
                 ))}
             </Box>
