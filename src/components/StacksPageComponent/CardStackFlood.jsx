@@ -38,8 +38,6 @@ const CardStackFlood = () => {
     const authContext = useContext(AuthContext);
     const uid = authContext.currentUser?.uid;
 
-    const animecode = ['cgh', 'jjk', 'htr', 'ims', 'kmy', 'toa', 'tsk', 'btr', 'mha', 'gnt', 'blc', 'blk'];
-
     const setFilter = (filter) => {
         setFilters([filter]);
     };
@@ -173,11 +171,10 @@ const CardStackFlood = () => {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 gap: '10px',
-                overflow: 'auto',
                 alignItems: 'start',
                 height: '80vh', // Adjusted height
                 paddingBottom: '50px',
-                paddingTop: '20px',
+                paddingTop: '10px',
                 width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' },
             }}
         >

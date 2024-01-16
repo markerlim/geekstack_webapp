@@ -42,7 +42,7 @@ const BottomNav = () => {
         position: { xs: 'fixed', sm: 'fixed', md: 'static' },
         width: '100%',
         justifyContent: 'space-evenly',
-        bgcolor: '#222032',
+        bgcolor: '#101418',
         color: '#7C4FFF',
         boxShadow: { xs: 1, sm: 1, md: 0 },
         bottom: 0,
@@ -51,7 +51,7 @@ const BottomNav = () => {
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#222032',  paddingTop: '5px' }}>
+        <BottomNavigation sx={{ bgcolor: '#101418',  paddingTop: '5px', borderTop:'0.5px solid #29333e' }}>
           <BottomNavigationAction
             disableRipple
             component={Link}
@@ -62,22 +62,15 @@ const BottomNav = () => {
                 alt="home"
                 style={{
                   width: "30px",
-                  filter: isActive('/') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive(['/','/stacks']) ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s ease-in-out'
                 }}
               />
             }
-            label="Home"
             sx={{
               padding:0,
               minWidth:'42px',
               color: isActive('/') ? '#7C4FFF' : '#555555',
-              '& .bottom-nav-icon': { // Target the icon class
-                marginBottom: '10px' // Increase the margin-bottom to push the label down
-              },
-              '& .MuiBottomNavigationAction-label': { // Target the label class
-                marginTop: '5px' // Increase the margin-top to push the label further down
-              }
             }}
           />
           <BottomNavigationAction
@@ -95,17 +88,10 @@ const BottomNav = () => {
                 }}
               />
             }
-            label="Library"
             sx={{
               padding:0,
               minWidth:'42px',
               color: isActive(['/list', '/unionarena', '/onepiece']) ? '#7C4FFF' : '#555555',
-              '& .bottom-nav-icon': { // Target the icon class
-                marginBottom: '10px' // Increase the margin-bottom to push the label down
-              },
-              '& .MuiBottomNavigationAction-label': { // Target the label class
-                marginTop: '5px' // Increase the margin-top to push the label further down
-              }
             }}
           />
           <BottomNavigationAction
@@ -123,17 +109,10 @@ const BottomNav = () => {
                 }}
               />
             }
-            label="Create"
             sx={{
               padding:0,
               minWidth:'42px',
               color: isActive(['/deckbuilder', '/optcgbuilder']) ? '#7C4FFF' : '#555555',
-              '& .bottom-nav-icon': { // Target the icon class
-                marginBottom: '10px' // Increase the margin-bottom to push the label down
-              },
-              '& .MuiBottomNavigationAction-label': { // Target the label class
-                marginTop: '5px' // Increase the margin-top to push the label further down
-              }
             }}
           />
           <BottomNavigationAction
@@ -151,45 +130,31 @@ const BottomNav = () => {
                 }}
               />
             }
-            label="News"
             sx={{
               padding:0,
               minWidth:'42px',
               color: isActive('/news') ? '#7C4FFF' : '#555555',
-              '& .bottom-nav-icon': { // Target the icon class
-                marginBottom: '10px' // Increase the margin-bottom to push the label down
-              },
-              '& .MuiBottomNavigationAction-label': { // Target the label class
-                marginTop: '5px' // Increase the margin-top to push the label further down
-              }
             }}
           />
           <BottomNavigationAction
             disableRipple
             component={Link}
-            to="/FAQ"
+            to="/Account"
             icon={
               <img
-                src="https://geekstack.dev/icons/bottomnav/FAQSelected.svg"
+                src="/icons/bottomnav/AccSelected.svg"
                 alt="FAQ"
                 style={{
                   width: "30px",
-                  filter: isActive('/FAQ') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive('/Account') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s'
                 }}
               />
             }
-            label="FAQ"
             sx={{
               padding:0,
               minWidth:'42px',
-              color: isActive('/FAQ') ? '#7C4FFF' : '#555555',
-              '& .bottom-nav-icon': { // Target the icon class
-                marginBottom: '10px' // Increase the margin-bottom to push the label down
-              },
-              '& .MuiBottomNavigationAction-label': { // Target the label class
-                marginTop: '5px' // Increase the margin-top to push the label further down
-              }
+              color: isActive('/Account') ? '#7C4FFF' : '#555555',
             }}
           />
         </BottomNavigation>

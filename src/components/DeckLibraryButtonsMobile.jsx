@@ -71,6 +71,7 @@ const DecklibrarybtnMobile = () => {
   };
 
   const handleInputChange = (e) => {
+    console.log('type')
     if (e.target.value.length > 80) {
       alert("Description should not exceed 80 characters.");
       return;

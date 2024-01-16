@@ -1,5 +1,6 @@
+import { CheckCircle } from "@mui/icons-material";
 import { Box, Button, Modal, TextField } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 const SharingStack = ({
   open,
@@ -7,7 +8,7 @@ const SharingStack = ({
   editedDeckName,
   handleDeckNameChange,
   description,
-  handleInputChange,
+  setDescription,
   cards,
   selectedCards,
   deckType,
@@ -16,6 +17,24 @@ const SharingStack = ({
   handleShareDeck,
   deck,
 }) => {
+  const [localDescription, setLocalDescription] = useState(description);
+  const handleSubmit = () => {
+
+    if (localDescription.length > 80) {
+      alert("Description should not exceed 80 characters.");
+      return;
+    }
+
+    if (selectedCards.length !== 3) {
+      alert("You must select exactly 3 cards to submit.");
+      return;
+    }
+
+    setDescription(localDescription);
+
+    handleClose();
+    handleShareDeck(deck, localDescription, selectedCards);
+  };
   return (
     <Modal
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
@@ -28,10 +47,11 @@ const SharingStack = ({
           color: "white",
           borderRadius: "30px",
           padding: "30px",
-          width: "500px",
+          width: { xs: "calc(100vw - 60px)", sm: "500px" },
           height: { xs: "100%", sm: "600px" },
           display: "flex",
           flexDirection: "column",
+          paddingTop: '60px',
           gap: "5px",
           textAlign: "center",
           alignItems: "center",
@@ -47,25 +67,25 @@ const SharingStack = ({
           maxLength="15"
           sx={{
             '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#7C4FFF', // Border color when not focused
-                },
-                '&:hover fieldset': {
-                  borderColor: '#7C4FFF', // Border color when hovered over
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#7C4FFF', // Border color when focused (in use)
-                },
+              '& fieldset': {
+                borderColor: '#7C4FFF', // Border color when not focused
               },
-              '.MuiOutlinedInput-input': {
-                color: 'white', // changes the text color
+              '&:hover fieldset': {
+                borderColor: '#7C4FFF', // Border color when hovered over
               },
-              '.MuiInputLabel-outlined': {
-                color: 'white', // changes the label color
+              '&.Mui-focused fieldset': {
+                borderColor: '#7C4FFF', // Border color when focused (in use)
               },
-              '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                color: 'white', // changes the label color when typing
-              },
+            },
+            '.MuiOutlinedInput-input': {
+              color: 'white', // changes the text color
+            },
+            '.MuiInputLabel-outlined': {
+              color: 'white', // changes the label color
+            },
+            '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+              color: 'white', // changes the label color when typing
+            },
           }}
         />
         <span style={{ padding: "10px" }}>
@@ -74,42 +94,48 @@ const SharingStack = ({
         </span>
         <TextField
           label="Description"
-          value={description}
-          onChange={handleInputChange}
           fullWidth
+          multiline
+          value={localDescription}
+          onChange={(e) => setLocalDescription(e.target.value)}
+          maxRows={4}
+          InputLabelProps={{ shrink: true }}
           sx={{
             '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#7C4FFF', // Border color when not focused
-                },
-                '&:hover fieldset': {
-                  borderColor: '#7C4FFF', // Border color when hovered over
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#7C4FFF', // Border color when focused (in use)
-                },
+              '& fieldset': {
+                borderColor: '#7C4FFF', // Border color when not focused
               },
-              '.MuiOutlinedInput-input': {
-                color: 'white', // changes the text color
+              '&:hover fieldset': {
+                borderColor: '#7C4FFF', // Border color when hovered over
               },
-              '.MuiInputLabel-outlined': {
-                color: 'white', // changes the label color
+              '&.Mui-focused fieldset': {
+                borderColor: '#7C4FFF', // Border color when focused (in use)
               },
-              '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                color: 'white', // changes the label color when typing
-              },
+            },
+            '.MuiOutlinedInput-input': {
+              color: 'white', // changes the text color
+            },
+            '.MuiInputLabel-outlined': {
+              color: 'white', // changes the label colorwhite
+              whiteSpace: 'pre-wrap'
+            },
+            '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+              color: 'white', // changes the label color when typing
+            },
           }}
         />
         <span style={{ padding: "10px" }}>
-          Pick 3 cards which will be key in the deck, this will help people
+          Scroll and pick 3 cards which will be key in the deck, this will help people
           when they want to search for the deck as well
         </span>
         <Box
           sx={{
             display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
+            overflow: 'auto',
+            justifyContent: "left",
+            width: 'calc(100vw - 60px)',
             gap: "5px",
+            height: '110px',
           }}
         >
           {cards.map((card) => (
@@ -117,20 +143,36 @@ const SharingStack = ({
               key={card.id}
               onClick={() =>
                 handleCardSelection(
-                    card.id || card.cardid,
-                    card.cardName || card.cardname,
-                    card.image
-                  )
-                }
+                  card.id || card.cardid,
+                  card.cardName || card.cardname,
+                  card.image
+                )
+              }
+              sx={{ position: 'relative' }}
             >
+              <CheckCircle sx={{
+                position: "absolute",
+                top: '50%',
+                left: '50%',
+                color: '#f2f3f8',
+                zIndex: '2',
+                transform: 'translate(-50%, -50%)',
+                transition: '0.3s ease-in-out',
+                display: selectedCards.some(
+                  (selectedCard) => selectedCard.id === card.id
+                )
+                  ? "block"
+                  : "none",
+              }} />
               <img
                 style={{
                   width: "75px",
-                  border: selectedCards.some(
+                  transition: '0.3s ease-in-out',
+                  filter: selectedCards.some(
                     (selectedCard) => selectedCard.id === card.id
                   )
-                    ? "4px solid #7C4FFF"
-                    : "none",
+                    ? "brightness(50%)"
+                    : "brightness(100%)",
                 }}
                 src={card.image}
                 alt={card.id}
@@ -173,14 +215,7 @@ const SharingStack = ({
         <Box sx={{ display: "flex", gap: "5px", justifyContent: "center" }}>
           <Button
             sx={{ color: "#7C4FFF" }}
-            onClick={() => {
-              if (selectedCards.length !== 3) {
-                alert("You must select exactly 3 cards to submit.");
-                return;
-              }
-              handleClose();
-              handleShareDeck(deck, description, selectedCards);
-            }}
+            onClick={handleSubmit}
           >
             Submit
           </Button>
