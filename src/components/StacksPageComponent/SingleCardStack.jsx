@@ -1,6 +1,6 @@
-import { Avatar, Box, Button, CircularProgress, Input, List, ListItem, ListItemAvatar, ListItemText, Modal, SwipeableDrawer, Typography } from "@mui/material";
+import { Avatar, Box, Input, List, ListItem, ListItemAvatar, SwipeableDrawer, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { ArrowBack, BookmarkBorderOutlined, CommentOutlined, FavoriteBorderOutlined, Pentagon, Refresh, Search, Send } from "@mui/icons-material";
+import { ArrowBack, BookmarkBorderOutlined, CommentOutlined, FavoriteBorderOutlined, Pentagon, Search, Send } from "@mui/icons-material";
 import { ResponsiveImage } from "./../ResponsiveImage";
 import CardFunctions from "./SingleCardStackFunc";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -9,9 +9,8 @@ import { useEffect } from "react";
 import CommentPill from "./CommentPill";
 import { useRef } from "react";
 
-const SingleCardStack = ({grpdata, index, uid }) => {
+const SingleCardStack = ({ grpdata, index, uid }) => {
     const data = grpdata;
-    console.log('xxx')
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [comments, setComments] = useState([]);
@@ -24,14 +23,14 @@ const SingleCardStack = ({grpdata, index, uid }) => {
 
     const handleDrawerOpen = useCallback(() => {
         setDrawerOpen(true);
-      }, []);
-      
-      const handleDrawerClose = useCallback(() => {
+    }, []);
+
+    const handleDrawerClose = useCallback(() => {
         setDrawerOpen(false);
         setCommentText("");
         setComments([]);
         setIsSubmitting(false);
-      }, []);
+    }, []);
 
     const handleCommentSubmit = async (uid) => {
         console.log('logging comments');
@@ -86,6 +85,39 @@ const SingleCardStack = ({grpdata, index, uid }) => {
         }
     };
 
+    const calculateTimeSincePost = (sharedDate) => {
+        let TimeStamp;
+
+        if (sharedDate instanceof Date) {
+            // If comment.timestamp is already a JavaScript Date
+            TimeStamp = sharedDate;
+        } else if (sharedDate && sharedDate.toDate instanceof Function) {
+            // If comment.timestamp is a Firestore Timestamp, convert it to JavaScript Date
+            TimeStamp = sharedDate.toDate();
+        } else {
+            // Handle the case where comment.timestamp is neither a Date nor a Firestore Timestamp
+            return "Invalid timestamp";
+        }
+
+        const currentTime = new Date();
+        const timeDifference = currentTime - TimeStamp;
+
+        const seconds = Math.floor(timeDifference / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        if (days > 0) {
+            return `${days}d ago`;
+        } else if (hours > 0) {
+            return `${hours}h ago`;
+        } else if (minutes > 0) {
+            return `${minutes}m ago`;
+        } else {
+            return `${seconds}s ago`;
+        }
+    };
+
     const handleSeeMoreToggle = () => {
         setShowAllComments(!showAllComments);
     };
@@ -107,71 +139,6 @@ const SingleCardStack = ({grpdata, index, uid }) => {
             fetchComments();
         }
     }, [drawerOpen]);
-
-
-    function replaceTagsWithIcons(line) {
-        let replacedLine = line;
-
-        Object.keys(tagsToIcons).forEach((tag, index) => {
-            const placeholder = `##REPLACE${index}##`;
-            replacedLine = replacedLine.split(tag).join(placeholder);
-        });
-
-        const lineSegments = replacedLine.split(/(##REPLACE\d+##|\(.*?\))/);
-
-        return lineSegments.map((segment, index) => {
-            const tagIndexMatch = segment.match(/##REPLACE(\d+)##/);
-
-            if (tagIndexMatch) {
-                const tagIndex = parseInt(tagIndexMatch[1], 10);
-                const tag = Object.keys(tagsToIcons)[tagIndex];
-                return (
-                    <img
-                        key={index}
-                        src={tagsToIcons[tag]}
-                        alt={tag}
-                        style={{ height: '14px', verticalAlign: 'middle' }}
-                    />
-                );
-            }
-
-            if (segment.startsWith('(') && segment.endsWith(')') && !tagsToIcons[segment]) {
-                return <span key={index} style={{ fontSize: '11px', verticalAlign: 'middle' }}>{segment}</span>;
-            }
-
-            return segment;
-        });
-    }
-
-    const tagsToIcons = {
-        "[Impact 1]": "/icons/UAtags/CTImpact1.png",
-        "[Impact]": "/icons/UAtags/CTImpact.png",
-        "[Block x2]": "/icons/UAtags/CTBlkx2.png",
-        "[Attack x2]": "/icons/UAtags/CTAtkx2.png",
-        "[Snipe]": "/icons/UAtags/CTSnipe.png",
-        "[Impact +1]": "/icons/UAtags/CTImpact+1.png",
-        "[Step]": "/icons/UAtags/CTStep.png",
-        "[Damage]": "/icons/UAtags/CTDmg.png",
-        "[Damage 2]": "/icons/UAtags/CTDmg2.png",
-        "[Damage 3]": "/icons/UAtags/CTDmg3.png",
-        "[Impact Negate]": "/icons/UAtags/CTImpactNegate.png",
-        "[Once Per Turn]": "/icons/UAtags/CTOncePerTurn.png",
-        "[Rest this card]": "/icons/UAtags/CTRestThisCard.png",
-        "[Retire this card]": "/icons/UAtags/CTRetirethiscard.png",
-        "[Place 1 card from hand to Outside Area]": "/icons/UAtags/CT1HandtoOA.png",
-        "[Place 2 card from hand to Outside Area]": "/icons/UAtags/CT2HandtoOA.png",
-        "[When In Front Line]": "/icons/UAtags/CTWhenInFrontLine.png",
-        "[When In Energy Line]": "/icons/UAtags/CTWhenInEnergyLine.png",
-        "[Pay 1 AP]": "/icons/UAtags/CTPay1AP.png",
-        "[Raid]": "/icons/UAtags/CTRaid.png",
-        "[On Play]": "/icons/UAtags/CTOnPlay.png",
-        "[On Retire]": "/icons/UAtags/CTOnRetire.png",
-        "[On Block]": "/icons/UAtags/CTOnBlock.png",
-        "[Activate Main]": "/icons/UAtags/CTActivateMain.png",
-        "[When Attacking]": "/icons/UAtags/CTWhenAttacking.png",
-        "[Your Turn]": "/icons/UAtags/CTYourTurn.png",
-        "[Opponent's Turn]": "/icons/UAtags/CTOppTurn.png",
-    };
 
     return (
         <>
@@ -220,7 +187,7 @@ const SingleCardStack = ({grpdata, index, uid }) => {
                     ))}
                 </Box>
                 <Box sx={{ color: '#D3D3D3', paddingBottom: '20px' }}>
-                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef}/>
+                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef} />
                 </Box>
             </Box>
             <SwipeableDrawer
@@ -268,6 +235,10 @@ const SingleCardStack = ({grpdata, index, uid }) => {
                                 ))}
                             </Box>
                         </Box>) : null}
+                    <Box sx={{fontSize:'14px',padding:'10px',backgroundColor:'#29333e',color:'#f2f3f8',display:'flex',justifyContent:'space-between'}}>
+                        <Box>Posted</Box>
+                        <Box>{calculateTimeSincePost(data.sharedDate)}</Box>
+                    </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', fontSize: '16px', gap: '5px', paddingTop: '10px', paddingBottom: '10px', paddingLeft: '15px', paddingRight: '15px', color: '#f2f3f8' }}>
                         <Typography sx={{ color: '#f2f8fc', fontWeight: '900', fontSize: '18px' }}>Description</Typography>
                         {data.description}
@@ -298,7 +269,7 @@ const SingleCardStack = ({grpdata, index, uid }) => {
                         )}
                     </Box>
                 </Box>
-                <Box sx={{ position: 'sticky', height: '100px', padding: '10px', backgroundColor: '#26252d', borderTop: '1px solid #121212' }}>
+                <Box sx={{ position: 'sticky', height: '100px', padding: '10px', backgroundColor: '#26252d', borderTop: '1px solid #29333e' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', padding: '8px', backgroundColor: '#1f1f1f', borderRadius: '5px', gap: '8px', alignItems: 'center' }}>
                         <Input
                             placeholder="Add a comment"
