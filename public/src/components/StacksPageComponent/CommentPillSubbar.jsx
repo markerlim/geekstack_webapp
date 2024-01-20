@@ -6,7 +6,7 @@ const CommentPillSubbar = ({ index, handleDeleteComment, comment }) => {
         handleDeleteComment(index);
     };
 
-    const calculateTimeSinceComment = () => {
+    const calculateTimeSinceComment = (comment) => {
         let commentTimestamp;
     
         if (comment.timestamp instanceof Date) {
@@ -39,7 +39,7 @@ const CommentPillSubbar = ({ index, handleDeleteComment, comment }) => {
         }
     };     
     
-    const timeSinceComment = calculateTimeSinceComment();
+    const timeSinceComment = calculateTimeSinceComment(comment);
 
     return (
         <Box sx={{ display: 'flex', gap: '5px', width: '100%',color: '#909394',alignItems:'center' }}>

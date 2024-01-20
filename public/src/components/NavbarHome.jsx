@@ -4,7 +4,6 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { SearchOutlined } from '@mui/icons-material';
 
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',

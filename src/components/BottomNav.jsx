@@ -139,14 +139,14 @@ const BottomNav = () => {
           <BottomNavigationAction
             disableRipple
             component={Link}
-            to="/Account"
+            to="/FAQ"
             icon={
               <img
-                src="/icons/bottomnav/AccSelected.svg"
+                src="/icons/bottomnav/FAQSelected.svg"
                 alt="FAQ"
                 style={{
                   width: "30px",
-                  filter: isActive('/Account') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive('/FAQ') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s'
                 }}
               />
@@ -154,7 +154,7 @@ const BottomNav = () => {
             sx={{
               padding:0,
               minWidth:'42px',
-              color: isActive('/Account') ? '#7C4FFF' : '#555555',
+              color: isActive('/FAQ') ? '#7C4FFF' : '#555555',
             }}
           />
         </BottomNavigation>

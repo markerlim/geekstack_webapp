@@ -5,16 +5,22 @@ import { Box } from "@mui/material"
 import NavbarHome from "../components/NavbarHome";
 import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { useEffect, useState } from "react";
 
 const Listofnews = () => {
-    const imageData = [
-        { src: 'latestreleasebanner/cghvol2newrelease.jpg', path: '/unionarena/cgh?booster=ex02bt' },
-        { src: 'latestreleasebanner/htrvol2newrelease.jpg', path: '/unionarena/htr?booster=ex01bt' },
-        { src: 'latestreleasebanner/tekkennewrelease.jpg', path: '/unionarena/tkn' },
-        { src: 'latestreleasebanner/jjkncnewrelease.jpg', path: '/unionarena/jjk?booster=ua02nc' },
-        { src: 'latestreleasebanner/kmyncnewrelease.jpg', path: '/unionarena/kmy?booster=ua01nc' },
-        { src: 'latestreleasebanner/st11newrelease.jpg', path: '/onepiece/OPST11' },
-    ];
+    const [imageData, setImageData] = useState([]);
+    const imagedataurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getLatestRelease"
+    useEffect(() => {
+        fetch(imagedataurl)
+            .then(response => response.json())
+            .then(data => {
+                const sortedData = data.sort((a, b) => a.order - b.order);
+                setImageData(sortedData);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
     return (
         <div>
             <Box color={"#f2f3f8"}>

@@ -136,6 +136,7 @@ const DBCardRef = (props) => {
         { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
         { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'] },
         { filter: 'Dr. Stone', sets: ['UA14BT', 'UA14ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
+        { filter: 'Sword Art Online', sets: ['UA15BT', 'UA15ST'], colorsets: ['Yellow', 'Blue', 'Green'] },
     ]
 
     return (

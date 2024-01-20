@@ -152,7 +152,7 @@ const OPDecklibrarybtn = () => {
         console.log("Deck Type:", deckType);
         console.log("Cards:", cards);
         
-        await addDoc(collection(db, "opdecklist"), {
+        await addDoc(collection(db, "uniondecklist"), {
           deckName: finalDeckName,
           image: deck.deckcover,
           description: description,
@@ -279,7 +279,7 @@ const OPDecklibrarybtn = () => {
                 editedDeckName={editedDeckName}
                 handleDeckNameChange={handleDeckNameChange}
                 description={description}
-                handleInputChange={handleInputChange}
+                setDescription={setDescription}
                 cards={cards}
                 selectedCards={selectedCards}
                 deckType={deckType}
