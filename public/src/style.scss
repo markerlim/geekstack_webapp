@@ -47,8 +47,6 @@
     }
 }
 
-
-
 #article01 .css-1evflyk {
     content: "";
     position: fixed;
@@ -301,6 +299,9 @@
     display:flex;
     align-items: center;
     flex: 0 0 auto;
+}
+.fc-list-event-title div{
+    height: 40px !important;
 }
 .fc-toolbar-title{
     margin-left: 30px !important;

@@ -51,28 +51,12 @@ function CustomDot({ onClick, active }) {
 const Home = () => {
     const launchdates = [
         {
-            title: "UA13BT Tekken7",
-            start: "2023-10-27",
-            end: "2023-10-27",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/Tekken7icon.jpg",
-        },
-        {
-            title: "UA14BT Dr Stone",
-            start: "2023-12-22",
-            end: "2023-12-22",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/DrStoneicon.jpg",
-        },
-        {
             title: "UA15BT Sword Art Online",
             start: "2024-01-26",
             end: "2024-01-26",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/SAOicon.jpg",
+            icon: "/icons/UAtags/icon_sao.jpg",
         },
         {
             title: "UA16BT SYNDUALITY Noir",
@@ -80,47 +64,79 @@ const Home = () => {
             end: "2024-02-23",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Synnoiricon.jpg",
+            icon: "/icons/UAtags/icon_syn.jpg",
         },
         {
-            title: "Jujutsu Kaisen New Card Selection",
-            start: "2023-10-27",
-            end: "2023-10-27",
+            title: "UA17BT Toriko",
+            start: "2024-02-23",
+            end: "2024-02-23",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Jujutsunokaisenicon.jpg",
+            icon: "/icons/UAtags/icon_trk.jpg",
         },
         {
-            title: "Demon Slayer New Card Selection",
-            start: "2023-10-27",
-            end: "2023-10-27",
+            title: "UA18BT Nikke",
+            start: "2024-03-22",
+            end: "2024-03-22",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Demonslayericon.jpg",
+            icon: "/icons/UAtags/icon_nkk.jpg",
         },
         {
-            title: "Hunter X Hunter EX01",
-            start: "2023-10-27",
-            end: "2023-10-27",
+            title: "UA19BT Haikyuu",
+            start: "2024-03-22",
+            end: "2024-03-22",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Hunterxhuntericon.jpg",
+            icon: "/icons/UAtags/icon_hky.jpg",
         },
         {
-            title: "Code Geass EX02",
-            start: "2023-11-24",
-            end: "2023-11-24",
+            title: "UA20BT Black Clover",
+            start: "2024-04-26",
+            end: "2024-04-26",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Codegeassicon.jpg",
+            icon: "/icons/UAtags/icon_bcv.jpg",
         },
         {
-            title: "The IDOLM@STER Shiny Colors EX03",
-            start: "2023-12-22",
-            end: "2023-12-22",
+            title: "UA21BT Yu Yu Hakusho",
+            start: "2024-04-26",
+            end: "2024-04-26",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/Idolmastericon.jpg",
+            icon: "/icons/UAtags/icon_yyh.jpg",
+        },
+        {
+            title: "UA22BT Gamera Rebirth",
+            start: "2024-05-31",
+            end: "2024-05-31",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/icon_gmr.jpg",
+        },
+        {
+            title: "EX04 Jujutsu No Kaisen",
+            start: "2024-03-22",
+            end: "2024-03-22",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/icon_jjk.jpg",
+        },
+        {
+            title: "EX05 Demon Slayer",
+            start: "2024-05-31",
+            end: "2024-05-31",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/icon_kmy.jpg",
+        },
+        {
+            title: "EX06 My Hero Academia",
+            start: "2024-06-28",
+            end: "2024-06-28",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/icon_mha.jpg",
         },
     ];
     const settings = {
@@ -357,8 +373,7 @@ const Home = () => {
                             <Collapse in={open}>
                                 <br />
                                 <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Release of UNION ARENA EX02BT
-                                    <br />Release of ONEPIECE OP06
+                                    <br />Release of UNION ARENA UA15BT SAO
                                     <br />
                                 </div>
                                 <br />

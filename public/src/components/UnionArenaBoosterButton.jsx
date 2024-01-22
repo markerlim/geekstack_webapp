@@ -193,6 +193,12 @@ const ButtonList = () => {
       imageSrc: "/images/deckimage14.jpg",
       imgWidth: "110%",
     },
+    {
+      pathname: "sao",
+      alt: "sword art online",
+      imageSrc: "/images/deckimage15.jpg",
+      imgWidth: "110%",
+    },
   ];
 
   return (

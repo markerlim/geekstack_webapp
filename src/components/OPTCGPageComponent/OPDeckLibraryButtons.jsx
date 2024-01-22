@@ -152,7 +152,7 @@ const OPDecklibrarybtn = () => {
         console.log("Deck Type:", deckType);
         console.log("Cards:", cards);
         
-        await addDoc(collection(db, "uniondecklist"), {
+        await addDoc(collection(db, "opdecklist"), {
           deckName: finalDeckName,
           image: deck.deckcover,
           description: description,
