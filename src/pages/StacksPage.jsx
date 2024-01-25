@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt';
 import CardStackFlood from "../components/StacksPageComponent/CardStackFlood";
+import HotkeysNav from "../components/HotkeysNav";
 
 const StacksPage = () => {
     useEffect(() => {
@@ -60,7 +61,7 @@ const StacksPage = () => {
             };
         }
 
-        return () => {};
+        return () => { };
     }, [scrollWholeContainerRef, setIsNavVisible, touchY]);
 
 
@@ -108,8 +109,8 @@ const StacksPage = () => {
             </Helmet>
             <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"} >
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center",marginTop:'-20px',position:'relative',gap:'0px'}} overflowY={"auto"} height={"calc(100vh - 114px)"} ref={scrollWholeContainerRef}>
-                    <Box sx={{position: 'fixed', top: 0, zIndex: 1000,backgroundColor: '#101418', height: '54px',width:'100vw',display: 'flex', flex: '0 0 auto', justifyContent: 'center', alignItems: 'center' }}>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: '-20px', position: 'relative', gap: '0px' }} overflowY={"auto"} height={"calc(100vh - 114px)"} ref={scrollWholeContainerRef}>
+                    <Box sx={{ position: 'fixed', top: 0, zIndex: 1000, backgroundColor: '#101418', height: '54px', width: '100vw', display: 'flex', flex: '0 0 auto', justifyContent: 'center', alignItems: 'center' }}>
                         <img style={{ width: "auto", height: "30px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     </Box>
                     <Box sx={{ position: 'fixed', top: '54px', zIndex: 900, backgroundColor: '#101418', transition: 'transform 0.3s ease', transform: `translateY(${isNavVisible ? '0' : 'calc(-100%)'})` }}>
@@ -196,7 +197,10 @@ const StacksPage = () => {
                     </Box>
                     <CardStackFlood selectedCategoryTag={selectedCategoryTag} selectedUAtag={selectedUAtag} />
                 </Box>
-                <Box sx={{ display: { sm: "block", md: "none" } }}><BottomNav /></Box>
+                <Box sx={{ display: { sm: "block", md: "none" } }}>
+                    <HotkeysNav isNavVisible={isNavVisible}/>
+                    <BottomNav />
+                </Box>
             </Box>
         </div>
     );
