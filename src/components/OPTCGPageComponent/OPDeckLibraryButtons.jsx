@@ -143,16 +143,9 @@ const OPDecklibrarybtn = () => {
 
         const finalDeckName = editedDeckName || deck.deckname;
 
-        console.log("Final Deck Name:", finalDeckName);
-        console.log("Deck Cover:", deck.deckcover);
-        console.log("Description:", description);
-        console.log("Selected Cards:", selectedCards);
-        console.log("UID:", currentUser.uid);
-        console.log("Final Date:", finalDate);
-        console.log("Deck Type:", deckType);
-        console.log("Cards:", cards);
         
-        await addDoc(collection(db, "opdecklist"), {
+        await addDoc(collection(db, "uniondecklist"), {
+          postType:'OPTCG',
           deckName: finalDeckName,
           image: deck.deckcover,
           description: description,

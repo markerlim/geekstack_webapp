@@ -20,7 +20,7 @@ function formatDate(date) {
     return `${day} ${monthName} ${year}`;
 }
 
-const CardStackFlood = ({selectedCategoryTag,selectedUAtag}) => {
+const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
     const [deckData, setDeckData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isPaginating, setIsPaginating] = useState(false);
@@ -59,21 +59,24 @@ const CardStackFlood = ({selectedCategoryTag,selectedUAtag}) => {
                 selectedCollection = "uniondecklist";
                 deckQuery = query(
                     collection(db, selectedCollection),
+                    where('postType','==','UATCG'),
                     orderBy("sharedDate", "desc"),
                     limit(itemsPerPage),
                     ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
                     ...(selectedCollection === "uniondecklist" && selectedUAtag
-                        ? [where('animecode', '==', selectedUAtag.toLowerCase())]
+                        ? [
+                            where('animecode', '==', selectedUAtag.toLowerCase())
+                        ]
                         : [])
                 );
             } else if (selectedCategoryTag === "ONE-PIECE") {
-                selectedCollection = "opdecklist";
+                selectedCollection = "uniondecklist";
                 deckQuery = query(
                     collection(db, selectedCollection),
+                    where('postType','==','OPTCG'),
                     orderBy("sharedDate", "desc"),
                     limit(itemsPerPage),
                     ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
-                    // You can add specific filters for ONE-PIECE if needed
                 );
             } else {
                 selectedCollection = "uniondecklist";
@@ -179,7 +182,7 @@ const CardStackFlood = ({selectedCategoryTag,selectedUAtag}) => {
 
         // Fetch new data for the selected category
         fetchDeckData();
-    }, [selectedCategoryTag,selectedUAtag]);
+    }, [selectedCategoryTag, selectedUAtag]);
 
     const leftColumnCards = deckData.filter((_, index) => index % 2 === 0);
     const rightColumnCards = deckData.filter((_, index) => index % 2 !== 0);
@@ -198,7 +201,7 @@ const CardStackFlood = ({selectedCategoryTag,selectedUAtag}) => {
                 width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' },
             }}
         >
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',paddingBottom:'20px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingBottom: '20px' }}>
                 {leftColumnCards.map((data, index) => (
                     <Box
                         key={index}
@@ -208,16 +211,16 @@ const CardStackFlood = ({selectedCategoryTag,selectedUAtag}) => {
                             height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
                             borderRadius: '10px',
                             width: '170px',
-                            flex:'0 0 auto',
+                            flex: '0 0 auto',
                             position: 'relative',
                             overflow: 'hidden',
                         }}
                     >
-                        <SingleCardStack grpdata={data} index={index} uid={uid}/>
+                        <SingleCardStack grpdata={data} index={index} uid={uid} />
                     </Box>
                 ))}
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',paddingBottom:'20px'  }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingBottom: '20px' }}>
                 {rightColumnCards.map((data, index) => (
                     <Box
                         key={index}
@@ -227,12 +230,12 @@ const CardStackFlood = ({selectedCategoryTag,selectedUAtag}) => {
                             height: !data.description ? '205px' : (data.selectedCards[0].imagesrc ? '240px' : '130px'),
                             width: '170px',
                             borderRadius: '10px',
-                            flex:'0 0 auto',
+                            flex: '0 0 auto',
                             position: 'relative',
                             overflow: 'hidden',
                         }}
                     >
-                        <SingleCardStack grpdata={data} index={index} uid={uid}/>
+                        <SingleCardStack grpdata={data} index={index} uid={uid} />
                     </Box>
                 ))}
             </Box>

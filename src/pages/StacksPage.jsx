@@ -20,7 +20,7 @@ const StacksPage = () => {
     }, []);
 
     const categorytags = ['ALL', 'UNION-ARENA', 'ONE-PIECE'];
-    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST'];
+    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO'];
     const [selectedCategoryTag, setSelectedCategoryTag] = useState('ALL');
     const [selectedUAtag, setSelectedUAtag] = useState(null);
     const scrollWholeContainerRef = useRef(null);
