@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt';
 import CardStackFlood from "../components/StacksPageComponent/CardStackFlood";
-import HotkeysNav from "../components/HotkeysNav";
 
 const StacksPage = () => {
     useEffect(() => {
@@ -198,7 +197,6 @@ const StacksPage = () => {
                     <CardStackFlood selectedCategoryTag={selectedCategoryTag} selectedUAtag={selectedUAtag} />
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}>
-                    <HotkeysNav isNavVisible={isNavVisible}/>
                     <BottomNav />
                 </Box>
             </Box>

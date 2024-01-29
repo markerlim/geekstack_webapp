@@ -7,7 +7,6 @@ import DecklibrarybtnMobile from "../components/DeckLibraryButtonsMobile";
 import { LibraryBooks } from "@mui/icons-material";
 import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
 import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
-import { CardStateProvider } from "../context/useCardState";
 
 const Listofcards = () => {
     return (
