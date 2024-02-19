@@ -199,6 +199,18 @@ const ButtonList = () => {
       imageSrc: "/images/deckimage15.jpg",
       imgWidth: "110%",
     },
+    {
+      pathname: "syn",
+      alt: "synduality noir",
+      imageSrc: "/images/deckimage16.jpg",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "trk",
+      alt: "toriko",
+      imageSrc: "/images/deckimage17.jpg",
+      imgWidth: "110%",
+    },
   ];
 
   return (

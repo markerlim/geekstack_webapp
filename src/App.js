@@ -81,6 +81,7 @@ function App() {
             <Route path="account" element={<AccountDetails />} />
             <Route path="/profile/:uid" element={<ProfilePage />} />
             <Route path="stacks" element={<StacksPage />} />
+            <Route path="/stacks/:id" element={<StacksPage />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="credits" element={<Community />} />

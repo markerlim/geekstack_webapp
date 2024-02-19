@@ -1,5 +1,5 @@
 import { Close, Error, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Drawer, Grid, Modal } from "@mui/material";
+import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import ErrorLog from "./UAErrorLog";
@@ -30,20 +30,20 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     onSwipedLeft: onSwipeLeft,
     onSwipedRight: onSwipeRight,
   });
-  
+
   function replaceTagsWithIcons(line) {
     let replacedLine = line;
-  
+
     Object.keys(tagsToIcons).forEach((tag, index) => {
       const placeholder = `##REPLACE${index}##`;
       replacedLine = replacedLine.split(tag).join(placeholder);
     });
-  
+
     const lineSegments = replacedLine.split(/(##REPLACE\d+##|\(.*?\))/);
-  
+
     return lineSegments.map((segment, index) => {
       const tagIndexMatch = segment.match(/##REPLACE(\d+)##/);
-  
+
       if (tagIndexMatch) {
         const tagIndex = parseInt(tagIndexMatch[1], 10);
         const tag = Object.keys(tagsToIcons)[tagIndex];
@@ -52,19 +52,19 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
             key={index}
             src={tagsToIcons[tag]}
             alt={tag}
-            style={{ height:'14px',verticalAlign: 'middle'}}
+            style={{ height: '14px', verticalAlign: 'middle' }}
           />
         );
       }
-  
+
       if (segment.startsWith('(') && segment.endsWith(')') && !tagsToIcons[segment]) {
-        return <span key={index} style={{ fontSize: '11px',verticalAlign:'middle' }}>{segment}</span>;
+        return <span key={index} style={{ fontSize: '11px', verticalAlign: 'middle' }}>{segment}</span>;
       }
-  
+
       return segment;
     });
   }
-  
+
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
     "[Impact 2]": "/icons/UAtags/CTImpact2.png",
@@ -82,8 +82,8 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[Once Per Turn]": "/icons/UAtags/CTOncePerTurn.png",
     "[Rest this card]": "/icons/UAtags/CTRestThisCard.png",
     "[Retire this card]": "/icons/UAtags/CTRetirethiscard.png",
-    "[Place 1 card from hand to Outside Area]":"/icons/UAtags/CT1HandtoOA.png",
-    "[Place 2 card from hand to Outside Area]":"/icons/UAtags/CT2HandtoOA.png",
+    "[Place 1 card from hand to Outside Area]": "/icons/UAtags/CT1HandtoOA.png",
+    "[Place 2 card from hand to Outside Area]": "/icons/UAtags/CT2HandtoOA.png",
     "[When In Front Line]": "/icons/UAtags/CTWhenInFrontLine.png",
     "[When In Energy Line]": "/icons/UAtags/CTWhenInEnergyLine.png",
     "[Pay 1 AP]": "/icons/UAtags/CTPay1AP.png",
@@ -97,8 +97,18 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[Opponent's Turn]": "/icons/UAtags/CTOppTurn.png",
   };
 
+  const Puller = styled('div')(({ theme }) => ({
+    width: 50,
+    height: 6,
+    backgroundColor: '#2b2b2b',
+    borderRadius: 3,
+    position: 'absolute',
+    top: 8,
+    left: 'calc(50% - 25px)',
+  }));
+
   return (
-    <Drawer
+    <SwipeableDrawer
       anchor="bottom"
       open={open}
       onClose={onClose}
@@ -117,9 +127,11 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
           transform: { md: 'translate(-50%, -50%)' },
         },
       }}
+      disableSwipeToOpen
       {...swipeHandlers}
     >
       <Box display="flex" flexDirection="column" minHeight="100%" minWidth={0} overflowY={"auto"} p={3}>
+        <Puller />
         <Box flexGrow={1} display='flex' flexDirection='column' >
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
             <img
@@ -264,6 +276,6 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
           </Button>
         </Box>
       </Box>
-    </Drawer >
+    </SwipeableDrawer >
   );
 };

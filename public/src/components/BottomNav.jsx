@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   BottomNavigation,
   BottomNavigationAction,
   createTheme,
   ThemeProvider,
+  Modal,
 } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import LoginModal from './LoginModal';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../Firebase';
 
 
 const customTheme = createTheme({
@@ -21,6 +25,17 @@ const customTheme = createTheme({
 
 const BottomNav = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
@@ -31,6 +46,16 @@ const BottomNav = () => {
       return paths.some(path => location.pathname === path);
     }
     return location.pathname === paths;
+  };
+
+  const handleAccountClick = () => {
+    if (!user) {
+      console.log('not logged in')
+      setLoginModalOpen(true);
+    } else {
+      console.log('logged in')
+      navigate('/account'); // You may adjust this based on your routing logic
+    }
   };
 
   return (
@@ -51,7 +76,7 @@ const BottomNav = () => {
       }}
     >
       <ThemeProvider theme={customTheme}>
-        <BottomNavigation sx={{ bgcolor: '#101418',  paddingTop: '5px', borderTop:'0.5px solid #29333e' }}>
+        <BottomNavigation sx={{ bgcolor: '#101418', paddingTop: '5px', borderTop: '0.5px solid #29333e' }}>
           <BottomNavigationAction
             disableRipple
             component={Link}
@@ -62,14 +87,14 @@ const BottomNav = () => {
                 alt="home"
                 style={{
                   width: "30px",
-                  filter: isActive(['/','/stacks']) ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive(['/']) ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s ease-in-out'
                 }}
               />
             }
             sx={{
-              padding:0,
-              minWidth:'42px',
+              padding: 0,
+              minWidth: '42px',
               color: isActive('/') ? '#7C4FFF' : '#555555',
             }}
           />
@@ -89,8 +114,8 @@ const BottomNav = () => {
               />
             }
             sx={{
-              padding:0,
-              minWidth:'42px',
+              padding: 0,
+              minWidth: '42px',
               color: isActive(['/list', '/unionarena', '/onepiece']) ? '#7C4FFF' : '#555555',
             }}
           />
@@ -110,55 +135,60 @@ const BottomNav = () => {
               />
             }
             sx={{
-              padding:0,
-              minWidth:'42px',
+              padding: 0,
+              minWidth: '42px',
               color: isActive(['/deckbuilder', '/optcgbuilder']) ? '#7C4FFF' : '#555555',
             }}
           />
           <BottomNavigationAction
+            disabled
             disableRipple
             component={Link}
-            to="/news"
+            to="/stacks"
+            label='Coming Soon'
             icon={
               <img
                 src="https://geekstack.dev/icons/bottomnav/NewsSelected.svg"
-                alt="news"
+                alt="content"
                 style={{
                   width: "30px",
-                  filter: isActive('/news') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive('/stacks') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s'
                 }}
               />
             }
             sx={{
-              padding:0,
-              minWidth:'42px',
-              color: isActive('/news') ? '#7C4FFF' : '#555555',
+              padding: 0,
+              minWidth: '42px',
+              color: isActive('/stacks') ? '#7C4FFF' : '#555555',
             }}
           />
           <BottomNavigationAction
             disableRipple
             component={Link}
-            to="/FAQ"
             icon={
               <img
-                src="/icons/bottomnav/FAQSelected.svg"
-                alt="FAQ"
+                src="/icons/bottomnav/AccSelected.svg"
+                alt="account"
                 style={{
                   width: "30px",
-                  filter: isActive('/FAQ') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive('/account') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s'
                 }}
               />
             }
             sx={{
-              padding:0,
-              minWidth:'42px',
-              color: isActive('/FAQ') ? '#7C4FFF' : '#555555',
+              padding: 0,
+              minWidth: '42px',
+              color: isActive('/account') ? '#7C4FFF' : '#555555',
             }}
+            onClick={handleAccountClick}
           />
         </BottomNavigation>
       </ThemeProvider>
+      <Modal open={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <LoginModal />
+      </Modal>
     </Box>
   );
 };

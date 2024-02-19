@@ -5,6 +5,8 @@ import { onSnapshot, query, collection, orderBy, limit, startAfter, getDocs, whe
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../../Firebase";
 import { AuthContext } from "../../context/AuthContext";
+import SingleCardDrawer from "./SingleCardDrawer";
+import { useNavigate, useParams } from "react-router-dom";
 
 function formatDate(date) {
     const day = date.getDate();
@@ -21,11 +23,16 @@ function formatDate(date) {
 }
 
 const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
+    const grabbingParams = useParams();
+    const paramsUid = grabbingParams.id;
+    const navigate = useNavigate();
     const [deckData, setDeckData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isPaginating, setIsPaginating] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
     const [canPaginateNext, setCanPaginateNext] = useState(true);
+    const [drawerOpen, setDrawerOpen] = useState(false);
     const itemsPerPage = 10;
     const querySnapshotRef = useRef(null);
     const querySnapshotStackRef = useRef([]);
@@ -59,7 +66,7 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                 selectedCollection = "uniondecklist";
                 deckQuery = query(
                     collection(db, selectedCollection),
-                    where('postType','==','UATCG'),
+                    where('postType', '==', 'UATCG'),
                     orderBy("sharedDate", "desc"),
                     limit(itemsPerPage),
                     ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
@@ -73,7 +80,7 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                 selectedCollection = "uniondecklist";
                 deckQuery = query(
                     collection(db, selectedCollection),
-                    where('postType','==','OPTCG'),
+                    where('postType', '==', 'OPTCG'),
                     orderBy("sharedDate", "desc"),
                     limit(itemsPerPage),
                     ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
@@ -166,6 +173,12 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
             fetchDeckData();  // This will re-fetch the data whenever there's a change in the Firestore collection.
         });
 
+        // Check if paramsUid is present and set isClicked and drawerOpen accordingly
+        if (paramsUid) {
+            setIsClicked(true);
+            setDrawerOpen(true);
+        }
+
         return () => {
             // Clean up the listener when the component unmounts
             changelistener();
@@ -215,8 +228,9 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                             position: 'relative',
                             overflow: 'hidden',
                         }}
+                        onClick={() => { setIsClicked(true) }}
                     >
-                        <SingleCardStack grpdata={data} index={index} uid={uid} />
+                        <SingleCardStack grpdata={data} index={index} uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />
                     </Box>
                 ))}
             </Box>
@@ -234,8 +248,9 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                             position: 'relative',
                             overflow: 'hidden',
                         }}
+                        onClick={() => { setIsClicked(true) }}
                     >
-                        <SingleCardStack grpdata={data} index={index} uid={uid} />
+                        <SingleCardStack grpdata={data} index={index} uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />
                     </Box>
                 ))}
             </Box>
@@ -253,6 +268,7 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                     Loading...
                 </Box>
             )}
+            {isClicked && (<SingleCardDrawer uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />)}
         </Box>
     );
 };

@@ -141,6 +141,7 @@ const DecklibrarybtnMobile = () => {
 
         // Create a new shared deck document in the 'uniondecklist' collection
         await addDoc(collection(db, "uniondecklist"), {
+          postType:'UATCG',
           deckName: finalDeckName,
           colorCount: deck.colorCount,
           specialCount: deck.specialCount,
