@@ -109,12 +109,14 @@ const DeckBuilderBar = (props) => {
   );
   const calculateStats = () => {
     const energyCounts = filteredCards.reduce((acc, card) => {
-      acc[card.energycost] = (acc[card.energycost] || 0) + card.count;
-      return acc;
+        const energyKey = card.energycost >= 10 ? 10 : card.energycost;
+        acc[energyKey] = (acc[energyKey] || 0) + card.count;
+        return acc;
     }, {});
 
     return energyCounts;
-  };
+};
+
   const stats = calculateStats();
   const handleExportClick = () => {
     if (totalCount < 50) {

@@ -61,16 +61,6 @@ const TestRightBar = (props) => {
         });
     };
 
-    const handleLocalStorageUpdate = (event) => {
-        if (event.key === "filteredCards") {
-            const newFilteredCards = JSON.parse(event.newValue);
-            setFilteredCards(newFilteredCards);
-        }
-        if (event.key === "countArray") {
-            const newCountArray = JSON.parse(event.newValue);
-            setCountArray(newCountArray);
-        }
-    };
 
     const areCardsFromSameAnime = (cards) => {
         if (cards.length === 0) {
