@@ -4,7 +4,7 @@ import { ButtonBase, IconButton } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
-import { Star } from "@mui/icons-material";
+import { Bookmark, BookmarkBorderOutlined, Star } from "@mui/icons-material";
 
 const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -72,7 +72,7 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   };
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <Link to={{ pathname }} style={{ textDecoration: "none" }}>
         <ButtonBase
           sx={{
@@ -80,7 +80,7 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
             flexDirection: "column",
             alignItems: "center",
             bgcolor: "#121212",
-            borderRadius: 5,
+            borderRadius: 3,
             boxShadow: 5,
             overflow: "hidden",
             width: { xs: 125, sm: 200 },
@@ -96,12 +96,17 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
       </Link>
       <IconButton
         sx={{
-          color: isFavorited ? "#7C4FFF" : "white",
+          position: 'absolute',
+          top: '0px',
+          left: '0px',
+          padding: '0px',
+          color: "rgba(255,255,255)",
+          borderRadius: '50%',
+          transition: '0.5s opacity',
         }}
         onClick={handleFavorite}
       >
-        <Star />
-        <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{pathname}</strong></span>
+        {isFavorited ? (<Bookmark sx={{fontSize:'40px'}}/>) : (<BookmarkBorderOutlined sx={{fontSize:'40px'}} />)}
       </IconButton>
     </div>
   );
