@@ -13,7 +13,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
-import LeakOfTheDay from "./components/LeakOfTheDay";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -45,6 +44,28 @@ function CustomDot({ onClick, active }) {
             }}
             onClick={onClick}
         />
+    );
+}
+
+function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block"}}
+            onClick={onClick}
+        />
+    );
+}
+
+function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block"}}
+            onClick={onClick}
+        ></div>
     );
 }
 
@@ -151,6 +172,8 @@ const Home = () => {
         afterChange: (index) => {
             setCurrentSlide(index);
         },
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />
     };
     const [currentSlide, setCurrentSlide] = useState(0);
     const settings1 = {
@@ -287,24 +310,27 @@ const Home = () => {
                                 </Collapse>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column',backgroundColor: '#121212', width:'100vw',paddingBottom:'40px',paddingTop:'20px',alignItems: 'center', gap: '10px' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', width: '100vw', paddingBottom: '40px', paddingTop: '20px', alignItems: 'center', gap: '10px' }}>
                             <Box sx={{ fontSize: "20px", color: "#F2F8FC", }}><strong>LATEST RELEASE</strong></Box>
-                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' }, }}>
                                 <Slider {...settings}>
                                     {imageData.map((image, index) => (
                                         <Link key={index} to={image.path}>
-                                            <Box component={'img'} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
+                                            <Box component={'img'} src={image.src} sx={{
+                                                width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' },
+                                                height: 'auto', borderRadius: '10px',
+                                            }} />
                                         </Link>
                                     ))}
                                 </Slider>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',paddingBottom:'30px' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingBottom: '30px' }}>
                             <img src="images/COMINGSOON.png" alt="comingsoon" style={{ width: '300px' }} />
-                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
+                            <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' } }}>
                                 <Slider {...settings1}>
                                     {comingsoonData.map((image, index) => (
-                                        <Box component={'img'} key={index} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, height: 'auto', borderRadius: '15px' }} />
+                                        <Box component={'img'} key={index} src={image.src} sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' }, height: 'auto', borderRadius: '10px' }} />
                                     ))}
                                 </Slider>
                             </Box>

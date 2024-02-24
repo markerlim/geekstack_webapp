@@ -145,7 +145,6 @@ const BottomNav = () => {
             disableRipple
             component={Link}
             to="/stacks"
-            label='Coming Soon'
             icon={
               <img
                 src="https://geekstack.dev/icons/bottomnav/NewsSelected.svg"
@@ -165,6 +164,7 @@ const BottomNav = () => {
           />
           <BottomNavigationAction
             disableRipple
+            to="/account"
             component={Link}
             icon={
               <img

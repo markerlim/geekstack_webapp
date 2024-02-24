@@ -141,6 +141,7 @@ const BottomNav = () => {
             }}
           />
           <BottomNavigationAction
+            disabled
             disableRipple
             component={Link}
             to="/stacks"
@@ -163,6 +164,7 @@ const BottomNav = () => {
           />
           <BottomNavigationAction
             disableRipple
+            to="/account"
             component={Link}
             icon={
               <img
