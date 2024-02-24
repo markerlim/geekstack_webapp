@@ -10,8 +10,10 @@ import LoginModal from './LoginModal'; // Import the LoginModal component
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
     height: '64px',
+    borderBottom: '0.5px solid #29333e',
+    boxShadow:'none',
     '&.MuiToolbar-root': {
-        background: 'linear-gradient(to right, rgb(44, 25, 80), rgb(15, 23, 42))',
+        background: '#101418',
     },
 });
 

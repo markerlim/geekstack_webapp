@@ -6,6 +6,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt';
 import CardStackFlood from "../components/StacksPageComponent/CardStackFlood";
+import { PostAdd } from "@mui/icons-material";
+import PostDrawer from "../components/StacksPageComponent/PostDrawer";
 
 const StacksPage = () => {
     useEffect(() => {
@@ -23,6 +25,7 @@ const StacksPage = () => {
     const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO'];
     const [selectedCategoryTag, setSelectedCategoryTag] = useState('ALL');
     const [selectedUAtag, setSelectedUAtag] = useState(null);
+    const [postDrawerOpen, setPostDrawerOpen] = useState(false);
     const scrollWholeContainerRef = useRef(null);
     const scrollContainerRef = useRef(null);
     const [isNavVisible, setIsNavVisible] = useState(true);
@@ -81,6 +84,10 @@ const StacksPage = () => {
             }
         }
     };
+    const handlePostDrawer = () => {
+        setPostDrawerOpen(true);
+        console.log(true);
+    }
     const handleUAtagClick = (tag) => {
         if (selectedUAtag === tag) {
             setSelectedUAtag(null);
@@ -197,6 +204,10 @@ const StacksPage = () => {
                     <CardStackFlood selectedCategoryTag={selectedCategoryTag} selectedUAtag={selectedUAtag} />
                 </Box>
                 <Box sx={{ display: { sm: "block", md: "none" } }}>
+                    <Box sx={{ position: 'absolute', zIndex: 1001, borderRadius: '50%', padding: '10px', bgcolor: '#7C4FFF', right: '15px', bottom: '90px' }}>
+                        <PostAdd onClick={handlePostDrawer} />
+                    </Box>
+                    <PostDrawer postDrawerOpen={postDrawerOpen} setPostDrawerOpen={setPostDrawerOpen}/>
                     <BottomNav />
                 </Box>
             </Box>

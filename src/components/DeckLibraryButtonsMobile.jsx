@@ -10,6 +10,7 @@ import SharingStack from "./SharingStack";
 const DecklibrarybtnMobile = () => {
   const { currentUser } = useAuth();
   const [decks, setDecks] = useState([]);
+  const [deck,setDeck] = useState(null);
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [selectedCards, setSelectedCards] = useState([]);
@@ -47,8 +48,8 @@ const DecklibrarybtnMobile = () => {
     setLoading(false);
   }, [currentUser]);
 
-  const handleOpen = async (deckId) => {
-    const cardsSnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deckId}/cards`));
+  const handleOpen = async (deck) => {
+    const cardsSnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deck.id}/cards`));
     const cardsData = [];
     cardsSnapshot.forEach((doc) => {
       const data = doc.data();
@@ -57,12 +58,13 @@ const DecklibrarybtnMobile = () => {
         ...data,
       });
     });
-    const deck = decks.find((d) => d.id === deckId);
-    if (deck) {
-      setEditedDeckName(deck.name);
+    const decksearch = decks.find((d) => d.id === deck.id);
+    if (decksearch) {
+      setEditedDeckName(decksearch.name);
     }
     setCards(cardsData);
     setSelectedCards([]);
+    setDeck(deck)
     setOpen(true);
   };
 
@@ -259,17 +261,20 @@ const DecklibrarybtnMobile = () => {
                         color: "#7C4FFF", // Change this to the desired hover text color if needed
                       }
                     }}
-                    onClick={() => handleOpen(deck.id)}
+                    onClick={() => handleOpen(deck)}
                   >
                     <Share sx={{ fontSize: '16px' }} />
                   </Box>
                 </Box>
-                <SharingStack
+              </Box>
+            )))}
+            <SharingStack
                   open={open}
                   handleClose={handleClose}
                   editedDeckName={editedDeckName}
                   handleDeckNameChange={handleDeckNameChange}
                   description={description}
+                  setDescription={setDescription}
                   handleInputChange={handleInputChange}
                   cards={cards}
                   selectedCards={selectedCards}
@@ -279,8 +284,6 @@ const DecklibrarybtnMobile = () => {
                   handleShareDeck={handleShareDeck}
                   deck={deck}
                 />
-              </Box>
-            )))}
           <div style={{ paddingLeft: '5vw' }}>
             <br />
           </div>

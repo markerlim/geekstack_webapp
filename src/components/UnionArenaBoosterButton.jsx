@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ButtonBase, IconButton } from "@mui/material";
+import { Box, ButtonBase, IconButton } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
-import { Bookmark, BookmarkBorderOutlined, Star } from "@mui/icons-material";
+import { Star } from "@mui/icons-material";
 
 const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -97,16 +97,16 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
       <IconButton
         sx={{
           position: 'absolute',
-          top: '0px',
-          left: '0px',
+          bottom: '5px',
+          right: '5px',
           padding: '0px',
-          color: "rgba(255,255,255)",
           borderRadius: '50%',
-          transition: '0.5s opacity',
         }}
         onClick={handleFavorite}
       >
-        {isFavorited ? (<Bookmark sx={{fontSize:'40px'}}/>) : (<BookmarkBorderOutlined sx={{fontSize:'40px'}} />)}
+        <Box sx={{backgroundImage:'linear-gradient(to right bottom, #241f4b, #1d1f4a, #161e48, #0d1e47, #031d45);',borderRadius:'50%',padding:'5px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+          {isFavorited ? (<Star sx={{ fontSize: '25px',color:'#FFC000', transition: 'color 0.5s ease-in-out' }} />) : (<Star sx={{ fontSize: '25px', color: '#F2F3F8', transition: 'color 0.5s ease-in-out' }} />)}
+        </Box>
       </IconButton>
     </div>
   );

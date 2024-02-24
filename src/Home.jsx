@@ -6,7 +6,7 @@ import HomepageDashboard from "./components/HomepageDashboard";
 import { Helmet } from "react-helmet";
 import FullCalendar from "@fullcalendar/react";
 import listPlugin from "@fullcalendar/list";
-import { ExpandMore } from "@mui/icons-material";
+import { ExpandMore, Style, ViewList } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -52,7 +52,7 @@ function SampleNextArrow(props) {
     return (
         <div
             className={className}
-            style={{ ...style, display: "block"}}
+            style={{ ...style, display: "block" }}
             onClick={onClick}
         />
     );
@@ -63,7 +63,7 @@ function SamplePrevArrow(props) {
     return (
         <div
             className={className}
-            style={{ ...style, display: "block"}}
+            style={{ ...style, display: "block" }}
             onClick={onClick}
         ></div>
     );
@@ -262,52 +262,42 @@ const Home = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: '-10px', gap: '20px', width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" } }}>
-                            <Box sx={{ display: 'flex', flex: '0 0 auto', flexWrap: 'nowrap', gap: '20px', height: { xs: '77px', sm: "165px" }, overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
-                                <Button
-                                    sx={{
-                                        width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', height: { xs: '70px', sm: "112.5px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
-                                            transform: 'scale(1.1)',
-                                            transition: 'all 0.2s ease-in-out'
-                                        }
-                                    }}
-                                    onClick={() => {
-                                        setIsUAButtonsVisible(!isUAButtonsVisible);
-                                        setIsOPTCGButtonsVisible(false);
-                                    }}
-                                >
-                                    <img style={{ height: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" />
-                                </Button>
-                                <Button
-                                    sx={{
-                                        width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', height: { xs: '70px', sm: "112.5px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
-                                            transform: 'scale(1.1)',
-                                            transition: 'all 0.2s ease-in-out'
-                                        }
-                                    }}
-                                    onClick={() => {
-                                        setIsOPTCGButtonsVisible(!isOPTCGButtonsVisible);
-                                        setIsUAButtonsVisible(false);
-                                    }}
-                                >
-                                    <img style={{ height: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" />
-                                </Button>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto',zIndex:'1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden', outlineOffset:'-3px',outline:'3.5px solid rgba(18, 18, 18, 0.4)' }}>
+                                <img style={{ height: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" />
                             </Box>
-                            <Box sx={{ position: 'relative', textAlign: 'center' }}>
-                                <Collapse in={isUAButtonsVisible}>
-                                    <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/unionarena">UATCG<br />Cardlist</Button>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/uadecklist">UATCG<br />Decklist</Button>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/deckbuilder">UATCG<br />Builder</Button>
-                                    </Box>
-                                </Collapse>
-                                <Collapse in={isOPTCGButtonsVisible}>
-                                    <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/onepiece">OPTCG<br />Cardlist</Button>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} disabled component={Link} to="/">OPTCG<br />Decklist</Button>
-                                        <Button sx={{ width: "100px", color: "#74CFFF", bgcolor: "#26252d", fontSize: '12px' }} component={Link} to="/optcgbuilder">OPTCG<br />Builder</Button>
-                                    </Box>
-                                </Collapse>
+                            <Box sx={{ height:'60px',bgcolor:'#26252d',marginLeft:'-10px',width:'200px',borderRadius:'0px 5px 5px 0px',zIndex:'0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '20px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/unionarena">
+                                    <Style sx={{alignSelf:'center'}} />
+                                    <p style={{fontSize:'12px'}}>Cards</p>
+                                </Box>
+                                <Box sx={{ width:'50px',height:'60px',color: "#c8a2c8", marginLeft: '10px',gap:'5px',display:'flex',justifyContent:'center',flexDirection:'column',textDecoration:'none',alignItems:'center' }} component={Link} to="/deckbuilder">
+                                    <img style={{ width: '24px' }} alt="UA Builder" src="https://geekstack.dev/icons/bottomnav/DeckcreateSelected.svg" />
+                                    <p style={{fontSize:'12px'}}>Build</p>
+                                </Box>
+                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '10px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/uadecklist">
+                                    <ViewList sx={{alignSelf:'center'}} />
+                                    <p style={{fontSize:'12px'}}>Decklist</p>
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto',zIndex:'1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden',outlineOffset:'-3px',outline:'3.5px solid rgba(18, 18, 18, 0.4)' }}>
+                                <img style={{ height: "100%"}} alt="onepiece" src="/images/HMOPTCGButton.jpg"/>
+                            </Box>
+                            <Box sx={{ height:'60px',bgcolor:'#26252d',marginLeft:'-10px',width:'200px',borderRadius:'0px 5px 5px 0px',zIndex:'0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '20px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/onepiece">
+                                    <Style sx={{alignSelf:'center'}} />
+                                    <p style={{fontSize:'12px'}}>Cards</p>
+                                </Box>
+                                <Box sx={{ width:'50px',height:'60px',color: "#c8a2c8", marginLeft: '10px',gap:'5px',display:'flex',justifyContent:'center',flexDirection:'column',textDecoration:'none',alignItems:'center' }} component={Link} to="/opdeckbuilder">
+                                    <img style={{ width: '24px' }} alt="UA Builder" src="https://geekstack.dev/icons/bottomnav/DeckcreateSelected.svg" />
+                                    <p style={{fontSize:'12px'}}>Build</p>
+                                </Box>
+                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '10px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/uadecklist">
+                                    <ViewList sx={{alignSelf:'center'}} />
+                                    <p style={{fontSize:'12px'}}>Decklist</p>
+                                </Box>
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', width: '100vw', paddingBottom: '40px', paddingTop: '20px', alignItems: 'center', gap: '10px' }}>

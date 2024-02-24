@@ -141,9 +141,9 @@ const BottomNav = () => {
             }}
           />
           <BottomNavigationAction
-            disabled
             disableRipple
             component={Link}
+            label="Coming Soon"
             to="/stacks"
             icon={
               <img

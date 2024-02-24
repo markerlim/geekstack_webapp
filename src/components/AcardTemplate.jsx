@@ -132,7 +132,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             if (prev[document.cardId] === undefined) {
                 return {
                     ...prev,
-                    [document.cardId]: 1
+                    [document.cardId]: 0
                 };
             }
 
@@ -154,6 +154,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
     useEffect(()=>{
         console.log(altFormIndex)
     },[altFormIndex])
+
     useEffect(() => {
         if (onlyAltForm) {
             setAltForms(prev => {
@@ -190,6 +191,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
             });
         }
     }, [onlyAltForm, documents]);
+
     function isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
     }
