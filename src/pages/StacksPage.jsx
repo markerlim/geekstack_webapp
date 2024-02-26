@@ -22,7 +22,7 @@ const StacksPage = () => {
     }, []);
 
     const categorytags = ['ALL', 'UNION-ARENA', 'ONE-PIECE'];
-    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO'];
+    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO', 'SYN', 'TRK'];
     const [selectedCategoryTag, setSelectedCategoryTag] = useState('ALL');
     const [selectedUAtag, setSelectedUAtag] = useState(null);
     const [postDrawerOpen, setPostDrawerOpen] = useState(false);

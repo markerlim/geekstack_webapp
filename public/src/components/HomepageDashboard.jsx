@@ -12,24 +12,8 @@ const HomepageDashboard = () => {
   const { currentUser } = useAuth();
   const [justifyContent, setJustifyContent] = useState('flex-start');
   const boxRef = useRef(null);
-  const [showPopup, setShowPopup] = useState(false);
-  const [dontShowAgain, setDontShowAgain] = useState(false);
-  const digimon = "digimon/";
   const uacard = "unionarena/";
   const onepiece = "onepiece/";
-
-  useEffect(() => {
-    if (!localStorage.getItem("popupShown")) {
-      setShowPopup(true);
-    }
-  }, []);
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    if (dontShowAgain) {
-      localStorage.setItem("popupShown", "true");
-    }
-  };
 
 
   useEffect(() => {
@@ -113,42 +97,15 @@ const HomepageDashboard = () => {
 
   return (
     <>
-      {showPopup && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div style={{ backgroundColor: '#26252d', padding: '20px', borderRadius: '10px', maxWidth: '400px', textAlign: 'start', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{fontSize:'15px'}}>Hi all, please start using <a style={{color:'#f2f3f8'}}href="www.geekstack.dev">www.geekstack.dev</a> instead of www.uniondeck.dev if you have not! :D
-            Also, the experience is most optimized for mobile as a web application.
-            <br/>We highly encourage you to add this on your home screen!
-            </p>
-            <Box sx={{backgroundColor:'#f2f3f8',height:'1px'}}>
-            </Box>
-            <Box>
-              <Box sx={{ fontSize: { xs: '8px', sm: '8px', md: '10px' } }}>Should there be queries, you may find us on discord via Aegis or DPPChannel</Box>
-              <Box sx={{ fontSize: { xs: '8px', sm: '8px', md: '10px' } }}>Disclaimer: Assets found on this websites are from Bandai we do not own any of it.</Box>
-              <div style={{ fontSize: '10px', display: 'flex', alignItems: 'center', paddingBottom: '20px' }}>
-                <input
-                  style={{ width: '10px' }}
-                  type="checkbox"
-                  id="dontShowAgain"
-                  checked={dontShowAgain}
-                  onChange={() => setDontShowAgain(!dontShowAgain)}
-                />
-                <label htmlFor="dontShowAgain">Don't show this again</label>
-              </div>
-              <button style={{ backgroundColor: "#74cfff", paddingTop: '3px', paddingBottom: '3px', paddingRight: '8px', paddingLeft: '8px', borderRadius: '5px', cursor: 'pointer' }} onClick={handleClosePopup}>Okay</button>
-            </Box>
-          </div>
-        </div>
-      )}
-      <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", paddingLeft: "15px", paddingRight: "15px", gap: "20px", height: { xs: 248, sm: 360 }, }}>
-        <Box sx={{width:'30px'}}></Box>
+      <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", paddingLeft: "15px", paddingRight: "15px",paddingBottom:'20px', gap: "20px", height: { xs: 188, sm: 300 }, }}>
+        <Box sx={{ width: '30px' }}></Box>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <CircularProgress />
           </Box>
         ) : favorites.length > 0 ? (
           favorites.map((favorite, index) => (
-            <div key={index}>
+            <div key={index} style={{position:'relative'}}>
               <Link to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
                 <ButtonBase
                   sx={{
@@ -172,12 +129,17 @@ const HomepageDashboard = () => {
               </Link>
               <IconButton
                 sx={{
-                  color: favorites.includes(favorite) ? "#7C4FFF" : "white",
+                  position: 'absolute',
+                  bottom: '5px',
+                  right: '5px',
+                  padding: '0px',
+                  borderRadius: '50%',
                 }}
                 onClick={() => handleFavorite(favorite)}
               >
-                <Star />
-                <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{favorite.pathname.replace(digimon, "").replace(uacard, "").replace(onepiece, "")}</strong></span>
+                <Box sx={{ backgroundImage: 'linear-gradient(to right bottom, #241f4b, #1d1f4a, #161e48, #0d1e47, #031d45);', borderRadius: '50%', padding: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {favorites.includes(favorite) ? (<Star sx={{ fontSize: '25px', color: '#FFC000', transition: 'color 0.5s ease-in-out' }} />) : (<Star sx={{ fontSize: '25px', color: '#F2F3F8', transition: 'color 0.5s ease-in-out' }} />)}
+                </Box>
               </IconButton>
             </div>
           ))
@@ -186,7 +148,7 @@ const HomepageDashboard = () => {
             <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You currently have no favourites. Do star them to add the pages to your favorite.</span>
           </Box>
         )}
-        <Box sx={{width:'30px'}}></Box>
+        <Box sx={{ width: '30px' }}></Box>
       </Box>
     </>
   );

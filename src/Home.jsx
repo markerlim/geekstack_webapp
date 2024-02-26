@@ -263,40 +263,40 @@ const Home = () => {
                         <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto',zIndex:'1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden', outlineOffset:'-3px',outline:'3.5px solid rgba(18, 18, 18, 0.4)' }}>
+                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', zIndex: '1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden', outlineOffset: '-3px', outline: '3.5px solid rgba(18, 18, 18, 0.4)' }}>
                                 <img style={{ height: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" />
                             </Box>
-                            <Box sx={{ height:'60px',bgcolor:'#26252d',marginLeft:'-10px',width:'200px',borderRadius:'0px 5px 5px 0px',zIndex:'0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '20px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/unionarena">
-                                    <Style sx={{alignSelf:'center'}} />
-                                    <p style={{fontSize:'12px'}}>Cards</p>
+                            <Box sx={{ height: '60px', bgcolor: '#26252d', marginLeft: '-10px', width: '200px', borderRadius: '0px 5px 5px 0px', zIndex: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", gap: '5px', marginLeft: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/unionarena">
+                                    <img style={{ width: '24px' }} alt="UA Builder" src="icons/UAcards.svg" />
+                                    <p style={{ fontSize: '12px' }}>Cards</p>
                                 </Box>
-                                <Box sx={{ width:'50px',height:'60px',color: "#c8a2c8", marginLeft: '10px',gap:'5px',display:'flex',justifyContent:'center',flexDirection:'column',textDecoration:'none',alignItems:'center' }} component={Link} to="/deckbuilder">
-                                    <img style={{ width: '24px' }} alt="UA Builder" src="https://geekstack.dev/icons/bottomnav/DeckcreateSelected.svg" />
-                                    <p style={{fontSize:'12px'}}>Build</p>
+                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", marginLeft: '10px', gap: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/deckbuilder">
+                                    <img style={{ width: '24px' }} alt="UA Builder" src="icons/UAdeckbox.svg" />
+                                    <p style={{ fontSize: '12px' }}>Build</p>
                                 </Box>
-                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '10px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/uadecklist">
-                                    <ViewList sx={{alignSelf:'center'}} />
-                                    <p style={{fontSize:'12px'}}>Decklist</p>
+                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", fontSize: '20px', gap: '5px', marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center' }} component={Link} to="/uadecklist">
+                                    <ViewList sx={{ alignSelf: 'center' }} />
+                                    <p style={{ fontSize: '12px' }}>Decklist</p>
                                 </Box>
                             </Box>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto',zIndex:'1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden',outlineOffset:'-3px',outline:'3.5px solid rgba(18, 18, 18, 0.4)' }}>
-                                <img style={{ height: "100%"}} alt="onepiece" src="/images/HMOPTCGButton.jpg"/>
+                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', zIndex: '1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden', outlineOffset: '-3px', outline: '3.5px solid rgba(18, 18, 18, 0.4)' }}>
+                                <img style={{ height: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" />
                             </Box>
-                            <Box sx={{ height:'60px',bgcolor:'#26252d',marginLeft:'-10px',width:'200px',borderRadius:'0px 5px 5px 0px',zIndex:'0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '20px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/onepiece">
-                                    <Style sx={{alignSelf:'center'}} />
-                                    <p style={{fontSize:'12px'}}>Cards</p>
+                            <Box sx={{ height: '60px', bgcolor: '#26252d', marginLeft: '-10px', width: '200px', borderRadius: '0px 5px 5px 0px', zIndex: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", gap: '5px', marginLeft: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/onepiece">
+                                    <img style={{ width: '24px' }} alt="OP Builder" src="icons/OPcards.svg" />
+                                    <p style={{ fontSize: '12px' }}>Cards</p>
                                 </Box>
-                                <Box sx={{ width:'50px',height:'60px',color: "#c8a2c8", marginLeft: '10px',gap:'5px',display:'flex',justifyContent:'center',flexDirection:'column',textDecoration:'none',alignItems:'center' }} component={Link} to="/opdeckbuilder">
-                                    <img style={{ width: '24px' }} alt="UA Builder" src="https://geekstack.dev/icons/bottomnav/DeckcreateSelected.svg" />
-                                    <p style={{fontSize:'12px'}}>Build</p>
+                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", marginLeft: '10px', gap: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/optcgbuilder">
+                                    <img style={{ width: '24px' }} alt="OP Builder" src="icons/OPdeckbox.svg" />
+                                    <p style={{ fontSize: '12px' }}>Build</p>
                                 </Box>
-                                <Box sx={{ width:'50px',height:'60px', color: "#c8a2c8", fontSize: '20px',gap:'5px', marginLeft: '10px',display:'flex',flexDirection:'column',justifyContent:'center',textDecoration:'none',textAlign:'center' }} component={Link} to="/uadecklist">
-                                    <ViewList sx={{alignSelf:'center'}} />
-                                    <p style={{fontSize:'12px'}}>Decklist</p>
+                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", fontSize: '20px', gap: '5px', marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center', opacity: '50%' }} component={Link} to="/">
+                                    <ViewList sx={{ alignSelf: 'center' }} />
+                                    <p style={{ fontSize: '12px' }}>Decklist</p>
                                 </Box>
                             </Box>
                         </Box>
