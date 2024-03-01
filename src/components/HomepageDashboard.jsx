@@ -113,7 +113,7 @@ const HomepageDashboard = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     bgcolor: "#121212",
-                    borderRadius: "10px",
+                    borderRadius: 3,
                     boxShadow: 5,
                     overflow: "hidden",
                     width: { xs: 125, sm: 200 },
