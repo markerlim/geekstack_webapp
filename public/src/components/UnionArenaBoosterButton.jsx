@@ -214,6 +214,18 @@ const ButtonList = () => {
       pathname: "trk",
       alt: "toriko",
       imageSrc: "/images/deckimage17.jpg",
+      imgWidth: "110%", 
+    },
+    {
+      pathname: "nik",
+      alt: "goddess of victory : nikke",
+      imageSrc: "/images/deckimage18.jpg",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "hiq",
+      alt: "haikyu!!",
+      imageSrc: "/images/deckimage19.jpg",
       imgWidth: "110%",
     },
   ];

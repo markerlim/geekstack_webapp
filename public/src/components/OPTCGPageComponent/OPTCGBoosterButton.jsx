@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ButtonBase, IconButton } from "@mui/material";
+import { Box, ButtonBase, IconButton } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
@@ -72,7 +72,7 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   };
 
   return (
-    <div>
+    <div style={{position:'relative'}}>
       <Link to={{ pathname }} style={{ textDecoration: "none" }}>
         <ButtonBase
           sx={{
@@ -80,7 +80,7 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
             flexDirection: "column",
             alignItems: "center",
             bgcolor: "#121212",
-            borderRadius: 5,
+            borderRadius: 3,
             boxShadow: 5,
             overflow: "hidden",
             width: { xs: 125, sm: 200 },
@@ -96,12 +96,17 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
       </Link>
       <IconButton
         sx={{
-          color: isFavorited ? "#7C4FFF" : "white",
+          position: 'absolute',
+          bottom: '5px',
+          right: '5px',
+          padding: '0px',
+          borderRadius: '50%',
         }}
         onClick={handleFavorite}
       >
-        <Star />
-        <span style={{ color: "#f2f3f8", textTransform: "uppercase" }}><strong>{pathname}</strong></span>
+        <Box sx={{backgroundImage:'linear-gradient(to right bottom, #241f4b, #1d1f4a, #161e48, #0d1e47, #031d45);',borderRadius:'50%',padding:'5px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+          {isFavorited ? (<Star sx={{ fontSize: '25px',color:'#FFC000', transition: 'color 0.5s ease-in-out' }} />) : (<Star sx={{ fontSize: '25px', color: '#F2F3F8', transition: 'color 0.5s ease-in-out' }} />)}
+        </Box>
       </IconButton>
     </div>
   );

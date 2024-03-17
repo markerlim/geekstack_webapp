@@ -11,7 +11,7 @@ const StyledToolbar = styled(Toolbar)({
     display: 'flex',
     height: '64px',
     '&.MuiToolbar-root': {
-        background: 'linear-gradient(to right, rgb(44, 25, 80), rgb(15, 23, 42))',
+        background: '#101418',
     },
 });
 

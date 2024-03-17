@@ -141,6 +141,7 @@ const BottomNav = () => {
             }}
           />
           <BottomNavigationAction
+            disabled
             disableRipple
             component={Link}
             label="Coming Soon"

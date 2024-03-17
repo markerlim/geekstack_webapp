@@ -123,7 +123,7 @@ const DBCardRef = (props) => {
 
     const animeData = [
         { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST','EX02BT'], colorsets: ['Red', 'Green','Blue','Purple'] },
-        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC'], colorsets: ['Blue', 'Yellow', 'Purple'] },
+        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC','EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple','Red'] },
         { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
         { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'] },
         { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC'], colorsets: ['Red', 'Yellow', 'Purple'] },
@@ -139,6 +139,8 @@ const DBCardRef = (props) => {
         { filter: 'Sword Art Online', sets: ['UA15BT', 'UA15ST'], colorsets: ['Yellow', 'Blue', 'Green'] },
         { filter: 'Synduality Noir', sets: ['UA16BT', 'UA16ST'], colorsets: ['Red', 'Yellow', 'Purple'] },
         { filter: 'Toriko', sets: ['UA17BT', 'UA17ST'], colorsets: ['Blue', 'Yellow', 'Purple'] },
+        { filter: 'Goddess of Victory : Nikke', sets: ['UA18BT', 'UA18ST'], colorsets: ['Green', 'Yellow', 'Purple'] },
+        { filter: 'Haikyu!!', sets: ['UA19BT', 'UA19ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
     ]
 
     return (
