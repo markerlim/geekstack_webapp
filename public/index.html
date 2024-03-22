@@ -23,6 +23,24 @@
     <script defer="defer" src="/static/js/main.949bdb69.js"></script>
     <link href="/static/css/main.0fe2e448.css" rel="stylesheet">
 </head>
+<!-- Open Graph tags for link preview customization -->
+<script>
+    // Function to dynamically generate og:image tags for each image on the page
+    function generateOpenGraphTagsForImages() {
+        const images = document.querySelectorAll('img');
+        images.forEach((image, index) => {
+            const metaTag = document.createElement('meta');
+            metaTag.setAttribute('property', 'og:image');
+            metaTag.setAttribute('content', image.src);
+            document.head.appendChild(metaTag);
+        }); 
+    }
+
+    // Check if the current URL matches the desired domain before executing the script
+    if (window.location.href.startsWith("https://www.geekstack.dev/UD")) {
+        window.onload = generateOpenGraphTagsForImages;
+    }
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E2GKNFJDK6"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945"
     crossorigin="anonymous"></script>
@@ -38,6 +56,7 @@
             });
     }
 </script>
+
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 </body>

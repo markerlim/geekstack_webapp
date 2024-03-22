@@ -432,6 +432,9 @@ const DeckBuilderBar = (props) => {
   }, [deckUidParams]); // Dependency array includes deckUidParams
   
 
+  useEffect(()=>{
+    
+  })
   useEffect(() => {
     if (viewDeckbar) {
       setShowPadding(true);
