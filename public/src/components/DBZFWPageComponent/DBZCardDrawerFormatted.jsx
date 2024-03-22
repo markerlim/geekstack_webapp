@@ -2,10 +2,10 @@ import { Close, Error, Share, Visibility, VisibilityOff } from "@mui/icons-mater
 import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
-import ErrorLog from "./UAErrorLog";
+import ErrorLog from "../UAErrorLog";
 
 
-export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
+export const DBZCardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSize, setShowFullSize] = useState(false);
   const [openErrorLog, setOpenErrorLog] = useState(false);
@@ -65,58 +65,10 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     });
   }
 
-  const shareImageToWhatsApp = () => {
-    // Replace 'selectedCard.currentImage' with the URL of your webp image
-    const imageUrl = selectedCard.currentImage;
-  
-    // Check if Web Share API is available
-    if (navigator.share) {
-      navigator.share({
-        title: 'Share via WhatsApp',
-        text: 'Check out this image!',
-        url: imageUrl,
-      })
-        .then(() => console.log('Shared successfully to WhatsApp'))
-        .catch((error) => console.error('Error sharing to WhatsApp:', error));
-    } else {
-      // If Web Share API is not available, fallback to another method
-      // For example, you can open a WhatsApp web link with the image URL
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out this image!')} ${encodeURIComponent(imageUrl)}`, '_blank');
-    }
-  };
   
 
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
-    "[Impact 2]": "/icons/UAtags/CTImpact2.png",
-    "[Impact]": "/icons/UAtags/CTImpact.png",
-    "[Block x2]": "/icons/UAtags/CTBlkx2.png",
-    "[Attack x2]": "/icons/UAtags/CTAtkx2.png",
-    "[Snipe]": "/icons/UAtags/CTSnipe.png",
-    "[Impact +1]": "/icons/UAtags/CTImpact+1.png",
-    "[Step]": "/icons/UAtags/CTStep.png",
-    "[Damage]": "/icons/UAtags/CTDmg.png",
-    "[Damage +1]": "/icons/UAtags/CTDmg+1.png",
-    "[Damage 2]": "/icons/UAtags/CTDmg2.png",
-    "[Damage 3]": "/icons/UAtags/CTDmg3.png",
-    "[Impact Negate]": "/icons/UAtags/CTImpactNegate.png",
-    "[Once Per Turn]": "/icons/UAtags/CTOncePerTurn.png",
-    "[Rest this card]": "/icons/UAtags/CTRestThisCard.png",
-    "[Retire this card]": "/icons/UAtags/CTRetirethiscard.png",
-    "[Place 1 card from hand to Outside Area]": "/icons/UAtags/CT1HandtoOA.png",
-    "[Place 2 card from hand to Outside Area]": "/icons/UAtags/CT2HandtoOA.png",
-    "[When In Front Line]": "/icons/UAtags/CTWhenInFrontLine.png",
-    "[When In Energy Line]": "/icons/UAtags/CTWhenInEnergyLine.png",
-    "[Pay 1 AP]": "/icons/UAtags/CTPay1AP.png",
-    "[Raid]": "/icons/UAtags/CTRaid.png",
-    "[On Play]": "/icons/UAtags/CTOnPlay.png",
-    "[On Retire]": "/icons/UAtags/CTOnRetire.png",
-    "[On Block]": "/icons/UAtags/CTOnBlock.png",
-    "[When Blocking]": "/icons/UAtags/CTWhenBlocking.png",
-    "[Activate Main]": "/icons/UAtags/CTActivateMain.png",
-    "[When Attacking]": "/icons/UAtags/CTWhenAttacking.png",
-    "[Your Turn]": "/icons/UAtags/CTYourTurn.png",
-    "[Opponent's Turn]": "/icons/UAtags/CTOppTurn.png",
   };
 
   const Puller = styled('div')(({ theme }) => ({

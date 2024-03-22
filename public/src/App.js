@@ -13,24 +13,23 @@ import Deckviewer from "./pages/Deckviewer";
 import DeckCardLoader from "./pages/DeckCardLoader";
 import smoothscroll from "smoothscroll-polyfill";
 import Articleviewer from "./pages/Articleviewer";
-import DigimonPage from "./pages/DigimonPage";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import ArticleUI from "./pages/ArticleUI";
 import TestPage from "./pages/TestPage";
-import DTCGBTpage from "./pages/DTCGBTpage";
 import UnionArenaPage from "./pages/UnionArenaPage";
 import UADecklistSharingPage from "./pages/UADecklistSharingPage";
 import AccountDetails from "./pages/AccountDetailsPage";
 import { Box, styled } from "@mui/material";
 import OnepiecePage from "./pages/OnepiecePage";
 import OPTCGBTpage from "./pages/OPTCGBTpage";
-import DTCGDeckbuilder from "./pages/DTCGDeckbuilder";
 import OPTCGDeckbuilder from "./pages/OPTCGDeckbuilder";
 import Listofcards from "./pages/Listofcards";
 import Listofnews from "./pages/Listofnews";
 import FAQPage from "./pages/FAQPage";
 import AcardFormatpage from "./pages/AcardFormatpage.jsx";
 import StacksPage from "./pages/StacksPage.jsx";
+import DBZFWPage from "./pages/DBZFWPage.jsx";
+import DBZFWBTPage from "./pages/DBZFWBTpage.jsx";
 
 smoothscroll.polyfill();
 
@@ -96,9 +95,8 @@ function App() {
             <Route path="unionarena" element={<ProtectedRoute path="/unionarena"><UnionArenaPage /></ProtectedRoute>}/>
             <Route path="unionarena/:animecode" element={<AcardFormatpage />} />
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
-            <Route path="digimon" element={<DigimonPage />} />
-            <Route path="/digimon/:booster" element={<DTCGBTpage />} />
-            <Route path="dtcgbuilder" element={<DTCGDeckbuilder />} />
+            <Route path="dragonballz" element={<DBZFWPage />} />
+            <Route path="/dragonballz/:booster" element={<DBZFWBTPage />} />
             <Route path="onepiece" element={<OnepiecePage />} />
             <Route path="optcgbuilder" element={<OPTCGDeckbuilder />} />
             <Route path="/onepiece/:booster" element={<OPTCGBTpage />} />

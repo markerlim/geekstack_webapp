@@ -1,4 +1,4 @@
-import { Close, Error, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Close, Error, Share, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
@@ -65,6 +65,27 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     });
   }
 
+  const shareImageToWhatsApp = () => {
+    // Replace 'selectedCard.currentImage' with the URL of your webp image
+    const imageUrl = selectedCard.currentImage;
+  
+    // Check if Web Share API is available
+    if (navigator.share) {
+      navigator.share({
+        title: 'Share via WhatsApp',
+        text: 'Check out this image!',
+        url: imageUrl,
+      })
+        .then(() => console.log('Shared successfully to WhatsApp'))
+        .catch((error) => console.error('Error sharing to WhatsApp:', error));
+    } else {
+      // If Web Share API is not available, fallback to another method
+      // For example, you can open a WhatsApp web link with the image URL
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out this image!')} ${encodeURIComponent(imageUrl)}`, '_blank');
+    }
+  };
+  
+
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
     "[Impact 2]": "/icons/UAtags/CTImpact2.png",
@@ -91,6 +112,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[On Play]": "/icons/UAtags/CTOnPlay.png",
     "[On Retire]": "/icons/UAtags/CTOnRetire.png",
     "[On Block]": "/icons/UAtags/CTOnBlock.png",
+    "[When Blocking]": "/icons/UAtags/CTWhenBlocking.png",
     "[Activate Main]": "/icons/UAtags/CTActivateMain.png",
     "[When Attacking]": "/icons/UAtags/CTWhenAttacking.png",
     "[Your Turn]": "/icons/UAtags/CTYourTurn.png",
@@ -266,7 +288,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
             </Grid>
           </Box>
         </Box>
-        <Box mt={2} display="flex" justifyContent="center" paddingBottom='10px'>
+        <Box mt={2} display="flex" justifyContent="center" paddingBottom='10px' gap="10px">
           <Button onClick={() => handleClose()}
             sx={{
               width: "80%", backgroundColor: "#FF6961", color: "#f2f3f8",

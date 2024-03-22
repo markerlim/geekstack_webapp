@@ -32,34 +32,66 @@ const TestRightBar = (props) => {
     const increase = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
+            
+            // Find the specific card in filteredCards
+            const updatedFilteredCards = filteredCards.map((card) => {
+                if (card.cardId === cardId) {
+                    // Get the ban ratio or default to 4 if not specified
+                    const banRatio = card.banRatio || 4;
+                    // Check if the count is already at the maximum
+                    if ((card.count || 0) < banRatio) {
+                        // Increase count and return the updated card
+                        return { ...card, count: (card.count || 0) + 1 };
+                    }
+                }
+                return card;
+            });
     
-            // Get the specific card's banRatio
-            const card = filteredCards.find(doc => doc.cardId === cardId);
-            // Use nullish coalescing to provide a default value of 4 if card.banRatio is not found
-            const cardMaxCount = card?.banRatio ?? 4;
+            // Update filteredCards with the updated card
+            setFilteredCards(updatedFilteredCards);
+            
+            // Update local storage
+            setToLocalStorage("filteredCards", updatedFilteredCards);
     
-            if (!newArray[cardId]) {
-                newArray[cardId] = 0;
-            }
-            if (newArray[cardId] < cardMaxCount) {
-                newArray[cardId]++;
-            }
+            // Update countArray, ensuring it doesn't exceed the maximum specified by banRatio
+            const banRatio = filteredCards.find((card) => card.cardId === cardId)?.banRatio || 4;
+            newArray[cardId] = Math.min((newArray[cardId] || 0) + 1, banRatio);
             setToLocalStorage("countArray", newArray);
-            return newArray; // Update the countArray state without triggering the updateFilteredCards function
+    
+            return newArray;
         });
     };
     
-
+    
     const decrease = (cardId) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
+    
+            // Find the specific card in filteredCards
+            const updatedFilteredCards = filteredCards.map((card) => {
+                if (card.cardId === cardId && card.count > 0) {
+                    // Decrease count and return the updated card
+                    return { ...card, count: card.count - 1 };
+                }
+                return card;
+            });
+    
+            // Update filteredCards with the updated card
+            setFilteredCards(updatedFilteredCards);
+    
+            // Update local storage
+            setToLocalStorage("filteredCards", updatedFilteredCards);
+    
+            // Update countArray
             if (newArray[cardId] > 0) {
                 newArray[cardId]--;
             }
             setToLocalStorage("countArray", newArray);
-            return newArray; // Update the countArray state without triggering the updateFilteredCards function
+    
+            return newArray;
         });
     };
+    
 
 
     const areCardsFromSameAnime = (cards) => {
