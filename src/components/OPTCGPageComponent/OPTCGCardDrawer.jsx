@@ -1,6 +1,6 @@
 import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Drawer, Grid, Modal, } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
 
@@ -8,6 +8,40 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSize, setShowFullSize] = useState(false);
   const [slidePosition, setSlidePosition] = useState("-100vh");
+
+  function replaceTagsWithIcons(line) {
+    let replacedLine = line;
+
+    Object.keys(tagsToIcons).forEach((tag, index) => {
+      const placeholder = `##REPLACE${index}##`;
+      replacedLine = replacedLine.split(tag).join(placeholder);
+    });
+
+    const lineSegments = replacedLine.split(/(##REPLACE\d+##|\(.*?\))/);
+
+    return lineSegments.map((segment, index) => {
+      const tagIndexMatch = segment.match(/##REPLACE(\d+)##/);
+
+      if (tagIndexMatch) {
+        const tagIndex = parseInt(tagIndexMatch[1], 10);
+        const tag = Object.keys(tagsToIcons)[tagIndex];
+        return (
+          <img
+            key={index}
+            src={tagsToIcons[tag]}
+            alt={tag}
+            style={{ height: '14px', verticalAlign: 'middle' }}
+          />
+        );
+      }
+
+      if (segment.startsWith('(') && segment.endsWith(')') && !tagsToIcons[segment]) {
+        return <span key={index} style={{ fontSize: '11px', verticalAlign: 'middle' }}>{segment}</span>;
+      }
+
+      return segment;
+    });
+  }
 
   useEffect(() => {
     if (open) {
@@ -28,6 +62,39 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
     onSwipedLeft: onSwipeLeft,
     onSwipedRight: onSwipeRight,
   });
+
+  const tagsToIcons = {
+    "[Impact 1]": "/icons/UAtags/CTImpact1.png",
+    "[Impact 2]": "/icons/UAtags/CTImpact2.png",
+    "[Impact]": "/icons/UAtags/CTImpact.png",
+    "[Block x2]": "/icons/UAtags/CTBlkx2.png",
+    "[Attack x2]": "/icons/UAtags/CTAtkx2.png",
+    "[Snipe]": "/icons/UAtags/CTSnipe.png",
+    "[Impact +1]": "/icons/UAtags/CTImpact+1.png",
+    "[Step]": "/icons/UAtags/CTStep.png",
+    "[Damage]": "/icons/UAtags/CTDmg.png",
+    "[Damage +1]": "/icons/UAtags/CTDmg+1.png",
+    "[Damage 2]": "/icons/UAtags/CTDmg2.png",
+    "[Damage 3]": "/icons/UAtags/CTDmg3.png",
+    "[Impact Negate]": "/icons/UAtags/CTImpactNegate.png",
+    "[Once Per Turn]": "/icons/UAtags/CTOncePerTurn.png",
+    "[Rest this card]": "/icons/UAtags/CTRestThisCard.png",
+    "[Retire this card]": "/icons/UAtags/CTRetirethiscard.png",
+    "[Place 1 card from hand to Outside Area]": "/icons/UAtags/CT1HandtoOA.png",
+    "[Place 2 card from hand to Outside Area]": "/icons/UAtags/CT2HandtoOA.png",
+    "[When In Front Line]": "/icons/UAtags/CTWhenInFrontLine.png",
+    "[When In Energy Line]": "/icons/UAtags/CTWhenInEnergyLine.png",
+    "[Pay 1 AP]": "/icons/UAtags/CTPay1AP.png",
+    "[Raid]": "/icons/UAtags/CTRaid.png",
+    "[On Play]": "/icons/UAtags/CTOnPlay.png",
+    "[On Retire]": "/icons/UAtags/CTOnRetire.png",
+    "[On Block]": "/icons/UAtags/CTOnBlock.png",
+    "[When Blocking]": "/icons/UAtags/CTWhenBlocking.png",
+    "[Activate Main]": "/icons/UAtags/CTActivateMain.png",
+    "[When Attacking]": "/icons/UAtags/CTWhenAttacking.png",
+    "[Your Turn]": "/icons/UAtags/CTYourTurn.png",
+    "[Opponent's Turn]": "/icons/UAtags/CTOppTurn.png",
+  };
 
   return (
     <Drawer
@@ -112,7 +179,7 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
                   <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Id:</Box>
                 </Grid>
                 <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardid}</Box>
+                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.cardId}</Box>
                   </Grid>
                 {showDetails && (<>
                   <Grid item xs={3}>
@@ -156,7 +223,21 @@ export const OPTCGCardDrawer = ({ open, onClose, selectedCard, onSwipeLeft, onSw
                   <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Effect:</Box>
                 </Grid>
                 <Grid item xs={9}>
-                  <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.effects}</Box>
+                  <Box
+                    sx={{
+                      backgroundColor: "#C8A2C8",
+                      color: "#000000",
+                      padding: 1,
+                      fontSize: '14px',
+                    }}
+                  >
+                    {selectedCard.effects.split('\\n').map((line, index) => (
+                      <React.Fragment key={index}>
+                        {replaceTagsWithIcons(line)}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </Box>
                 </Grid>
                 <Grid item xs={3}>
                   <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Trigger:</Box>

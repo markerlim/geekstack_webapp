@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
-import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
+import { ArrowBack, Refresh } from "@mui/icons-material";
 import searchMatch from "../searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from "react-helmet";
-import { DBZCardDrawerNF } from "./DBZCardDrawerFormatted";
+import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
 
 
-const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
+const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [carddata, setCarddata] = useState([]);
     const { booster: rawBooster } = useParams();
     const boostercode = rawBooster.toUpperCase();
@@ -23,7 +23,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
-    const [altForms, setAltForms] = useState({});
     const [onlyAltForm, setOnlyAltForm] = useState(false);
     const [altFormIndex, setAltFormIndex] = useState({});
     const isMedium = useMediaQuery('(min-width:900px)');
@@ -35,15 +34,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     };
     const getCurrentImage = (document) => {
         let currentImage = document.image;
-
-        // Check if the alternate form should be used
-        if ((onlyAltForm || rarityFilter === "ALT" || altFormIndex[document.cardId] !== undefined) && document.altforms) {
-            if (Array.isArray(document.altforms)) {
-                currentImage = document.altforms[altFormIndex[document.cardId] || 0];
-            } else if (typeof document.altforms === "string") {
-                currentImage = document.altforms;
-            }
-        }
 
         return currentImage;
     };
@@ -60,14 +50,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         let nextIndex = (currentIndex + 1) % filteredDocuments.length;
         let nextDocument = filteredDocuments[nextIndex];
 
-        // If rarityFilter is "ALT", skip documents without alternate forms
-        if (rarityFilter === "ALT") {
-            while (!nextDocument.altforms) {
-                nextIndex = (nextIndex + 1) % filteredDocuments.length;
-                nextDocument = filteredDocuments[nextIndex];
-            }
-        }
-
         const currentImage = getCurrentImage(nextDocument);
         setSelectedCard({
             ...nextDocument,
@@ -78,14 +60,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         let prevDocument = filteredDocuments[prevIndex];
-
-        // If rarityFilter is "ALT", skip documents without alternate forms
-        if (rarityFilter === "ALT") {
-            while (!prevDocument.altforms) {
-                prevIndex = (prevIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
-                prevDocument = filteredDocuments[prevIndex];
-            }
-        }
 
         const currentImage = getCurrentImage(prevDocument);
         setSelectedCard({
@@ -102,7 +76,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         setBoosterFilter("");
         setColorFilter("");
         setRarityFilter("");
-        setAltForms(false);
         setOnlyAltForm(false);
         setAltFormIndex({});
         setDetailsByBoosterCode(boostercode);
@@ -113,77 +86,13 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const searchFilterMatch = searchMatch(document, currentSearchQuery);
-        const rarityFilterMatch = rarityFilter === "ALT" ? document.altforms !== undefined : !rarityFilter || document.rarity === rarityFilter;
         const altFormFilterMatch = !onlyAltForm || document.altform;
 
-        return boosterFilterMatch && colorFilterMatch && rarityFilterMatch && searchFilterMatch && altFormFilterMatch;
+        return boosterFilterMatch && colorFilterMatch && searchFilterMatch && altFormFilterMatch;
     });
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);
     };
-    const handleFormChange = (event, document) => {
-        event.stopPropagation(); // Prevent event from bubbling up
-        setAltFormIndex(prev => {
-            // Check if the document.cardId exists in the prev state
-            if (prev[document.cardId] === undefined) {
-                return {
-                    ...prev,
-                    [document.cardId]: 0
-                };
-            }
-
-            let altFormsLength = 0;
-            if (Array.isArray(document.altforms)) {
-                altFormsLength = document.altforms.length;
-            } else if (typeof document.altforms === "string") {
-                altFormsLength = 1; // Consider the original form and the alt form
-            }
-            const currentFormIndex = prev[document.cardId];
-            const newFormIndex = (currentFormIndex + 1) % (altFormsLength + 1); // Add 1 to account for the original form
-
-            return {
-                ...prev,
-                [document.cardId]: newFormIndex,
-            };
-        });
-    };
-
-    useEffect(() => {
-        if (onlyAltForm) {
-            setAltForms(prev => {
-                const newAltForms = { ...prev };
-                for (let cardId in newAltForms) {
-                    const document = documents.find(doc => doc.cardId === cardId);
-                    newAltForms[cardId] = (newAltForms[cardId] + 1) % document.altforms.length;
-                }
-                return newAltForms;
-            });
-            setAltFormIndex(prev => {
-                const newAltFormIndex = { ...prev };
-                for (let cardId in documents) {
-                    if (documents[cardId].altforms) {
-                        newAltFormIndex[cardId] = (newAltFormIndex[cardId] || 0 + 1) % documents[cardId].altforms.length;
-                    }
-                }
-                return newAltFormIndex;
-            });
-        } else {
-            setAltForms(prev => {
-                const newAltForms = { ...prev };
-                for (let cardId in newAltForms) {
-                    newAltForms[cardId] = 0;
-                }
-                return newAltForms;
-            });
-            setAltFormIndex(prev => {
-                const newAltFormIndex = { ...prev };
-                for (let cardId in newAltFormIndex) {
-                    newAltFormIndex[cardId] = 0;
-                }
-                return newAltFormIndex;
-            });
-        }
-    }, [onlyAltForm, documents]);
 
     function isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
@@ -202,7 +111,7 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const filteredQuery = query(collection(db, "dragonballzfw"), where("booster", "==", boostercode));
+                const filteredQuery = query(collection(db, "onepiececardgame"), where("booster", "==", boostercode));
                 const querySnapshot = await getDocs(filteredQuery);
                 const documentsArray = [];
                 const initialAltForms = {};
@@ -216,7 +125,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                 });
 
                 setDocuments(documentsArray);
-                setAltForms(initialAltForms);
                 console.log(`Number of reads: ${documentsArray.length}`);
 
                 const queryParams = new URLSearchParams(window.location.search);
@@ -394,25 +302,12 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                                                 height={imageHeight}
                                             />
                                         </Box>
-                                        {((Array.isArray(document.altforms) && document.altforms.length > 0) || (typeof document.altforms === "string" && document.altforms !== '')) ? (
-                                            <button
-                                                onClick={(event) => handleFormChange(event, document)}
-                                                style={{
-                                                    position: "absolute", backgroundColor: "#7C4FFF",
-                                                    border: "3px #934fff solid", borderRadius: "100px",
-                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.3}px`, height: `${imageWidth * 0.3}px`,
-                                                    display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
-                                                }}
-                                            >
-                                                <SwapHoriz sx={{ fontSize: "20px", color: '#F2f3f8' }} />
-                                            </button>
-                                        ) : null}
                                     </Grid>
                                 )
                             }
                         })}
                     {selectedCard && (
-                        <DBZCardDrawerNF
+                        <OPTCGCardDrawer
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}
@@ -524,5 +419,5 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     );
 };
 
-export default DBZFWcardFormat;
+export default OPTCGcardFormat;
 
