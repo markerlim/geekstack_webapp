@@ -104,7 +104,7 @@ const OPTCGCardlist = ({ filters }) => {
                 ) : (
                     <Grid container spacing={2} justifyContent="center">
                         {documents.map((document) => (
-                            <Grid item key={document.cardId}>
+                            <Grid item key={document.cardUid}>
                                 <Box onClick={() => handleOpenModal(document)}>
                                     <ResponsiveImage
                                         loading="lazy"

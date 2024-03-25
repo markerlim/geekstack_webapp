@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { ResponsiveImage } from "./ResponsiveImage";
 import ButtonList from "./UnionArenaBoosterButton";
 import { CircularProgress } from '@mui/material';

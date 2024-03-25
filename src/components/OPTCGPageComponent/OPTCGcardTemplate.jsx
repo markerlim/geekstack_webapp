@@ -13,8 +13,9 @@ const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [carddata, setCarddata] = useState([]);
     const { booster: rawBooster } = useParams();
     const boostercode = rawBooster.toUpperCase();
-    const [listOfColors, setListofColors] = useState([]);
-    const [listOfRarities, setListofRarities] = useState([]);
+    const [listOfColors, setListofColors] = useState(['Red','Blue','Green','Purple','Black','Yellow']);
+    const [listOfRarities, setListofRarities] = useState(['ALT','SEC','SR','R','UC','C','L']);
+    const [filteredDocuments,setFilteredDocuments] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -23,8 +24,6 @@ const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
-    const [onlyAltForm, setOnlyAltForm] = useState(false);
-    const [altFormIndex, setAltFormIndex] = useState({});
     const isMedium = useMediaQuery('(min-width:900px)');
     const navigate = useNavigate();
     const location = useLocation();
@@ -70,26 +69,16 @@ const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
     const handleCloseModal = () => {
         setSelectedCard(null);
         setOpenModal(false);
-        setAltFormIndex({});
     };
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
         setRarityFilter("");
-        setOnlyAltForm(false);
-        setAltFormIndex({});
         setDetailsByBoosterCode(boostercode);
         setSearchQuery("");
     };
     const currentSearchQuery = searchQuery;
-    const filteredDocuments = documents.filter((document) => {
-        const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
-        const colorFilterMatch = !colorFilter || document.color === colorFilter;
-        const searchFilterMatch = searchMatch(document, currentSearchQuery);
-        const altFormFilterMatch = !onlyAltForm || document.altform;
 
-        return boosterFilterMatch && colorFilterMatch && searchFilterMatch && altFormFilterMatch;
-    });
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);
     };
@@ -141,6 +130,22 @@ const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
         fetchDocuments();
     }, [boostercode]);
 
+    useEffect(() => {
+        const filteredDocuments = documents.filter((document) => {
+            const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
+            const colorFilterMatch = !colorFilter || document.color === colorFilter;
+            const searchFilterMatch = searchMatch(document, currentSearchQuery);
+            const rarityFilterMatch = !rarityFilter || (rarityFilter === 'ALT' 
+                ? ['LA', 'ALT', 'MG', 'SP', 'FS', 'PA', 'RPA'].includes(document.rarity) 
+                : document.rarity === rarityFilter); 
+        
+            return boosterFilterMatch && colorFilterMatch && searchFilterMatch && rarityFilterMatch;
+        });
+        
+        setFilteredDocuments(filteredDocuments);
+    }, [documents, boosterFilter, colorFilter, currentSearchQuery, rarityFilter]);
+    
+    
 
 
     return (
@@ -264,48 +269,26 @@ const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
                 </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+                <Box sx={{ paddingTop: '20px', paddingBottom: '20px', textAlign: 'center', display: { xs: 'block', sm: 'block', md: 'none' } }}>
+                    <span>{boostercode}</span>
+                </Box>
                 <Grid container spacing={2} justifyContent="center">
-                    {filteredDocuments
-                        .filter(document => !(rarityFilter === 'ALT' && (!document.altforms || document.altforms.length === 0 || document.altforms === '')))
-                        .map((document) => {
-                            if (rarityFilter === 'ALT' && document.altforms) {
-                                const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
-                                return altForms.map((form, index) => (
-                                    <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)}
-                                            sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
-                                            <img
-                                                loading="lazy"
-                                                src={form}
-                                                draggable="false"
-                                                alt={`${document.cardId}-${index}`}
-                                                width={imageWidth}
-                                                height={imageHeight}
-                                            />
-                                        </Box>
-                                    </Grid>
-                                ))
-                            } else {
-                                return (
-                                    <Grid item key={document.cardId} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
-                                            <img
-                                                loading="lazy"
-                                                src={
-                                                    (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) ? document.altforms[altFormIndex[document.cardId]] :
-                                                        (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) ? document.altforms :
-                                                            document.image
-                                                }
-                                                draggable="false"
-                                                alt={`Card of ${document.cardName} from ${document.anime}`}
-                                                width={imageWidth}
-                                                height={imageHeight}
-                                            />
-                                        </Box>
-                                    </Grid>
-                                )
-                            }
-                        })}
+                    {filteredDocuments.map((document) => {
+                        return(
+                        <Grid item key={document.cardUid} sx={{ position: "relative" }}>
+                            <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
+                                <img
+                                    loading="lazy"
+                                    src={document.image}
+                                    draggable="false"
+                                    alt={`Card of ${document.cardName} from ${document.anime}`}
+                                    width={imageWidth}
+                                    height={imageHeight}
+                                />
+                            </Box>
+                        </Grid>
+                        )
+                    })}
                     {selectedCard && (
                         <OPTCGCardDrawer
                             open={openModal}
