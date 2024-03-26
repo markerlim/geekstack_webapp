@@ -63,13 +63,13 @@ const OPTCGRightBar = ({setChangeClick}) => {
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px', paddingTop: '20px' }}>
                     {filteredCards.map((onepiece) => (
-                        <Grid item key={onepiece.cardid}>
-                            <Box onClick={() => handleOpenModal(onepiece)}>
+                        <Grid item>
+                            <Box onClick={() => handleOpenModal(onepiece)} key={onepiece.cardUid}>
                                 <img
                                     loading="lazy"
                                     src={onepiece.image}
                                     draggable="false"
-                                    alt={onepiece.cardid}
+                                    alt={onepiece.cardUid}
                                     width={imageWidth}
                                     height={imageHeight}
                                 />

@@ -558,11 +558,11 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
                     />
                   </Box>
                   <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
-                    <div component={Button} onClick={() => decrease(onepiece.cardUid)} style={{ cursor: "pointer" }}>
+                    <div component={Button} onClick={() => decrease(onepiece.cardId,onepiece.cardUid)} style={{ cursor: "pointer" }}>
                       <RemoveCircle sx={{ fontSize: 20 }} />
                     </div>
                     <span sx={{ fontSize: 20 }}>{onepiece.count || 0}</span>
-                    <div component={Button} onClick={() => increase(onepiece.cardUid)} style={{ cursor: "pointer" }}>
+                    <div component={Button} onClick={() => increase(onepiece.cardId,onepiece.cardUid)} style={{ cursor: "pointer" }}>
                       <AddCircle sx={{ fontSize: 20 }} />
                     </div>
                   </Box>
