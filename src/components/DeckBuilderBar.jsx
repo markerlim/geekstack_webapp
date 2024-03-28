@@ -92,19 +92,19 @@ const DeckBuilderBar = (props) => {
   // Filter the cards based on the triggerState that are color
   const colorCards = filteredCards.filter(card => card.triggerState === "Color");
   const colorCount = colorCards.reduce(
-    (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
+    (accumulator, card) => accumulator + (countArray[card.cardUid] || 0),
     0
   );
   // Filter the cards based on the triggerState that are special
   const specialCards = filteredCards.filter(card => card.triggerState === "Special");
   const specialCount = specialCards.reduce(
-    (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
+    (accumulator, card) => accumulator + (countArray[card.cardUid] || 0),
     0
   );
   // Filter the cards based on the triggerState that are final
   const finalCards = filteredCards.filter(card => card.triggerState === "Final");
   const finalCount = finalCards.reduce(
-    (accumulator, card) => accumulator + (countArray[card.cardId] || 0),
+    (accumulator, card) => accumulator + (countArray[card.cardUid] || 0),
     0
   );
   const calculateStats = () => {
@@ -212,15 +212,15 @@ const DeckBuilderBar = (props) => {
       );
 
       await Promise.all(
-        Object.entries(countArray).map(async ([cardId, cardCount]) => {
-          const card = filteredCards.find((card) => card.cardId === cardId);
-          const cardDocRef = doc(cardsCollectionRef, cardId);
+        Object.entries(countArray).map(async ([cardUid, cardCount]) => {
+          const card = filteredCards.find((card) => card.cardUid === cardUid);
+          const cardDocRef = doc(cardsCollectionRef, cardUid);
 
           if (cardCount === 0) {
-            console.log("Deleting card with cardId:", cardId);
+            console.log("Deleting card with cardId:", cardUid);
             await deleteDoc(cardDocRef)
               .then(() => {
-                console.log("Card deleted successfully:", cardId);
+                console.log("Card deleted successfully:", cardUid);
               })
               .catch((error) => {
                 console.error("Error deleting card:", error);
@@ -228,15 +228,16 @@ const DeckBuilderBar = (props) => {
           } else {
             if (card) {
               const cardData = {
-                altforms: card.altforms,
                 anime: card.anime,
                 animeLower: card.animeLower,
                 apcost: card.apcost,
                 banRatio: card.banRatio,
+                banWith: card.banWith,
                 basicpower: card.basicpower,
                 booster: card.booster,
                 boosterLower: card.boosterLower,
                 cardId: card.cardId,
+                cardUid: card.cardUid,
                 cardName: card.cardName,
                 cardNameLower: card.cardNameLower,
                 cardNameTokens: card.cardNameTokens,
@@ -257,7 +258,7 @@ const DeckBuilderBar = (props) => {
               };
               await setDoc(cardDocRef, cardData);
             } else {
-              console.error("Card not found in filteredCards:", cardId);
+              console.error("Card not found in filteredCards:", cardUid);
             }
           }
         })

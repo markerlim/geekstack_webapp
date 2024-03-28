@@ -13,7 +13,6 @@ const DBCardRef = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const { countArray, setCountArray, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
-
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
 
@@ -42,43 +41,55 @@ const DBCardRef = (props) => {
     };
 
     const updateFilteredCards = (updatedCountArray) => {
-        const newFilteredCards = documents.filter((doc) => updatedCountArray[doc.cardId] > 0)
-            .map((doc) => ({ ...doc, count: updatedCountArray[doc.cardId] }));
+        const newFilteredCards = documents
+            .map((doc) => {
+                const count = updatedCountArray[doc.cardUid] || 0;
+                return { ...doc, count };
+            })
+            .filter((doc) => doc.count > 0);
         setFilteredCards(newFilteredCards);
         setToLocalStorage("filteredCards", newFilteredCards);
     };
-
-    const increase = (cardId) => {
+    
+    const increase = (cardId, cardUid) => {
         setCountArray((prevCountArray) => {
             const newArray = { ...prevCountArray };
-
-            // Get the specific card's banRatio
-            const card = documents.find(doc => doc.cardId === cardId);
-            const cardMaxCount = card ? card.banRatio : 0;  // default to 0 if card is not found
-
-            if (!newArray[cardId]) {
-                newArray[cardId] = 0;
+    
+            // Get all instances of cards with the same cardId
+            const cardInstances = documents.filter((doc) => doc.cardId === cardId);
+    
+            // Calculate the total current count for all instances of this cardId
+            const totalCount = cardInstances.reduce((acc, curr) => acc + (newArray[curr.cardUid] || 0), 0);
+    
+            // Get the banRatio for the cardId
+            const cardMaxCount = cardInstances.length > 0 ? cardInstances[0].banRatio : 0;
+    
+            if (totalCount < cardMaxCount) {
+                // Increase count for the cardUid if totalCount is less than banRatio
+                newArray[cardUid] = (newArray[cardUid] || 0) + 1;
+            } else {
+                // Notify or handle the situation where banRatio is reached
+                console.log("Cannot increase count. Ban ratio reached.");
             }
-            if (newArray[cardId] < cardMaxCount) {
-                newArray[cardId]++;
+    
+            setToLocalStorage("countArray", newArray);
+            updateFilteredCards(newArray);
+            return newArray;
+        });
+    };
+    
+    const decrease = (cardId, cardUid) => {
+        setCountArray((prevCountArray) => {
+            const newArray = { ...prevCountArray };
+            if (newArray[cardUid] > 0) {
+                newArray[cardUid]--;
             }
             setToLocalStorage("countArray", newArray);
             updateFilteredCards(newArray);
             return newArray;
         });
     };
-
-    const decrease = (cardId) => {
-        setCountArray((prevCountArray) => {
-            const newArray = { ...prevCountArray };
-            if (newArray[cardId] > 0) {
-                newArray[cardId]--;
-            }
-            setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray);
-            return newArray;
-        });
-    };
+    
 
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
@@ -93,7 +104,7 @@ const DBCardRef = (props) => {
             if (boosterFilter === "" && colorFilter === "" && animeFilter === "") {
                 return;
             }
-            let docRef = collection(db, "unionarenatcg");
+            let docRef = collection(db, "unionarenatcgnew");
 
             const querySnapshot = await getDocs(docRef);
             const documentsArray = [];
@@ -114,7 +125,7 @@ const DBCardRef = (props) => {
         }
 
         const initialCountArray = documents.reduce((accumulator, document) => {
-            accumulator[document.cardId] = 0;
+            accumulator[document.cardUid] = 0;
             return accumulator;
         }, {});
 
@@ -260,7 +271,7 @@ const DBCardRef = (props) => {
             </Box>
             <Grid container spacing={2} justifyContent="center">
                 {animeFilter !== "" && filteredDocuments.map((document, index) => (
-                    <Grid item key={document.cardId}>
+                    <Grid item key={document.cardUid}>
                         <Box sx={{ position: 'relative' }} >
                             <ResponsiveImage
                                 loading="lazy"
@@ -277,11 +288,11 @@ const DBCardRef = (props) => {
                                 )
                             }
                             <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
-                                <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
+                                <div component={Button} onClick={() => decrease(document.cardId,document.cardUid)} style={{ cursor: "pointer" }}>
                                     <RemoveCircle sx={{ fontSize: 20 }} />
                                 </div>
-                                <div style={{ fontSize: 15 }}>{countArray[document.cardId] || 0}</div>
-                                <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
+                                <div style={{ fontSize: 15 }}>{countArray[document.cardUid] || 0}</div>
+                                <div component={Button} onClick={() => increase(document.cardId,document.cardUid)} style={{ cursor: "pointer" }}>
                                     <AddCircle sx={{ fontSize: 20 }} />
                                 </div>
                             </Box>

@@ -281,7 +281,7 @@ const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
                                     loading="lazy"
                                     src={document.image}
                                     draggable="false"
-                                    alt={`Card of ${document.cardName} from ${document.anime}`}
+                                    alt={`Card of ${document.cardName} from ${document.booster}`}
                                     width={imageWidth}
                                     height={imageHeight}
                                 />
