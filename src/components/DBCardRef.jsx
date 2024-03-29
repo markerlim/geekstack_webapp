@@ -2,24 +2,22 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Box, Button, FormControl, Grid, MenuItem, Select } from "@mui/material";
-import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
 import { AddCircle, ArrowBack, Refresh, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { CardDrawerNF } from "./CardDrawerFormatted";
 
-const DBCardRef = (props) => {
+const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClick }) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const { countArray, setCountArray, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
+    const { filteredCards, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
 
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
-        props.setSearchQuery("");
     };
 
     const resetAnimeFilters = () => {
@@ -40,56 +38,50 @@ const DBCardRef = (props) => {
         setOpenModal(false);
     };
 
-    const updateFilteredCards = (updatedCountArray) => {
-        const newFilteredCards = documents
-            .map((doc) => {
-                const count = updatedCountArray[doc.cardUid] || 0;
-                return { ...doc, count };
-            })
-            .filter((doc) => doc.count > 0);
-        setFilteredCards(newFilteredCards);
-        setToLocalStorage("filteredCards", newFilteredCards);
-    };
-    
-    const increase = (cardId, cardUid) => {
-        setCountArray((prevCountArray) => {
-            const newArray = { ...prevCountArray };
-    
-            // Get all instances of cards with the same cardId
-            const cardInstances = documents.filter((doc) => doc.cardId === cardId);
-    
-            // Calculate the total current count for all instances of this cardId
-            const totalCount = cardInstances.reduce((acc, curr) => acc + (newArray[curr.cardUid] || 0), 0);
-    
-            // Get the banRatio for the cardId
-            const cardMaxCount = cardInstances.length > 0 ? cardInstances[0].banRatio : 0;
-    
-            if (totalCount < cardMaxCount) {
-                // Increase count for the cardUid if totalCount is less than banRatio
-                newArray[cardUid] = (newArray[cardUid] || 0) + 1;
-            } else {
-                // Notify or handle the situation where banRatio is reached
-                console.log("Cannot increase count. Ban ratio reached.");
+    const modifyCardCount = (cardId, cardUid, change) => {
+        // Filter cards with the same cardId
+        const cardsWithSameId = filteredCards.filter(card => card.cardId === cardId);
+        // Count the total number of cards with the same cardId
+        const countOfSameId = cardsWithSameId.reduce((total, card) => total + card.count, 0);
+        // Get the banRatio for the cardId
+        const banRatio = cardsWithSameId.length > 0 ? cardsWithSameId[0].banRatio : 4;
+        console.log(banRatio)
+        // Check if adding 'change' cards would exceed the limit of 4 cards with the same cardId
+        if (countOfSameId + change <= banRatio) {
+            // Find the index of the existing card in filteredCards based on cardUid
+            const existingCardIndex = filteredCards.findIndex(card => card.cardUid === cardUid);
+
+            // If the card with cardUid exists
+            if (existingCardIndex !== -1) {
+                const existingCard = filteredCards[existingCardIndex];
+                const newCount = Math.max(0, existingCard.count + change);
+
+                // If newCount becomes 0, remove the card from filteredCards
+                if (newCount === 0) {
+                    setFilteredCards(prevFilteredCards => prevFilteredCards.filter(card => card.cardUid !== cardUid));
+                } else {
+                    // Update the count of the existing card
+                    setFilteredCards(prevFilteredCards => {
+                        const updatedCards = [...prevFilteredCards];
+                        updatedCards[existingCardIndex] = { ...existingCard, count: newCount };
+                        return updatedCards;
+                    });
+                }
+            } else if (change > 0) {
+                // If the card with cardUid doesn't exist and change is positive, add a new card
+                const newCard = documents.find(onepiece => onepiece.cardUid === cardUid);
+                if (newCard) {
+                    setFilteredCards(prevFilteredCards => [...prevFilteredCards, { ...newCard, count: 1 }]);
+                }
             }
-    
-            setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray);
-            return newArray;
-        });
+        }
+        // Toggle the state of changeClick
+        setChangeClick(prevState => !prevState);
     };
-    
-    const decrease = (cardId, cardUid) => {
-        setCountArray((prevCountArray) => {
-            const newArray = { ...prevCountArray };
-            if (newArray[cardUid] > 0) {
-                newArray[cardUid]--;
-            }
-            setToLocalStorage("countArray", newArray);
-            updateFilteredCards(newArray);
-            return newArray;
-        });
-    };
-    
+
+    const increase = (cardId, cardUid) => modifyCardCount(cardId, cardUid, 1);
+    const decrease = (cardId, cardUid) => modifyCardCount(cardId, cardUid, -1);
+
 
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
@@ -107,34 +99,41 @@ const DBCardRef = (props) => {
             let docRef = collection(db, "unionarenatcgnew");
 
             const querySnapshot = await getDocs(docRef);
-            const documentsArray = [];
+            let documentsArray = [];
             querySnapshot.forEach((doc) => {
                 documentsArray.push(doc.data());
             });
+            documentsArray = documentsArray.map(document => ({
+                ...document,
+                count: document.count || 0
+            }));
             setDocuments(documentsArray);
         };
 
         fetchDocuments();
     }, [animeFilter]);
 
-
-
     useEffect(() => {
-        if (animeFilter !== "") {
-            return;
-        }
-
-        const initialCountArray = documents.reduce((accumulator, document) => {
-            accumulator[document.cardUid] = 0;
-            return accumulator;
-        }, {});
-
-        setCountArray(initialCountArray);
-    }, [documents, animeFilter]);
+        setDocuments(prevDoc => {
+          return prevDoc.map(document => {
+            const cardFromFiltered = filteredCards.find(card => card.cardUid === document.cardUid);
+            if (cardFromFiltered) {
+              return {
+                ...document,
+                count: cardFromFiltered.count
+              };
+            }
+            return {
+              ...document,
+              count: 0
+            };
+          });
+        });
+      }, [filteredCards]);
 
     const animeData = [
-        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST','EX02BT'], colorsets: ['Red', 'Green','Blue','Purple'] },
-        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC','EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple','Red'] },
+        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST', 'EX02BT'], colorsets: ['Red', 'Green', 'Blue', 'Purple'] },
+        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC', 'EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple', 'Red'] },
         { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
         { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'] },
         { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC'], colorsets: ['Red', 'Yellow', 'Purple'] },
@@ -282,17 +281,17 @@ const DBCardRef = (props) => {
                             />
                             {
                                 document.banRatio !== "4" && (
-                                    <Box sx={{ width: '25px',color:'#f2f3f8', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
+                                    <Box sx={{ width: '25px', color: '#f2f3f8', height: '25px', borderRadius: '12.5px', backgroundColor: '#240056', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '5px', right: '5px' }}>
                                         {document.banRatio}
                                     </Box>
                                 )
                             }
                             <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
-                                <div component={Button} onClick={() => decrease(document.cardId,document.cardUid)} style={{ cursor: "pointer" }}>
+                                <div component={Button} onClick={() => decrease(document.cardId, document.cardUid)} style={{ cursor: "pointer" }}>
                                     <RemoveCircle sx={{ fontSize: 20 }} />
                                 </div>
-                                <div style={{ fontSize: 15 }}>{countArray[document.cardUid] || 0}</div>
-                                <div component={Button} onClick={() => increase(document.cardId,document.cardUid)} style={{ cursor: "pointer" }}>
+                                <div style={{ fontSize: 15 }}>{document.count || 0}</div>
+                                <div component={Button} onClick={() => increase(document.cardId, document.cardUid)} style={{ cursor: "pointer" }}>
                                     <AddCircle sx={{ fontSize: 20 }} />
                                 </div>
                             </Box>

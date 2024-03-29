@@ -8,7 +8,7 @@ import { Delete } from "@mui/icons-material";
 
 const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
   const { currentUser } = useAuth();
-  const { setFilteredCards, setCountArray } = useCardState(); // Use the hook to get the state setters
+  const { setFilteredCards } = useCardState(); // Use the hook to get the state setters
   const [decks, setDecks] = useState([]);
 
   const loadDeckCards = async (deckId) => {
@@ -26,25 +26,7 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
 
   const handleDeckClick = async (deck) => {
     const cards = await loadDeckCards(deck.id);
-
-    const newCountArray = {};
-    const newFilteredCards = [];
-
-    cards.forEach((card) => {
-      // Update newCountArray with the new count for each card
-      newCountArray[card.id] = (newCountArray[card.id] || 0) + card.count;
-
-      // Update newFilteredCards
-      const existingCardIndex = newFilteredCards.findIndex((newCard) => newCard.id === card.id);
-      if (existingCardIndex !== -1) {
-        newFilteredCards[existingCardIndex].count += card.count;
-      } else {
-        newFilteredCards.push(card);
-      }
-    });
-    // Update CardState with the new countArray and filteredCards values
-    setCountArray(newCountArray);
-    setFilteredCards(newFilteredCards);
+    setFilteredCards(cards);
 
     onDeckLoaded(deck.id, deck.deckuid, deck.name, deck.image);
   };

@@ -20,15 +20,16 @@ import UATCGExport from "./UAExportTemplate";
 import { useLocation } from "react-router-dom";
 
 
-const DeckBuilderBar = (props) => {
+const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
   const { currentUser } = useAuth();
-  const { countArray, setCountArray, filteredCards, setFilteredCards } = useCardState();
+  const { filteredCards, setFilteredCards } = useCardState();
   const [deckName, setDeckName] = useState("myDeckId");
+  const [totalCount, setTotalCount] = useState(0);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showDeckLoaderModal, setShowDeckLoaderModal] = useState(false); // State to manage the visibility of the DeckLoader modal
   const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
   const [loadedDeckUid, setLoadedDeckUid] = useState(null);
-  const [deckDetails, setDeckDetails] =useState([]);
+  const [deckDetails, setDeckDetails] = useState([]);
   const [saveStatus, setSaveStatus] = useState(null);
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -42,6 +43,21 @@ const DeckBuilderBar = (props) => {
   const searchParams = new URLSearchParams(location.search);
   const [deckUidParams, setDeckUidParams] = useState(searchParams.get("deckUid") || "");
   const [loadedFromParams, setLoadedFromParams] = useState(false);
+  const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
+  const sorttotalCount = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
+
+  useEffect(() => {
+    if (changeClick === true) {
+      setFilteredCards(sortedCards);
+      setTotalCount(sorttotalCount);
+      console.log("Card count changed! TRUE");
+    }
+    if (changeClick === false) {
+      setFilteredCards(sortedCards);
+      setTotalCount(sorttotalCount);
+      console.log("Card count changed! FALSE");
+    }
+  }, [changeClick]);
 
   const images = [
     "/images/deckimage.jpg",
@@ -72,8 +88,6 @@ const DeckBuilderBar = (props) => {
     setAnchorEl(null);
   };
   const handleClearClick = () => {
-    setCountArray({});
-    setToLocalStorage("countArray", {});
     setToLocalStorage("filteredCards", []);
     setDeckName("myDeckId");
     setLoadedDeckUid(null); // Clear the loadedDeckUid
@@ -84,38 +98,33 @@ const DeckBuilderBar = (props) => {
     const currentPath = window.location.pathname;
     window.history.pushState({}, '', currentPath);
   };
-
-  const totalCount = Object.values(countArray).reduce(
-    (accumulator, count) => accumulator + count,
-    0
-  );
   // Filter the cards based on the triggerState that are color
   const colorCards = filteredCards.filter(card => card.triggerState === "Color");
   const colorCount = colorCards.reduce(
-    (accumulator, card) => accumulator + (countArray[card.cardUid] || 0),
+    (accumulator, card) => accumulator + (card.count || 0),
     0
   );
   // Filter the cards based on the triggerState that are special
   const specialCards = filteredCards.filter(card => card.triggerState === "Special");
   const specialCount = specialCards.reduce(
-    (accumulator, card) => accumulator + (countArray[card.cardUid] || 0),
+    (accumulator, card) => accumulator + (card.count || 0),
     0
   );
   // Filter the cards based on the triggerState that are final
   const finalCards = filteredCards.filter(card => card.triggerState === "Final");
   const finalCount = finalCards.reduce(
-    (accumulator, card) => accumulator + (countArray[card.cardUid] || 0),
+    (accumulator, card) => accumulator + (card.count || 0),
     0
   );
   const calculateStats = () => {
     const energyCounts = filteredCards.reduce((acc, card) => {
-        const energyKey = card.energycost >= 10 ? 10 : card.energycost;
-        acc[energyKey] = (acc[energyKey] || 0) + card.count;
-        return acc;
+      const energyKey = card.energycost >= 10 ? 10 : card.energycost;
+      acc[energyKey] = (acc[energyKey] || 0) + card.count;
+      return acc;
     }, {});
 
     return energyCounts;
-};
+  };
 
   const stats = calculateStats();
   const handleExportClick = () => {
@@ -153,7 +162,61 @@ const DeckBuilderBar = (props) => {
     }
     handleMenuClose();
   };
+  const createNewDeck = async (uid) => {
+    const userDocRef = doc(db, "users", uid);
+
+    // Get the decksCounter from the user document
+    const userDocSnapshot = await getDoc(userDocRef);
+    const decksCounter = userDocSnapshot.get("decksCounter") || 0;
+
+    // Update the decksCounter for the user
+    await updateDoc(userDocRef, { decksCounter: decksCounter + 1 });
+
+    // Generate a new deckuid based on the updated decksCounter
+    const deckUid = `gsdeck${String(decksCounter + 1).padStart(8, "0")}`;
+    const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
+
+    const deckInfo = {
+      deckName: deckName,
+      deckuid: deckUid,
+      colorCount: colorCount,
+      specialCount: specialCount,
+      finalCount: finalCount,
+      image: selectedImage,
+      // Add any other information about the deck as required
+    };
+    // Create a document for the deck with the new name and deck info
+    await setDoc(deckDocRef, deckInfo);
+
+    // Create a placeholder document in the `optcgdeck` collection if it doesn't exist yet
+    const placeholderRef = doc(db, `users/${uid}/decks`, "placeholder");
+    if (!(await getDoc(placeholderRef)).exists()) {
+      await setDoc(placeholderRef, {
+        placeholder: true
+        // any other default values you'd like to set
+      });
+    }
+
+    return deckUid; // return this value so we can use it in handleSaveClick
+  };
+  const updateExistingDeck = async (uid, deckUid) => {
+    
+    const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
+
+    const deckInfo = {
+      deckName: deckName,
+      deckuid: deckUid,
+      colorCount: colorCount,
+      specialCount: specialCount,
+      finalCount: finalCount,
+      image: selectedImage,
+      // Add any other information about the deck as required
+    };
+    // Update the deck name in the existing document
+    await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
+  };
   const handleSaveClick = async (proceed = false) => {
+
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
       return;
@@ -162,128 +225,89 @@ const DeckBuilderBar = (props) => {
     if (!currentUser) {
       return;
     }
-    if (!selectedImage) {
-      setShowImagePickerModal(true);
-      return;
-    }
+
     const uid = currentUser.uid;
 
     try {
       let deckUid;
       if (!isUpdatingExistingDeck) {
-        const userDocRef = doc(db, "users", uid);
-
-        // Get the decksCounter from the user document
-        const userDocSnapshot = await getDoc(userDocRef);
-        const decksCounter = userDocSnapshot.get("decksCounter") || 0;
-
-        // Update the decksCounter for the user
-        await updateDoc(userDocRef, { decksCounter: decksCounter + 1 });
-
-        // Generate a new deckuid based on the updated decksCounter
-        deckUid = `deckuid${String(decksCounter + 1).padStart(10, "0")}`;
+        deckUid = await createNewDeck(uid);
       } else {
-        deckUid = loadedDeckUid; // Use the loadedDeckUid when updating an existing deck
+        deckUid = loadedDeckUid;
+        await updateExistingDeck(uid, deckUid);
       }
 
-      const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
-
-      const deckInfo = {
-        deckName: deckName,
-        deckuid: deckUid,
-        colorCount: colorCount,
-        specialCount: specialCount,
-        finalCount: finalCount,
-        image: selectedImage,
-        // Add any other information about the deck as required
-      };
-
-      if (!isUpdatingExistingDeck) {
-        // Create a document for the deck with the new name and deck info
-        await setDoc(deckDocRef, deckInfo);
-      } else {
-        // Update the deck name in the existing document
-        await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
-      }
-
-      const cardsCollectionRef = collection(
-        db,
-        `users/${uid}/decks/${deckUid}/cards`
-      );
+      const cardsCollectionRef = collection(db, `users/${uid}/decks/${deckUid}/cards`);
+      const existingCardSnapshot = await getDocs(cardsCollectionRef);
+      const existingCards = existingCardSnapshot.docs.map(doc => doc.data().cardUid);
 
       await Promise.all(
-        Object.entries(countArray).map(async ([cardUid, cardCount]) => {
-          const card = filteredCards.find((card) => card.cardUid === cardUid);
-          const cardDocRef = doc(cardsCollectionRef, cardUid);
-
-          if (cardCount === 0) {
-            console.log("Deleting card with cardId:", cardUid);
-            await deleteDoc(cardDocRef)
-              .then(() => {
-                console.log("Card deleted successfully:", cardUid);
-              })
-              .catch((error) => {
-                console.error("Error deleting card:", error);
-              });
-          } else {
-            if (card) {
-              const cardData = {
-                anime: card.anime,
-                animeLower: card.animeLower,
-                apcost: card.apcost,
-                banRatio: card.banRatio,
-                banWith: card.banWith,
-                basicpower: card.basicpower,
-                booster: card.booster,
-                boosterLower: card.boosterLower,
-                cardId: card.cardId,
-                cardUid: card.cardUid,
-                cardName: card.cardName,
-                cardNameLower: card.cardNameLower,
-                cardNameTokens: card.cardNameTokens,
-                category: card.category,
-                color: card.color,
-                colorLower: card.colorLower,
-                effect: card.effect,
-                energycost: card.energycost,
-                energygen: card.energygen,
-                image: card.image,
-                rarity: card.rarity,
-                rarityLower: card.rarityLower,
-                traits: card.traits,
-                trigger: card.trigger,
-                triggerState: card.triggerState,
-                triggerStateLower: card.triggerStateLower,
-                count: cardCount,
-              };
-              await setDoc(cardDocRef, cardData);
-            } else {
-              console.error("Card not found in filteredCards:", cardUid);
-            }
+        filteredCards.map(async (card) => {
+          const cardDocRef = doc(cardsCollectionRef, card.cardUid);
+          const cardData = {
+            anime: card.anime,
+            animeLower: card.animeLower,
+            apcost: card.apcost,
+            banRatio: card.banRatio,
+            banWith: card.banWith,
+            basicpower: card.basicpower,
+            booster: card.booster,
+            boosterLower: card.boosterLower,
+            cardId: card.cardId,
+            cardUid: card.cardUid,
+            cardName: card.cardName,
+            cardNameLower: card.cardNameLower,
+            cardNameTokens: card.cardNameTokens,
+            category: card.category,
+            color: card.color,
+            colorLower: card.colorLower,
+            effect: card.effect,
+            energycost: card.energycost,
+            energygen: card.energygen,
+            image: card.image,
+            rarity: card.rarity,
+            rarityLower: card.rarityLower,
+            traits: card.traits,
+            trigger: card.trigger,
+            triggerState: card.triggerState,
+            triggerStateLower: card.triggerStateLower,
+            count: card.count,
+          };
+          try {
+            await setDoc(cardDocRef, cardData);
+            console.log("Card saved successfully:", card.cardUid);
+          } catch (error) {
+            console.error("Error saving card:", error);
           }
         })
       );
 
+      for (const cardUid of existingCards) {
+        if (!filteredCards.some(card => card.cardUid === cardUid)) {
+          const cardToDeleteRef = doc(cardsCollectionRef, cardUid);
+          await deleteDoc(cardToDeleteRef);
+          console.log("Card deleted:", cardUid);
+        }
+      }
+
       console.log("Data saved successfully!");
       setSaveStatus("success");
-
       // Reset the component state
-      handleClearClick();
       setIsUpdatingExistingDeck(false);
       setLoadedDeckUid(null);
       setShouldSaveDeck(false); // Reset shouldSaveDeck to false
-      handleMenuClose();
     } catch (error) {
       console.error("Error saving data: ", error);
       setSaveStatus("error");
     }
   };
+
   const handleProceedSave = () => {
     setShouldSaveDeck(true);
-    handleSaveClick(true);
+    setShowImagePickerModal(true);
     setShowConfirmDialog(false);
-    handleMenuClose();
   };
+
   const handleLoadDeckClick = () => {
     setShowDeckLoaderModal(true); // Open the DeckLoader modal
     setDeckUidParams("");
@@ -293,13 +317,12 @@ const DeckBuilderBar = (props) => {
   };
 
   const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName, loadedDeckImage) => {
-    // Handle the deck loaded from DeckLoader
-    // You can update the DeckBuilderBar state here based on the loadedDeck data
     setDeckName(loadedDeckName);
     setLoadedDeckUid(loadedDeckUid); // Update the loadedDeckUid
     setExportImage(loadedDeckImage);
     setIsUpdatingExistingDeck(true); //Update the previousDeckName
     setShowDeckLoaderModal(false); // Close the DeckLoader modal
+    setChangeClick(prevState => !prevState);
   };
 
   const getImageSrc = (energycost) => {
@@ -366,17 +389,6 @@ const DeckBuilderBar = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (selectedImage && shouldSaveDeck) {
-      handleSaveClick(true);
-      setShouldSaveDeck(false);
-    }
-    if (selectedImage && totalCount) {
-      handleSaveClick(true);
-      setShouldSaveDeck(false);
-    }
-  }, [selectedImage, shouldSaveDeck, handleSaveClick]);
-
   const loadDeckCards = async (deckId) => {
     const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deckId}/cards`));
     const cards = [];
@@ -392,27 +404,10 @@ const DeckBuilderBar = (props) => {
   const handleDeckClick = async (deck) => {
     const cards = await loadDeckCards(deck.id);
 
-    const newCountArray = {};
-    const newFilteredCards = [];
-
-    cards.forEach((card) => {
-      // Update newCountArray with the new count for each card
-      newCountArray[card.id] = (newCountArray[card.id] || 0) + card.count;
-
-      // Update newFilteredCards
-      const existingCardIndex = newFilteredCards.findIndex((newCard) => newCard.id === card.id);
-      if (existingCardIndex !== -1) {
-        newFilteredCards[existingCardIndex].count += card.count;
-      } else {
-        newFilteredCards.push(card);
-      }
-    });
-    // Update CardState with the new countArray and filteredCards values
-    setCountArray(newCountArray);
-    setFilteredCards(newFilteredCards);
+    setFilteredCards(cards);
     handleDeckLoaded(deck.id, deck.deckuid, deck.name, deck.image);
   };
-  
+
   useEffect(() => {
     const loadDeckData = async () => {
       if (deckUidParams && deckUidParams.trim() !== "") {
@@ -428,14 +423,18 @@ const DeckBuilderBar = (props) => {
         }
       }
     };
-  
+
     loadDeckData();
   }, [deckUidParams]); // Dependency array includes deckUidParams
-  
 
-  useEffect(()=>{
-    
-  })
+  useEffect(() => {
+    if (saveStatus === "success") {
+      handleClearClick();
+      console.log("cleared")
+    }
+  }, [saveStatus]);
+
+
   useEffect(() => {
     if (viewDeckbar) {
       setShowPadding(true);
@@ -460,7 +459,7 @@ const DeckBuilderBar = (props) => {
         color: "#121212",
         zIndex: 1,
         paddingTop: showPadding ? "10px" : "0px", paddingBottom: showPadding ? "10px" : "0px", paddingLeft: "10px", paddingRight: "10px",
-        ...props.style,
+        ...style,
       }}
     >
       <Collapse in={viewDeckbar}>
@@ -534,7 +533,7 @@ const DeckBuilderBar = (props) => {
                   Load
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={() => handleSaveClick(false)}>
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={() => setShowImagePickerModal(true)}>
                 <Save sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
                 <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Save
@@ -561,7 +560,7 @@ const DeckBuilderBar = (props) => {
               onClose={handleMenuClose}
             >
               <MenuItem onClick={handleClearClick}>clear</MenuItem>
-              <MenuItem onClick={() => handleSaveClick(false)}>save</MenuItem>
+              <MenuItem onClick={() => setShowImagePickerModal(true)}>save</MenuItem>
               <MenuItem onClick={handleLoadDeckClick}>load</MenuItem>
               <MenuItem onClick={handleExportClick}>export</MenuItem>
             </Menu>
@@ -623,6 +622,7 @@ const DeckBuilderBar = (props) => {
           setSelectedImage(image);
           setShowImagePickerModal(false); // Close the ImagePickerModal upon selection
         }}
+        handleSaveClick={handleSaveClick}
       />
       <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
         <UATCGExport filteredCards={filteredCards} exportImage={exportImage} currentUser={currentUser} />
