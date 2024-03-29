@@ -32,7 +32,6 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
   const [deckDetails, setDeckDetails] = useState([]);
   const [saveStatus, setSaveStatus] = useState(null);
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
   const [viewDeckbar, setViewDeckbar] = useState(true);
   const [showPadding, setShowPadding] = useState(false);
@@ -92,7 +91,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     setDeckName("myDeckId");
     setLoadedDeckUid(null); // Clear the loadedDeckUid
     setIsUpdatingExistingDeck(false); // Set isUpdatingExistingDeck to false
-    setSelectedImage(null);
+    handleMenuClose();
     setFilteredCards([]);
     setDeckUidParams("");
     const currentPath = window.location.pathname;
