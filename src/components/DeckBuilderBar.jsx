@@ -162,7 +162,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     }
     handleMenuClose();
   };
-  const createNewDeck = async (uid) => {
+  const createNewDeck = async (uid, image) => {
     const userDocRef = doc(db, "users", uid);
 
     // Get the decksCounter from the user document
@@ -182,7 +182,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
       colorCount: colorCount,
       specialCount: specialCount,
       finalCount: finalCount,
-      image: selectedImage,
+      image: image,
       // Add any other information about the deck as required
     };
     // Create a document for the deck with the new name and deck info
@@ -199,8 +199,8 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
 
     return deckUid; // return this value so we can use it in handleSaveClick
   };
-  const updateExistingDeck = async (uid, deckUid) => {
-    
+  const updateExistingDeck = async (uid, deckUid, image) => {
+    console.log('Updating', image)
     const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
 
     const deckInfo = {
@@ -209,14 +209,13 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
       colorCount: colorCount,
       specialCount: specialCount,
       finalCount: finalCount,
-      image: selectedImage,
+      image: image,
       // Add any other information about the deck as required
     };
     // Update the deck name in the existing document
     await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
   };
-  const handleSaveClick = async (proceed = false) => {
-
+  const handleSaveClick = async (proceed = false, image) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
       return;
@@ -234,7 +233,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
         deckUid = await createNewDeck(uid);
       } else {
         deckUid = loadedDeckUid;
-        await updateExistingDeck(uid, deckUid);
+        await updateExistingDeck(uid, deckUid, image);
       }
 
       const cardsCollectionRef = collection(db, `users/${uid}/decks/${deckUid}/cards`);
@@ -618,10 +617,6 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
         open={showImagePickerModal}
         handleClose={() => setShowImagePickerModal(false)}
         images={images}
-        handleImageSelected={(image) => {
-          setSelectedImage(image);
-          setShowImagePickerModal(false); // Close the ImagePickerModal upon selection
-        }}
         handleSaveClick={handleSaveClick}
       />
       <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>

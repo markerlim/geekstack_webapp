@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, Grid } from "@mui/material";
 
-const ImagePickerModal = ({ open, handleClose, images, handleImageSelected, handleSaveClick }) => {
+const ImagePickerModal = ({ open, handleClose, images, handleSaveClick }) => {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Select an image</DialogTitle>
@@ -14,8 +14,7 @@ const ImagePickerModal = ({ open, handleClose, images, handleImageSelected, hand
                 alt="deck"
                 style={{ width: "100%", cursor: "pointer" }}
                 onClick={() => {
-                  handleImageSelected(image);
-                  handleSaveClick();
+                  handleSaveClick(true,image);
                   handleClose();
                 }}
               />
