@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
+import NotificationModal from "./components/HomeNotificationBanner";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -194,8 +195,6 @@ const Home = () => {
     const [selectedId, setSelectedId] = useState(""); // State to store selected ID
     const [open, setOpen] = useState(false);
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-    const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
-    const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const [imageData, setImageData] = useState([]);
     const [comingsoonData, setComingsoonData] = useState([]);
     const theme = useTheme();
@@ -238,6 +237,22 @@ const Home = () => {
         }
     };
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const isNotificationShown = localStorage.getItem("isNotificationShown");
+        if (!isNotificationShown) {
+            setIsModalOpen(true); // If the notification hasn't been shown before, set isModalOpen to true to show it
+        }
+    }, []);
+
+    const handleCloseNotification = (isChecked) => {
+        setIsModalOpen(false);
+        if (isChecked) {
+            localStorage.setItem("isNotificationShown", "true"); // Store in local storage that the notification has been shown
+        }
+    };
+
     useEffect(() => {
         const link = document.createElement("link");
         link.rel = "webmanifest";
@@ -257,6 +272,7 @@ const Home = () => {
             <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"}>
                 <NavbarHome />
+                <NotificationModal open={isModalOpen} onClose={handleCloseNotification} />
                 <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
@@ -268,11 +284,11 @@ const Home = () => {
                             </Box>
                             <Box sx={{ height: '60px', bgcolor: '#26252d', marginLeft: '-10px', width: '200px', borderRadius: '0px 5px 5px 0px', zIndex: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                 <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", gap: '5px', marginLeft: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/unionarena">
-                                    <img style={{ width: '24px' }} alt="UA Builder" src="icons/UAcards.svg" />
+                                    <img style={{ width: '24px' }} alt="UA Builder" src="/icons/UAcards.svg" />
                                     <p style={{ fontSize: '12px' }}>Cards</p>
                                 </Box>
                                 <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", marginLeft: '10px', gap: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/deckbuilder">
-                                    <img style={{ width: '24px' }} alt="UA Builder" src="icons/UAdeckbox.svg" />
+                                    <img style={{ width: '24px' }} alt="UA Builder" src="/icons/UAdeckbox.svg" />
                                     <p style={{ fontSize: '12px' }}>Build</p>
                                 </Box>
                                 <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", fontSize: '20px', gap: '5px', marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center' }} component={Link} to="/uadecklist">
@@ -287,11 +303,11 @@ const Home = () => {
                             </Box>
                             <Box sx={{ height: '60px', bgcolor: '#26252d', marginLeft: '-10px', width: '200px', borderRadius: '0px 5px 5px 0px', zIndex: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                 <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", gap: '5px', marginLeft: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/onepiece">
-                                    <img style={{ width: '24px' }} alt="OP Builder" src="icons/OPcards.svg" />
+                                    <img style={{ width: '24px' }} alt="OP Builder" src="/icons/OPcards.svg" />
                                     <p style={{ fontSize: '12px' }}>Cards</p>
                                 </Box>
                                 <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", marginLeft: '10px', gap: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/optcgbuilder">
-                                    <img style={{ width: '24px' }} alt="OP Builder" src="icons/OPdeckbox.svg" />
+                                    <img style={{ width: '24px' }} alt="OP Builder" src="/icons/OPdeckbox.svg" />
                                     <p style={{ fontSize: '12px' }}>Build</p>
                                 </Box>
                                 <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", fontSize: '20px', gap: '5px', marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center', opacity: '50%' }} component={Link} to="/">
@@ -378,7 +394,7 @@ const Home = () => {
                             </Collapse>
                         </Box>
                         <Box width={{ xs: "70vw", sm: "60vw" }} sx={{ display: "flex", flexDirection: "column", bgcolor: "#26252d", paddingRight: "30px", paddingLeft: "30px", paddingTop: "20px", paddingBottom: "20px", borderRadius: "20px" }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}><div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>UPDATES ON WEBSITE</strong></div>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}><div style={{ fontSize: "20px", color: "#74CFFF" }}><strong>PATCH NOTES</strong></div>
                                 <IconButton
                                     onClick={() => setOpen(!open)}
                                     sx={{ color: '#f2f3f8', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: theme.transitions.create('transform', { duration: theme.transitions.duration.shortest }) }}
@@ -387,15 +403,13 @@ const Home = () => {
                                 </IconButton>
                             </Box>
                             <Collapse in={open}>
-                                <br />
-                                <div><strong style={{ color: '#74CFFF' }}>Current Update:</strong>
-                                    <br />Release of UNION ARENA UA15BT SAO
-                                    <br />
-                                </div>
-                                <br />
-                                <div><strong style={{ color: '#74CFFF' }}>Next Update:</strong>
-                                    <br />-
-                                    <br />
+                                <div className='hide-scrollbar' style={{ color: '#f2f3f8', marginBottom: '10px', height: '300px', overflow: 'auto', }}><strong style={{ color: '#f2f3f8' }}>As of 30th March:</strong>
+                                    <Box sx={{ overflow: 'hidden', height: '200px', width: 'inherit', marginTop: '10px', marginBottom: '10px', borderRadius: '5px' }}>
+                                        <img src="/images/deckcover.webp" style={{ width: '100%' }} alt="screen" />
+                                    </Box>
+                                    <li>Added feature to build with Alternate Arts.</li>
+                                    <li>However it is important to note that, all previously built decks are no "unbuildable".</li>
+                                    <li>Onepiece Deckbuilder is fully functional</li>
                                 </div>
                             </Collapse>
                         </Box>

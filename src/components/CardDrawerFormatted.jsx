@@ -117,6 +117,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[When Attacking]": "/icons/UAtags/CTWhenAttacking.png",
     "[Your Turn]": "/icons/UAtags/CTYourTurn.png",
     "[Opponent's Turn]": "/icons/UAtags/CTOppTurn.png",
+    "[Trigger]":"/icons/UAtags/CTTrigger.png",
   };
 
   const Puller = styled('div')(({ theme }) => ({

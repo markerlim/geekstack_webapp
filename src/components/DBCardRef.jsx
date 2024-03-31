@@ -6,6 +6,7 @@ import { AddCircle, ArrowBack, Refresh, RemoveCircle } from "@mui/icons-material
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { CardDrawerNF } from "./CardDrawerFormatted";
+import GSearchBarUADB from "./ChipSearchBarUADBCardRef";
 
 const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClick }) => {
     const [documents, setDocuments] = useState([]);
@@ -14,6 +15,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
     const { filteredCards, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
+    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+
 
     const resetFilters = () => {
         setBoosterFilter("");
@@ -83,13 +86,20 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
     const decrease = (cardId, cardUid) => modifyCardCount(cardId, cardUid, -1);
 
 
+    // Event handler for search input change
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
+        const searchQueryMatch = !searchQuery || document.cardNameTokens.toLowerCase().includes(searchQuery.toLowerCase());
 
-        return boosterFilterMatch && colorFilterMatch && animeFilterMatch;
+        return boosterFilterMatch && colorFilterMatch && animeFilterMatch && searchQueryMatch;
     });
+
 
     useEffect(() => {
         const fetchDocuments = async () => {
@@ -115,34 +125,35 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
 
     useEffect(() => {
         setDocuments(prevDoc => {
-          return prevDoc.map(document => {
-            const cardFromFiltered = filteredCards.find(card => card.cardUid === document.cardUid);
-            if (cardFromFiltered) {
-              return {
-                ...document,
-                count: cardFromFiltered.count
-              };
-            }
-            return {
-              ...document,
-              count: 0
-            };
-          });
+            return prevDoc.map(document => {
+                const cardFromFiltered = filteredCards.find(card => card.cardUid === document.cardUid);
+                if (cardFromFiltered) {
+                    return {
+                        ...document,
+                        count: cardFromFiltered.count
+                    };
+                }
+                return {
+                    ...document,
+                    count: 0
+                };
+            });
         });
-      }, [filteredCards]);
+    }, [filteredCards]);
+
 
     const animeData = [
         { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST', 'EX02BT'], colorsets: ['Red', 'Green', 'Blue', 'Purple'] },
         { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC', 'EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple', 'Red'] },
-        { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
-        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'] },
+        { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT', 'PROMO'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
+        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT', 'PROMO'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'] },
         { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC'], colorsets: ['Red', 'Yellow', 'Purple'] },
         { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'] },
-        { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST'], colorsets: ['Blue', 'Green', 'Yellow'] },
+        { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST', 'PROMO'], colorsets: ['Blue', 'Green', 'Yellow'] },
         { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
         { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'] },
         { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST'], colorsets: ['Red', 'Green', 'Purple'] },
-        { filter: 'Gintama', sets: ['UA11BT', 'UA11ST'], colorsets: ['Red', 'Purple', 'Yellow'] },
+        { filter: 'Gintama', sets: ['UA11BT', 'UA11ST', 'PROMO'], colorsets: ['Red', 'Purple', 'Yellow'] },
         { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
         { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'] },
         { filter: 'Dr. Stone', sets: ['UA14BT', 'UA14ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
@@ -172,100 +183,103 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                     </>
                 )}
                 {animeFilter !== "" && (
-                    <>
-                        <FormControl sx={{ margin: 1 }}>
-                            <Select
+                    <Box>
+                        <Box>
+                            <FormControl sx={{ margin: 1 }}>
+                                <Select
+                                    sx={{
+                                        display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                        whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                        fontSize: 11, width: "60px", height: "30px",
+                                        '& .MuiSelect-icon': {
+                                            display: "none",
+                                            position: "absolute"
+                                        },
+                                    }}
+                                    value={boosterFilter}
+                                    onChange={(event) => setBoosterFilter(event.target.value)}
+                                    displayEmpty // Add this prop to display the placeholder when the value is empty
+                                    renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {animeData
+                                        .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                        .flatMap(anime => anime.sets) // Get the sets for the matched anime and flatten the result
+                                        .map(set => (
+                                            <MenuItem key={set} value={set}>{set}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
+                            <FormControl sx={{ margin: 1 }}>
+                                <Select
+                                    sx={{
+                                        display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                        whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                        fontSize: 11, width: "60px", height: "30px",
+                                        '& .MuiSelect-icon': {
+                                            display: "none",
+                                            position: "absolute"
+                                        },
+                                    }}
+                                    value={colorFilter}
+                                    onChange={(event) => setColorFilter(event.target.value)}
+                                    displayEmpty // Add this prop to display the placeholder when the value is empty
+                                    renderValue={(selectedValue) => selectedValue || 'Color'}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {animeData
+                                        .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                        .flatMap(anime => anime.colorsets) // Get the sets for the matched anime and flatten the result
+                                        .map(colorset => (
+                                            <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
+                            <Button
                                 sx={{
-                                    display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                                    whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                                    fontSize: 11, width: "60px", height: "30px",
-                                    '& .MuiSelect-icon': {
-                                        display: "none",
-                                        position: "absolute"
+                                    minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                                    width: 30, // Change this value to adjust the width
+                                    height: 20,
+                                    margin: 1,
+                                    padding: 1, // Adjust the padding as needed 
+                                    backgroundColor: "#f2f3f8",
+                                    color: "#240052",
+                                    '&:hover': {
+                                        backgroundColor: "#240052", // Change this to the desired hover background color
+                                        color: "#f2f3f8", // Change this to the desired hover text color if needed
                                     },
                                 }}
-                                value={boosterFilter}
-                                onChange={(event) => setBoosterFilter(event.target.value)}
-                                displayEmpty // Add this prop to display the placeholder when the value is empty
-                                renderValue={(selectedValue) => selectedValue || 'BT/ST'} // Add this prop to display the placeholder text when the value is empty
+                                onClick={resetFilters}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {animeData
-                                    .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
-                                    .flatMap(anime => anime.sets) // Get the sets for the matched anime and flatten the result
-                                    .map(set => (
-                                        <MenuItem key={set} value={set}>{set}</MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
-                        <FormControl sx={{ margin: 1 }}>
-                            <Select
+                                <Refresh sx={{ fontSize: 15 }} />
+                            </Button>
+                            <Button
                                 sx={{
-                                    display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
-                                    whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
-                                    fontSize: 11, width: "60px", height: "30px",
-                                    '& .MuiSelect-icon': {
-                                        display: "none",
-                                        position: "absolute"
+                                    minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
+                                    width: 30, // Change this value to adjust the width
+                                    height: 20,
+                                    margin: 1,
+                                    padding: 1, // Adjust the padding as needed 
+                                    backgroundColor: "#f2f3f8",
+                                    color: "#240052",
+                                    '&:hover': {
+                                        backgroundColor: "#240052", // Change this to the desired hover background color
+                                        color: "#f2f3f8", // Change this to the desired hover text color if needed
                                     },
                                 }}
-                                value={colorFilter}
-                                onChange={(event) => setColorFilter(event.target.value)}
-                                displayEmpty // Add this prop to display the placeholder when the value is empty
-                                renderValue={(selectedValue) => selectedValue || 'Color'}
+                                onClick={resetAnimeFilters}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {animeData
-                                    .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
-                                    .flatMap(anime => anime.colorsets) // Get the sets for the matched anime and flatten the result
-                                    .map(colorset => (
-                                        <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
-                        <Button
-                            sx={{
-                                minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
-                                width: 30, // Change this value to adjust the width
-                                height: 20,
-                                margin: 1,
-                                padding: 1, // Adjust the padding as needed 
-                                backgroundColor: "#f2f3f8",
-                                color: "#240052",
-                                '&:hover': {
-                                    backgroundColor: "#240052", // Change this to the desired hover background color
-                                    color: "#f2f3f8", // Change this to the desired hover text color if needed
-                                },
-                            }}
-                            onClick={resetFilters}
-                        >
-                            <Refresh sx={{ fontSize: 15 }} />
-                        </Button>
-                        <Button
-                            sx={{
-                                minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
-                                width: 30, // Change this value to adjust the width
-                                height: 20,
-                                margin: 1,
-                                padding: 1, // Adjust the padding as needed 
-                                backgroundColor: "#f2f3f8",
-                                color: "#240052",
-                                '&:hover': {
-                                    backgroundColor: "#240052", // Change this to the desired hover background color
-                                    color: "#f2f3f8", // Change this to the desired hover text color if needed
-                                },
-                            }}
-                            onClick={resetAnimeFilters}
-                        >
-                            <ArrowBack sx={{ fontSize: 15 }} />
-                        </Button>
-                    </>
+                                <ArrowBack sx={{ fontSize: 15 }} />
+                            </Button>
+                        </Box>
+                        <GSearchBarUADB handleSearchChange={handleSearchChange}/>
+                    </Box>
                 )}
             </Box>
             <Grid container spacing={2} justifyContent="center">

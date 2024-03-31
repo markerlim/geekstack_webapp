@@ -6,7 +6,7 @@ const ImagePickerModal = ({ open, handleClose, images, handleSaveClick }) => {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Select an image</DialogTitle>
       <DialogContent>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{overflowY:'auto'}}>
           {images.map((image, index) => (
             <Grid item xs={3} key={index}>
               <img
