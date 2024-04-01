@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
-import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
+import { ArrowBack, Refresh } from "@mui/icons-material";
 import searchMatch from "../searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from "react-helmet";
-import { DBZCardDrawerNF } from "./DBZCardDrawerFormatted";
+import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
 
 
-const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
+const OPTCGcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [carddata, setCarddata] = useState([]);
     const { booster: rawBooster } = useParams();
     const boostercode = rawBooster.toUpperCase();
-    const [listOfColors, setListofColors] = useState([]);
-    const [listOfRarities, setListofRarities] = useState([]);
+    const [listOfColors, setListofColors] = useState(['Red','Blue','Green','Purple','Black','Yellow']);
+    const [listOfRarities, setListofRarities] = useState(['ALT','SEC','SR','R','UC','C','L']);
+    const [filteredDocuments,setFilteredDocuments] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -23,9 +24,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
-    const [altForms, setAltForms] = useState({});
-    const [onlyAltForm, setOnlyAltForm] = useState(false);
-    const [altFormIndex, setAltFormIndex] = useState({});
     const isMedium = useMediaQuery('(min-width:900px)');
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,15 +33,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     };
     const getCurrentImage = (document) => {
         let currentImage = document.image;
-
-        // Check if the alternate form should be used
-        if ((onlyAltForm || rarityFilter === "ALT" || altFormIndex[document.cardId] !== undefined) && document.altforms) {
-            if (Array.isArray(document.altforms)) {
-                currentImage = document.altforms[altFormIndex[document.cardId] || 0];
-            } else if (typeof document.altforms === "string") {
-                currentImage = document.altforms;
-            }
-        }
 
         return currentImage;
     };
@@ -60,14 +49,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         let nextIndex = (currentIndex + 1) % filteredDocuments.length;
         let nextDocument = filteredDocuments[nextIndex];
 
-        // If rarityFilter is "ALT", skip documents without alternate forms
-        if (rarityFilter === "ALT") {
-            while (!nextDocument.altforms) {
-                nextIndex = (nextIndex + 1) % filteredDocuments.length;
-                nextDocument = filteredDocuments[nextIndex];
-            }
-        }
-
         const currentImage = getCurrentImage(nextDocument);
         setSelectedCard({
             ...nextDocument,
@@ -79,14 +60,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         let prevDocument = filteredDocuments[prevIndex];
 
-        // If rarityFilter is "ALT", skip documents without alternate forms
-        if (rarityFilter === "ALT") {
-            while (!prevDocument.altforms) {
-                prevIndex = (prevIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
-                prevDocument = filteredDocuments[prevIndex];
-            }
-        }
-
         const currentImage = getCurrentImage(prevDocument);
         setSelectedCard({
             ...prevDocument,
@@ -96,94 +69,19 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const handleCloseModal = () => {
         setSelectedCard(null);
         setOpenModal(false);
-        setAltFormIndex({});
     };
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
         setRarityFilter("");
-        setAltForms(false);
-        setOnlyAltForm(false);
-        setAltFormIndex({});
         setDetailsByBoosterCode(boostercode);
         setSearchQuery("");
     };
     const currentSearchQuery = searchQuery;
-    const filteredDocuments = documents.filter((document) => {
-        const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
-        const colorFilterMatch = !colorFilter || document.color === colorFilter;
-        const searchFilterMatch = searchMatch(document, currentSearchQuery);
-        const rarityFilterMatch = rarityFilter === "ALT" ? document.altforms !== undefined : !rarityFilter || document.rarity === rarityFilter;
-        const altFormFilterMatch = !onlyAltForm || document.altform;
 
-        return boosterFilterMatch && colorFilterMatch && rarityFilterMatch && searchFilterMatch && altFormFilterMatch;
-    });
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);
     };
-    const handleFormChange = (event, document) => {
-        event.stopPropagation(); // Prevent event from bubbling up
-        setAltFormIndex(prev => {
-            // Check if the document.cardId exists in the prev state
-            if (prev[document.cardId] === undefined) {
-                return {
-                    ...prev,
-                    [document.cardId]: 0
-                };
-            }
-
-            let altFormsLength = 0;
-            if (Array.isArray(document.altforms)) {
-                altFormsLength = document.altforms.length;
-            } else if (typeof document.altforms === "string") {
-                altFormsLength = 1; // Consider the original form and the alt form
-            }
-            const currentFormIndex = prev[document.cardId];
-            const newFormIndex = (currentFormIndex + 1) % (altFormsLength + 1); // Add 1 to account for the original form
-
-            return {
-                ...prev,
-                [document.cardId]: newFormIndex,
-            };
-        });
-    };
-
-    useEffect(() => {
-        if (onlyAltForm) {
-            setAltForms(prev => {
-                const newAltForms = { ...prev };
-                for (let cardId in newAltForms) {
-                    const document = documents.find(doc => doc.cardId === cardId);
-                    newAltForms[cardId] = (newAltForms[cardId] + 1) % document.altforms.length;
-                }
-                return newAltForms;
-            });
-            setAltFormIndex(prev => {
-                const newAltFormIndex = { ...prev };
-                for (let cardId in documents) {
-                    if (documents[cardId].altforms) {
-                        newAltFormIndex[cardId] = (newAltFormIndex[cardId] || 0 + 1) % documents[cardId].altforms.length;
-                    }
-                }
-                return newAltFormIndex;
-            });
-        } else {
-            setAltForms(prev => {
-                const newAltForms = { ...prev };
-                for (let cardId in newAltForms) {
-                    newAltForms[cardId] = 0;
-                }
-                return newAltForms;
-            });
-            setAltFormIndex(prev => {
-                const newAltFormIndex = { ...prev };
-                for (let cardId in newAltFormIndex) {
-                    newAltFormIndex[cardId] = 0;
-                }
-                return newAltFormIndex;
-            });
-        }
-    }, [onlyAltForm, documents]);
 
     function isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
@@ -202,7 +100,7 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const filteredQuery = query(collection(db, "dragonballzfw"), where("booster", "==", boostercode));
+                const filteredQuery = query(collection(db, "onepiececardgame"), where("booster", "==", boostercode));
                 const querySnapshot = await getDocs(filteredQuery);
                 const documentsArray = [];
                 const initialAltForms = {};
@@ -216,7 +114,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                 });
 
                 setDocuments(documentsArray);
-                setAltForms(initialAltForms);
                 console.log(`Number of reads: ${documentsArray.length}`);
 
                 const queryParams = new URLSearchParams(window.location.search);
@@ -233,6 +130,22 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         fetchDocuments();
     }, [boostercode]);
 
+    useEffect(() => {
+        const filteredDocuments = documents.filter((document) => {
+            const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
+            const colorFilterMatch = !colorFilter || document.color === colorFilter;
+            const searchFilterMatch = searchMatch(document, currentSearchQuery);
+            const rarityFilterMatch = !rarityFilter || (rarityFilter === 'ALT' 
+                ? ['LA', 'ALT', 'MG', 'SP', 'FS', 'PA', 'RPA'].includes(document.rarity) 
+                : document.rarity === rarityFilter); 
+        
+            return boosterFilterMatch && colorFilterMatch && searchFilterMatch && rarityFilterMatch;
+        });
+        
+        setFilteredDocuments(filteredDocuments);
+    }, [documents, boosterFilter, colorFilter, currentSearchQuery, rarityFilter]);
+    
+    
 
 
     return (
@@ -356,63 +269,28 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                 </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+                <Box sx={{ paddingTop: '20px', paddingBottom: '20px', textAlign: 'center', display: { xs: 'block', sm: 'block', md: 'none' } }}>
+                    <span>{boostercode}</span>
+                </Box>
                 <Grid container spacing={2} justifyContent="center">
-                    {filteredDocuments
-                        .filter(document => !(rarityFilter === 'ALT' && (!document.altforms || document.altforms.length === 0 || document.altforms === '')))
-                        .map((document) => {
-                            if (rarityFilter === 'ALT' && document.altforms) {
-                                const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
-                                return altForms.map((form, index) => (
-                                    <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)}
-                                            sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
-                                            <img
-                                                loading="lazy"
-                                                src={form}
-                                                draggable="false"
-                                                alt={`${document.cardId}-${index}`}
-                                                width={imageWidth}
-                                                height={imageHeight}
-                                            />
-                                        </Box>
-                                    </Grid>
-                                ))
-                            } else {
-                                return (
-                                    <Grid item key={document.cardId} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
-                                            <img
-                                                loading="lazy"
-                                                src={
-                                                    (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) ? document.altforms[altFormIndex[document.cardId]] :
-                                                        (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) ? document.altforms :
-                                                            document.image
-                                                }
-                                                draggable="false"
-                                                alt={`Card of ${document.cardName} from ${document.anime}`}
-                                                width={imageWidth}
-                                                height={imageHeight}
-                                            />
-                                        </Box>
-                                        {((Array.isArray(document.altforms) && document.altforms.length > 0) || (typeof document.altforms === "string" && document.altforms !== '')) ? (
-                                            <button
-                                                onClick={(event) => handleFormChange(event, document)}
-                                                style={{
-                                                    position: "absolute", backgroundColor: "#7C4FFF",
-                                                    border: "3px #934fff solid", borderRadius: "100px",
-                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.3}px`, height: `${imageWidth * 0.3}px`,
-                                                    display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
-                                                }}
-                                            >
-                                                <SwapHoriz sx={{ fontSize: "20px", color: '#F2f3f8' }} />
-                                            </button>
-                                        ) : null}
-                                    </Grid>
-                                )
-                            }
-                        })}
+                    {filteredDocuments.map((document) => {
+                        return(
+                        <Grid item key={document.cardUid} sx={{ position: "relative" }}>
+                            <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
+                                <img
+                                    loading="lazy"
+                                    src={document.image}
+                                    draggable="false"
+                                    alt={`Card of ${document.cardName} from ${document.booster}`}
+                                    width={imageWidth}
+                                    height={imageHeight}
+                                />
+                            </Box>
+                        </Grid>
+                        )
+                    })}
                     {selectedCard && (
-                        <DBZCardDrawerNF
+                        <OPTCGCardDrawer
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}
@@ -524,5 +402,5 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     );
 };
 
-export default DBZFWcardFormat;
+export default OPTCGcardFormat;
 

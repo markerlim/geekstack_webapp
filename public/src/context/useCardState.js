@@ -15,14 +15,11 @@ export const useCardState = () => {
 // CardStateProvider component
 export const CardStateProvider = ({ children }) => {
   const [filteredCards, setFilteredCards] = useState([]);
-  const [countArray, setCountArray] = useState({});
   const [animeFilter,setAnimeFilter] = useState("");
 
   const value = {
     filteredCards,
     setFilteredCards,
-    countArray,
-    setCountArray,
     animeFilter,
     setAnimeFilter,
   };

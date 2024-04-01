@@ -7,14 +7,14 @@ const ImagePickerModal = ({ open, handleClose, images, handleSaveClick }) => {
       <DialogTitle>Select an image</DialogTitle>
       <DialogContent>
         <Grid container spacing={2} sx={{overflowY:'auto'}}>
-          {images.map((image, index) => (
+          {images.map((specialImage, index) => (
             <Grid item xs={3} key={index}>
               <img
-                src={image}
+                src={specialImage}
                 alt="deck"
                 style={{ width: "100%", cursor: "pointer" }}
                 onClick={() => {
-                  handleSaveClick(true,image);
+                  handleSaveClick(specialImage,true);
                   handleClose();
                 }}
               />

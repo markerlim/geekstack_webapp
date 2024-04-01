@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
-import AcardFormat from "../components/AcardTemplate";
+import AcardFormat from "../components/AcardTemplatenew";
 
 const AcardFormatpage = () => {
   const [searchQuery, setSearchQuery] = useState("");

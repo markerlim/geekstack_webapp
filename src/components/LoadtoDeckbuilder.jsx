@@ -51,16 +51,18 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
       const deckDocs = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        deckDocs.push({
-          id: doc.id,
-          name: data.deckName,
-          description: data.description,
-          colorCount: data.colorCount,
-          specialCount: data.specialCount,
-          finalCount: data.finalCount,
-          image: data.image,
-          ...data,
-        });
+        if (doc.id !== "placeholder") {
+          deckDocs.push({
+            id: doc.id,
+            name: data.deckName,
+            description: data.description,
+            colorCount: data.colorCount,
+            specialCount: data.specialCount,
+            finalCount: data.finalCount,
+            image: data.image,
+            ...data,
+          });
+        }
       });
       setDecks(deckDocs);
     };

@@ -10,10 +10,33 @@ import { Hidden } from "@mui/material";
 import { Helmet } from "react-helmet";
 import UANavBar from "../components/UANavBar";
 import NavbarPrompt from "../components/NavbarPromptLogin";
+import GSearchBar from "../components/ChipSearchBar";
 
 const Deckbuilder = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+  const toggleDrawer = () => {
+    if (isDrawerOpen) {
+      // The drawer is currently open and will be closed
+      // Save the state to sessionStorage
+      const stateToSave = JSON.stringify({ filters });
+      sessionStorage.setItem('drawerState', stateToSave);
+    } else {
+      // The drawer is currently closed and will be opened
+      // Restore the state from sessionStorage
+      const savedState = sessionStorage.getItem('drawerState');
+      if (savedState) {
+        const parsedState = JSON.parse(savedState);
+        setIsButtonClicked(false);
+        setFilters(parsedState.filters);
+      }
+    }
+  
+    // Toggle the drawer open/closed state
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+  const [changeClick, setChangeClick] = useState(false);
+  const [filters, setFilters] = useState([]);
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
   }
@@ -46,8 +69,8 @@ const Deckbuilder = () => {
             <Hidden only={['md', 'lg', 'xl']}>
               <Box bgcolor={"#202023"} sx={{ overflowY: 'auto', overflowX: "hidden", height: '100%', width: '100%', }} className="hide-scrollbar">
                 <UANavBar sx={{ backgroundColor: '#121212' }} />
-                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky", }} />
-                <TestRightBar sx={{ top: 0 }} />
+                <DeckBuilderBar changeClick={changeClick} setChangeClick={setChangeClick} style={{ width: "100%", top: 0, position: "sticky", }} />
+                <TestRightBar setChangeClick={setChangeClick} sx={{ top: 0 }} />
                 <div style={{ height: "120px" }}></div>
               </Box>
               <Button onClick={toggleDrawer} sx={{
@@ -74,6 +97,7 @@ const Deckbuilder = () => {
                 <Box sx={{
                   width: '100%',
                   maxHeight: '70vh',
+                  minHeight:'500px',
                   bgcolor: '#121212',
                   borderRadius: '20px 20px 0px 0px',
                   overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
@@ -82,7 +106,7 @@ const Deckbuilder = () => {
                     paddingRight: '30px',
                     paddingLeft: '30px',
                   }}>
-                    <DBCardRef />
+                    <DBCardRef filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                     <br></br>
                     <br></br>
                     <br></br>
@@ -101,7 +125,7 @@ const Deckbuilder = () => {
                 marginLeft: "100px"
               }}>
                 <UANavBar />
-                <DBCardRef />
+                <DBCardRef filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                 <br></br>
                 <br></br>
                 <br></br>
@@ -112,8 +136,8 @@ const Deckbuilder = () => {
             </Hidden>
             <Hidden only={['xs', 'sm']}>
               <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', height: '100%' }} className="hide-scrollbar">
-                <DeckBuilderBar style={{ width: "100%", top: 0, position: "sticky" }} />
-                <TestRightBar />
+                <DeckBuilderBar changeClick={changeClick} setChangeClick={setChangeClick} style={{ width: "100%", top: 0, position: "sticky" }} />
+                <TestRightBar setChangeClick={setChangeClick}/>
                 <br></br>
                 <br></br>
                 <br></br>

@@ -1,20 +1,20 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, Grid } from "@mui/material";
 
-const ImagePickerModal = ({ open, handleClose, images, handleImageSelected }) => {
+const ImagePickerModal = ({ open, handleClose, images, handleSaveClick }) => {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Select an image</DialogTitle>
       <DialogContent>
-        <Grid container spacing={2}>
-          {images.map((image, index) => (
+        <Grid container spacing={2} sx={{overflowY:'auto'}}>
+          {images.map((specialImage, index) => (
             <Grid item xs={3} key={index}>
               <img
-                src={image}
+                src={specialImage}
                 alt="deck"
                 style={{ width: "100%", cursor: "pointer" }}
                 onClick={() => {
-                  handleImageSelected(image);
+                  handleSaveClick(specialImage,true);
                   handleClose();
                 }}
               />

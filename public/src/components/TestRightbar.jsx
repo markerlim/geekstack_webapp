@@ -7,12 +7,10 @@ import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
 import { CardDrawerNF } from "./CardDrawerFormatted";
 
-const TestRightBar = (props) => {
-    const [documents, setDocuments] = useState([]);
+const TestRightBar = ({setChangeClick}) => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [totalCount, setTotalCount] = useState(0);
-    const { countArray, setCountArray, filteredCards, setFilteredCards, setAnimeFilter } = useCardState(); // Use useCardState hook
+    const { filteredCards, setFilteredCards, setAnimeFilter } = useCardState(); // Use useCardState hook
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleOpenModal = (document) => {
@@ -29,69 +27,43 @@ const TestRightBar = (props) => {
         setOpenModal(false);
     };
 
-    const increase = (cardId) => {
-        setCountArray((prevCountArray) => {
-            const newArray = { ...prevCountArray };
-            
-            // Find the specific card in filteredCards
-            const updatedFilteredCards = filteredCards.map((card) => {
-                if (card.cardId === cardId) {
-                    // Get the ban ratio or default to 4 if not specified
-                    const banRatio = card.banRatio || 4;
-                    // Check if the count is already at the maximum
-                    if ((card.count || 0) < banRatio) {
-                        // Increase count and return the updated card
-                        return { ...card, count: (card.count || 0) + 1 };
-                    }
-                }
-                return card;
-            });
-    
-            // Update filteredCards with the updated card
-            setFilteredCards(updatedFilteredCards);
-            
-            // Update local storage
-            setToLocalStorage("filteredCards", updatedFilteredCards);
-    
-            // Update countArray, ensuring it doesn't exceed the maximum specified by banRatio
-            const banRatio = filteredCards.find((card) => card.cardId === cardId)?.banRatio || 4;
-            newArray[cardId] = Math.min((newArray[cardId] || 0) + 1, banRatio);
-            setToLocalStorage("countArray", newArray);
-    
-            return newArray;
-        });
-    };
-    
-    
-    const decrease = (cardId) => {
-        setCountArray((prevCountArray) => {
-            const newArray = { ...prevCountArray };
-    
-            // Find the specific card in filteredCards
-            const updatedFilteredCards = filteredCards.map((card) => {
-                if (card.cardId === cardId && card.count > 0) {
-                    // Decrease count and return the updated card
-                    return { ...card, count: card.count - 1 };
-                }
-                return card;
-            });
-    
-            // Update filteredCards with the updated card
-            setFilteredCards(updatedFilteredCards);
-    
-            // Update local storage
-            setToLocalStorage("filteredCards", updatedFilteredCards);
-    
-            // Update countArray
-            if (newArray[cardId] > 0) {
-                newArray[cardId]--;
+    const modifyCardCount = (cardId, cardUid, change) => {
+        // Filter cards with the same cardId
+        const cardsWithSameId = filteredCards.filter(card => card.cardId === cardId);
+        // Count the total number of cards with the same cardId
+        const countOfSameId = cardsWithSameId.reduce((total, card) => total + card.count, 0);
+
+        const banRatio = cardsWithSameId.length > 0 ? cardsWithSameId[0].banRatio : 4;
+
+        // Check if adding 'change' cards would exceed the limit of 4 cards with the same cardId
+        if (countOfSameId + change <= banRatio) {
+          // Find the index of the existing card in filteredCards based on cardUid
+          const existingCardIndex = filteredCards.findIndex(card => card.cardUid === cardUid);
+      
+          // If the card with cardUid exists
+          if (existingCardIndex !== -1) {
+            const existingCard = filteredCards[existingCardIndex];
+            const newCount = Math.max(0, existingCard.count + change);
+      
+            // If newCount becomes 0, remove the card from filteredCards
+            if (newCount === 0) {
+              setFilteredCards(prevFilteredCards => prevFilteredCards.filter(card => card.cardUid !== cardUid));
+            } else {
+              // Update the count of the existing card
+              setFilteredCards(prevFilteredCards => {
+                const updatedCards = [...prevFilteredCards];
+                updatedCards[existingCardIndex] = { ...existingCard, count: newCount };
+                return updatedCards;
+              });
             }
-            setToLocalStorage("countArray", newArray);
-    
-            return newArray;
-        });
-    };
-    
+          }
+        }
+        // Toggle the state of changeClick
+        setChangeClick(prevState => !prevState);
+      };
+      
+      const increase = (cardId, cardUid) => modifyCardCount(cardId, cardUid, 1);
+      const decrease = (cardId, cardUid) => modifyCardCount(cardId, cardUid, -1);
 
 
     const areCardsFromSameAnime = (cards) => {
@@ -112,20 +84,6 @@ const TestRightBar = (props) => {
             setSnackbarOpen(false);
         }
     }, [filteredCards]);
-
-    useEffect(() => {
-        const initialCountArray = documents.reduce((accumulator, document) => {
-            accumulator[document.cardId] = 0;
-            return accumulator;
-        }, {});
-
-        setCountArray(initialCountArray);
-    }, [documents]);
-
-    useEffect(() => {
-        const newTotalCount = Object.values(countArray).reduce((accumulator, count) => accumulator + count, 0);
-        setTotalCount(newTotalCount);
-    }, [countArray]);
 
     useEffect(() => {
         const sorted = [...filteredCards].sort((a, b) => {
@@ -151,8 +109,7 @@ const TestRightBar = (props) => {
             <Grid style={{ overflowY: "auto", height: "100%" }}>
                 <Grid container spacing={2} justifyContent="center">
                     {sortedCards.map((document) => (
-                        countArray[document.cardId] > 0 && (
-                            <Grid item key={document.cardId} style={{ alignSelf: "flex-start" }}>
+                            <Grid item key={document.cardUid} style={{ alignSelf: "flex-start" }}>
                                 <Box sx={{position:'relative'}}>
                                     <ResponsiveImage
                                         loading="lazy"
@@ -169,17 +126,16 @@ const TestRightBar = (props) => {
                                         )
                                     }
                                     <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"}>
-                                        <div component={Button} onClick={() => decrease(document.cardId)} style={{ cursor: "pointer" }}>
+                                        <div component={Button} onClick={() => decrease(document.cardId,document.cardUid)} style={{ cursor: "pointer" }}>
                                             <RemoveCircle sx={{ fontSize: 20 }} />
                                         </div>
-                                        <span sx={{ fontSize: 20 }}>{countArray[document.cardId] || 0}</span>
-                                        <div component={Button} onClick={() => increase(document.cardId)} style={{ cursor: "pointer" }}>
+                                        <span sx={{ fontSize: 20 }}>{document.count || 0}</span>
+                                        <div component={Button} onClick={() => increase(document.cardId,document.cardUid)} style={{ cursor: "pointer" }}>
                                             <AddCircle sx={{ fontSize: 20 }} />
                                         </div>
                                     </Box>
                                 </Box>
                             </Grid>
-                        )
                     ))}
                     {selectedCard && (
                         <CardDrawerNF

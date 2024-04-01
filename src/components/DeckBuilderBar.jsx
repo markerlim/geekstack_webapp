@@ -174,7 +174,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     }
     handleMenuClose();
   };
-  const createNewDeck = async (uid, image) => {
+  const createNewDeck = async (uid, specialImage) => {
     const userDocRef = doc(db, "users", uid);
 
     // Get the decksCounter from the user document
@@ -194,7 +194,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
       colorCount: colorCount,
       specialCount: specialCount,
       finalCount: finalCount,
-      image: image,
+      image: specialImage,
       // Add any other information about the deck as required
     };
     // Create a document for the deck with the new name and deck info
@@ -211,8 +211,8 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
 
     return deckUid; // return this value so we can use it in handleSaveClick
   };
-  const updateExistingDeck = async (uid, deckUid, image) => {
-    console.log('Updating', image)
+  const updateExistingDeck = async (uid, deckUid, specialImage) => {
+    console.log('Updating', specialImage)
     const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
 
     const deckInfo = {
@@ -221,13 +221,14 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
       colorCount: colorCount,
       specialCount: specialCount,
       finalCount: finalCount,
-      image: image,
+      image: specialImage,
       // Add any other information about the deck as required
     };
     // Update the deck name in the existing document
     await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
   };
-  const handleSaveClick = async (proceed = false, image) => {
+  
+  const handleSaveClick = async (specialImage, proceed = false ) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
       return;
@@ -242,10 +243,10 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     try {
       let deckUid;
       if (!isUpdatingExistingDeck) {
-        deckUid = await createNewDeck(uid);
+        deckUid = await createNewDeck(uid, specialImage);
       } else {
         deckUid = loadedDeckUid;
-        await updateExistingDeck(uid, deckUid, image);
+        await updateExistingDeck(uid, deckUid, specialImage);
       }
 
       const cardsCollectionRef = collection(db, `users/${uid}/decks/${deckUid}/cards`);

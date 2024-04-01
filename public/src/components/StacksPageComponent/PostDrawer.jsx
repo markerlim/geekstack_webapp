@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Box, SwipeableDrawer, TextField, styled } from "@mui/material";
+import DecklibrarybtnMobile from "../DeckLibraryButtonsMobile";
+import OPDecklibrarybtn from "../OPTCGPageComponent/OPDeckLibraryButtons";
+import { CardStateProviderOnepiece } from "../../context/useCardStateOnepiece";
 
 const PostDrawer = ({ setPostDrawerOpen, postDrawerOpen }) => {
     const [postFontWeight, setPostFontWeight] = useState(900);
@@ -41,52 +44,23 @@ const PostDrawer = ({ setPostDrawerOpen, postDrawerOpen }) => {
             <Box sx={{ width: 'calc(100vw - 40px)', padding: '20px', height: '50vh', display: 'flex', flexDirection: 'column', backgroundColor: '#26262d', borderRadius: '20px 20px 0px 0px', color: '#f2f3f8' }}>
                 <Puller />
                 <br />
-                <Box sx={{ padding: '15px' }}>
-                    {postFontWeight === 900 && (
-                        <Box>
-                            <TextField
-                                label="Post"
-                                fullWidth
-                                multiline
-                                value={localDescription}
-                                onChange={(e) => setLocalDescription(e.target.value)}
-                                maxRows={4}
-                                InputLabelProps={{ shrink: true }}
-                                sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: '#7C4FFF', // Border color when not focused
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: '#7C4FFF', // Border color when hovered over
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#7C4FFF', // Border color when focused (in use)
-                                        },
-                                    },
-                                    '.MuiOutlinedInput-input': {
-                                        color: 'white', // changes the text color
-                                    },
-                                    '.MuiInputLabel-outlined': {
-                                        color: 'white', // changes the label colorwhite
-                                        whiteSpace: 'pre-wrap'
-                                    },
-                                    '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                                        color: 'white', // changes the label color when typing
-                                    },
-                                }}
-                            />
-                        </Box>
-                    )}
+                <Box sx={{ padding: '15px',overflowY:'auto'}}>
                     {deckshareFontWeight === 900 && (
-                        <Box>
-                            This content is rendered when deckshareFontWeight is 900.
+                        <Box sx={{display:'flex', flexDirection:'column'}}>
+                            <Box overflowX={'auto'} sx={{ height: { xs: '300px' } }}>
+                                <DecklibrarybtnMobile />
+                            </Box>
+                            <Box overflowX={'auto'} sx={{ height: { xs: '300px' } }}>
+                                <CardStateProviderOnepiece>
+                                    <OPDecklibrarybtn />
+                                </CardStateProviderOnepiece>
+                            </Box>
                         </Box>
                     )}
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px', justifyContent: 'center', alignItems: 'center', width: 'calc(100vw - 40px)' }}>
                     <Box sx={{ paddingTop: '10px', paddingBottom: '10px', paddingLeft: '20px', paddingRight: '20px', bgcolor: '#121212', borderRadius: '30px', display: 'flex', gap: '10px', fontSize: '17px' }}>
-                        <Box sx={{ fontWeight: postFontWeight, cursor: 'pointer' }} onClick={() => handleFontWeightChange('Post')}>
+                        <Box sx={{ fontWeight: postFontWeight, cursor: 'pointer',display:'none' }} onClick={() => handleFontWeightChange('Post')}>
                             Post
                         </Box>
                         <Box sx={{ fontWeight: deckshareFontWeight, cursor: 'pointer' }} onClick={() => handleFontWeightChange('Deckshare')}>

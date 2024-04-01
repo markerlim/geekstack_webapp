@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { ResponsiveImage } from "./ResponsiveImage";
 import ButtonList from "./UnionArenaBoosterButton";
 import { CircularProgress } from '@mui/material';
@@ -46,7 +46,7 @@ const UACardlist = ({ filters }) => {
             const arrayFields = ['cardNameTokens']; // specify which keys should be treated as arrays
 
             for (let filter of filters) {
-                filter = filter.toLowerCase(); 
+                filter = filter.toLowerCase();
                 let filterMatches = [];
 
                 for (let key of keysToSearch) {
@@ -97,7 +97,7 @@ const UACardlist = ({ filters }) => {
             )}
             <div className="hide-scrollbar">
                 {loading ? (
-                    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop:'-30vh', height: "86vh" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: '-30vh', height: "86vh" }}>
                         <CircularProgress sx={{ color: "#74CFFF" }} />
                         {slowFetch && <Box mt={2}>This field has a large amount of data. Please wait a moment.</Box>}
                     </Box>

@@ -28,9 +28,9 @@ function formatDate(date) {
 const AccountDetails = () => {
     const currentUser = useContext(AuthContext);
     const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
-    const [isDTCGButtonsVisible, setIsDTCGButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const [uaDeckData, setUaDeckData] = useState([]);
+    const [opDeckData, setOpDeckData] = useState([]);
     const uid = currentUser.currentUser.uid;
 
     useEffect(() => {
@@ -44,8 +44,12 @@ const AccountDetails = () => {
         };
     }, []);
 
-    const fetchData = async () => {
-        const querySnapshot = await getDocs(query(collection(db, 'uniondecklist'), where('uid', '==', uid)));
+    const fetchUAData = async () => {
+        const querySnapshot = await getDocs(query(
+            collection(db, 'uniondecklist'),
+            where('uid', '==', uid),
+            where('postType', '==', 'UATCG')
+        ));
 
         const retrievedData = querySnapshot.docs.map(doc => {
             const data = doc.data();
@@ -58,9 +62,28 @@ const AccountDetails = () => {
         setUaDeckData(retrievedData);
     };
 
+    const fetchOPData = async () => {
+        const querySnapshot = await getDocs(query(
+            collection(db, 'uniondecklist'),
+            where('uid', '==', uid),
+            where('postType', '==', 'OPTCG')
+        ));
+
+        const retrievedData = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            data.id = doc.id;
+            if (data.sharedDate) {
+                data.formattedSharedDate = formatDate(data.sharedDate.toDate());
+            }
+            return data;
+        });
+        setOpDeckData(retrievedData);
+    };
+
     useEffect(() => {
         // Call fetchData within useEffect
-        fetchData();
+        fetchUAData();
+        fetchOPData();
     }, [uid]);
 
     const imgStyles = {
@@ -70,12 +93,24 @@ const AccountDetails = () => {
     };
 
 
-    const deleteDeck = async (deckId) => {
+    const deleteUADeck = async (deckId) => {
         if (window.confirm(`Are you sure you want to delete this deck?`)) {
             try {
                 await deleteDoc(doc(db, 'uniondecklist', deckId));
                 // Refresh deck data after deletion
-                fetchData();
+                fetchUAData();
+            } catch (error) {
+                console.error("Error deleting deck: ", error);
+            }
+        }
+    }
+
+    const deleteOPDeck = async (deckId) => {
+        if (window.confirm(`Are you sure you want to delete this deck?`)) {
+            try {
+                await deleteDoc(doc(db, 'uniondecklist', deckId));
+                // Refresh deck data after deletion
+                fetchOPData();
             } catch (error) {
                 console.error("Error deleting deck: ", error);
             }
@@ -106,23 +141,7 @@ const AccountDetails = () => {
                                             }
                                         }}
                                         onClick={() => {
-                                            setIsDTCGButtonsVisible(!isDTCGButtonsVisible);
-                                            setIsUAButtonsVisible(false);
-                                            setIsOPTCGButtonsVisible(false);
-                                        }}
-                                    >
-                                        <img style={{ height: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" />
-                                    </Button>
-                                    <Button
-                                        sx={{
-                                            width: { xs: 'auto', sm: "120px" }, flex: '0 0 auto', height: { xs: '50px', sm: "75px" }, color: "#7C4FFF", bgcolor: "#26252d", padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out', '&:hover': {
-                                                transform: 'scale(1.1)',
-                                                transition: 'all 0.2s ease-in-out'
-                                            }
-                                        }}
-                                        onClick={() => {
                                             setIsUAButtonsVisible(!isUAButtonsVisible);
-                                            setIsDTCGButtonsVisible(false);
                                             setIsOPTCGButtonsVisible(false);
                                         }}
                                     >
@@ -137,7 +156,6 @@ const AccountDetails = () => {
                                         }}
                                         onClick={() => {
                                             setIsOPTCGButtonsVisible(!isOPTCGButtonsVisible);
-                                            setIsDTCGButtonsVisible(false);
                                             setIsUAButtonsVisible(false);
                                         }}
                                     >
@@ -145,13 +163,8 @@ const AccountDetails = () => {
                                     </Button>
                                 </Box>
                                 <Box sx={{ position: 'relative' }}>
-                                    <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isDTCGButtonsVisible}>
-                                        <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
-                                            Currently Unavailable
-                                        </Box>
-                                    </Collapse>
                                     <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isUAButtonsVisible}>
-                                        <Box sx={{ width: '100vw', display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
+                                        <Box sx={{ width: 'calc(100vw - 80px)', display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'left',overflowY:'auto', paddingLeft:'40px', paddingRight:'40px' }}>
                                             <Box
                                                 sx={{
                                                     display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px"
@@ -167,7 +180,7 @@ const AccountDetails = () => {
                                                                 <Box><span style={{ fontWeight: "900", color: "#f2f3f8" }}>{deck.deckName}</span></Box>
                                                                 <Box><span style={{ fontWeight: "900", color: "#7C4FFF" }}>{deck.formattedSharedDate}</span></Box>
                                                                 <Box
-                                                                    onClick={() => deleteDeck(deck.id)}  // make sure to pass the deck's ID
+                                                                    onClick={() => deleteUADeck(deck.id)}  // make sure to pass the deck's ID
                                                                     sx={{ position: { xs: 'block', sm: 'absolute' }, bottom: '10px', right: '10px', color: '#ff2247', cursor: "pointer" }}  // added cursor style for better UX
                                                                 >
                                                                     <Delete />
@@ -184,8 +197,36 @@ const AccountDetails = () => {
                                         </Box>
                                     </Collapse>
                                     <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isOPTCGButtonsVisible}>
-                                        <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
-                                            Currently Unavailable
+                                    <Box sx={{ width: 'calc(100vw - 80px)', display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'left',overflowY:'auto', paddingLeft:'40px', paddingRight:'40px' }}>
+                                            <Box
+                                                sx={{
+                                                    display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px"
+                                                }}
+                                            >
+                                                {opDeckData.length > 0 ? (
+                                                    opDeckData.map((deck, index) => (
+                                                        <div key={index}>
+                                                            <Box position={'relative'} sx={{ width: { xs: "130px", sm: "200px" }, paddingTop: { xs: '10px', sm: "20px" }, paddingBottom: { xs: '10px', sm: "20px" }, borderRadius: "20px", bgcolor: "#26252D", display: "flex", gap: '10px', alignItems: 'center', flexDirection: "column", cursor: "pointer", position: "relative" }}>
+                                                                <Box sx={{ width: { xs: "80px", sm: "150px" }, height: { xs: "80px", sm: "150px" }, borderRadius: { xs: "40px", sm: "75px" }, overflow: "hidden", flex: "0 0 auto", border: { xs: "2px solid #7C4FFF", sm: "4px solid #7C4FFF" } }}>
+                                                                    <Box component="img" src={deck.selectedCards[0].imagesrc} alt="test" sx={imgStyles} />
+                                                                </Box>
+                                                                <Box><span style={{ fontWeight: "900", color: "#f2f3f8" }}>{deck.deckName}</span></Box>
+                                                                <Box><span style={{ fontWeight: "900", color: "#7C4FFF" }}>{deck.formattedSharedDate}</span></Box>
+                                                                <Box
+                                                                    onClick={() => deleteOPDeck(deck.id)}  // make sure to pass the deck's ID
+                                                                    sx={{ position: { xs: 'block', sm: 'absolute' }, bottom: '10px', right: '10px', color: '#ff2247', cursor: "pointer" }}  // added cursor style for better UX
+                                                                >
+                                                                    <Delete />
+                                                                </Box>
+                                                            </Box>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <Box>
+                                                        <span style={{ fontWeight: "900", color: "#f2f3f8" }}>No deck shared</span>
+                                                    </Box>
+                                                )}
+                                            </Box>
                                         </Box>
                                     </Collapse>
                                 </Box>

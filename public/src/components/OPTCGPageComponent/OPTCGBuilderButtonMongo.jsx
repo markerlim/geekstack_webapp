@@ -3,8 +3,6 @@ import { Box, Button, ButtonBase, CircularProgress, FormControl, Grid, InputLabe
 import { AddCircle, ArrowBack, RemoveCircle } from "@mui/icons-material";
 import { OPTCGCardDrawer } from "./OPTCGCardDrawer";
 import { useOPCardState } from "../../context/useCardStateOnepiece";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../Firebase";
 
 const MyButton = ({ alt, imageSrc, imgWidth, onClick }) => {
   return (
@@ -64,7 +62,7 @@ const customSort = (a, b) => {
     return a.pathname.localeCompare(b.pathname);
   }
 };
-const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClick }) => {
+const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked,setChangeClick }) => {
   const { filteredCards, setFilteredCards } = useOPCardState();
   const [buttonData, setButtonData] = useState([]);
   const [onepieces, setOnepieces] = useState([]);
@@ -84,7 +82,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
     attribute_lower: ["slash", "ranged", "special", "wisdom", "strike"],
     rarity_lower: ["c", "uc", "r", "sr", "alt", "l", "l-alt", "sp", "manga"],
     typing_lower_token: [],
-    typing_lower: [],
+    typing_lower:[],
     cardname_lower_token: [],
     booster_lower: ["op01", "op02", "op03", "op04", "op05", "st01", "st02", "st03", "st04", "st05", "st06", "st07", "st08", "st09", "st10"], // Same here
     category: ["character", "event", "stage"]
@@ -126,52 +124,70 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
     }
     return transformedFilters;
   }
+
   const handleOpenModal = (onepiece) => {
     setSelectedCard(onepiece);
     setOpenModal(true);
   };
+
   const handleCloseModal = () => {
     setSelectedCard(null);
     setOpenModal(false);
   };
+
   const handleSwipeLeft = () => {
-    const currentIndex = onepieces.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
+    const currentIndex = onepieces.findIndex((doc) => doc.cardid === selectedCard.cardid);
     const nextIndex = (currentIndex + 1) % onepieces.length;
     setSelectedCard(onepieces[nextIndex]);
   };
+
   const handleSwipeRight = () => {
-    const currentIndex = onepieces.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
+    const currentIndex = onepieces.findIndex((doc) => doc.cardid === selectedCard.cardid);
     const prevIndex = (currentIndex - 1 + onepieces.length) % onepieces.length;
     setSelectedCard(onepieces[prevIndex]);
   };
 
   const fetchonepieces = async (booster) => {
-    try {
-      const filteredQuery = query(collection(db, "onepiececardgame"), where("booster", "==", booster));
-      const querySnapshot = await getDocs(filteredQuery);
-      let allOnepieces = [];
+    let currentPage = 1; // Start with the first page
+    let allOnepieces = []; // To accumulate onepieces across multiple pages
 
-      querySnapshot.forEach((doc) => {
-        const docData = doc.data();
-        allOnepieces.push(docData);
-      });
+    while (true) { // Keep fetching until no more data
+      const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/onepieceData?page=${currentPage}&booster=${booster}&secret=${process.env.REACT_APP_SECRET_KEY}`;
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
 
-      allOnepieces = allOnepieces.filter(onepiece => onepiece.category !== "leader");
+        if (!result.data || result.data.length === 0) { // Stop when no data is returned
+          break;
+        }
 
-      allOnepieces = allOnepieces.map(onepiece => ({
-        ...onepiece,
-        count: onepiece.count || 0
-      }));
-      console.log(allOnepieces)
-      setOnepieces(allOnepieces);
-      setCurrentViewedCards(allOnepieces);
-      setIsLoading(false);
+        allOnepieces = [...allOnepieces, ...result.data]; // Add the new data to our accumulating array
+        currentPage++; // Go to the next page for the next loop iteration
 
-      return allOnepieces
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
+      } catch (error) {
+        console.error("Failed to fetch onepieces:", error);
+        break; // Exit the loop if there's an error
+      }
     }
+
+    // Sorting the data
+    allOnepieces.sort((a, b) => {
+      const aId = parseInt(a.cardid.split('-')[1]);
+      const bId = parseInt(b.cardid.split('-')[1]);
+      return aId - bId;
+    });
+    allOnepieces = allOnepieces.filter(onepiece => onepiece.category !== "leader");
+
+    allOnepieces = allOnepieces.map(onepiece => ({
+      ...onepiece,
+      count: onepiece.count || 0
+    }));
+
+    setOnepieces(allOnepieces);
+    setCurrentViewedCards(allOnepieces);
+    setIsLoading(false);
+
+    return allOnepieces;
   };
 
   useEffect(() => {
@@ -203,7 +219,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
     setIsLoading(true);
     fetchonepieces(booster).then(newonepieces => {
       const updatedOnepieces = newonepieces.map(onepiece => {
-        const existingCard = filteredCards.find(card => card.cardUid === onepiece.cardUid);
+        const existingCard = filteredCards.find(card => card.cardid === onepiece.cardid);
         return {
           ...onepiece,
           count: existingCard ? existingCard.count : 0
@@ -282,52 +298,41 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
     }
   }, [currentPage, filters, shouldFetch]);
 
-  const modifyCardCount = (cardId, cardUid, change) => {
-    // Filter cards with the same cardId
-    const cardsWithSameId = filteredCards.filter(card => card.cardId === cardId);
-    // Count the total number of cards with the same cardId
-    const countOfSameId = cardsWithSameId.reduce((total, card) => total + card.count, 0);
-  
-    // Check if adding 'change' cards would exceed the limit of 4 cards with the same cardId
-    if (countOfSameId + change <= 4) {
-      // Find the index of the existing card in filteredCards based on cardUid
-      const existingCardIndex = filteredCards.findIndex(card => card.cardUid === cardUid);
-  
-      // If the card with cardUid exists
-      if (existingCardIndex !== -1) {
-        const existingCard = filteredCards[existingCardIndex];
-        const newCount = Math.max(0, existingCard.count + change);
-  
-        // If newCount becomes 0, remove the card from filteredCards
-        if (newCount === 0) {
-          setFilteredCards(prevFilteredCards => prevFilteredCards.filter(card => card.cardUid !== cardUid));
-        } else {
-          // Update the count of the existing card
-          setFilteredCards(prevFilteredCards => {
-            const updatedCards = [...prevFilteredCards];
-            updatedCards[existingCardIndex] = { ...existingCard, count: newCount };
-            return updatedCards;
-          });
-        }
-      } else if (change > 0) {
-        // If the card with cardUid doesn't exist and change is positive, add a new card
-        const newCard = onepieces.find(onepiece => onepiece.cardUid === cardUid);
-        if (newCard) {
-          setFilteredCards(prevFilteredCards => [...prevFilteredCards, { ...newCard, count: 1 }]);
-        }
+
+  const modifyCardCount = (cardId, change) => {
+    const existingCard = filteredCards.find(card => card.cardid === cardId);
+
+    if (existingCard) {
+      let newCount = (existingCard.count || 0) + change;
+
+      // Ensure the count is between 0 and 4 inclusive
+      newCount = Math.max(0, Math.min(4, newCount));
+      if (newCount === 0) {
+        setFilteredCards(prevFilteredCards => prevFilteredCards.filter(card => card.cardid !== cardId));
+      } else {
+        setFilteredCards(prevFilteredCards => prevFilteredCards.map(card => {
+          if (card.cardid === cardId) {
+            return { ...card, count: newCount };
+          }
+          return card;
+        }));
+      }
+    } else if (change > 0) {
+      const newCard = onepieces.find(onepiece => onepiece.cardid === cardId);
+      if (newCard) {
+        setFilteredCards(prevFilteredCards => [...prevFilteredCards, { ...newCard, count: 1 }]);
       }
     }
-    // Toggle the state of changeClick
     setChangeClick(prevState => !prevState);
   };
-  
-  const increase = (cardId, cardUid) => modifyCardCount(cardId, cardUid, 1);
-  const decrease = (cardId, cardUid) => modifyCardCount(cardId, cardUid, -1);
-  
+
+  const increase = (cardId) => modifyCardCount(cardId, 1);
+  const decrease = (cardId) => modifyCardCount(cardId, -1);
+
   useEffect(() => {
     setOnepieces(prevOnepieces => {
       return prevOnepieces.map(onepiece => {
-        const cardFromFiltered = filteredCards.find(card => card.cardUid === onepiece.cardUid);
+        const cardFromFiltered = filteredCards.find(card => card.cardid === onepiece.cardid);
         if (cardFromFiltered) {
           return {
             ...onepiece,
@@ -369,7 +374,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
       ) : (
         <>
           {isButtonClicked && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: { md: '-20px' }, position: 'relative' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: {md: '-20px' }, position: 'relative' }}>
               <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, justifyContent: 'center' }}>
                 <Slider
                   sx={{
@@ -448,17 +453,17 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
                           loading="lazy"
                           src={onepiece.image}
                           draggable="false"
-                          alt={onepiece.cardId}
+                          alt={onepiece.cardid}
                           width={imageWidth}
                           height={imageHeight}
                         />
                       </Box>
                       <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
-                        <div component={Button} onClick={() => decrease(onepiece.cardId,onepiece.cardUid)} style={{ cursor: "pointer" }}>
+                        <div component={Button} onClick={() => decrease(onepiece.cardid)} style={{ cursor: "pointer" }}>
                           <RemoveCircle sx={{ fontSize: 20 }} />
                         </div>
                         <span sx={{ fontSize: 20 }}>{onepiece.count || 0}</span>
-                        <div component={Button} onClick={() => increase(onepiece.cardId,onepiece.cardUid)} style={{ cursor: "pointer" }}>
+                        <div component={Button} onClick={() => increase(onepiece.cardid)} style={{ cursor: "pointer" }}>
                           <AddCircle sx={{ fontSize: 20 }} />
                         </div>
                       </Box>
@@ -547,22 +552,22 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
               {onepieces.map((onepiece) => (
                 <Grid item >
-                  <Box onClick={() => handleOpenModal(onepiece)} key={onepiece.cardUid}>
+                  <Box onClick={() => handleOpenModal(onepiece)} key={onepiece.cardid}>
                     <img
                       loading="lazy"
                       src={onepiece.image}
                       draggable="false"
-                      alt={onepiece.cardUid}
+                      alt={onepiece.cardid}
                       width={imageWidth}
                       height={imageHeight}
                     />
                   </Box>
                   <Box display={"flex"} flexDirection={"row"} gap={1} alignItems={"center"} justifyContent={"center"} sx={{ color: '#C8A2C8' }}>
-                    <div component={Button} onClick={() => decrease(onepiece.cardId,onepiece.cardUid)} style={{ cursor: "pointer" }}>
+                    <div component={Button} onClick={() => decrease(onepiece.cardid)} style={{ cursor: "pointer" }}>
                       <RemoveCircle sx={{ fontSize: 20 }} />
                     </div>
                     <span sx={{ fontSize: 20 }}>{onepiece.count || 0}</span>
-                    <div component={Button} onClick={() => increase(onepiece.cardId,onepiece.cardUid)} style={{ cursor: "pointer" }}>
+                    <div component={Button} onClick={() => increase(onepiece.cardid)} style={{ cursor: "pointer" }}>
                       <AddCircle sx={{ fontSize: 20 }} />
                     </div>
                   </Box>

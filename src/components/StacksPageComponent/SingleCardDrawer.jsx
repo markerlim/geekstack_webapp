@@ -62,7 +62,6 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
                         };
                         setData(fetchedDeckData);
                         setComments(fetchedDeckData?.comments);
-                        console.log(fetchedDeckData, 'logging')
                     } else {
                         console.error("Deck data not found for deck UID:", paramsUid);
                     }
@@ -100,8 +99,13 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
         const newComment = { uid: uid, text: commentText, timestamp: new Date() };
 
         // Optimistically update the UI
-        setComments((prevComments) => [...prevComments, newComment]);
-        setCommentText("");
+        setComments((prevComments) => {
+            if (!Array.isArray(prevComments)) {
+                console.error("prevComments is not an array:", prevComments);
+                return [];
+            }
+            return [...prevComments, newComment];
+        });        setCommentText("");
         setIsSubmitting(true);
 
         try {

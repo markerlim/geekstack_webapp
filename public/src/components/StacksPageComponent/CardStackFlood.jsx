@@ -44,6 +44,7 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
     const uid = authContext.currentUser?.uid;
 
     const fetchDeckData = async () => {
+        console.log('fetching DATAAAAA');
         setIsPaginating(true);
         setIsLoading(true);
         try {
@@ -55,8 +56,11 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                     querySnapshotStackRef.current.push(lastSharedDate);
                 }
             } else {
-                lastSharedDate = querySnapshotStackRef.current[querySnapshotStackRef.current.length - 2];
-                querySnapshotStackRef.current.pop();
+                // Pop the last shared date only if it's not the first page
+                if (currentPage > 1) {
+                    querySnapshotStackRef.current.pop();
+                }
+                lastSharedDate = querySnapshotStackRef.current[querySnapshotStackRef.current.length - 1];
             }
 
             let deckQuery;
@@ -142,8 +146,8 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
             (entries) => {
                 if (entries[0].isIntersecting && !isPaginating && canPaginateNext) {
                     console.log('Triggering Pagination');
-                    setIsPaginating(true);
                     setCurrentPage((prevPage) => prevPage + 1);
+                    setIsPaginating(true);
                 }
             },
             { threshold: 0.2 }
@@ -160,30 +164,27 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
         };
     }, [lastCardRef, isPaginating, canPaginateNext]);
 
-    useEffect(() => {
-        if (isPaginating) {
-            fetchDeckData();
-        }
-        console.log('Paginating');
-    }, [isPaginating]);
 
     useEffect(() => {
-        // Set up real-time listener
-        const changelistener = onSnapshot(collection(db, "uniondecklist"), snapshot => {
-            fetchDeckData();  // This will re-fetch the data whenever there's a change in the Firestore collection.
-        });
+        // Fetch initial data only once
+        if (!currentPage) {
+            fetchDeckData();
+        }
 
         // Check if paramsUid is present and set isClicked and drawerOpen accordingly
         if (paramsUid) {
             setIsClicked(true);
             setDrawerOpen(true);
         }
-
-        return () => {
-            // Clean up the listener when the component unmounts
-            changelistener();
-        };
     }, []);
+
+    useEffect(() => {
+        if (isPaginating && currentPage > 1) {
+            fetchDeckData();
+        }
+        console.log('Paginating');
+    }, [isPaginating, currentPage]);
+    
 
     useEffect(() => {
         // Reset deckData when selectedCategoryTag changes

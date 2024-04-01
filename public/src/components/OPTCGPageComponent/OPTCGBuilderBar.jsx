@@ -155,50 +155,53 @@ const OPTCGBuilderBar = ({ changeClick, setChangeClick }) => {
 
             const cardsCollectionRef = collection(db, `users/${uid}/optcgdecks/${deckUid}/optcgcards`);
             const existingCardSnapshot = await getDocs(cardsCollectionRef);
-            const existingCards = existingCardSnapshot.docs.map(doc => doc.data().cardid);
+            const existingCards = existingCardSnapshot.docs.map(doc => doc.data().cardUid);
 
             await Promise.all(
                 filteredCards.map(async (card) => {
-                    const cardDocRef = doc(cardsCollectionRef, card.cardid);
+                    const cardDocRef = doc(cardsCollectionRef, card.cardUid);
                     const cardData = {
+                        attribute: card.attribute,
+                        attribute_lower: card.attribute_lower,
                         booster: card.booster,
+                        booster_lower: card.booster_lower,
+                        cardId: card.cardId,
+                        cardUid: card.cardUid,
                         cardfrom: card.cardfrom,
                         cardname: card.cardname,
                         cardname_lower: card.cardname_lower,
-                        cardid: card.cardid,
-                        rarity: card.rarity,
-                        rarity_lower: card.rarity_lower,
+                        cardname_lower_token: card.cardname_lower_token,
                         category: card.category,
-                        cost_life: card.cost_life,
-                        attribute: card.attribute,
-                        attribute_lower: card.attribute_lower,
-                        power: card.power,
-                        counter: card.counter,
                         color: card.color,
                         color_lower: card.color_lower,
+                        cost_life: card.cost_life,
+                        counter: card.counter,
+                        effects: card.effects,
+                        image: card.image,
+                        power: card.power,
+                        rarity: card.rarity,
+                        rarity_lower: card.rarity_lower,
+                        trigger: card.trigger,
                         typing: card.typing,
                         typing_lower: card.typing_lower,
-                        effects: card.effects,
-                        trigger: card.trigger,
-                        image: card.image,
+                        typing_lower_token: card.typing_lower_token,
                         count: card.count,
                     };
 
                     try {
                         await setDoc(cardDocRef, cardData);
-                        console.log("Card saved successfully:", card.cardid);
+                        console.log("Card saved successfully:", card.cardUid);
                     } catch (error) {
                         console.error("Error saving card:", error);
                     }
-                    console.log(cardData, "test")
                 })
             );
 
-            for (const cardId of existingCards) {
-                if (!filteredCards.some(card => card.cardid === cardId)) {
-                    const cardToDeleteRef = doc(cardsCollectionRef, cardId);
+            for (const cardUid of existingCards) {
+                if (!filteredCards.some(card => card.cardUid === cardUid)) {
+                    const cardToDeleteRef = doc(cardsCollectionRef, cardUid);
                     await deleteDoc(cardToDeleteRef);
-                    console.log("Card deleted:", cardId);
+                    console.log("Card deleted:", cardUid);
                 }
             }
 

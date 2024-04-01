@@ -10,7 +10,7 @@ import SharingStack from "./SharingStack";
 const DecklibrarybtnMobile = () => {
   const { currentUser } = useAuth();
   const [decks, setDecks] = useState([]);
-  const [deck,setDeck] = useState(null);
+  const [deck, setDeck] = useState(null);
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [selectedCards, setSelectedCards] = useState([]);
@@ -32,15 +32,17 @@ const DecklibrarybtnMobile = () => {
       const deckDocs = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        deckDocs.push({
-          id: doc.id,
-          name: data.deckName,
-          colorCount: data.colorCount,
-          specialCount: data.specialCount,
-          finalCount: data.finalCount,
-          image: data.image,
-          ...data,
-        });
+        if (doc.id !== "placeholder") {
+          deckDocs.push({
+            id: doc.id,
+            name: data.deckName,
+            colorCount: data.colorCount,
+            specialCount: data.specialCount,
+            finalCount: data.finalCount,
+            image: data.image,
+            ...data,
+          });
+        }
       });
       setDecks(deckDocs);
     };
@@ -143,7 +145,7 @@ const DecklibrarybtnMobile = () => {
 
         // Create a new shared deck document in the 'uniondecklist' collection
         await addDoc(collection(db, "uniondecklist"), {
-          postType:'UATCG',
+          postType: 'UATCG',
           deckName: finalDeckName,
           colorCount: deck.colorCount,
           specialCount: deck.specialCount,
@@ -268,22 +270,22 @@ const DecklibrarybtnMobile = () => {
                 </Box>
               </Box>
             )))}
-            <SharingStack
-                  open={open}
-                  handleClose={handleClose}
-                  editedDeckName={editedDeckName}
-                  handleDeckNameChange={handleDeckNameChange}
-                  description={description}
-                  setDescription={setDescription}
-                  handleInputChange={handleInputChange}
-                  cards={cards}
-                  selectedCards={selectedCards}
-                  deckType={deckType}
-                  setDeckType={setDeckType}
-                  handleCardSelection={handleCardSelection}
-                  handleShareDeck={handleShareDeck}
-                  deck={deck}
-                />
+          <SharingStack
+            open={open}
+            handleClose={handleClose}
+            editedDeckName={editedDeckName}
+            handleDeckNameChange={handleDeckNameChange}
+            description={description}
+            setDescription={setDescription}
+            handleInputChange={handleInputChange}
+            cards={cards}
+            selectedCards={selectedCards}
+            deckType={deckType}
+            setDeckType={setDeckType}
+            handleCardSelection={handleCardSelection}
+            handleShareDeck={handleShareDeck}
+            deck={deck}
+          />
           <div style={{ paddingLeft: '5vw' }}>
             <br />
           </div>

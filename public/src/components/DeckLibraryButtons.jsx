@@ -5,6 +5,7 @@ import { Box, Button, ButtonBase, CircularProgress, Modal, TextField } from "@mu
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Delete, Share, Style } from "@mui/icons-material";
+import SharingStack from "./SharingStack";
 
 const Decklibrarybtn = () => {
   const { currentUser } = useAuth();
@@ -30,15 +31,17 @@ const Decklibrarybtn = () => {
       const deckDocs = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        deckDocs.push({
-          id: doc.id,
-          name: data.deckName,
-          colorCount: data.colorCount,
-          specialCount: data.specialCount,
-          finalCount: data.finalCount,
-          image: data.image,
-          ...data,
-        });
+        if (doc.id !== "placeholder") {
+          deckDocs.push({
+            id: doc.id,
+            name: data.deckName,
+            colorCount: data.colorCount,
+            specialCount: data.specialCount,
+            finalCount: data.finalCount,
+            image: data.image,
+            ...data,
+          });
+        }
       });
       setDecks(deckDocs);
     };
@@ -139,7 +142,7 @@ const Decklibrarybtn = () => {
 
         // Create a new shared deck document in the 'uniondecklist' collection
         await addDoc(collection(db, "uniondecklist"), {
-          postType:'UATCG',
+          postType: 'UATCG',
           deckName: finalDeckName,
           colorCount: deck.colorCount,
           specialCount: deck.specialCount,
@@ -171,16 +174,16 @@ const Decklibrarybtn = () => {
         gap: '20px',
       }}
     >
-      <Box sx={{ display: 'flex',alignItems: 'center',justifyContent:'center', width:{xs:'100vw',sm:'100vw',md:'calc(100vw - 100px)'},}}>
-        <Box sx={{ display: 'flex', alignItems: 'center',marginLeft:{xs:'0px',sm:'0px',md:'-100px'} }}><Style style={{ marginRight: '10px' }} />UA Decks</Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' }, }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0px', sm: '0px', md: '-100px' } }}><Style style={{ marginRight: '10px' }} />UA Decks</Box>
       </Box>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <CircularProgress />
         </Box>
       ) : (
-        <Box sx={{ width: '100vw', display: "flex", flexDirection: 'row',alignItems:'start', flexWrap: 'nowrap',overflow:'visible', height:'calc(100vh - 84px)'}} className="hide-scrollbar">
-          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:'center',gap: '20px',width:{xs:'100vw',sm:'100vw',md:'calc(100vw - 100px)'},flexWrap:'wrap',paddingBottom:'100px'}}>
+        <Box sx={{ width: '100vw', display: "flex", flexDirection: 'row', alignItems: 'start', flexWrap: 'nowrap', overflow: 'visible', height: 'calc(100vh - 84px)' }} className="hide-scrollbar">
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '20px', width: { xs: '100vw', sm: '100vw', md: 'calc(100vw - 100px)' }, flexWrap: 'wrap', paddingBottom: '100px' }}>
             {decks.length === 0 ? (
               <Box style={{ textAlign: 'center', color: '#f2f3f8', padding: '20px' }}>
                 No Union Arena Deck Created
@@ -259,129 +262,22 @@ const Decklibrarybtn = () => {
                       <Share sx={{ fontSize: '16px' }} />
                     </Box>
                   </Box>
-                  <Modal sx={{ display: "flex", justifyContent: "center", alignItems: "center" }} open={open} onClose={handleClose}>
-                    <Box sx={{ backgroundColor: "#26252D", color: "white", borderRadius: "30px", padding: "30px", width: "500px", height: { xs: '100%', sm: "600px" }, display: "flex", flexDirection: "column", gap: "5px", textAlign: "center", alignItems: "center", overflowY: 'auto' }}>
-                      <span>Title of Deck</span>
-                      <TextField
-                        label="Deck Name"
-                        value={editedDeckName}
-                        onChange={(e) => handleDeckNameChange(e)}
-                        fullWidth
-                        maxLength="15"
-                        sx={{
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              borderColor: '#7C4FFF', // Border color when not focused
-                            },
-                            '&:hover fieldset': {
-                              borderColor: '#7C4FFF', // Border color when hovered over
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: '#7C4FFF', // Border color when focused (in use)
-                            },
-                          },
-                          '.MuiOutlinedInput-input': {
-                            color: 'white', // changes the text color
-                          },
-                          '.MuiInputLabel-outlined': {
-                            color: 'white', // changes the label color
-                          },
-                          '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                            color: 'white', // changes the label color when typing
-                          },
-                        }}
-                      />
-                      <span style={{ padding: "10px" }}>Write a short description no more than 80 characters on the key pointers of the deck.</span>
-                      <TextField
-                        label="Description"
-                        value={description}
-                        onChange={handleInputChange}
-                        fullWidth
-                        sx={{
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              borderColor: '#7C4FFF', // Border color when not focused
-                            },
-                            '&:hover fieldset': {
-                              borderColor: '#7C4FFF', // Border color when hovered over
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: '#7C4FFF', // Border color when focused (in use)
-                            },
-                          },
-                          '.MuiOutlinedInput-input': {
-                            color: 'white', // changes the text color
-                          },
-                          '.MuiInputLabel-outlined': {
-                            color: 'white', // changes the label color
-                          },
-                          '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                            color: 'white', // changes the label color when typing
-                          },
-                        }}
-                      />
-                      <span style={{ padding: "10px" }}>Pick 3 cards which will be key in the deck, this will help people when they want to search for the deck as well</span>
-                      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "5px" }}>
-                        {cards.map((card) => (
-                          <Box key={card.id} onClick={() => handleCardSelection(card.id, card.cardName, card.image)}>
-                            <img
-                              style={{
-                                width: "75px",
-                                border: selectedCards.some(selectedCard => selectedCard.id === card.id) ? "4px solid #7C4FFF" : "none",
-                              }}
-                              src={card.image}
-                              alt={card.id}
-                            />
-                          </Box>
-                        ))}
-                      </Box>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <span style={{ padding: "10px" }}>Pick the usage of this deck</span>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                          <Button
-                            sx={{
-                              backgroundColor: deckType === "tournament" ? "#333333" : "#333333",
-                              color: deckType === "tournament" ? "#7C4FFF" : "#240056",
-                              '&:focus': {
-                                backgroundColor: '#333333',
-                              }
-                            }}
-                            onClick={() => setDeckType("tournament")}
-                          >
-                            Tournament
-                          </Button>
-                          <Button
-                            sx={{
-                              backgroundColor: deckType === "casuals" ? "#333333" : "#333333",
-                              color: deckType === "casuals" ? "#7C4FFF" : "#240056",
-                              '&:focus': {
-                                backgroundColor: '#333333',
-                              }
-                            }}
-                            onClick={() => setDeckType("casuals")}
-                          >
-                            Casuals
-                          </Button>
-                        </Box>
-                      </Box>
-                      <Box sx={{ display: "flex", gap: "5px", justifyContent: "center" }}>
-                        <Button
-                          sx={{ color: "#7C4FFF" }}
-                          onClick={() => {
-                            if (selectedCards.length !== 3) {
-                              alert("You must select exactly 3 cards to submit.");
-                              return;
-                            }
-                            handleClose();
-                            handleShareDeck(deck, description, selectedCards);
-                          }}
-                        >
-                          Submit
-                        </Button>
-                        <Button sx={{ color: "#7C4FFF" }} onClick={handleClose}>Cancel</Button>
-                      </Box>
-                    </Box>
-                  </Modal>
+                  <SharingStack
+                    open={open}
+                    handleClose={handleClose}
+                    editedDeckName={editedDeckName}
+                    handleDeckNameChange={handleDeckNameChange}
+                    description={description}
+                    setDescription={setDescription}
+                    handleInputChange={handleInputChange}
+                    cards={cards}
+                    selectedCards={selectedCards} 
+                    deckType={deckType}
+                    setDeckType={setDeckType}
+                    handleCardSelection={handleCardSelection}
+                    handleShareDeck={handleShareDeck}
+                    deck={deck}
+                  />
                 </Box>
               )))}
           </Box>
