@@ -95,10 +95,11 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
-        const searchQueryMatch = !searchQuery || document.cardNameTokens.toLowerCase().includes(searchQuery.toLowerCase());
-
+        const searchQueryMatch = !searchQuery || document.cardNameTokens.map(token => token.toLowerCase()).join(' ').includes(searchQuery.toLowerCase());
+    
         return boosterFilterMatch && colorFilterMatch && animeFilterMatch && searchQueryMatch;
     });
+    
 
 
     useEffect(() => {
@@ -183,7 +184,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                     </>
                 )}
                 {animeFilter !== "" && (
-                    <Box>
+                    <Box sx={{paddingTop:'10px'}}>
                         <Box>
                             <FormControl sx={{ margin: 1 }}>
                                 <Select

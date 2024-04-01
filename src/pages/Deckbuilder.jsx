@@ -40,14 +40,6 @@ const Deckbuilder = () => {
   function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
   }
-  const handleFiltersChange = (newFilters) => {
-      setFilters(newFilters);
-  };
-
-  const clearAllFilters = () => {
-    setFilters([]);
-    console.log(filters);
-};
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -105,6 +97,7 @@ const Deckbuilder = () => {
                 <Box sx={{
                   width: '100%',
                   maxHeight: '70vh',
+                  minHeight:'500px',
                   bgcolor: '#121212',
                   borderRadius: '20px 20px 0px 0px',
                   overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh

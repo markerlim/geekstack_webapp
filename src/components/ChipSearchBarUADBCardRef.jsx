@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 
-
-function GSearchBarUADB({handleSearchChange}) {
+function GSearchBarUADB({ handleSearchChange }) {
     const [inputValue, setInputValue] = useState("");
     const [filters, setFilters] = useState([]);
 
@@ -15,10 +13,12 @@ function GSearchBarUADB({handleSearchChange}) {
             const parsedFilters = JSON.parse(savedFilters);
             setFilters(parsedFilters);
         }
-    }, [handleSearchChange]);
+    }, []);
 
-    const handleInputChange = (event) => {  
+    const handleInputChange = (event) => {
         setInputValue(event.target.value.toLowerCase());
+        // Call the handleSearchChange function with the input value
+        handleSearchChange(event);
     };
 
     const handleKeyPress = (event) => {
@@ -33,17 +33,12 @@ function GSearchBarUADB({handleSearchChange}) {
 
     const internalClearAllFilters = () => {
         setFilters([]);
+        setInputValue(''); // Clear the inputValue state
         sessionStorage.removeItem('filters');
     };
-
-    const handleDelete = (filterToDelete) => () => {
-        const newFilters = filters.filter((filter) => filter !== filterToDelete);
-        setFilters(newFilters);
-        sessionStorage.setItem('filters', JSON.stringify(newFilters));
-    };
-
+    
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '7px',paddingTop:'5px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', paddingTop: '5px' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: "center", gap: '7px' }}>
                 <TextField
                     label="Search"
@@ -76,7 +71,7 @@ function GSearchBarUADB({handleSearchChange}) {
                         },
                     }}
                 />
-                <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <button
                         onClick={internalClearAllFilters}
                         style={{
@@ -94,29 +89,10 @@ function GSearchBarUADB({handleSearchChange}) {
                             },
                         }}
                     >
-                        <Refresh/>
+                        <Refresh />
                     </button>
                 </Box>
             </div>
-            <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '6px' }}>
-                {filters.map((filter) => (
-                    <Chip
-                        key={filter}
-                        label={filter}
-                        onDelete={handleDelete(filter)}
-                        sx={{
-                            backgroundColor: '#7C4FFF',
-                            color: '#000000',
-                            '&:hover': {
-                                backgroundColor: '#7C4FFF',
-                            },
-                            '&:focus': {
-                                backgroundColor: '#7C4FFF',
-                            },
-                        }}
-                    />
-                ))}
-            </Box>
         </div>
     );
 }

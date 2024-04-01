@@ -106,6 +106,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     handleMenuClose();
     setFilteredCards([]);
     setDeckUidParams("");
+    setTotalCount(0);
     const currentPath = window.location.pathname;
     window.history.pushState({}, '', currentPath);
   };

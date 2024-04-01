@@ -42,7 +42,6 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
 
     useEffect(() => {
         const fetchDeckDetailsData = async () => {
-            console.log('loaded')
             if (paramsUid) {
                 try {
                     const deckRef = doc(db, "uniondecklist", paramsUid);
