@@ -46,21 +46,6 @@ const CommentPillSubbar = ({ index, handleDeleteComment, comment }) => {
             <Box sx={{color:'#C8A2C8',cursor: 'pointer', fontSize: '12px' }}>
                 {timeSinceComment}
             </Box>
-            <Box>
-                -
-            </Box>
-            <Box sx={{cursor: 'pointer', fontSize: '12px' }}>
-                Like
-            </Box>
-            <Box>
-                -
-            </Box>
-            <Box sx={{cursor: 'pointer', fontSize: '12px' }}>
-                Reply
-            </Box>
-            <Box>
-                -
-            </Box>
             <Box sx={{cursor: 'pointer', fontSize: '10px', fontWeight:'900' }} onClick={handleDelete}>
                 DELETE
             </Box>

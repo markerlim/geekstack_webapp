@@ -1,14 +1,8 @@
-import { Avatar, Box, Input, List, ListItem, ListItemAvatar, SwipeableDrawer, Typography } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { ArrowBack, BookmarkBorderOutlined, CommentOutlined, FavoriteBorderOutlined, Pentagon, Search, Send } from "@mui/icons-material";
-import { ResponsiveImage } from "./../ResponsiveImage";
+import { Box } from "@mui/material";
+import React, { useCallback } from "react";
 import CardFunctions from "./SingleCardStackFunc";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../Firebase";
-import { useEffect } from "react";
-import CommentPill from "./CommentPill";
 import { useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 

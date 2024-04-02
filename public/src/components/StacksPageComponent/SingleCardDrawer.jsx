@@ -304,7 +304,7 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
                         <Send />
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: '5px', alignItems: 'center' }}>
+                <Box sx={{ display: 'none', flexDirection: 'row', justifyContent: 'space-between', paddingTop: '5px', alignItems: 'center' }}>
                     <BookmarkBorderOutlined sx={{ fontSize: '30px', color: '#c8a2c8' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', paddingRight: '5px', }}>
                         <FavoriteBorderOutlined sx={{ fontSize: '30px', color: '#c8a2c8' }} />

@@ -13,6 +13,7 @@ const AccountDetailsComponent = () => {
     const [err, setErr] = useState(false);
     const [loading, setLoading] = useState(false); // Loading state
     const [success, setSuccess] = useState(false); // Success state
+    const [uploadError, setUploadError] = useState(false); // Image upload error state
 
     useEffect(() => {
         if (auth.currentUser) {
@@ -20,7 +21,6 @@ const AccountDetailsComponent = () => {
             setPhotoURLx(auth.currentUser.photoURL);
         }
     }, []);
-
 
     const handleImageChange = async (e) => {
         setLoading(true); // Start loading
@@ -33,7 +33,12 @@ const AccountDetailsComponent = () => {
                     const oldImageRef = ref(storage, photoURLx);
                     await deleteObject(oldImageRef);
                 }
+            } catch (err) {
+                console.error(err);
+                setErr(true);
+            }
 
+            try {
                 // Upload the new image
                 const storageRef = ref(storage, `userdp/${file.name}`);
                 const uploadTask = uploadBytesResumable(storageRef, file);
@@ -42,18 +47,20 @@ const AccountDetailsComponent = () => {
                     (snapshot) => { },
                     (error) => {
                         console.log(error);
+                        setUploadError(true); // Set upload error
                     },
                     async () => {
                         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                         setPhotoURLx(downloadURL);
+                        setLoading(false); // End loading when upload is done
                     }
                 );
             } catch (err) {
                 console.error(err);
-                setErr(true);
+                setUploadError(true);
+                setLoading(false); // End loading if there's an error during upload
             }
         }
-        setLoading(false); // End loading when done
     };
 
     const handleSubmit = async (e) => {
@@ -83,9 +90,6 @@ const AccountDetailsComponent = () => {
         setLoading(false); // End loading when done
     };
 
-
-
-
     return (
         <Box>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center" }}>
@@ -94,7 +98,7 @@ const AccountDetailsComponent = () => {
                     <Box sx={{ borderRadius: '100px', border: '4px solid #7C4FFF ', overflow: 'hidden', width: '200px', height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img src={photoURLx} style={{ width: '250px', backgroundColor: '#26252D' }} alt="displaypic" />
                     </Box>
-                    <span style={{ color: '#f2f3f8' }}>Recomended to use a photo that is 200px by 200px</span>
+                    <span style={{ color: '#f2f3f8' }}>Recommended to use a photo that is 200px by 200px</span>
                     <label style={{ position: "absolute", right: '70px', top: '180px' }} htmlFor="icon-button-file">
                         <input
                             id="icon-button-file"
@@ -152,7 +156,7 @@ const AccountDetailsComponent = () => {
                     {success && (
                         <span style={{ color: "green" }}>Saved successfully!</span> // Show success message when successful
                     )}
-                    {err && <span style={{ color: "red" }}>Something went wrong</span>}
+                    {(err || uploadError) && <span style={{ color: "red" }}>Something went wrong</span>}
                 </form>
             </Box>
         </Box>

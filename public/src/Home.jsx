@@ -404,11 +404,11 @@ const Home = () => {
                             </Box>
                             <Collapse in={open}>
                                 <div className='hide-scrollbar' style={{ color: '#f2f3f8', marginBottom: '10px', height: '300px', overflow: 'auto', }}><strong style={{ color: '#f2f3f8' }}>As of 30th March:</strong>
-                                    <Box sx={{ overflow: 'hidden', height: '200px', width: 'inherit', marginTop: '10px', marginBottom: '10px', borderRadius: '5px' }}>
+                                    <Box sx={{ overflow: 'hidden', height: '150px', width: 'inherit', marginTop: '10px', marginBottom: '10px', borderRadius: '5px' }}>
                                         <img src="/images/deckcover.webp" style={{ width: '100%' }} alt="screen" />
                                     </Box>
                                     <li>Added feature to build with Alternate Arts.</li>
-                                    <li>However it is important to note that, all previously built decks are no "unbuildable".</li>
+                                    <li>However it is important to note that, all previously built decks are no longer "unbuildable". <br /><strong style={{ color: '#ff6961' }}>PLEASE DELETE THEM</strong></li>
                                     <li>Onepiece Deckbuilder is fully functional</li>
                                 </div>
                             </Collapse>

@@ -635,6 +635,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
       <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
         <UATCGExport filteredCards={filteredCards} exportImage={exportImage} currentUser={currentUser} />
       </Box>
+      {viewDeckbar ? <Box sx={{position:'absolute',bgcolor:'#121212',color:'#ff6961',fontSize:'12px',padding:'2px',bottom:'0px',right:'20px',width:'100px'}}>Decks built before 30th March are no longer 'Buildable'</Box>:<></>}
     </Box>
   );
 
