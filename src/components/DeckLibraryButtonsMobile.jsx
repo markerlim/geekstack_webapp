@@ -160,7 +160,7 @@ const DecklibrarybtnMobile = () => {
           animecode: animecode,
         });
         console.log(cards, 'completed')
-        navigate('/uadecklist', { state: { openedDeck: deck.id } });
+        navigate('/stacks');
       }
     } catch (error) {
       console.error("Error sharing deck: ", error);
