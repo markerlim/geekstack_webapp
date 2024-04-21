@@ -163,6 +163,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         { filter: 'Toriko', sets: ['UA17BT', 'UA17ST'], colorsets: ['Blue', 'Yellow', 'Purple'] },
         { filter: 'Goddess of Victory : Nikke', sets: ['UA18BT', 'UA18ST'], colorsets: ['Green', 'Yellow', 'Purple'] },
         { filter: 'Haikyu!!', sets: ['UA19BT', 'UA19ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
+        { filter: 'Black Clover', sets: ['UA20BT', 'UA20ST'], colorsets: ['Red','Green','Purple']},
+        { filter: 'YuYu Hakusho', sets: ['UA21BT', 'UA21ST'], colorsets: ['Red','Green','Purple']}
     ]
 
     return (

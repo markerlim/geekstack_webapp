@@ -229,6 +229,12 @@ const ButtonList = () => {
       imgWidth: "110%",
     },
     {
+      pathname: "bcv",
+      alt: "black clover",
+      imageSrc: "/images/deckimage20.jpg",
+      imgWidth: "110%",
+    },
+    {
       pathname: "yyh",
       alt: "yuyu hakusho",
       imageSrc: "/images/deckimage21.jpg",
