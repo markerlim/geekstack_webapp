@@ -5,6 +5,7 @@ import { Box } from "@mui/material"
 import { useState } from "react";
 import GSearchBar from "../components/ChipSearchBar";
 import DBZFWCardlist from "../components/DBZFWPageComponent/DBZFWCardlist";
+import CreateDeckBtn from "../components/ModularCreateDeckButton";
 
 const DBZFWPage = () => {
   const [filters, setFilters] = useState([]);
@@ -26,12 +27,14 @@ const DBZFWPage = () => {
             <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
               <Sidebar />
             </Box>
-            <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
+            <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, positon: 'relative', paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
+              <br />
               <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
-              <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px",paddingTop:'20px', paddingBottom: "150px", justifyContent: "center" }}>
+              <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingTop: '20px', paddingBottom: "150px", justifyContent: "center" }}>
                 <DBZFWCardlist filters={filters} />
-                <br/>
+                <br />
               </Box>
+              <CreateDeckBtn contentType={"dragonballz"}/>
             </Box>
           </Box>
           <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}><BottomNav /></Box>

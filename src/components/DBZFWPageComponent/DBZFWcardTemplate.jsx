@@ -364,7 +364,7 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                                 const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
                                 return altForms.map((form, index) => (
                                     <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)}
+                                        <Box
                                             sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
                                             <img
                                                 loading="lazy"
@@ -411,15 +411,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                                 )
                             }
                         })}
-                    {selectedCard && (
-                        <DBZCardDrawerNF
-                            open={openModal}
-                            onClose={handleCloseModal}
-                            selectedCard={selectedCard}
-                            onSwipeLeft={handleSwipeLeft}
-                            onSwipeRight={handleSwipeRight}
-                        />
-                    )}
                 </Grid>
                 <div style={{ height: '200px' }} />
             </div>

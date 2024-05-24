@@ -121,6 +121,12 @@ const DBZFWButtonList = () => {
       imgWidth: "110%",
     },
     {
+      pathname: "fb02",
+      alt: "BOOSTER PACK -BLAZING AURA- [FB02]",
+      imageSrc: "/DBZFW/DBZFWCOVER/fb02cover.jpg",
+      imgWidth: "110%",
+    },
+    {
       pathname: "fs01",
       alt: "STARTER DECK -SON GOKU- [FS01]",
       imageSrc: "/DBZFW/DBZFWCOVER/fs01cover.jpg",

@@ -12,9 +12,6 @@ const UANavBar = () => {
             <Button component={Link} to="/unionarena" sx={{ width: "120px", color: "#c8a2c8", bgcolor: "#171614",fontSize:"13px" }}>
                 <Style sx={{fontSize:"13px"}} /><div style={{ width: "10px" }} />Cards
             </Button>
-            <Button component={Link} to="/uadecklist" sx={{ width: "120px", color: "#c8a2c8", bgcolor: "#171614",fontSize:"13px" }}>
-                <Layers sx={{fontSize:"13px"}} /><div style={{ width: "10px" }} />Decklist
-            </Button>
         </Box>
     )
 }

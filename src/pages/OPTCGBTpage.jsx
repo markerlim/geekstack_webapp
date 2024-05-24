@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
 import OPTCGcardFormat from "../components/OPTCGPageComponent/OPTCGcardTemplate";
+import CreateDeckBtn from "../components/ModularCreateDeckButton";
 
 const OPTCGBTPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,9 +38,11 @@ const OPTCGBTPage = () => {
           <Box
             sx={{
               marginLeft: { xs: "0px", sm: "0px", md: "100px" },
+              position:'relative'
             }}
           >
             <OPTCGcardFormat searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <CreateDeckBtn contentType={"onepiece"}/>
           </Box>
           <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <BottomNav />

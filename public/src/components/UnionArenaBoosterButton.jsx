@@ -239,6 +239,12 @@ const ButtonList = () => {
       alt: "yuyu hakusho",
       imageSrc: "/images/deckimage21.jpg",
       imgWidth: "110%",
+    },
+    {
+      pathname: "gmr",
+      alt: "gamera -rebirth-",
+      imageSrc: "/images/deckimage22.jpg",
+      imgWidth: "110%",
     }
   ];
 

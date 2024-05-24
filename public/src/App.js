@@ -30,6 +30,7 @@ import AcardFormatpage from "./pages/AcardFormatpage.jsx";
 import StacksPage from "./pages/StacksPage.jsx";
 import DBZFWPage from "./pages/DBZFWPage.jsx";
 import DBZFWBTPage from "./pages/DBZFWBTpage.jsx";
+import DBZFWDeckbuilder from "./pages/DBZFWDeckbuilder.jsx";
 
 smoothscroll.polyfill();
 
@@ -96,6 +97,7 @@ function App() {
             <Route path="unionarena/:animecode" element={<AcardFormatpage />} />
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="dragonballz" element={<DBZFWPage />} />
+            <Route path="dbzfwbuilder" element={<DBZFWDeckbuilder/>}/>
             <Route path="/dragonballz/:booster" element={<DBZFWBTPage />} />
             <Route path="onepiece" element={<OnepiecePage />} />
             <Route path="optcgbuilder" element={<OPTCGDeckbuilder />} />

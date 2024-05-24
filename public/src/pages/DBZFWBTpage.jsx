@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
 import DBZFWcardFormat from "../components/DBZFWPageComponent/DBZFWcardTemplate";
+import CreateDeckBtn from "../components/ModularCreateDeckButton";
 
 const DBZFWBTPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,9 +38,11 @@ const DBZFWBTPage = () => {
           <Box
             sx={{
               marginLeft: { xs: "0px", sm: "0px", md: "100px" },
+              position: 'relative'
             }}
           >
             <DBZFWcardFormat searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <CreateDeckBtn contentType={"dragonballz"}/>
           </Box>
           <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <BottomNav />

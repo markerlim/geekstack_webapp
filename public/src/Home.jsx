@@ -197,6 +197,8 @@ const Home = () => {
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
     const [imageData, setImageData] = useState([]);
     const [comingsoonData, setComingsoonData] = useState([]);
+    const [justifyContent, setJustifyContent] = useState('flex-start');
+    const boxRef = useRef(null);
     const theme = useTheme();
 
     const imagedataurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getLatestRelease"
@@ -264,6 +266,31 @@ const Home = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (!boxRef.current) return;
+
+            let childWidth = 0;
+            for (let child of boxRef.current.children) {
+                childWidth += child.getBoundingClientRect().width;
+            }
+
+            if (childWidth > boxRef.current.getBoundingClientRect().width) {
+                setJustifyContent('flex-start');
+            } else {
+                setJustifyContent('center');
+            }
+        }
+
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, []);
+
     return (
         <div>
             <Helmet>
@@ -277,47 +304,78 @@ const Home = () => {
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
+                        <div style={{ height: "1px" }}></div>
                         <HomepageDashboard />
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', zIndex: '1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden', outlineOffset: '-3px', outline: '3.5px solid rgba(18, 18, 18, 0.4)' }}>
-                                <img style={{ height: "100%" }} alt="unionarena" src="/images/HMUAButton.jpg" />
-                            </Box>
-                            <Box sx={{ height: '60px', bgcolor: '#26252d', marginLeft: '-10px', width: '200px', borderRadius: '0px 5px 5px 0px', zIndex: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", gap: '5px', marginLeft: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/unionarena">
-                                    <img style={{ width: '24px' }} alt="UA Builder" src="/icons/UAcards.svg" />
-                                    <p style={{ fontSize: '12px' }}>Cards</p>
-                                </Box>
-                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", marginLeft: '10px', gap: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/deckbuilder">
-                                    <img style={{ width: '24px' }} alt="UA Builder" src="/icons/UAdeckbox.svg" />
-                                    <p style={{ fontSize: '12px' }}>Build</p>
-                                </Box>
-                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", fontSize: '20px', gap: '5px', marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center' }} component={Link} to="/uadecklist">
-                                    <ViewList sx={{ alignSelf: 'center' }} />
-                                    <p style={{ fontSize: '12px' }}>Decklist</p>
-                                </Box>
-                            </Box>
+                        <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingTop: '10px', paddingBottom: '5px', textAlign: 'left', width: '100%', paddingLeft: '50px' }}><strong>TCG STACK</strong></Box>
+                        <Box sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden",gap:'20px', justifyContent: 'left', width: "100%", paddingLeft: '15px',paddingRight: '15px',height: { xs: 188, sm: 300 }, }}>
+                            <Box sx={{ width: '30px' }}></Box>
+                            <Link to={{ pathname: '/unionarena' }} sx={{ textDecoration: "none" }}>
+                                <ButtonBase
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        bgcolor: "#121212",
+                                        borderRadius: 3,
+                                        boxShadow: 5,
+                                        overflow: "hidden",
+                                        width: { xs: 125, sm: 200 },
+                                        height: { xs: 188, sm: 300 },
+                                    }}
+                                >
+                                    <img
+                                        src="/images/homeUAbtn.jpg"
+                                        alt="unionarena"
+                                        style={{ width: "120%", height: "auto" }}
+                                    />
+                                </ButtonBase>
+                            </Link>
+                            <Link to={{ pathname: '/onepiece' }} sx={{ textDecoration: "none" }}>
+                                <ButtonBase
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        bgcolor: "#121212",
+                                        borderRadius: 3,
+                                        boxShadow: 5,
+                                        overflow: "hidden",
+                                        width: { xs: 125, sm: 200 },
+                                        height: { xs: 188, sm: 300 },
+                                    }}
+                                >
+                                    <img
+                                        src="/images/homeOPbtn.jpg"
+                                        alt="unionarena"
+                                        style={{ width: "120%", height: "auto" }}
+                                    />
+                                </ButtonBase>
+                            </Link>
+                            <Link to={{ pathname: '/dragonballz' }} sx={{ textDecoration: "none" }}>
+                                <ButtonBase
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        bgcolor: "#121212",
+                                        borderRadius: 3,
+                                        boxShadow: 5,
+                                        overflow: "hidden",
+                                        width: { xs: 125, sm: 200 },
+                                        height: { xs: 188, sm: 300 },
+                                    }}
+                                >
+                                    <img
+                                        src="/images/homeDBZbtn.jpg"
+                                        alt="unionarena"
+                                        style={{ width: "120%", height: "auto" }}
+                                    />
+                                </ButtonBase>
+                            </Link>
+                            <Box sx={{ width: '30px' }}></Box>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box sx={{ width: { xs: 'auto', sm: "180px" }, flex: '0 0 auto', zIndex: '1', height: { xs: '70px', sm: "112.5px" }, borderRadius: '10px', overflow: 'hidden', outlineOffset: '-3px', outline: '3.5px solid rgba(18, 18, 18, 0.4)' }}>
-                                <img style={{ height: "100%" }} alt="onepiece" src="/images/HMOPTCGButton.jpg" />
-                            </Box>
-                            <Box sx={{ height: '60px', bgcolor: '#26252d', marginLeft: '-10px', width: '200px', borderRadius: '0px 5px 5px 0px', zIndex: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", gap: '5px', marginLeft: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/onepiece">
-                                    <img style={{ width: '24px' }} alt="OP Builder" src="/icons/OPcards.svg" />
-                                    <p style={{ fontSize: '12px' }}>Cards</p>
-                                </Box>
-                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", marginLeft: '10px', gap: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', textDecoration: 'none', alignItems: 'center' }} component={Link} to="/optcgbuilder">
-                                    <img style={{ width: '24px' }} alt="OP Builder" src="/icons/OPdeckbox.svg" />
-                                    <p style={{ fontSize: '12px' }}>Build</p>
-                                </Box>
-                                <Box sx={{ width: '50px', height: '60px', color: "#c8a2c8", fontSize: '20px', gap: '5px', marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center', opacity: '50%' }} component={Link} to="/">
-                                    <ViewList sx={{ alignSelf: 'center' }} />
-                                    <p style={{ fontSize: '12px' }}>Decklist</p>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', width: '100vw', paddingBottom: '40px', paddingTop: '20px', alignItems: 'center', gap: '10px' }}>
-                            <Box sx={{ fontSize: "20px", color: "#F2F8FC", }}><strong>LATEST RELEASE</strong></Box>
+                        <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingTop: '15px', paddingBottom: '10px',backgroundColor: '#121212',marginBottom:'-8px' ,textAlign: 'left', width: '100%', paddingLeft: '50px' }}><strong>WHAT'S NEW?</strong></Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', width: '100vw', paddingBottom: '40px', paddingTop: '5px', alignItems: 'center', gap: '10px' }}>
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' }, }}>
                                 <Slider {...settings}>
                                     {imageData.map((image, index) => (

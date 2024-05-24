@@ -105,7 +105,7 @@ const DBZFWCardlist = ({ filters }) => {
                     <Grid container spacing={2} justifyContent="center">
                         {documents.map((document) => (
                             <Grid item key={document.cardId}>
-                                <Box onClick={() => handleOpenModal(document)}>
+                                <Box >
                                     <ResponsiveImage
                                         loading="lazy"
                                         src={document.image}
@@ -115,13 +115,6 @@ const DBZFWCardlist = ({ filters }) => {
                                 </Box>
                             </Grid>
                         ))}
-                        {selectedCard && (
-                            <DBZCardDrawerNF
-                                open={openModal}
-                                onClose={handleCloseModal}
-                                selectedCard={selectedCard}
-                            />
-                        )}
                     </Grid>
                 )}
             </div>

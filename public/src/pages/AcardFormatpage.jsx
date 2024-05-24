@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
 import AcardFormat from "../components/AcardTemplatenew";
+import CreateDeckBtn from "../components/ModularCreateDeckButton";
 
 const AcardFormatpage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,9 +38,11 @@ const AcardFormatpage = () => {
           <Box
             sx={{
               marginLeft: { xs: "0px", sm: "0px", md: "100px" },
+              position:'relative'
             }}
           >
             <AcardFormat searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <CreateDeckBtn contentType={"unionarena"}/>
           </Box>
           <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <BottomNav />
