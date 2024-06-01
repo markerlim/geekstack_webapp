@@ -288,7 +288,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
             </Box>
             <Grid container spacing={2} justifyContent="center">
                 {animeFilter !== "" && filteredDocuments.map((document, index) => (
-                    <Grid item key={document.cardUid}>
+                    <Grid item key={document.cardUid + index}>
                         <Box sx={{ position: 'relative' }} >
                             <ResponsiveImage
                                 loading="lazy"

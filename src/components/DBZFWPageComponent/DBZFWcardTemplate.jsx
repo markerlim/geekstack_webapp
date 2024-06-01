@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../Firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Grid, Select, MenuItem, FormControl, Button, Slider, useMediaQuery } from "@mui/material";
-import { ArrowBack, Refresh, SwapHoriz } from "@mui/icons-material";
+import { ArrowBack, Refresh } from "@mui/icons-material";
 import searchMatch from "../searchUtils";
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from "react-helmet";
@@ -121,69 +121,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);
     };
-    const handleFormChange = (event, document) => {
-        event.stopPropagation(); // Prevent event from bubbling up
-        setAltFormIndex(prev => {
-            // Check if the document.cardId exists in the prev state
-            if (prev[document.cardId] === undefined) {
-                return {
-                    ...prev,
-                    [document.cardId]: 0
-                };
-            }
-
-            let altFormsLength = 0;
-            if (Array.isArray(document.altforms)) {
-                altFormsLength = document.altforms.length;
-            } else if (typeof document.altforms === "string") {
-                altFormsLength = 1; // Consider the original form and the alt form
-            }
-            const currentFormIndex = prev[document.cardId];
-            const newFormIndex = (currentFormIndex + 1) % (altFormsLength + 1); // Add 1 to account for the original form
-
-            return {
-                ...prev,
-                [document.cardId]: newFormIndex,
-            };
-        });
-    };
-
-    useEffect(() => {
-        if (onlyAltForm) {
-            setAltForms(prev => {
-                const newAltForms = { ...prev };
-                for (let cardId in newAltForms) {
-                    const document = documents.find(doc => doc.cardId === cardId);
-                    newAltForms[cardId] = (newAltForms[cardId] + 1) % document.altforms.length;
-                }
-                return newAltForms;
-            });
-            setAltFormIndex(prev => {
-                const newAltFormIndex = { ...prev };
-                for (let cardId in documents) {
-                    if (documents[cardId].altforms) {
-                        newAltFormIndex[cardId] = (newAltFormIndex[cardId] || 0 + 1) % documents[cardId].altforms.length;
-                    }
-                }
-                return newAltFormIndex;
-            });
-        } else {
-            setAltForms(prev => {
-                const newAltForms = { ...prev };
-                for (let cardId in newAltForms) {
-                    newAltForms[cardId] = 0;
-                }
-                return newAltForms;
-            });
-            setAltFormIndex(prev => {
-                const newAltFormIndex = { ...prev };
-                for (let cardId in newAltFormIndex) {
-                    newAltFormIndex[cardId] = 0;
-                }
-                return newAltFormIndex;
-            });
-        }
-    }, [onlyAltForm, documents]);
 
     function isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
@@ -357,60 +294,31 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
                 <Grid container spacing={2} justifyContent="center">
-                    {filteredDocuments
-                        .filter(document => !(rarityFilter === 'ALT' && (!document.altforms || document.altforms.length === 0 || document.altforms === '')))
-                        .map((document) => {
-                            if (rarityFilter === 'ALT' && document.altforms) {
-                                const altForms = Array.isArray(document.altforms) ? document.altforms : typeof document.altforms === "string" ? [document.altforms] : [];
-                                return altForms.map((form, index) => (
-                                    <Grid item key={`${document.cardId}-${index}`} sx={{ position: "relative" }}>
-                                        <Box
-                                            sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
-                                            <img
-                                                loading="lazy"
-                                                src={form}
-                                                draggable="false"
-                                                alt={`${document.cardId}-${index}`}
-                                                width={imageWidth}
-                                                height={imageHeight}
-                                            />
-                                        </Box>
-                                    </Grid>
-                                ))
-                            } else {
-                                return (
-                                    <Grid item key={document.cardId} sx={{ position: "relative" }}>
-                                        <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
-                                            <img
-                                                loading="lazy"
-                                                src={
-                                                    (Array.isArray(document.altforms) && altFormIndex[document.cardId] < document.altforms.length) ? document.altforms[altFormIndex[document.cardId]] :
-                                                        (typeof document.altforms === "string" && altFormIndex[document.cardId] === 1) ? document.altforms :
-                                                            document.image
-                                                }
-                                                draggable="false"
-                                                alt={`Card of ${document.cardName} from ${document.anime}`}
-                                                width={imageWidth}
-                                                height={imageHeight}
-                                            />
-                                        </Box>
-                                        {((Array.isArray(document.altforms) && document.altforms.length > 0) || (typeof document.altforms === "string" && document.altforms !== '')) ? (
-                                            <button
-                                                onClick={(event) => handleFormChange(event, document)}
-                                                style={{
-                                                    position: "absolute", backgroundColor: "#7C4FFF",
-                                                    border: "3px #934fff solid", borderRadius: "100px",
-                                                    cursor: "pointer", bottom: 15, right: 5, width: `${imageWidth * 0.3}px`, height: `${imageWidth * 0.3}px`,
-                                                    display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden"
-                                                }}
-                                            >
-                                                <SwapHoriz sx={{ fontSize: "20px", color: '#F2f3f8' }} />
-                                            </button>
-                                        ) : null}
-                                    </Grid>
-                                )
-                            }
-                        })}
+                    {filteredDocuments.map((document) => {
+                        return (
+                            <Grid item key={document.cardUid} sx={{ position: "relative" }}>
+                                <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
+                                    <img
+                                        loading="lazy"
+                                        src={document.image}
+                                        draggable="false"
+                                        alt={`Card of ${document.cardName} from ${document.anime}`}
+                                        width={imageWidth}
+                                        height={imageHeight}
+                                    />
+                                </Box>
+                            </Grid>
+                        )
+                    })}
+                    {selectedCard && (
+                        <DBZCardDrawerNF
+                            open={openModal}
+                            onClose={handleCloseModal}
+                            selectedCard={selectedCard}
+                            onSwipeLeft={handleSwipeLeft}
+                            onSwipeRight={handleSwipeRight}
+                        />
+                    )}
                 </Grid>
                 <div style={{ height: '200px' }} />
             </div>

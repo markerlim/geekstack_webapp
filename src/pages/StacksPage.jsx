@@ -8,8 +8,10 @@ import PWAPrompt from 'react-ios-pwa-prompt';
 import CardStackFlood from "../components/StacksPageComponent/CardStackFlood";
 import { PostAdd } from "@mui/icons-material";
 import PostDrawer from "../components/StacksPageComponent/PostDrawer";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 
-const StacksPage = () => {
+const StacksPageNM = () => {
     useEffect(() => {
         const link = document.createElement("link");
         link.rel = "webmanifest";
@@ -21,8 +23,8 @@ const StacksPage = () => {
         };
     }, []);
 
-    const categorytags = ['ALL', 'UNION-ARENA', 'ONE-PIECE'];
-    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO', 'SYN', 'TRK'];
+    const categorytags = ['ALL', 'UNION-ARENA', 'ONE-PIECE', 'DRAGONBALLZ-FW'];
+    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO', 'SYN', 'TRK', 'NIK', 'HIQ', 'BCV', 'YYH', 'GMR'];
     const [selectedCategoryTag, setSelectedCategoryTag] = useState('ALL');
     const [selectedUAtag, setSelectedUAtag] = useState(null);
     const [postDrawerOpen, setPostDrawerOpen] = useState(false);
@@ -115,104 +117,112 @@ const StacksPage = () => {
             </Helmet>
             <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"} >
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: '-20px', position: 'relative', gap: '0px' }} overflowY={"auto"} height={"calc(100vh - 114px)"} ref={scrollWholeContainerRef}>
+            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Navbar /></Box>
+                <Box>
+                    <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ position: 'fixed', top: 0, zIndex: 1000, backgroundColor: '#101418', height: '54px', width: '100vw', display: 'flex', flex: '0 0 auto', justifyContent: 'center', alignItems: 'center' }}>
                         <img style={{ width: "auto", height: "30px" }} alt="uniondeck" src="/icons/geekstackicon.svg" />
                     </Box>
-                    <Box sx={{ position: 'fixed', top: '54px', zIndex: 900, backgroundColor: '#101418', transition: 'transform 0.3s ease', transform: `translateY(${isNavVisible ? '0' : 'calc(-100%)'})` }}>
-                        <Box
-                            ref={scrollContainerRef}
-                            sx={{
-                                display: 'flex',
-                                height: '25px',
-                                verticalAlign: 'middle',
-                                overflowX: 'auto', // Enable horizontal scrolling
-                                gap: '10px',
-                                flex: '0 0 auto',
-                                justifyContent: 'left',
-                                paddingLeft: '20px',
-                                paddingRight: '20px',
-                                transition: '1s ease',
-                                scrollBehavior: 'smooth',
-                                width: 'calc(100vw - 40px)',
-                                scrollbarWidth: 'none', // Firefox
-                                msOverflowStyle: 'none', // IE
-                                '&::-webkit-scrollbar': {
-                                    width: 0, // Hide scrollbar in Webkit browsers
-                                },
-                            }}
-                        >
-                            {categorytags.map((tag, index) => (
-                                <Box
-                                    sx={{
-                                        flex: '0 0 auto',
-                                        cursor: 'pointer',
-                                        fontSize: '14px',
-                                        color: selectedCategoryTag === tag ? '#ffffff' : '#435364',
-                                        transition: '0.3s linear'
-                                    }}
-                                    key={index}
-                                    onClick={() => handleCategorytagClick(tag)}
-                                    category-filter={tag}
-                                >
-                                    {tag}
-                                </Box>
-                            ))}
-                        </Box>
-                        {selectedCategoryTag === 'UNION-ARENA' && (
+                    <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", alignItems: "center", position: 'relative', gap: '0px' }} overflowY={"auto"} height={"calc(100vh - 74px)"} ref={scrollWholeContainerRef}>
+                        <Box sx={{ position: 'fixed', top: {xs:'54px',sm:'54px',md:'64px'}, zIndex: 900, backgroundColor: '#101418', transition: 'transform 0.3s ease', transform: `translateY(${isNavVisible ? '0' : 'calc(-100%)'})` }}>
                             <Box
                                 ref={scrollContainerRef}
                                 sx={{
                                     display: 'flex',
+                                    height: '25px',
+                                    verticalAlign: 'middle',
                                     overflowX: 'auto', // Enable horizontal scrolling
                                     gap: '10px',
-                                    justifyContent: 'left',
+                                    flex: '0 0 auto',
+                                    justifyContent: { xs: 'left',sm: 'left', md: 'center' },
                                     paddingLeft: '20px',
                                     paddingRight: '20px',
-                                    height: '30px',
-                                    flex: '0 0 auto',
-                                    verticalAlign: 'middle',
+                                    paddingTop: {xs:'0px',sm:'0px',md:'10px'},
                                     transition: '1s ease',
                                     scrollBehavior: 'smooth',
-                                    width: 'calc(100vw - 40px)',
+                                    width: {xs:'calc(100vw - 40px)',sm:'calc(100vw - 40px)',md:'calc(100vw - 140px)'},
                                     scrollbarWidth: 'none', // Firefox
                                     msOverflowStyle: 'none', // IE
                                     '&::-webkit-scrollbar': {
                                         width: 0, // Hide scrollbar in Webkit browsers
+                                        height:0
+
                                     },
                                 }}
                             >
-                                {unionarenatags.map((tag, index) => (
+                                {categorytags.map((tag, index) => (
                                     <Box
                                         sx={{
                                             flex: '0 0 auto',
                                             cursor: 'pointer',
                                             fontSize: '14px',
-                                            color: selectedUAtag === tag ? '#ffffff' : '#435364',
-                                            transition: '0.3s linear',
+                                            color: selectedCategoryTag === tag ? '#ffffff' : '#435364',
+                                            transition: '0.3s linear'
                                         }}
                                         key={index}
-                                        onClick={() => handleUAtagClick(tag)}
-                                        data-filter={tag}
+                                        onClick={() => handleCategorytagClick(tag)}
+                                        category-filter={tag}
                                     >
                                         {tag}
                                     </Box>
                                 ))}
                             </Box>
-                        )}
+                            {selectedCategoryTag === 'UNION-ARENA' && (
+                                <Box
+                                    ref={scrollContainerRef}
+                                    sx={{
+                                        display: 'flex',
+                                        overflowX: 'auto', // Enable horizontal scrolling
+                                        gap: '10px',
+                                        justifyContent: { xs: 'left', sm: 'left', md: 'center' },
+                                        paddingLeft: '20px',
+                                        paddingRight: '20px',
+                                        height: '30px',
+                                        flex: '0 0 auto',
+                                        verticalAlign: 'middle',
+                                        transition: '1s ease',
+                                        scrollBehavior: 'smooth',
+                                        width: {xs:'calc(100vw - 40px)',sm:'calc(100vw - 40px)',md:'calc(100vw - 140px)'},
+                                        scrollbarWidth: 'none', // Firefox
+                                        msOverflowStyle: 'none', // IE
+                                        '&::-webkit-scrollbar': {
+                                            width: 0, // Hide scrollbar in Webkit browsers
+                                            height:0
+                                        },
+                                    }}
+                                >
+                                    {unionarenatags.map((tag, index) => (
+                                        <Box
+                                            sx={{
+                                                flex: '0 0 auto',
+                                                cursor: 'pointer',
+                                                fontSize: '14px',
+                                                color: selectedUAtag === tag ? '#ffffff' : '#435364',
+                                                transition: '0.3s linear',
+                                            }}
+                                            key={index}
+                                            onClick={() => handleUAtagClick(tag)}
+                                            data-filter={tag}
+                                        >
+                                            {tag}
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )}
+                        </Box>
+                        <CardStackFlood selectedCategoryTag={selectedCategoryTag} selectedUAtag={selectedUAtag} />
                     </Box>
-                    <CardStackFlood selectedCategoryTag={selectedCategoryTag} selectedUAtag={selectedUAtag} />
-                </Box>
-                <Box sx={{ display: { sm: "block", md: "none" } }}>
-                    <Box sx={{ position: 'absolute', zIndex: 1001, borderRadius: '50%', padding: '10px', bgcolor: '#7C4FFF', right: '15px', bottom: '90px' }}>
-                        <PostAdd onClick={handlePostDrawer} />
+                    <Box sx={{ display: { sm: "block", md: "none" } }}>
+                        <Box sx={{ position: 'absolute', zIndex: 1001, borderRadius: '50%', padding: '10px', bgcolor: '#7C4FFF', right: '15px', bottom: '90px' }}>
+                            <PostAdd onClick={handlePostDrawer} />
+                        </Box>
+                        <PostDrawer postDrawerOpen={postDrawerOpen} setPostDrawerOpen={setPostDrawerOpen} />
+                        <BottomNav />
                     </Box>
-                    <PostDrawer postDrawerOpen={postDrawerOpen} setPostDrawerOpen={setPostDrawerOpen}/>
-                    <BottomNav />
                 </Box>
             </Box>
         </div>
     );
 }
 
-export default StacksPage;
+export default StacksPageNM;

@@ -214,7 +214,7 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
             onOpen={() => { }}
             onClose={handleDrawerClose}
             disableSwipeToOpen={true}>
-            <Box sx={{ position: 'sticky', display: 'flex', flexDirection: 'row', padding: '10px', backgroundColor: '#26252d', justifyContent: 'space-between', width: 'calc(100vw - 20px)', alignItems: 'center' }}>
+            <Box sx={{ position: 'sticky', display: 'flex', flexDirection: 'row', padding: '10px', backgroundColor: '#26252d', justifyContent: 'space-between', width: {sm:'calc(100vw - 20px)',md:'680px'}, alignItems: 'center' }}>
                 <ArrowBack onClick={handleDrawerClose} sx={{ color: '#f2f3f8' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center' }}>
                     <Box sx={{ borderRadius: '20px', border: '4px solid #26262d', width: '30px', height: '30px', display: 'flex', alignItems: 'middle', overflow: 'hidden', backgroundColor: '#7C4FFF' }}>
@@ -236,7 +236,7 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
                 </Box>
                 <Search sx={{ color: '#f2f3f8' }} />
             </Box>
-            <Box sx={{ width: 'calc(100vw)', height: 'calc(100vh)', backgroundColor: '#26252d', overflowY: 'auto' }}>
+            <Box sx={{ width: {sm:'calc(100vw)',md:'700px'}, height: 'calc(100vh)', backgroundColor: '#26252d', overflowY: 'auto' }}>
                 {data.cards && data.cards.length > 0 ? (
                     <Box sx={{ display: "flex", width: { xs: "100%", sm: "500px", md: "700px" }, backgroundColor: '#121212', justifyContent: "center", paddingTop: '10px', paddingBottom: '10px' }}>
                         <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", paddingTop: "10px", gap: "10px", }}>

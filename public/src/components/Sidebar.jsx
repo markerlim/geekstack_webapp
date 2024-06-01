@@ -83,18 +83,22 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton sx={{ display: "none" }} component={Link} to="/articles">
-                            <ListItemIcon sx={{
-                                justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
-                                    filter: 'drop-shadow(0 0 5px #121212)'
-                                }
-                            }}>
-                                <Article sx={{ color: "#7C4FFF" }} alt="articles" />
+                        <ListItemButton component={Link} to="/dragonballz">
+                            <ListItemIcon sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                    <Box component={'img'} src="/icons/dragonballz.ico" width="30px" alt="dragonballz" sx={{
+                                        width: "30px",
+                                        filter: isActive('/dragonballz') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                        transition: 'filter 0.3s ease-in-out',
+                                        padding: 0,
+                                    }} />
+                                    <Box component={'span'} sx={{ color: isActive('/dragonballz') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>Dragonballz FW</Box>
+                                </Box>
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/news">
+                        <ListItemButton component={Link} to="/stacks">
                             <ListItemIcon sx={{
                                 justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
                                     filter: 'drop-shadow(0 0 5px #121212)'
@@ -105,10 +109,10 @@ const Sidebar = () => {
                                         alt="FAQ"
                                         style={{
                                             width: "30px",
-                                            filter: isActive('/news') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                            filter: isActive('/stacks') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                                             transition: 'filter 0.3s'
                                         }} />
-                                    <Box component={'span'} sx={{ color: isActive('/news') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>News</Box>
+                                    <Box component={'span'} sx={{ color: isActive('/stacks') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>Stacks</Box>
                                 </Box>
                             </ListItemIcon>
                         </ListItemButton>

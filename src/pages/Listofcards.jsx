@@ -7,6 +7,8 @@ import DecklibrarybtnMobile from "../components/DeckLibraryButtonsMobile";
 import { LibraryBooks } from "@mui/icons-material";
 import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButtons";
 import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
+import { CardStateProviderDragonballz } from "../context/useCardStateDragonballz";
+import DBZFWDecklibrarybtn from "../components/DBZFWPageComponent/DBZFWDeckLibraryButtons";
 
 const Listofcards = () => {
     return (
@@ -31,7 +33,7 @@ const Listofcards = () => {
                                     component={Link}
                                     to="/unionarena"
                                 >
-                                    <img style={{ width: "100%" }} alt="unionarena" src="/images/UALibrary.webp" />
+                                    <img style={{ width: "100%" }} alt="unionarena" src="/images/homeUAbtn.jpg" />
                                 </Button>
                                 <Button
                                     sx={{
@@ -40,7 +42,7 @@ const Listofcards = () => {
                                     component={Link}
                                     to="/onepiece"
                                 >
-                                    <img style={{ width: "100%" }} alt="unionarena" src="/images/OPLibrary.webp" />
+                                    <img style={{ width: "100%" }} alt="unionarena" src="/images/homeOPbtn.jpg" />
                                 </Button>
                                 <div style={{ paddingLeft: '5vw' }}>
                                     <br />
@@ -56,6 +58,11 @@ const Listofcards = () => {
                             <CardStateProviderOnepiece>
                                 <OPDecklibrarybtn />
                             </CardStateProviderOnepiece>
+                        </Box>
+                        <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>
+                            <CardStateProviderDragonballz>
+                                <DBZFWDecklibrarybtn />
+                            </CardStateProviderDragonballz>
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <div style={{ height: '1px', padding: '20px' }}>

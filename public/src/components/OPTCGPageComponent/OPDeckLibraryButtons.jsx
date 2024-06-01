@@ -155,6 +155,7 @@ const OPDecklibrarybtn = () => {
           deckType: deckType,
           cards: cards,
         });
+        navigate('/stacks');
       }
     } catch (error) {
       console.error("Error sharing deck: ", error);

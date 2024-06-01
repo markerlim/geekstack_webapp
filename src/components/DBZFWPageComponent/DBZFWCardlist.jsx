@@ -4,11 +4,11 @@ import { CircularProgress } from '@mui/material';
 import { db } from "../../Firebase";
 import DBZFWButtonList from "./DBZFWBoosterButton";
 import { ResponsiveImage } from "../ResponsiveImage";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { DBZCardDrawerNF } from "./DBZCardDrawerFormatted";
 
 
-const keysToSearch = ['cardNameLower', 'colorLower','cardTypeLower', 'cardNameTokens', 'boosterLower','featuresToken', 'cardId', 'basicpower'];
+const keysToSearch = ['cardNameLower', 'colorLower', 'cardtypeLower', 'cardNameTokens', 'boosterLower', 'featuresToken', 'cardId'];
 
 const DBZFWCardlist = ({ filters }) => {
     const [documents, setDocuments] = useState([]);
@@ -36,57 +36,80 @@ const DBZFWCardlist = ({ filters }) => {
     };
 
     useEffect(() => {
+        let isMounted = true; // Flag to track component mounting state
+
         const fetchDocuments = async () => {
-            setLoading(true); // Start loading
-            const timeoutId = setTimeout(() => {
-                setSlowFetch(true);
-            }, 1000); // 1 second timeout
+            setLoading(true);
+            setSlowFetch(false); // Reset slow fetch indicator
+            if (filters.length === 0) {
+                // If filters are empty, immediately clear the documents
+                if (isMounted) {
+                    setDocuments([]);
+                    setLoading(false);
+                }
+                return;
+            }
+            // Combine filters into a single lowercase string for efficiency
+            const combinedFilter = filters.join(" ").toLowerCase();
+
             let finalDocSet = new Set();
+            const arrayFields = ['cardNameTokens', 'featuresToken'];
 
-            const arrayFields = ['cardNameTokens','featuresToken']; // specify which keys should be treated as arrays
-
-            for (let filter of filters) {
-                filter = filter.toLowerCase(); 
-                let filterMatches = [];
-
+            try {
                 for (let key of keysToSearch) {
                     let docsRef;
 
                     if (arrayFields.includes(key)) {
-                        docsRef = query(collection(db, "dragonballzfw"), where(key, "array-contains", filter));
+                        docsRef = query(collection(db, "dragonballzfw"), where(key, "array-contains-any", filters));
                     } else {
-                        docsRef = query(collection(db, "dragonballzfw"), where(key, "==", filter));
+                        docsRef = query(collection(db, "dragonballzfw"), where(key, ">=", combinedFilter), where(key, "<", combinedFilter + "zzzz"));
                     }
 
                     const querySnapshot = await getDocs(docsRef);
 
                     for (let doc of querySnapshot.docs) {
-                        filterMatches.push(doc.id);
+                        const docData = doc.data();
+                        const lowerCaseData = JSON.stringify(docData).toLowerCase();
+
+                        if (lowerCaseData.includes(combinedFilter)) {
+                            finalDocSet.add(doc.id);
+                        }
                     }
                 }
 
-                if (finalDocSet.size === 0) {
-                    finalDocSet = new Set(filterMatches);
-                } else {
-                    finalDocSet = new Set([...finalDocSet].filter(x => filterMatches.includes(x)));
+                const matchedDocs = await Promise.all(
+                    Array.from(finalDocSet).map(docId =>
+                        getDoc(doc(db, "dragonballzfw", docId)).then(doc => doc.data())
+                    )
+                );
+
+                if (isMounted) { // Update state only if the component is still mounted
+                    setDocuments(matchedDocs);
+                    console.log(`Number of reads: ${matchedDocs.length}`);
+                    setLoading(false);
+                }
+
+                // Check if fetch took longer than 1 second and set slowFetch accordingly
+                const elapsedTime = performance.now() - startTime;
+                if (elapsedTime > 1000 && isMounted) {
+                    setSlowFetch(true);
+                }
+            } catch (error) {
+                console.error("Error fetching documents:", error);
+                if (isMounted) {
+                    setLoading(false);
                 }
             }
-
-            const matchedDocs = [];
-            for (let docId of finalDocSet) {
-                const docData = (await getDocs(query(collection(db, "dragonballzfw"), where("cardId", "==", docId)))).docs[0].data();
-                matchedDocs.push(docData);
-            }
-
-            setDocuments(matchedDocs);
-            // Logging the number of reads
-            console.log(`Number of reads: ${matchedDocs.length}`);
-            clearTimeout(timeoutId); // Clear the timeout if fetch completes in less than 1 second
-            setLoading(false); // Stop loading after fetching the data
         };
 
+        const startTime = performance.now();
         fetchDocuments();
+
+        return () => {
+            isMounted = false; // Cleanup: set flag to false when component unmounts
+        };
     }, [filters]);
+
 
     return (
         <div>
@@ -97,7 +120,7 @@ const DBZFWCardlist = ({ filters }) => {
             )}
             <div className="hide-scrollbar">
                 {loading ? (
-                    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop:'-30vh', height: "86vh" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: '-30vh', height: "86vh" }}>
                         <CircularProgress sx={{ color: "#74CFFF" }} />
                         {slowFetch && <Box mt={2}>This field has a large amount of data. Please wait a moment.</Box>}
                     </Box>
@@ -105,7 +128,7 @@ const DBZFWCardlist = ({ filters }) => {
                     <Grid container spacing={2} justifyContent="center">
                         {documents.map((document) => (
                             <Grid item key={document.cardId}>
-                                <Box >
+                                <Box onClick={() => handleOpenModal(document)}>
                                     <ResponsiveImage
                                         loading="lazy"
                                         src={document.image}
@@ -115,6 +138,13 @@ const DBZFWCardlist = ({ filters }) => {
                                 </Box>
                             </Grid>
                         ))}
+                        {selectedCard && (
+                            <DBZCardDrawerNF
+                                open={openModal}
+                                onClose={handleCloseModal}
+                                selectedCard={selectedCard}
+                            />
+                        )}
                     </Grid>
                 )}
             </div>

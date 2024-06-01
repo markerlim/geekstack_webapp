@@ -30,7 +30,7 @@ const OPTCGDeckbuilder = () => {
         setFilters(parsedState.filters);
       }
     }
-  
+
     // Toggle the drawer open/closed state
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -41,13 +41,13 @@ const OPTCGDeckbuilder = () => {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
   }
   const handleFiltersChange = (newFilters) => {
-      setFilters(newFilters);
+    setFilters(newFilters);
   };
 
   const clearAllFilters = () => {
     setFilters([]);
     console.log(filters);
-};
+  };
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -76,20 +76,10 @@ const OPTCGDeckbuilder = () => {
             </Box>
             <Hidden only={['md', 'lg', 'xl']}>
               <Box bgcolor={"#202023"} sx={{ overflowY: 'auto', overflowX: "hidden", height: '100%', width: '100%', }} className="hide-scrollbar">
-                <OPTCGNavBar sx={{ backgroundColor: '#121212' }} />
-                <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick} style={{ width: "100%", top: 0, position: "sticky", }} />
+                <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick} style={{ width: "100%", top: "64px", position: "fixed", }} />
                 <OPTCGRightBar setChangeClick={setChangeClick} />
                 <div style={{ height: "120px" }}></div>
               </Box>
-              <Button onClick={toggleDrawer} sx={{
-                display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "absolute", bottom: isIOS() ? "80px":"70px", borderRadius: '0',
-                '&:hover': {
-                  backgroundColor: "#171614", // Change this to the desired hover background color
-                  color: "#c8a2c8", // Change this to the desired hover text color if needed
-                },
-              }}>
-                ↑ SHOW
-              </Button>
             </Hidden>
             <Hidden mdUp> {/* This will hide the content for screens md (medium) and up */}
               <Drawer
@@ -107,17 +97,26 @@ const OPTCGDeckbuilder = () => {
                   maxHeight: '70vh',
                   bgcolor: '#121212',
                   borderRadius: '20px 20px 0px 0px',
-                  paddingTop:'10px',
-                  paddingBottom:'30px',
+                  paddingTop: '10px',
+                  paddingBottom: '30px',
                   overflowY: 'auto' // This ensures content is scrollable if it exceeds 70vh
                 }}>
                   {!isButtonClicked && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center',paddingBottom:'10px' }}>
-                    <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters}/>
-                  </Box>)}
+                    <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
+                      <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
+                    </Box>)}
                   <OPTCGBuilderButtonList filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                 </Box>
               </Drawer>
+              <Button onClick={toggleDrawer} sx={{
+                display: { xs: "block", sm: "block", md: "none" }, width: "100%", backgroundColor: "#171614", color: "#c8a2c8", fontWeight: "900", zIndex: 80, position: "fixed", bottom: isIOS() ? "80px" : "70px", borderRadius: '0',
+                '&:hover': {
+                  backgroundColor: "#171614", // Change this to the desired hover background color
+                  color: "#c8a2c8", // Change this to the desired hover text color if needed
+                },
+              }}>
+                ↑ SHOW
+              </Button>
             </Hidden>
             <Hidden smDown> {/* This will hide the content for screens sm (small) and down */}
               <Box flex={6} sx={{
@@ -128,10 +127,10 @@ const OPTCGDeckbuilder = () => {
               }}>
                 <OPTCGNavBar />
                 {!isButtonClicked && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center',paddingBottom:'10px' }}>
-                    <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters}/>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
+                    <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
                   </Box>)}
-                <OPTCGBuilderButtonList filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick}  />
+                <OPTCGBuilderButtonList filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                 <br />
                 <br />
                 <br />
@@ -140,8 +139,8 @@ const OPTCGDeckbuilder = () => {
               </Box>
             </Hidden>
             <Hidden only={['xs', 'sm']}>
-              <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto',overflowX:'hidden', height: '100%' }} className="hide-scrollbar">
-                <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick}/>
+              <Box flex={6} bgcolor={"#262626"} sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%' }} className="hide-scrollbar">
+                <OPTCGBuilderBar changeClick={changeClick} setChangeClick={setChangeClick} />
                 <OPTCGRightBar setChangeClick={setChangeClick} />
                 <br></br>
                 <br></br>

@@ -22,7 +22,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../Firebase";
 
-const CardFunctions = ({ deck, handleDrawerOpen, inputRef }) => {
+const CardFunctions = ({ deck, handleDrawerOpen, inputRef,deleteRefresh,setDeleteRefresh }) => {
     const authContext = useContext(AuthContext);
     const userId = authContext.currentUser?.uid;
     const [deckToDelete, setDeckToDelete] = useState(null);
@@ -61,7 +61,8 @@ const CardFunctions = ({ deck, handleDrawerOpen, inputRef }) => {
         setShareDrawerOpen(false);
     };
 
-    const handleWhatsAppShare = () => {
+    const handleWhatsAppShare = (event) => {
+        event.stopPropagation();
         const text = `Check out this deck on Union: ${window.location.origin}/stacks/${deck.id}`;
         const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(text)}`;
 
@@ -69,18 +70,20 @@ const CardFunctions = ({ deck, handleDrawerOpen, inputRef }) => {
         window.location.href = whatsappUrl;
     };
 
-    const handleTelegramShare = () => {
+    const handleTelegramShare = (event) => {
+        event.stopPropagation();
         const text = `Check out this deck on Union: ${window.location.origin}/stacks/${deck.id}`;
-        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`;
+        const telegramUrl = `tg://share/url?&text=${encodeURIComponent(text)}`;
    
         window.location.href = telegramUrl;
     };
     
 
-    const handleTwitterShare = () => {
+    const handleTwitterShare = (event) => {
+        event.stopPropagation();
         const text = `Check out this deck on Union: ${window.location.origin}/stacks/${deck.id}`;
         console.log(text);
-        const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
         // Open the Twitter share intent
         window.open(twitterUrl);
@@ -107,12 +110,14 @@ const CardFunctions = ({ deck, handleDrawerOpen, inputRef }) => {
         setConfirmDeleteOpen(true);
     };
 
-    const handleConfirmDelete = async () => {
+    const handleConfirmDelete = async (event) => {
+        event.stopPropagation();
         try {
             const deckRef = doc(db, 'uniondecklist', deckToDelete);
             await deleteDoc(deckRef);
             console.log("Deck successfully deleted!");
             setConfirmDeleteOpen(false);
+            setDeleteRefresh(prevState => !prevState);
         } catch (error) {
             console.error("Error deleting deck: ", error);
         }

@@ -32,13 +32,14 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
     const [canPaginateNext, setCanPaginateNext] = useState(true);
+    const [deleteRefresh, setDeleteRefresh] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const itemsPerPage = 10;
     const querySnapshotRef = useRef(null);
     const querySnapshotStackRef = useRef([]);
     const lastCardRef = useRef(null);
 
-    const paddingTopValue = selectedCategoryTag === 'UNION-ARENA' ? '64px' : '44px';
+    const paddingTopValue = selectedCategoryTag === 'UNION-ARENA' ? { xs: '44px', sm: '44px', md: '64px' } : { xs: '24px', sm: '24px', md: '44px' };
 
     const authContext = useContext(AuthContext);
     const uid = authContext.currentUser?.uid;
@@ -85,6 +86,15 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                 deckQuery = query(
                     collection(db, selectedCollection),
                     where('postType', '==', 'OPTCG'),
+                    orderBy("sharedDate", "desc"),
+                    limit(itemsPerPage),
+                    ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
+                );
+            } else if (selectedCategoryTag === "DRAGONBALLZ-FW") {
+                selectedCollection = "uniondecklist";
+                deckQuery = query(
+                    collection(db, selectedCollection),
+                    where('postType', '==', 'DBZFW'),
                     orderBy("sharedDate", "desc"),
                     limit(itemsPerPage),
                     ...(lastSharedDate ? [startAfter(lastSharedDate)] : []),
@@ -170,7 +180,6 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
         if (!currentPage) {
             fetchDeckData();
         }
-
         // Check if paramsUid is present and set isClicked and drawerOpen accordingly
         if (paramsUid) {
             setIsClicked(true);
@@ -178,13 +187,14 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
         }
     }, []);
 
+
     useEffect(() => {
         if (isPaginating && currentPage > 1) {
             fetchDeckData();
         }
         console.log('Paginating');
     }, [isPaginating, currentPage]);
-    
+
 
     useEffect(() => {
         // Reset deckData when selectedCategoryTag changes
@@ -196,7 +206,7 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
 
         // Fetch new data for the selected category
         fetchDeckData();
-    }, [selectedCategoryTag, selectedUAtag]);
+    }, [selectedCategoryTag, selectedUAtag, deleteRefresh]);
 
     const leftColumnCards = deckData.filter((_, index) => index % 2 === 0);
     const rightColumnCards = deckData.filter((_, index) => index % 2 !== 0);
@@ -231,7 +241,8 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                         }}
                         onClick={() => { setIsClicked(true) }}
                     >
-                        <SingleCardStack grpdata={data} index={index} uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />
+                        <SingleCardStack grpdata={data} index={index} uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen}
+                            deleteRefresh={deleteRefresh} setDeleteRefresh={setDeleteRefresh} />
                     </Box>
                 ))}
             </Box>
@@ -251,7 +262,8 @@ const CardStackFlood = ({ selectedCategoryTag, selectedUAtag }) => {
                         }}
                         onClick={() => { setIsClicked(true) }}
                     >
-                        <SingleCardStack grpdata={data} index={index} uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />
+                        <SingleCardStack grpdata={data} index={index} uid={uid} setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen}
+                            deleteRefresh={deleteRefresh} setDeleteRefresh={setDeleteRefresh} />
                     </Box>
                 ))}
             </Box>

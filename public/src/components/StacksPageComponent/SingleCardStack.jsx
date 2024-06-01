@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const SingleCardStack = ({ grpdata, index, setDrawerOpen, drawerOpen}) => {
+const SingleCardStack = ({ grpdata, index, setDrawerOpen, drawerOpen,deleteRefresh,setDeleteRefresh}) => {
     const data = grpdata;
     const deckuid = grpdata.id;
     const navigate = useNavigate();
@@ -64,7 +64,8 @@ const SingleCardStack = ({ grpdata, index, setDrawerOpen, drawerOpen}) => {
                     ))}
                 </Box>
                 <Box sx={{ color: '#D3D3D3', paddingBottom: '20px' }}>
-                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef} />
+                    <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef}
+                    deleteRefresh={deleteRefresh} setDeleteRefresh={setDeleteRefresh} />
                 </Box>
             </Box>
         </>

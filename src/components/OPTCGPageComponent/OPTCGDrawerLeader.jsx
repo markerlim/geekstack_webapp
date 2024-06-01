@@ -8,8 +8,8 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, setSelectedImage, setSelecte
     const [colorFilter, setColorFilter] = useState("");
     const [slidePosition, setSlidePosition] = useState(100);
     const [dataList, setDataList] = useState([]); 
-    const boosters = ['OP01', 'OP02', 'OP03', 'OP04', 'OP05', 'OPST01'
-        , 'OPST02', 'OPST03', 'OPST04', 'OPST05', 'OPST06', 'OPST07', 'OPST08', 'OPST09', 'OPST10'];
+    const boosters = ['OP01', 'OP02', 'OP03', 'OP04', 'OP05','OP06','OP07','OP08','EB01','OPST01'
+        , 'OPST02', 'OPST03', 'OPST04', 'OPST05', 'OPST06', 'OPST07', 'OPST08', 'OPST09', 'OPST10','OPST11','OPST12','OPST13','OPST14'];
     const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Black'];
 
     const opldrurl = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/onepieceLeader?secret=${process.env.REACT_APP_SECRET_KEY}`;
@@ -189,7 +189,7 @@ export const OPTCGLdrCardDrawer = ({ open, onClose, setSelectedImage, setSelecte
                                     style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
                                     onClick={() => {
                                         setSelectedImage(item.image);
-                                        setSelectedCardid(item.cardid);
+                                        setSelectedCardid(item.cardUid);
                                         onClose();
                                     }}
                                 />

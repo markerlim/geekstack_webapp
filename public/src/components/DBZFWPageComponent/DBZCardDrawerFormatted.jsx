@@ -110,7 +110,7 @@ export const DBZCardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSw
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
             <img
               loading="lazy"
-              src={selectedCard.currentImage}
+              src={selectedCard.image}
               draggable="false"
               alt="test"
               style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
@@ -131,7 +131,7 @@ export const DBZCardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSw
               }}>
                 <Box
                   component='img'
-                  src={selectedCard.currentImage}
+                  src={selectedCard.image}
                   alt="Full Size"
                   sx={{ width: { xs: '80vw', sm: '400px' }, cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}
@@ -202,10 +202,10 @@ export const DBZCardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSw
                     <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.color}</Box>
                   </Grid>
                   <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Traits:</Box>
+                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Features:</Box>
                   </Grid>
                   <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.traits}</Box>
+                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.features}</Box>
                   </Grid>
                 </>)}
                 <Grid item xs={3}>
@@ -220,7 +220,7 @@ export const DBZCardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSw
                       fontSize: '14px',
                     }}
                   >
-                    {selectedCard.effect.split('\\n').map((line, index) => (
+                    {selectedCard.effects.split('\\n').map((line, index) => (
                       <React.Fragment key={index}>
                         {replaceTagsWithIcons(line)}
                         <br />
@@ -228,14 +228,6 @@ export const DBZCardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSw
                     ))}
                   </Box>
                 </Grid>
-                {showDetails && (<>
-                  <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: "#240056", color: "#f2f3f8", padding: 1 }}>Trigger:</Box>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Box sx={{ backgroundColor: "#C8A2C8", color: "#000000", padding: 1 }}>{selectedCard.trigger}</Box>
-                  </Grid>
-                </>)}
               </Grid>
             </Grid>
           </Box>

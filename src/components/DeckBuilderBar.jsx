@@ -94,6 +94,12 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     "/images/deckcover-9.webp",
     "/images/deckcover-10.webp",
     "/images/deckcover-11.webp",
+    "/images/deckcover-12.webp",
+    "/images/deckcover-13.webp",
+    "/images/deckcover-14.webp",
+    "/images/deckcover-15.webp",
+    "/images/deckcover-16.webp",
+    "/images/deckcover-17.webp",
   ];
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

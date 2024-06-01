@@ -242,7 +242,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
 
       // If the search returns more than 500 cards, then discard the results
       if (data.length > 500 || (result.totalCount && result.totalCount > 500)) {
-        console.warn("API returned more than 500 cards.");
+        console.warn("Search returned more than 500 cards. Be more specific");
         setOnepieces([]);
         return;
       }
@@ -251,8 +251,8 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
         const filteredData = data.filter(card => card.category !== "leader");
         const newData = [...prevData, ...filteredData];
         newData.sort((a, b) => {
-          const aId = parseInt(a.cardid.split('-')[1]);
-          const bId = parseInt(b.cardid.split('-')[1]);
+          const aId = parseInt(a.cardId.split('-')[1]);
+          const bId = parseInt(b.cardId.split('-')[1]);
           return aId - bId;
         });
         return newData;
@@ -442,8 +442,8 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
                 {currentViewedCards
                   .filter(onepiece => !selectedColor || onepiece.color === selectedColor)
                   .map((onepiece) => (
-                    <Grid item >
-                      <Box onClick={() => handleOpenModal(onepiece)} key={onepiece.cardid}>
+                    <Grid item key={onepiece.cardId}>
+                      <Box onClick={() => handleOpenModal(onepiece)} >
                         <img
                           loading="lazy"
                           src={onepiece.image}
