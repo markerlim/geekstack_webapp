@@ -442,7 +442,7 @@ const OPTCGBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
                 {currentViewedCards
                   .filter(onepiece => !selectedColor || onepiece.color === selectedColor)
                   .map((onepiece) => (
-                    <Grid item key={onepiece.cardId}>
+                    <Grid item key={onepiece.cardUid}>
                       <Box onClick={() => handleOpenModal(onepiece)} >
                         <img
                           loading="lazy"
