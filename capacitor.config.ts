@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'GeekstackV1.0',
+  appId: 'com.example.geekstack',
   appName: 'Geekstack',
   webDir: 'build'
 };

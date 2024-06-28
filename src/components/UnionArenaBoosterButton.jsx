@@ -245,6 +245,12 @@ const ButtonList = () => {
       alt: "gamera -rebirth-",
       imageSrc: "/images/deckimage22.jpg",
       imgWidth: "110%",
+    },
+    {
+      pathname: "aot",
+      alt: "attack on titan",
+      imageSrc: "/images/deckimage23.jpg",
+      imgWidth: "110%",
     }
   ];
 

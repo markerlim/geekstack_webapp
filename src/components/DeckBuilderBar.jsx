@@ -82,6 +82,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     "/images/deckimage20.jpg",
     "/images/deckimage21.jpg",
     "/images/deckimage22.jpg",
+    "/images/deckimage23.jpg",
     "/images/deckcover.webp",
     "/images/deckcover-1.webp",
     "/images/deckcover-2.webp",
@@ -100,6 +101,10 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     "/images/deckcover-15.webp",
     "/images/deckcover-16.webp",
     "/images/deckcover-17.webp",
+    "/images/deckcover-18.webp",
+    "/images/deckcover-19.webp",
+    "/images/deckcover-20.webp",
+    "/images/deckcover-21.webp",
   ];
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
