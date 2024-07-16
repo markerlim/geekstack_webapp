@@ -49,7 +49,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
         setOpenModal(true);
     };
     const handleSwipeLeft = () => {
-        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
+        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
         let nextIndex = (currentIndex + 1) % filteredDocuments.length;
         let nextDocument = filteredDocuments[nextIndex];
         const currentImage = getCurrentImage(nextDocument);
@@ -59,7 +59,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
         });
     };
     const handleSwipeRight = () => {
-        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
+        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
         let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         let prevDocument = filteredDocuments[prevIndex];
         const currentImage = getCurrentImage(prevDocument);

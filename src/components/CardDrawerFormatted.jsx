@@ -1,4 +1,4 @@
-import { Close, Error, Share, Visibility, VisibilityOff } from "@mui/icons-material";
+import { ArrowLeft, ArrowRight, Close, Error, Share, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
@@ -68,7 +68,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
   const shareImageToWhatsApp = () => {
     // Replace 'selectedCard.currentImage' with the URL of your webp image
     const imageUrl = selectedCard.currentImage;
-  
+
     // Check if Web Share API is available
     if (navigator.share) {
       navigator.share({
@@ -84,7 +84,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out this image!')} ${encodeURIComponent(imageUrl)}`, '_blank');
     }
   };
-  
+
 
   const tagsToIcons = {
     "[Impact 1]": "/icons/UAtags/CTImpact1.png",
@@ -117,7 +117,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
     "[When Attacking]": "/icons/UAtags/CTWhenAttacking.png",
     "[Your Turn]": "/icons/UAtags/CTYourTurn.png",
     "[Opponent's Turn]": "/icons/UAtags/CTOppTurn.png",
-    "[Trigger]":"/icons/UAtags/CTTrigger.png",
+    "[Trigger]": "/icons/UAtags/CTTrigger.png",
   };
 
   const Puller = styled('div')(({ theme }) => ({
@@ -154,17 +154,21 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
       {...swipeHandlers}
     >
       <Box display="flex" flexDirection="column" minHeight="100%" minWidth={0} overflowY={"auto"} p={3}>
-        <Puller />
+        <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' } }}><Puller /></Box>
         <Box flexGrow={1} display='flex' flexDirection='column' >
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <img
-              loading="lazy"
-              src={selectedCard.currentImage}
-              draggable="false"
-              alt="test"
-              style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
-              onClick={() => setShowFullSize(true)}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '30px' }} onClick={() => onSwipeLeft()} /></Box>
+              <img
+                loading="lazy"
+                src={selectedCard.currentImage}
+                draggable="false"
+                alt="test"
+                style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
+                onClick={() => setShowFullSize(true)}
+              />
+              <Box><ArrowRight sx={{ color: '#f2f3f8', fontSize: '30px' }} onClick={() => onSwipeRight()} /></Box>
+            </Box>
             <Modal
               open={showFullSize}
               onClose={() => setShowFullSize(false)}
@@ -177,7 +181,11 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 boxShadow: 24,
+                display:'flex',
+                gap:'5px',
+                alignItems:'center'
               }}>
+                <Box><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '40px' }} onClick={() => onSwipeLeft()} /></Box>
                 <Box
                   component='img'
                   src={selectedCard.currentImage}
@@ -185,6 +193,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                   sx={{ width: { xs: '80vw', sm: '400px' }, cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}
                 />
+                <Box><ArrowRight sx={{ color: '#f2f3f8', fontSize: '40px' }} onClick={() => onSwipeRight()} /></Box>
               </Box>
             </Modal>
             <span style={{ color: "#f2f3f8" }}>tap card to see full</span>

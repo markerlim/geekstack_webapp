@@ -251,6 +251,12 @@ const ButtonList = () => {
       alt: "attack on titan",
       imageSrc: "/images/deckimage23.jpg",
       imgWidth: "110%",
+    },
+    {
+      pathname: "shy",
+      alt: "shy",
+      imageSrc: "/images/deckimage24.webp",
+      imgWidth: "110%",
     }
   ];
 

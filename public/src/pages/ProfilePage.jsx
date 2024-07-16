@@ -33,7 +33,7 @@ const ProfilePage = () => {
     const [userVote, setUserVote] = useState(null);
     const currentUser = useContext(AuthContext);
     const [isUAButtonsVisible, setIsUAButtonsVisible] = useState(false);
-    const [isDTCGButtonsVisible, setIsDTCGButtonsVisible] = useState(false);
+    const [isDBZFWButtonsVisible, setIsDBZFWButtonsVisible] = useState(false);
     const [isOPTCGButtonsVisible, setIsOPTCGButtonsVisible] = useState(false);
     const [uaDeckData, setUaDeckData] = useState([]);
 
@@ -211,12 +211,12 @@ const ProfilePage = () => {
                                                 }
                                             }}
                                             onClick={() => {
-                                                setIsDTCGButtonsVisible(!isDTCGButtonsVisible);
+                                                setIsDBZFWButtonsVisible(!isDBZFWButtonsVisible);
                                                 setIsUAButtonsVisible(false);
                                                 setIsOPTCGButtonsVisible(false);
                                             }}
                                         >
-                                            <img style={{ height: "100%" }} alt="digimon" src="/images/HMDTCGButton.jpg" />
+                                            <img style={{ height: "100%" }} alt="dragonballz" src="/images/HMDBZFWButton.jpg" />
                                         </Button>
                                         <Button
                                             sx={{
@@ -227,7 +227,7 @@ const ProfilePage = () => {
                                             }}
                                             onClick={() => {
                                                 setIsUAButtonsVisible(!isUAButtonsVisible);
-                                                setIsDTCGButtonsVisible(false);
+                                                setIsDBZFWButtonsVisible(false);
                                                 setIsOPTCGButtonsVisible(false);
                                             }}
                                         >
@@ -242,7 +242,7 @@ const ProfilePage = () => {
                                             }}
                                             onClick={() => {
                                                 setIsOPTCGButtonsVisible(!isOPTCGButtonsVisible);
-                                                setIsDTCGButtonsVisible(false);
+                                                setIsDBZFWButtonsVisible(false);
                                                 setIsUAButtonsVisible(false);
                                             }}
                                         >
@@ -250,7 +250,7 @@ const ProfilePage = () => {
                                         </Button>
                                     </Box>
                                     <Box sx={{ position: 'relative' }}>
-                                        <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isDTCGButtonsVisible}>
+                                        <Collapse sx={{ position: "absolute", top: '50%', left: '50%', transform: 'translate(-50%, 0%)' }} in={isDBZFWButtonsVisible}>
                                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)" }, display: "flex", flexDirection: "row", gap: '20px', justifyContent: 'center', paddingBottom: "20px", borderRadius: "20px" }}>
                                                 Currently Unavailable
                                             </Box>

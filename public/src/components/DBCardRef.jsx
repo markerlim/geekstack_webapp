@@ -153,7 +153,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST', 'PROMO'], colorsets: ['Blue', 'Green', 'Yellow'] },
         { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
         { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'] },
-        { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST'], colorsets: ['Red', 'Green', 'Purple'] },
+        { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST','EX06BT'], colorsets: ['Red', 'Green', 'Purple','Yellow'] },
         { filter: 'Gintama', sets: ['UA11BT', 'UA11ST', 'PROMO'], colorsets: ['Red', 'Purple', 'Yellow'] },
         { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
         { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'] },
@@ -167,6 +167,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         { filter: 'YuYu Hakusho', sets: ['UA21BT', 'UA21ST'], colorsets: ['Red','Green','Purple']},
         { filter: 'GAMERA -Rebirth-', sets: ['UA22BT'], colorsets: ['Green','Blue']},
         { filter: 'Attack On Titan', sets: ['UA23BT', 'UA23ST'], colorsets: ['Green','Blue','Red']},
+        { filter: 'SHY', sets: ['UA24BT'], colorsets: ['Blue','Red']},  
     ]
 
     return (

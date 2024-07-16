@@ -167,6 +167,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         { filter: 'YuYu Hakusho', sets: ['UA21BT', 'UA21ST'], colorsets: ['Red','Green','Purple']},
         { filter: 'GAMERA -Rebirth-', sets: ['UA22BT'], colorsets: ['Green','Blue']},
         { filter: 'Attack On Titan', sets: ['UA23BT', 'UA23ST'], colorsets: ['Green','Blue','Red']},
+        { filter: 'SHY', sets: ['UA24BT'], colorsets: ['Blue','Red']},  
     ]
 
     return (

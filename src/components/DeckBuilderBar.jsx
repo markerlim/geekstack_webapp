@@ -20,7 +20,7 @@ import UATCGExport from "./UAExportTemplate";
 import { useLocation } from "react-router-dom";
 
 
-const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
+const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) => {
   const { currentUser } = useAuth();
   const { filteredCards, setFilteredCards } = useCardState();
   const [deckName, setDeckName] = useState("myDeckId");
@@ -83,6 +83,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     "/images/deckimage21.jpg",
     "/images/deckimage22.jpg",
     "/images/deckimage23.jpg",
+    "/images/deckimage24.webp",
     "/images/deckcover.webp",
     "/images/deckcover-1.webp",
     "/images/deckcover-2.webp",
@@ -105,6 +106,8 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     "/images/deckcover-19.webp",
     "/images/deckcover-20.webp",
     "/images/deckcover-21.webp",
+    "/images/deckcover-22.webp",
+    "/images/deckcover-23.webp",
   ];
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -434,6 +437,11 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
     handleDeckLoaded(deck.id, deck.deckuid, deck.name, deck.image);
   };
 
+  const handleDeckview = () => {
+    setViewDeckbar(prev => !prev);
+    setHideDeckbar(prev => !prev);
+  }
+
   useEffect(() => {
     const loadDeckData = async () => {
       if (deckUidParams && deckUidParams.trim() !== "") {
@@ -596,7 +604,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, style }) => {
           </Box>
         </Box >
       </Collapse>
-      <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={() => setViewDeckbar(prev => !prev)}>
+      <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={handleDeckview}>
         {viewDeckbar ? <><Visibility /></> : <><VisibilityOff /></>}
       </Button>
       <Dialog
