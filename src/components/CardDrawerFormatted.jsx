@@ -157,8 +157,8 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
         <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' } }}><Puller /></Box>
         <Box flexGrow={1} display='flex' flexDirection='column' >
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '30px' }} onClick={() => onSwipeLeft()} /></Box>
+            <Box sx={{ display: 'flex', alignItems: 'center',gap:'10px' }}>
+              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeRight()} /></Box>
               <img
                 loading="lazy"
                 src={selectedCard.currentImage}
@@ -167,7 +167,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                 style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
                 onClick={() => setShowFullSize(true)}
               />
-              <Box><ArrowRight sx={{ color: '#f2f3f8', fontSize: '30px' }} onClick={() => onSwipeRight()} /></Box>
+              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}}><ArrowRight sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeLeft()} /></Box>
             </Box>
             <Modal
               open={showFullSize}
@@ -185,15 +185,15 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                 gap:'5px',
                 alignItems:'center'
               }}>
-                <Box><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '40px' }} onClick={() => onSwipeLeft()} /></Box>
-                <Box
+              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}} onClick={() => onSwipeRight()}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
+              <Box
                   component='img'
                   src={selectedCard.currentImage}
                   alt="Full Size"
                   sx={{ width: { xs: '80vw', sm: '400px' }, cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}
                 />
-                <Box><ArrowRight sx={{ color: '#f2f3f8', fontSize: '40px' }} onClick={() => onSwipeRight()} /></Box>
+              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}}  onClick={() => onSwipeLeft()}><ArrowRight sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
               </Box>
             </Modal>
             <span style={{ color: "#f2f3f8" }}>tap card to see full</span>

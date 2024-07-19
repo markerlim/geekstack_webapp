@@ -151,7 +151,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC','EX05BT'], colorsets: ['Red', 'Yellow', 'Purple','Blue'] },
         { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'] },
         { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST', 'PROMO'], colorsets: ['Blue', 'Green', 'Yellow'] },
-        { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
+        { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST','EX07BT'], colorsets: ['Green', 'Purple', 'Yellow','Blue'] },
         { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'] },
         { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST','EX06BT'], colorsets: ['Red', 'Green', 'Purple','Yellow'] },
         { filter: 'Gintama', sets: ['UA11BT', 'UA11ST', 'PROMO'], colorsets: ['Red', 'Purple', 'Yellow'] },
