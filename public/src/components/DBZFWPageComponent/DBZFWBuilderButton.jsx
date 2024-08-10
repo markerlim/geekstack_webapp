@@ -78,10 +78,10 @@ const DBZFWBuilderButtonList = ({ filters, isButtonClicked, setIsButtonClicked, 
   const [currentPage, setCurrentPage] = useState(1);
   const imageHeight = imageWidth * 1.395;
   const url = `https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/dragonballzfwboosterlist?secret=${process.env.REACT_APP_SECRET_KEY}`;
-  const colors = ["Red", "Blue", "Green", "Yellow"]
+  const colors = ["Red", "Blue", "Green", "Yellow","Black"]
   const parameters = {
-    colorLower: ["red", "blue", "green", "yellow"],
-    boosterLower: ["fb01", "fb02", "fs01", "fs02", "fs03", "fs04"],
+    colorLower: ["red", "blue", "green", "yellow","black"],
+    boosterLower: ["fb01", "fb02","fb03", "fs01", "fs02", "fs03", "fs04"],
     featuresToken:[],
     cardNameTokens:[],
     featuresLower:[],

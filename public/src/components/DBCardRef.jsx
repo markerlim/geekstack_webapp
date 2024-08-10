@@ -7,6 +7,7 @@ import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { CardDrawerNF } from "./CardDrawerFormatted";
 import GSearchBarUADB from "./ChipSearchBarUADBCardRef";
+import { toInteger } from "lodash";
 
 const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClick }) => {
     const [documents, setDocuments] = useState([]);
@@ -15,12 +16,18 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
     const { filteredCards, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
+    const [rarityFilter, setRarityFilter] = useState("");
+    const [costFilter, setCostFilter] = useState("");
+    const [triggerFilter, setTriggerFilter] = useState("");
     const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
 
 
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
+        setCostFilter("");
+        setRarityFilter("");
+        setTriggerFilter("");
     };
 
     const resetAnimeFilters = () => {
@@ -94,12 +101,15 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
+        const rarityFilterMatch = !rarityFilter || document.rarity === rarityFilter;
+        const costFilterMatch = !costFilter || document.energycost === costFilter;
+        const triggerFilterMatch = !triggerFilter || document.triggerState === triggerFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
         const searchQueryMatch = !searchQuery || document.cardNameTokens.map(token => token.toLowerCase()).join(' ').includes(searchQuery.toLowerCase());
-    
-        return boosterFilterMatch && colorFilterMatch && animeFilterMatch && searchQueryMatch;
+
+        return boosterFilterMatch && colorFilterMatch && rarityFilterMatch && triggerFilterMatch && costFilterMatch && animeFilterMatch && searchQueryMatch;
     });
-    
+
 
 
     useEffect(() => {
@@ -144,31 +154,35 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
 
 
     const animeData = [
-        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST', 'EX02BT'], colorsets: ['Red', 'Green', 'Blue', 'Purple'] },
-        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC', 'EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple', 'Red'] },
-        { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT', 'PROMO'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'] },
-        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT', 'PROMO'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'] },
-        { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC','EX05BT'], colorsets: ['Red', 'Yellow', 'Purple','Blue'] },
-        { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'] },
-        { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST', 'PROMO'], colorsets: ['Blue', 'Green', 'Yellow'] },
-        { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST','EX07BT'], colorsets: ['Green', 'Purple', 'Yellow','Blue'] },
-        { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'] },
-        { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST','EX06BT'], colorsets: ['Red', 'Green', 'Purple','Yellow'] },
-        { filter: 'Gintama', sets: ['UA11BT', 'UA11ST', 'PROMO'], colorsets: ['Red', 'Purple', 'Yellow'] },
-        { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
-        { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'] },
-        { filter: 'Dr. Stone', sets: ['UA14BT', 'UA14ST'], colorsets: ['Green', 'Purple', 'Yellow'] },
-        { filter: 'Sword Art Online', sets: ['UA15BT', 'UA15ST'], colorsets: ['Yellow', 'Blue', 'Green'] },
-        { filter: 'Synduality Noir', sets: ['UA16BT', 'UA16ST'], colorsets: ['Red', 'Yellow', 'Purple'] },
-        { filter: 'Toriko', sets: ['UA17BT', 'UA17ST'], colorsets: ['Blue', 'Yellow', 'Purple'] },
-        { filter: 'Goddess of Victory : Nikke', sets: ['UA18BT', 'UA18ST'], colorsets: ['Green', 'Yellow', 'Purple'] },
-        { filter: 'Haikyu!!', sets: ['UA19BT', 'UA19ST'], colorsets: ['Red', 'Blue', 'Yellow'] },
-        { filter: 'Black Clover', sets: ['UA20BT', 'UA20ST'], colorsets: ['Red','Green','Purple']},
-        { filter: 'YuYu Hakusho', sets: ['UA21BT', 'UA21ST'], colorsets: ['Red','Green','Purple']},
-        { filter: 'GAMERA -Rebirth-', sets: ['UA22BT'], colorsets: ['Green','Blue']},
-        { filter: 'Attack On Titan', sets: ['UA23BT', 'UA23ST'], colorsets: ['Green','Blue','Red']},
-        { filter: 'SHY', sets: ['UA24BT'], colorsets: ['Blue','Red']},  
+        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST', 'EX02BT'], colorsets: ['Red', 'Green', 'Blue', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC', 'EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple', 'Red'], raritysets: ['ALT', 'SP', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT', 'PROMO'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT', 'PROMO'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC', 'EX05BT'], colorsets: ['Red', 'Yellow', 'Purple', 'Blue'], raritysets: ['ALT', 'SP', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST', 'PROMO'], colorsets: ['Blue', 'Green', 'Yellow'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST', 'EX07BT'], colorsets: ['Green', 'Purple', 'Yellow', 'Blue'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST', 'EX06BT'], colorsets: ['Red', 'Green', 'Purple', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Gintama', sets: ['UA11BT', 'UA11ST', 'PROMO'], colorsets: ['Red', 'Purple', 'Yellow'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST','UA03NC'], colorsets: ['Red', 'Blue', 'Yellow'], raritysets: ['ALT','SP','SR', 'C', 'U', 'R'] },
+        { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Dr. Stone', sets: ['UA14BT', 'UA14ST'], colorsets: ['Green', 'Purple', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Sword Art Online', sets: ['UA15BT', 'UA15ST'], colorsets: ['Yellow', 'Blue', 'Green'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Synduality Noir', sets: ['UA16BT', 'UA16ST'], colorsets: ['Red', 'Yellow', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Toriko', sets: ['UA17BT', 'UA17ST'], colorsets: ['Blue', 'Yellow', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Goddess of Victory : Nikke', sets: ['UA18BT', 'UA18ST'], colorsets: ['Green', 'Yellow', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Haikyu!!', sets: ['UA19BT', 'UA19ST'], colorsets: ['Red', 'Blue', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Black Clover', sets: ['UA20BT', 'UA20ST'], colorsets: ['Red', 'Green', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'YuYu Hakusho', sets: ['UA21BT', 'UA21ST'], colorsets: ['Red', 'Green', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'GAMERA -Rebirth-', sets: ['UA22BT'], colorsets: ['Green', 'Blue'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Attack On Titan', sets: ['UA23BT', 'UA23ST'], colorsets: ['Green', 'Blue', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'SHY', sets: ['UA24BT'], colorsets: ['Blue', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Undead Unluck', sets: ['UA25BT'], colorsets: ['Purple', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You', sets: ['UA26BT'], colorsets: ['Green', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
     ]
+    const triggerStateSet = ["Draw", "Active", "Color", "Blank", "Raid", "Special", "Final"];
+    const costSet = ["0","1","2","3","4","5","6","7","8","9","10"]
 
     return (
         <div>
@@ -189,8 +203,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                     </>
                 )}
                 {animeFilter !== "" && (
-                    <Box sx={{paddingTop:'10px'}}>
-                        <Box>
+                    <Box sx={{ paddingTop: '10px', display:'flex',flexDirection:'column',alignItems:'center' }}>
+                        <Box sx={{display:'flex', justifyContent:'center', flexWrap:'wrap'}}>
                             <FormControl sx={{ margin: 1 }}>
                                 <Select
                                     sx={{
@@ -247,6 +261,96 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                     }
                                 </Select>
                             </FormControl>
+                            <FormControl sx={{ margin: 1 }}>
+                                <Select
+                                    sx={{
+                                        display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                        whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                        fontSize: 11, width: "60px", height: "30px",
+                                        '& .MuiSelect-icon': {
+                                            display: "none",
+                                            position: "absolute"
+                                        },
+                                    }}
+                                    value={rarityFilter}
+                                    onChange={(event) => setRarityFilter(event.target.value)}
+                                    displayEmpty // Add this prop to display the placeholder when the value is empty
+                                    renderValue={(selectedValue) => selectedValue || 'Rarity'}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {animeData
+                                        .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                        .flatMap(anime => anime.raritysets) // Get the sets for the matched anime and flatten the result
+                                        .map(rarityset => (
+                                            <MenuItem key={rarityset} value={rarityset}>{rarityset}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
+                            <FormControl sx={{ margin: 1 }}>
+                                <Select
+                                    sx={{
+                                        display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                        whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                        fontSize: 11, width: "60px", height: "30px",
+                                        '& .MuiSelect-icon': {
+                                            display: "none",
+                                            position: "absolute"
+                                        },
+                                    }}
+                                    value={costFilter}
+                                    onChange={(event) => setCostFilter(event.target.value)}
+                                    displayEmpty // Add this prop to display the placeholder when the value is empty
+                                    renderValue={(selectedValue) => selectedValue || 'Cost'}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {
+                                        animeData
+                                            .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                            .flatMap(() => costSet) // Use flatMap to integrate the costSet
+                                            .map(cost => (
+                                                <MenuItem key={cost} value={cost}>{cost}</MenuItem>
+                                            ))
+                                    }
+                                </Select>
+                            </FormControl>
+                            <FormControl sx={{ margin: 1 }}>
+                                <Select
+                                    sx={{
+                                        display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center",
+                                        whiteSpace: 'nowrap', backgroundColor: "#f2f3f8", borderRadius: "5px",
+                                        fontSize: 11, width: "60px", height: "30px",
+                                        '& .MuiSelect-icon': {
+                                            display: "none",
+                                            position: "absolute"
+                                        },
+                                    }}
+                                    value={triggerFilter}
+                                    onChange={(event) => setTriggerFilter(event.target.value)}
+                                    displayEmpty // Add this prop to display the placeholder when the value is empty
+                                    renderValue={(selectedValue) => selectedValue || 'Trigger'}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {
+                                        animeData
+                                            .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                            .flatMap(() => triggerStateSet) // Use flatMap to integrate the costSet
+                                            .map(triggerState => (
+                                                triggerState === "Blank" ? (
+                                                    <MenuItem key="-" value="-">Blank</MenuItem>
+                                                ) : (
+                                                    <MenuItem key={triggerState} value={triggerState}>{triggerState}</MenuItem>
+                                                )
+                                            ))
+                                    }
+                                </Select>
+                            </FormControl>
                             <Button
                                 sx={{
                                     minWidth: 0, // Set the minimum width to 0 to allow the button to shrink
@@ -284,7 +388,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                 <ArrowBack sx={{ fontSize: 15 }} />
                             </Button>
                         </Box>
-                        <GSearchBarUADB handleSearchChange={handleSearchChange}/>
+                        <GSearchBarUADB handleSearchChange={handleSearchChange} />
                     </Box>
                 )}
             </Box>

@@ -26,9 +26,6 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
     const [animeFilter, setAnimeFilter] = useState("");
-    const [altForms, setAltForms] = useState({});
-    const [onlyAltForm, setOnlyAltForm] = useState(false);
-    const [altFormIndex, setAltFormIndex] = useState({});
     const isMedium = useMediaQuery('(min-width:900px)');
     const navigate = useNavigate();
     const location = useLocation();
@@ -76,7 +73,6 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
         setBoosterFilter("");
         setColorFilter("");
         setRarityFilter("");
-        setAltForms(false);
         setDetailsByAnimeCode(animecode);
         setSearchQuery("");
     };
@@ -86,10 +82,9 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
         const animeFilterMatch = !animeFilter || document.anime === animeFilter;
         const searchFilterMatch = searchMatch(document, currentSearchQuery);
-        const rarityFilterMatch = rarityFilter === "ALT" ? document.altforms !== undefined : !rarityFilter || document.rarity === rarityFilter;
-        const altFormFilterMatch = !onlyAltForm || document.altform;
+        const rarityFilterMatch = !rarityFilter || document.rarity === rarityFilter;
 
-        return boosterFilterMatch && colorFilterMatch && animeFilterMatch && rarityFilterMatch && searchFilterMatch && altFormFilterMatch;
+        return boosterFilterMatch && colorFilterMatch && animeFilterMatch && rarityFilterMatch && searchFilterMatch;
     });
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);
@@ -128,16 +123,11 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                         const filteredQuery = query(collection(db, "unionarenatcgnew"), where("anime", "==", currentAnime));
                         const querySnapshot = await getDocs(filteredQuery);
                         const documentsArray = [];
-                        const initialAltForms = {};
                         querySnapshot.forEach((doc) => {
                             const docData = doc.data();
                             documentsArray.push(docData);
-                            if (docData.altforms) {
-                                initialAltForms[docData.cardId] = 0;
-                            }
                         });
                         setDocuments(documentsArray);
-                        setAltForms(initialAltForms);
                         console.log(`Number of reads: ${documentsArray.length}`);
                     };
 

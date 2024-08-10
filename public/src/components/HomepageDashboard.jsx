@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Box, ButtonBase, CircularProgress, IconButton } from "@mui/material";
 import { Star } from "@mui/icons-material";
 
-const HomepageDashboard = () => {
+const HomepageDashboard = ({loginStatus}) => {
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { currentUser } = useAuth();
@@ -145,7 +145,10 @@ const HomepageDashboard = () => {
           ))
         ) : (
           <Box sx={{ height: { xs: 228, sm: 340 }, alignItems: "center", display: "flex", fontSize: "20px", fontWeight: "900" }}>
-            <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You currently have no favourites. Do star them to add the pages to your favorite.</span>
+            {loginStatus ? 
+            <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You currently have no favourites. Do star them to add the pages to your favorite.</span>:
+            <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You can login to fully utilise this favorites bar!</span>
+            }
           </Box>
         )}
         <Box sx={{ width: '30px' }}></Box>

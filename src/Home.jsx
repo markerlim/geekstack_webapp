@@ -196,6 +196,7 @@ const Home = () => {
     const [open, setOpen] = useState(false);
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
     const [imageData, setImageData] = useState([]);
+    const [loginStatus, setLoginStatus] = useState(null)
     const [comingsoonData, setComingsoonData] = useState([]);
     const [justifyContent, setJustifyContent] = useState('flex-start');
     const boxRef = useRef(null);
@@ -298,14 +299,14 @@ const Home = () => {
             </Helmet>
             <PWAPrompt promptOnVisit={1} timesToShow={1} copyClosePrompt="Close" permanentlyHideOnDismiss={false} />
             <Box color={"#f2f3f8"}>
-                <NavbarHome />
+                <NavbarHome setLoginStatus={setLoginStatus} />
                 <NotificationModal open={isModalOpen} onClose={handleCloseNotification} />
                 <Box >
                     <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}><Sidebar /></Box>
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <div style={{ height: "1px" }}></div>
-                        <HomepageDashboard />
+                        <HomepageDashboard loginStatus={loginStatus}/>
                         <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingTop: '10px', paddingBottom: '5px', textAlign: 'left', width: '100%', paddingLeft: '50px' }}><strong>TCG STACK</strong></Box>
                         <Box sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden",gap:'20px', justifyContent: 'left', width: "100%", paddingLeft: '15px',paddingRight: '15px',height: { xs: 188, sm: 300 }, }}>
                             <Box sx={{ width: '30px' }}></Box>

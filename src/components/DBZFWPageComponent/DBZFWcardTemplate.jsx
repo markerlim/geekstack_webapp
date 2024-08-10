@@ -11,6 +11,7 @@ import { DBZCardDrawerNF } from "./DBZCardDrawerFormatted";
 
 const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [carddata, setCarddata] = useState([]);
+    const dbzboosterurl = "https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getDBZBoosterDatabase"
     const { booster: rawBooster } = useParams();
     const boostercode = rawBooster.toUpperCase();
     const [listOfColors, setListofColors] = useState([]);
@@ -21,11 +22,9 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const [imageWidth, setImageWidth] = useState(100); //store value of slider
     const imageHeight = imageWidth * 1.395;
     const [boosterFilter, setBoosterFilter] = useState("");
+    const [boosterName, setBoosterName] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
-    const [altForms, setAltForms] = useState({});
-    const [onlyAltForm, setOnlyAltForm] = useState(false);
-    const [altFormIndex, setAltFormIndex] = useState({});
     const isMedium = useMediaQuery('(min-width:900px)');
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,16 +34,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     };
     const getCurrentImage = (document) => {
         let currentImage = document.image;
-
-        // Check if the alternate form should be used
-        if ((onlyAltForm || rarityFilter === "ALT" || altFormIndex[document.cardId] !== undefined) && document.altforms) {
-            if (Array.isArray(document.altforms)) {
-                currentImage = document.altforms[altFormIndex[document.cardId] || 0];
-            } else if (typeof document.altforms === "string") {
-                currentImage = document.altforms;
-            }
-        }
-
         return currentImage;
     };
     const handleOpenModal = (document) => {
@@ -60,14 +49,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         let nextIndex = (currentIndex + 1) % filteredDocuments.length;
         let nextDocument = filteredDocuments[nextIndex];
 
-        // If rarityFilter is "ALT", skip documents without alternate forms
-        if (rarityFilter === "ALT") {
-            while (!nextDocument.altforms) {
-                nextIndex = (nextIndex + 1) % filteredDocuments.length;
-                nextDocument = filteredDocuments[nextIndex];
-            }
-        }
-
         const currentImage = getCurrentImage(nextDocument);
         setSelectedCard({
             ...nextDocument,
@@ -78,15 +59,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
         let currentIndex = filteredDocuments.findIndex((doc) => doc.cardId === selectedCard.cardId);
         let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
         let prevDocument = filteredDocuments[prevIndex];
-
-        // If rarityFilter is "ALT", skip documents without alternate forms
-        if (rarityFilter === "ALT") {
-            while (!prevDocument.altforms) {
-                prevIndex = (prevIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
-                prevDocument = filteredDocuments[prevIndex];
-            }
-        }
-
         const currentImage = getCurrentImage(prevDocument);
         setSelectedCard({
             ...prevDocument,
@@ -96,15 +68,11 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const handleCloseModal = () => {
         setSelectedCard(null);
         setOpenModal(false);
-        setAltFormIndex({});
     };
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
         setRarityFilter("");
-        setAltForms(false);
-        setOnlyAltForm(false);
-        setAltFormIndex({});
         setDetailsByBoosterCode(boostercode);
         setSearchQuery("");
     };
@@ -112,11 +80,10 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     const filteredDocuments = documents.filter((document) => {
         const boosterFilterMatch = !boosterFilter || document.booster === boosterFilter;
         const colorFilterMatch = !colorFilter || document.color === colorFilter;
+        const rarityFilterMatch = !rarityFilter || document.raritySub === rarityFilter;
         const searchFilterMatch = searchMatch(document, currentSearchQuery);
-        const rarityFilterMatch = rarityFilter === "ALT" ? document.altforms !== undefined : !rarityFilter || document.rarity === rarityFilter;
-        const altFormFilterMatch = !onlyAltForm || document.altform;
 
-        return boosterFilterMatch && colorFilterMatch && rarityFilterMatch && searchFilterMatch && altFormFilterMatch;
+        return boosterFilterMatch && colorFilterMatch && rarityFilterMatch && searchFilterMatch;
     });
     const handleSliderChange = (event, newValue) => {
         setImageWidth(newValue);
@@ -127,7 +94,6 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
     }
     const setDetailsByBoosterCode = (boostercode) => {
         const boosterDetails = carddata.find(data => data.booster === boostercode);
-
         if (boosterDetails) {
             setBoosterFilter(boosterDetails.boostercode);
             setListofColors(boosterDetails.listofcolors || []);
@@ -136,38 +102,51 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
             console.error(`No anime details found for code: ${boostercode}`);
         }
     };
+
     useEffect(() => {
-        const fetchDocuments = async () => {
-            try {
-                const filteredQuery = query(collection(db, "dragonballzfw"), where("booster", "==", boostercode));
-                const querySnapshot = await getDocs(filteredQuery);
-                const documentsArray = [];
-                const initialAltForms = {};
+        // Fetch the booster data first
+        fetch(dbzboosterurl)
+            .then(response => response.json())
+            .then(data => {
+                setCarddata(data);
+                // After fetching the card data, find the anime details based on the animecode
+                const boosterDetails = data.find(data => data.booster === boostercode);
 
-                querySnapshot.forEach((doc) => {
-                    const docData = doc.data();
-                    documentsArray.push(docData);
-                    if (docData.altforms) {
-                        initialAltForms[docData.cardId] = 0;
-                    }
-                });
+                if (boosterDetails) {
+                    const currentBooster = boosterDetails.currentBooster;
+                    // Fetch documents using the currentAnime directly
+                    const fetchDocuments = async () => {
+                        const filteredQuery = query(collection(db, "dragonballzfw"), where("booster", "==", boostercode));
+                        const querySnapshot = await getDocs(filteredQuery);
+                        const documentsArray = [];
+                        querySnapshot.forEach((doc) => {
+                            const docData = doc.data();
+                            documentsArray.push(docData);
+                        });
+                        setDocuments(documentsArray);
+                        console.log(`Number of reads: ${documentsArray.length}`);
+                    };
 
-                setDocuments(documentsArray);
-                setAltForms(initialAltForms);
-                console.log(`Number of reads: ${documentsArray.length}`);
+                    fetchDocuments();
+                    setBoosterName(boosterDetails.currentBooster);
+                    setBoosterFilter(boosterDetails.boostercode);
+                    setListofColors(boosterDetails.listofcolors || []);
+                    setListofRarities(boosterDetails.listofrarities || []);
+                } else {
+                    console.error(`No anime details found for code: ${boostercode}`);
+                }
 
                 const queryParams = new URLSearchParams(window.location.search);
                 const boosterParam = queryParams.get('booster');
 
+                // Set the booster filter if the parameter exists
                 if (boosterParam) {
                     setBoosterFilter(boosterParam.toUpperCase());
                 }
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchDocuments();
+            });
     }, [boostercode]);
 
 
@@ -293,6 +272,9 @@ const DBZFWcardFormat = ({ searchQuery, setSearchQuery }) => {
                 </Box>
             </Box>
             <div style={{ overflowY: "auto", height: "86vh" }} className="hide-scrollbar">
+            <Box sx={{ paddingTop: '20px', paddingBottom: '20px', textAlign: 'center', display: { xs: 'block', sm: 'block', md: 'none' } }}>
+                    <span>{boosterName}</span>
+                </Box>
                 <Grid container spacing={2} justifyContent="center">
                     {filteredDocuments.map((document) => {
                         return (

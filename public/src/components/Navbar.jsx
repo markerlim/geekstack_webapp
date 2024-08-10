@@ -46,8 +46,14 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
-        signOut(auth);
-        localStorage.clear();
+        signOut(auth)
+            .then(() => {
+                localStorage.clear();
+                window.location.reload(); // Refresh the page after logging out
+            })
+            .catch((error) => {
+                console.error("Error signing out: ", error);
+            });
     };
 
     return (
@@ -106,7 +112,7 @@ const Navbar = () => {
                                 }}
                             >
                                 <MenuItem component={Link} to="/account">Account</MenuItem>
-                                <MenuItem component={Link} onClick={handleLogout} to="/login">Logout</MenuItem>
+                                <MenuItem component={Link} onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
                         </>
                     ) : (

@@ -77,7 +77,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" />
-            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route index element={<Home />} />
             <Route path="account" element={<AccountDetails />} />
             <Route path="/profile/:uid" element={<ProfilePage />} />
             <Route path="stacks" element={<StacksPage />} />
@@ -93,7 +93,7 @@ function App() {
             <Route path="faq" element={<FAQPage />} />
             <Route path="test" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
-            <Route path="unionarena" element={<ProtectedRoute path="/unionarena"><UnionArenaPage /></ProtectedRoute>}/>
+            <Route path="unionarena" element={<UnionArenaPage />}/>
             <Route path="unionarena/:animecode" element={<AcardFormatpage />} />
             <Route path="uadecklist" element={<UADecklistSharingPage />} />
             <Route path="dragonballz" element={<DBZFWPage />} />

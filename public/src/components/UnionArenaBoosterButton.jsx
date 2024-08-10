@@ -257,6 +257,18 @@ const ButtonList = () => {
       alt: "shy",
       imageSrc: "/images/deckimage24.webp",
       imgWidth: "110%",
+    },
+    {
+      pathname: "and",
+      alt: "undead unluck",
+      imageSrc: "/images/deckimage25.webp",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "rly",
+      alt: "the 100 girlfriends who really, really, really, really, really love you",
+      imageSrc: "/images/deckimage26.webp",
+      imgWidth: "110%",
     }
   ];
 

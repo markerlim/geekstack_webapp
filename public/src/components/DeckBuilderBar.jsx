@@ -84,6 +84,11 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     "/images/deckimage22.jpg",
     "/images/deckimage23.jpg",
     "/images/deckimage24.webp",
+    "/images/deckimage25.webp",
+    "/images/deckimage26.webp",
+    "/images/deckimage27.webp",
+    "/images/deckimage28.webp",
+    "/images/deckimage29.webp",
     "/images/deckcover.webp",
     "/images/deckcover-1.webp",
     "/images/deckcover-2.webp",
@@ -110,6 +115,11 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     "/images/deckcover-23.webp",
     "/images/deckcover-24.webp",
     "/images/deckcover-25.webp",
+    "/images/deckcover-26.webp",
+    "/images/deckcover-27.webp",
+    "/images/deckcover-28.webp",
+    "/images/deckcover-29.webp",
+    "/images/deckcover-30.webp",
   ];
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

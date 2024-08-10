@@ -3,6 +3,7 @@ import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import ErrorLog from "./UAErrorLog";
+import axios from "axios";
 
 
 export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
@@ -10,10 +11,14 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
   const [showFullSize, setShowFullSize] = useState(false);
   const [openErrorLog, setOpenErrorLog] = useState(false);
   const [slidePosition, setSlidePosition] = useState("-100vh");
+  const [yytprice, setYytPrice] = useState(null);
+  const [doraprice, setDoraPrice] = useState(null);
 
   useEffect(() => {
     if (open) {
       setSlidePosition("0");
+      /*fetchYYTCardData('https://yuyu-tei.jp/sell/ua/card/blc2/10024');
+      fetchDORACardData('https://dorasuta.jp/union-arena/product?pid=542095');*/
     } else {
       setSlidePosition("-100vh");
     }
@@ -25,6 +30,30 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
       onClose();
     }, 50);
   };
+
+  /*const fetchYYTCardData = async (url) => {
+    try {
+      const encodedUrl = encodeURIComponent(url); // Encode the URL
+      const response = await axios.get(`http://localhost:4003/api/getYYTCardData`, { params: { url: encodedUrl } });
+      console.log(response.data);
+      console.log(response.data[0].price);
+      setYytPrice(response.data[0].price);
+    } catch (error) {
+      console.error('Error fetching YYT data:', error);
+    }
+  };
+
+  const fetchDORACardData = async (url) => {
+    try {
+      const encodedUrl = encodeURIComponent(url); // Encode the URL
+      const response = await axios.get(`http://localhost:4003/api/getDORACardData`, { params: { url: encodedUrl } });
+      console.log("DORA", response.data);
+      console.log("DORA", response.data[0].price);
+      setDoraPrice(response.data[0].price);
+    } catch (error) {
+      console.error('Error fetching DORA data:', error);
+    }
+  };*/
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: onSwipeLeft,

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Drawer, } from "@mui/material"
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Hidden } from "@mui/material";
@@ -10,6 +9,7 @@ import GSearchBar from "../components/ChipSearchBar";
 import DBZFWRightBar from "../components/DBZFWPageComponent/DBZFWRightBar";
 import DBZFWBuilderButtonList from "../components/DBZFWPageComponent/DBZFWBuilderButton";
 import DBZFWBuilderBar from "../components/DBZFWPageComponent/DBZFWBuilderBar";
+import NavbarPrompt from "../components/NavbarPromptLogin";
 
 const DBZFWDeckbuilder = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -64,7 +64,7 @@ const DBZFWDeckbuilder = () => {
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Helmet>
       <Box bgcolor={"#121212"} color={"#f2f3f8"} sx={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
-        <Navbar />
+        <NavbarPrompt />
         <Box sx={{ display: { xs: "flex", sm: "flex", md: "none" }, flexDirection: "column" }}>
           <BottomNav />
         </Box>

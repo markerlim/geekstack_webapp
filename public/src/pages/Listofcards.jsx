@@ -1,7 +1,6 @@
 
 import BottomNav from "../components/BottomNav"
 import { Box, Button, } from "@mui/material"
-import NavbarHome from "../components/NavbarHome";
 import { Link } from "react-router-dom";
 import DecklibrarybtnMobile from "../components/DeckLibraryButtonsMobile";
 import { LibraryBooks } from "@mui/icons-material";
@@ -9,12 +8,13 @@ import OPDecklibrarybtn from "../components/OPTCGPageComponent/OPDeckLibraryButt
 import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
 import { CardStateProviderDragonballz } from "../context/useCardStateDragonballz";
 import DBZFWDecklibrarybtn from "../components/DBZFWPageComponent/DBZFWDeckLibraryButtons";
+import NavbarPrompt from "../components/NavbarPromptLogin";
 
 const Listofcards = () => {
     return (
         <div>
             <Box color={"#f2f3f8"}>
-                <NavbarHome />
+                <NavbarPrompt />
                 <Box>
                     <Box sx={{ paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: '15px', alignItems: "center", paddingTop: '20px', height: "calc(100vh - 144px)" }} overflowY={"auto"}>
                         <Box sx={{ display: 'flex', flexDirection: "column", gap: '15px', justifyContent: 'left' }}>
@@ -43,6 +43,15 @@ const Listofcards = () => {
                                     to="/onepiece"
                                 >
                                     <img style={{ width: "100%" }} alt="unionarena" src="/images/homeOPbtn.jpg" />
+                                </Button>
+                                <Button
+                                    sx={{
+                                        width: { xs: '30vw', sm: 'auto' }, height: 'auto', flex: '0 0 auto', marginRight: '20px', padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out',
+                                    }}
+                                    component={Link}
+                                    to="/dragonballzfw"
+                                >
+                                    <img style={{ width: "100%" }} alt="unionarena" src="/images/homeDBZbtn.jpg" />
                                 </Button>
                                 <div style={{ paddingLeft: '5vw' }}>
                                     <br />
