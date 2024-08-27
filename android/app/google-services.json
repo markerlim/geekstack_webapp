@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "380411056228",
+    "firebase_url": "https://geek-stack-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "geek-stack",
+    "storage_bucket": "geek-stack.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380411056228:android:0f675e6e951c5093724f71",
+        "android_client_info": {
+          "package_name": "com.example.geekstack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "380411056228-h980656qsndj7qkgghjqh7fc1f1prm99.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geekstack",
+            "certificate_hash": "4027a61d078756c543bb3f28e18d649eb03af134"
+          }
+        },
+        {
+          "client_id": "380411056228-p971cril6cmvn5heev4n6q2n8pp8t4qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDXI0nrrsIpnalBPFMkoEV-qRNxmnWpTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380411056228-gv2b9lndem7iffghnbeeet50dj8blen4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
