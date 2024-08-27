@@ -4,12 +4,12 @@
     "description": "Step into the world of geekstack.dev, your premier destination for Union Arena, Dragonballz Fusion World and One Piece Card Game deck-building insights. Utilize our user-friendly tools to craft unbeatable decks, explore top strategies, and connect with a community of enthusiasts. Elevate your gameplay and become a master strategist with geekstack.dev - where every card counts.",
     "icons": [
         {
-            "src": "https://uniondeck.dev/icons/GEEKSTACK192.png",
+            "src": "https://geekstack.dev/icons/GEEKSTACK192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "https://uniondeck.dev/icons/GEEKSTACK512.png",
+            "src": "https://geekstack.dev/icons/GEEKSTACK512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

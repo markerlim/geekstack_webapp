@@ -27,6 +27,32 @@ const TestRightBar = ({setChangeClick}) => {
         setOpenModal(false);
     };
 
+    const getCurrentImage = (document) => {
+        let currentImage = document.image;
+        return currentImage;
+    };
+
+    const handleSwipeLeft = () => {
+        let currentIndex = sortedCards.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
+        let nextIndex = (currentIndex + 1) % sortedCards.length;
+        let nextDocument = sortedCards[nextIndex];
+        const currentImage = getCurrentImage(nextDocument);
+        setSelectedCard({
+            ...nextDocument,
+            currentImage: currentImage
+        });
+    };
+    const handleSwipeRight = () => {
+        let currentIndex = sortedCards.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
+        let prevIndex = (currentIndex - 1 + sortedCards.length) % sortedCards.length;
+        let prevDocument = sortedCards[prevIndex];
+        const currentImage = getCurrentImage(prevDocument);
+        setSelectedCard({
+            ...prevDocument,
+            currentImage: currentImage
+        });
+    };
+
     const modifyCardCount = (cardId, cardUid, change) => {
         // Filter cards with the same cardId
         const cardsWithSameId = filteredCards.filter(card => card.cardId === cardId);
@@ -142,6 +168,8 @@ const TestRightBar = ({setChangeClick}) => {
                             open={openModal}
                             onClose={handleCloseModal}
                             selectedCard={selectedCard}
+                            onSwipeLeft={handleSwipeLeft}
+                            onSwipeRight={handleSwipeRight}
                         />
                     )}
                 </Grid>

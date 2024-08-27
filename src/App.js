@@ -31,6 +31,9 @@ import StacksPage from "./pages/StacksPage.jsx";
 import DBZFWPage from "./pages/DBZFWPage.jsx";
 import DBZFWBTPage from "./pages/DBZFWBTpage.jsx";
 import DBZFWDeckbuilder from "./pages/DBZFWDeckbuilder.jsx";
+import PTCGPage from "./pages/PTCGPage.jsx";
+import PTCGBTPage from "./pages/PTCGBTpage.jsx";
+import PTCGDeckbuilder from "./pages/PTCGDeckbuilder.jsx";
 
 smoothscroll.polyfill();
 
@@ -102,6 +105,9 @@ function App() {
             <Route path="onepiece" element={<OnepiecePage />} />
             <Route path="optcgbuilder" element={<OPTCGDeckbuilder />} />
             <Route path="/onepiece/:booster" element={<OPTCGBTpage />} />
+            <Route path="/pokemon" element ={<PTCGPage/>}/>
+            <Route path="/pokemon/:booster" element ={<PTCGBTPage/>}/>
+            <Route path="ptcgbuilder" element={<PTCGDeckbuilder/>}/>
             <Route path="/article01" element={<ArticleUI />} />
           </Routes>
         </BrowserRouter>

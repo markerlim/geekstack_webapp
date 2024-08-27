@@ -53,6 +53,15 @@ const Listofcards = () => {
                                 >
                                     <img style={{ width: "100%" }} alt="unionarena" src="/images/homeDBZbtn.jpg" />
                                 </Button>
+                                <Button
+                                    sx={{
+                                        width: { xs: '30vw', sm: 'auto' }, height: 'auto', flex: '0 0 auto', marginRight: '20px', padding: 0, borderRadius: "10px", overflow: 'hidden', transition: 'all 0.2s ease-in-out',
+                                    }}
+                                    component={Link}
+                                    to="/pokemon"
+                                >
+                                    <img style={{ width: "100%" }} alt="unionarena" src="/images/homePKMNbtn.jpg" />
+                                </Button>
                                 <div style={{ paddingLeft: '5vw' }}>
                                     <br />
                                 </div>

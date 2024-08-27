@@ -1,4 +1,4 @@
-package com.example.geekstack;
+package com.geekapps.geekstack;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -16,6 +16,9 @@ const CreateDeckBtn = ({ contentType }) => {
     case "unionarena":
       pathname = "/deckbuilder";
       break;
+    case "pokemon":
+      pathname = "/ptcgbuilder";
+      break;
     default:
       pathname = "/"; // Fallback to root if contentType doesn't match
   }
@@ -37,7 +40,7 @@ const CreateDeckBtn = ({ contentType }) => {
         right: { xs: '15px', sm: '15px', md: '30px' },
         bottom: { xs: '90px', sm: '90px', md: '60px' }
       }}>
-      <Box sx={{ display: { xs: 'none', sm: 'none', md: 'block' },fontSize: '17px',color:'#f2f3f8',marginRight:'10px' }}>Create Deck</Box>
+      <Box sx={{ display: { xs: 'none', sm: 'none', md: 'block' }, fontSize: '17px', color: '#f2f3f8', marginRight: '10px' }}>Create Deck</Box>
       <Add sx={{ fontSize: '30px', color: '#f2f3f8' }} />
     </Box>
   );

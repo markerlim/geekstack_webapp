@@ -22,6 +22,11 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
     const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
 
 
+    const getCurrentImage = (document) => {
+        let currentImage = document.image;
+        return currentImage;
+    };
+
     const resetFilters = () => {
         setBoosterFilter("");
         setColorFilter("");
@@ -33,6 +38,27 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
     const resetAnimeFilters = () => {
         setAnimeFilter("");
     }
+
+    const handleSwipeLeft = () => {
+        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
+        let nextIndex = (currentIndex + 1) % filteredDocuments.length;
+        let nextDocument = filteredDocuments[nextIndex];
+        const currentImage = getCurrentImage(nextDocument);
+        setSelectedCard({
+            ...nextDocument,
+            currentImage: currentImage
+        });
+    };
+    const handleSwipeRight = () => {
+        let currentIndex = filteredDocuments.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
+        let prevIndex = (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
+        let prevDocument = filteredDocuments[prevIndex];
+        const currentImage = getCurrentImage(prevDocument);
+        setSelectedCard({
+            ...prevDocument,
+            currentImage: currentImage
+        });
+    };
 
     const handleOpenModal = (document) => {
         let currentImage = document.image
@@ -427,6 +453,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                         open={openModal}
                         onClose={handleCloseModal}
                         selectedCard={selectedCard}
+                        onSwipeLeft={handleSwipeLeft}
+                        onSwipeRight={handleSwipeRight}
                     />
                 )}
             </Grid>

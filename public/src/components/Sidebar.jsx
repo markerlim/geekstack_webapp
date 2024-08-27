@@ -118,7 +118,7 @@ const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to="/credits">
+                        <ListItemButton component={Link} to="/faq">
                             <ListItemIcon sx={{
                                 justifyContent: "center", alignItems: "center", '& svg': { // target the svg within the ListItemIcon
                                     filter: 'drop-shadow(0 0 5px #121212)'
@@ -129,10 +129,10 @@ const Sidebar = () => {
                                         alt="FAQ"
                                         style={{
                                             width: "30px",
-                                            filter: isActive('/credits') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                                            filter: isActive('/faq') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                                             transition: 'filter 0.3s'
                                         }} />
-                                    <Box component={'span'} sx={{ color: isActive('/credits') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>FAQ</Box>
+                                    <Box component={'span'} sx={{ color: isActive('/faq') ? '#7C4FFF' : '#555555', fontSize: '10px' }}>FAQ</Box>
                                 </Box>
                             </ListItemIcon>
                         </ListItemButton>

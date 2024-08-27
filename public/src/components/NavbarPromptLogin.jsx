@@ -118,7 +118,7 @@ const NavbarPrompt = () => {
                                 }}
                             >
                                 <MenuItem component={Link} to="/account">Account</MenuItem>
-                                <MenuItem component={Link} onClick={handleLogout} to="/login">Logout</MenuItem>
+                                <MenuItem component={Link} onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
                         </>
                     ) : (

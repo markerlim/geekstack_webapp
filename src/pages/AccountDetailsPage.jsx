@@ -33,7 +33,7 @@ const AccountDetails = () => {
     const [uaDeckData, setUaDeckData] = useState([]);
     const [opDeckData, setOpDeckData] = useState([]);
     const [dbzDeckData, setDbzDeckData] = useState([]);
-    const uid = currentUser.currentUser.uid;
+    const uid = currentUser?.currentUser?.uid;
 
     useEffect(() => {
         const link = document.createElement("link");
@@ -105,7 +105,8 @@ const AccountDetails = () => {
         fetchUAData();
         fetchOPData();
         fetchDBZData();
-    }, [uid]);
+    }, [uid, currentUser]);
+
 
     const imgStyles = {
         width: { xs: '150px', sm: '300px' },
@@ -168,7 +169,7 @@ const AccountDetails = () => {
                 setIsUAButtonsVisible(false);
                 setIsDBZFWButtonsVisible(false);
             },
-        },        
+        },
         {
             alt: 'dragonballz fusion world',
             src: '/images/HMDBZFWButton.jpg',
@@ -192,7 +193,11 @@ const AccountDetails = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, paddingLeft: "15px", paddingRight: "15px", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center", }} overflowY={"auto"} height={"100vh"}>
                         <div style={{ height: "1px" }}></div>
                         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingBottom: "150px", justifyContent: "center" }}>
-                            <AccountDetailsComponent />
+                            {currentUser?.currentUser ? (
+                                <AccountDetailsComponent />
+                            ) : (
+                                <Box>Please Login to Make changes to your account details</Box>
+                            )}
                             <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", gap: "20px", paddingBottom: "500px", alignItems: "center" }}>
                                 <span style={{ color: '#f2f3f8', }}>Click to view decklist shared:</span>
                                 <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '20px', height: '83.5px', overflowX: 'auto', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>

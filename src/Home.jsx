@@ -306,9 +306,9 @@ const Home = () => {
                     <Box sx={{ marginLeft: { xs: "0px", sm: "0px", md: "100px" }, display: "flex", flexDirection: "column", gap: "8px", alignItems: "center", }} overflowY={"auto"} height={"95vh"}>
                         <div style={{ height: "1px" }}></div>
                         <div style={{ height: "1px" }}></div>
-                        <HomepageDashboard loginStatus={loginStatus}/>
+                        <HomepageDashboard loginStatus={loginStatus} />
                         <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingTop: '10px', paddingBottom: '5px', textAlign: 'left', width: '100%', paddingLeft: '50px' }}><strong>TCG STACK</strong></Box>
-                        <Box sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden",gap:'20px', justifyContent: 'left', width: "100%", paddingLeft: '15px',paddingRight: '15px',height: { xs: 188, sm: 300 }, }}>
+                        <Box sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", gap: '20px', justifyContent: 'left', width: "100%", paddingLeft: '15px', paddingRight: '15px', height: { xs: 188, sm: 300 }, }}>
                             <Box sx={{ width: '30px' }}></Box>
                             <Link to={{ pathname: '/unionarena' }} sx={{ textDecoration: "none" }}>
                                 <ButtonBase
@@ -347,7 +347,7 @@ const Home = () => {
                                 >
                                     <img
                                         src="/images/homeOPbtn.jpg"
-                                        alt="unionarena"
+                                        alt="onepiece"
                                         style={{ width: "120%", height: "auto" }}
                                     />
                                 </ButtonBase>
@@ -368,14 +368,35 @@ const Home = () => {
                                 >
                                     <img
                                         src="/images/homeDBZbtn.jpg"
-                                        alt="unionarena"
+                                        alt="dragonballz"
+                                        style={{ width: "120%", height: "auto" }}
+                                    />
+                                </ButtonBase>
+                            </Link>
+                            <Link to={{ pathname: '/pokemon' }} sx={{ textDecoration: "none" }}>
+                                <ButtonBase
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        bgcolor: "#121212",
+                                        borderRadius: 3,
+                                        boxShadow: 5,
+                                        overflow: "hidden",
+                                        width: { xs: 125, sm: 200 },
+                                        height: { xs: 188, sm: 300 },
+                                    }}
+                                >
+                                    <img
+                                        src="/images/homePKMNbtn.jpg"
+                                        alt="pokemon"
                                         style={{ width: "120%", height: "auto" }}
                                     />
                                 </ButtonBase>
                             </Link>
                             <Box sx={{ width: '30px' }}></Box>
                         </Box>
-                        <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingTop: '15px', paddingBottom: '10px',backgroundColor: '#121212',marginBottom:'-8px' ,textAlign: 'left', width: '100%', paddingLeft: '50px' }}><strong>WHAT'S NEW?</strong></Box>
+                        <Box sx={{ fontSize: "20px", color: "#F2F8FC", paddingTop: '15px', paddingBottom: '10px', backgroundColor: '#121212', marginBottom: '-8px', textAlign: 'left', width: '100%', paddingLeft: '50px' }}><strong>WHAT'S NEW?</strong></Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: '#121212', width: '100vw', paddingBottom: '40px', paddingTop: '5px', alignItems: 'center', gap: '10px' }}>
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' }, }}>
                                 <Slider {...settings}>

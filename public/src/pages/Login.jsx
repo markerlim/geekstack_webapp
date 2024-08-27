@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { Capacitor } from '@capacitor/core';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { auth } from "../Firebase";
 import { Box, CircularProgress } from "@mui/material";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { Google } from "@mui/icons-material";
+
 
 const Login = () => {
     const [err, setErr] = useState(false);
@@ -55,12 +58,31 @@ const Login = () => {
         }
     };
 
-    const handleGoogleSignIn = async () => {
-        const provider = new GoogleAuthProvider();
 
+    const handleGoogleSignIn = async () => {
         try {
-            console.log('Attempting Google Sign-in');
-            await signInWithPopup(auth, provider);
+            if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android' ) {
+                // Capacitor (Mobile) logic
+                await GoogleAuth.initialize({
+                    clientId: '380411056228-p971cril6cmvn5heev4n6q2n8pp8t4qa.apps.googleusercontent.com', // Replace with your web client ID from Google Cloud Console
+                    scopes: ['profile', 'email'], // Optional: Scopes you need
+                    forceCodeForRefreshToken: true, // Optional: Use code flow for refresh tokens
+                }
+                ); // Initialize for Capacitor
+                const googleUser = await GoogleAuth.signIn();
+
+                console.log('Google User (Mobile):', googleUser);
+
+                const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
+                await signInWithCredential(auth, credential);
+            } else {
+                // Web logic
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+
+                console.log('Google User (Web):', result.user);
+            }
+
             console.log('Google Sign-in completed');
         } catch (err) {
             console.error(err);
