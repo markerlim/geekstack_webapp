@@ -18,6 +18,7 @@ import ImagePickerModal from "./ImagePickerModal";
 import { toJpeg } from "html-to-image";
 import UATCGExport from "./UAExportTemplate";
 import { useLocation } from "react-router-dom";
+import html2canvas from "html2canvas";
 
 
 const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) => {
@@ -89,6 +90,14 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     "/images/deckimage27.webp",
     "/images/deckimage28.webp",
     "/images/deckimage29.webp",
+    "/images/deckimage30.webp",
+    "/images/deckimage31.webp",
+    "/images/deckimage32.webp",
+    "/images/deckimage33.webp",
+    "/images/deckimage34.webp",
+    "/images/deckimage35.webp",
+    "/images/deckimage36.webp",
+    "/images/deckimage37.webp",
     "/images/deckcover.webp",
     "/images/deckcover-1.webp",
     "/images/deckcover-2.webp",
@@ -169,40 +178,21 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
 
   const stats = calculateStats();
   const handleExportClick = () => {
-    if (totalCount < 50) {
-      alert("You cannot export a deck with less than 50 cards.");
-      return;
-    }
-
-    setIsExporting(true);
-
-    const componentRef = document.querySelector('#UATCGExport');
-
-    if (componentRef) {
-      toJpeg(componentRef, { quality: 0.8 })
-        .then((dataUrl) => {
-          fetch(dataUrl)
-            .then(res => res.blob())
-            .then(blob => {
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'decklist.jpg';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              URL.revokeObjectURL(url);
-            });
-        })
-        .catch((error) => {
-          console.error('oops, something went wrong!', error);
-        })
-        .finally(() => {
-          setIsExporting(false);
+    const exportElement = document.getElementById('UATCGExport');
+    if (exportElement) {
+        html2canvas(exportElement, { useCORS: true }).then((canvas) => {
+            // Compress the image by setting the quality parameter (0.0 to 1.0)
+            const imgData = canvas.toDataURL('image/jpeg', 0.5); // Adjust quality parameter as needed (e.g., 0.5 for 50% quality)
+            
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'exported_image.jpg';
+            link.click();
+        }).catch((error) => {
+            console.error('Error exporting image:', error);
         });
     }
-    handleMenuClose();
-  };
+};
   const createNewDeck = async (uid, specialImage) => {
     const userDocRef = doc(db, "users", uid);
 
@@ -669,7 +659,6 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
       <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
         <UATCGExport filteredCards={filteredCards} exportImage={exportImage} currentUser={currentUser} />
       </Box>
-      {viewDeckbar ? <Box sx={{position:'absolute',bgcolor:'#121212',color:'#ff6961',fontSize:'12px',padding:'2px',bottom:'0px',right:'20px',width:'100px'}}>Decks built before 30th March are no longer 'Buildable'</Box>:<></>}
     </Box>
   );
 

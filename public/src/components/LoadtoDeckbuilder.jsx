@@ -99,16 +99,16 @@ const LoadtoDeckbuilder = ({ onDeckLoaded }) => {
               borderRadius: 5,
               boxShadow: 5,
               overflow: "hidden",
-              width: 200,
-              height: 300,
+              width: { xs: 140, sm: 200 },
+              height: { xs: 210, sm: 300 },
             }}
           >
-            <img
+            <Box
+              component="img"
               src={deck.image}
               alt={deck.name}
-              style={{ width: "140%", height: "auto" }}
+              sx={{ width: { xs: "150%", sm: "140%" }, height: "auto" }}
             />
-            <p style={{ margin: 0 }}>{deck.description}</p>
           </ButtonBase>
           <h3 style={{ margin: "0.5rem 0", color: "primary" }}>{deck.name}</h3>
           <Button

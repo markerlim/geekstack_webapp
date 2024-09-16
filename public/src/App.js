@@ -94,7 +94,7 @@ function App() {
             <Route path="list" element={<Listofcards />} />
             <Route path="news" element={<Listofnews />} />
             <Route path="faq" element={<FAQPage />} />
-            <Route path="test" element={<TestPage />} />
+            <Route path="thisistestsite" element={<TestPage />} />
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
             <Route path="unionarena" element={<UnionArenaPage />}/>
             <Route path="unionarena/:animecode" element={<AcardFormatpage />} />

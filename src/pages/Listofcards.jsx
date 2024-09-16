@@ -9,6 +9,7 @@ import { CardStateProviderOnepiece } from "../context/useCardStateOnepiece";
 import { CardStateProviderDragonballz } from "../context/useCardStateDragonballz";
 import DBZFWDecklibrarybtn from "../components/DBZFWPageComponent/DBZFWDeckLibraryButtons";
 import NavbarPrompt from "../components/NavbarPromptLogin";
+import GenericGoogleAd from "../components/AdsComponent/GenericAds";
 
 const Listofcards = () => {
     return (
@@ -68,6 +69,8 @@ const Listofcards = () => {
                             </Box>
                         </Box>
                         <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
+                        <GenericGoogleAd/>
+                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>
                             <DecklibrarybtnMobile />
                         </Box>
@@ -77,6 +80,7 @@ const Listofcards = () => {
                                 <OPDecklibrarybtn />
                             </CardStateProviderOnepiece>
                         </Box>
+                        <Box sx={{ height: '0.5px', width: '100vw', backgroundColor: '#3F3754' }}><br /></Box>
                         <Box overflowX={'auto'} sx={{ height: { xs: '400px' } }}>
                             <CardStateProviderDragonballz>
                                 <DBZFWDecklibrarybtn />

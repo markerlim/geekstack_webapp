@@ -1,22 +1,35 @@
-import { Box } from "@mui/material";
-import React from "react";
-import UATCGExport from "../components/UAExportTemplate";
+import React from 'react';
+import { Box } from '@mui/material';
+import html2canvas from 'html2canvas';
 
-const TestPage = () => {
-
-    const currentUser = "ABCDEFGHIJKLMNOPQ"
-
-    const data=[{cardid:'1-1-1',image:'/UD/HTR-2-001.webp',count:4,trigger:'none'},{cardid:'1-1-2',image:'/UD/HTR-2-002.webp',count:4,trigger:'none'},{cardid:'1-1-3',image:'/UD/HTR-2-003.webp',count:4,trigger:'none'}
-    ,{cardid:'1-1-4',image:'/UD/HTR-2-004.webp',count:4,trigger:'none'},{cardid:'1-1-5',image:'/UD/HTR-2-005.webp',count:4,trigger:'none'},{cardid:'1-1-6',image:'/UD/HTR-2-006.webp',count:4,trigger:'none'}
-    ,{cardid:'1-1-7',image:'/UD/HTR-2-007.webp',count:4,trigger:'none'},{cardid:'1-1-8',image:'/UD/HTR-2-008.webp',count:4,trigger:'Raid'},{cardid:'1-1-9',image:'/UD/HTR-2-009.webp',count:4,trigger:'none'}
-    ,{cardid:'1-1-10',image:'/UD/HTR-2-010.webp',count:4,trigger:'none'},{cardid:'1-1-11',image:'/UD/HTR-2-011.webp',count:4,trigger:'none'},{cardid:'1-1-12',image:'/UD/HTR-2-012.webp',count:4,trigger:'none'}
-    ,{cardid:'1-1-13',image:'/UD/HTR-2-013.webp',count:2,trigger:'none'}]
+const TestExport = () => {
+    const handleExportClick = () => {
+        const exportElement = document.getElementById('TestExport');
+        if (exportElement) {
+            html2canvas(exportElement, { useCORS: true }).then((canvas) => {
+                const imgData = canvas.toDataURL('image/jpg');
+                const link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'exported_image.jpg';
+                link.click();
+            }).catch((error) => {
+                console.error('Error exporting image:', error);
+            });
+        }
+    };
 
     return (
-        <Box>
-            <UATCGExport filteredCards={data} currentUser={currentUser}/>
-        </Box>
+        <div>
+            <Box id="TestExport" sx={{ width: '500px', height: '500px', padding: '20px', backgroundColor: 'lightgray' }}>
+                <img
+                    src="https://storage.googleapis.com/geek-stack.appspot.com/UD/AOT-1-013_ALT.webp"
+                    alt="test"
+                    style={{ width: '200px', height: 'auto' }}
+                />
+            </Box>
+            <button onClick={handleExportClick}>Export</button>
+        </div>
     );
-}
+};
 
-export default TestPage
+export default TestExport;

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Box, Button, FormControl, Grid, MenuItem, Select } from "@mui/material";
 import { AddCircle, ArrowBack, Refresh, RemoveCircle } from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { CardDrawerNF } from "./CardDrawerFormatted";
 import GSearchBarUADB from "./ChipSearchBarUADBCardRef";
-import { toInteger } from "lodash";
 
 const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClick }) => {
     const [documents, setDocuments] = useState([]);
@@ -144,8 +143,9 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                 return;
             }
             let docRef = collection(db, "unionarenatcgnew");
+            const q = query(docRef, where("anime", "==", animeFilter));
 
-            const querySnapshot = await getDocs(docRef);
+            const querySnapshot = await getDocs(q);
             let documentsArray = [];
             querySnapshot.forEach((doc) => {
                 documentsArray.push(doc.data());
@@ -155,6 +155,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                 count: document.count || 0
             }));
             setDocuments(documentsArray);
+
         };
 
         fetchDocuments();
@@ -206,8 +207,9 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         { filter: 'SHY', sets: ['UA24BT'], colorsets: ['Blue', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
         { filter: 'Undead Unluck', sets: ['UA25BT'], colorsets: ['Purple', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
         { filter: 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You', sets: ['UA26BT'], colorsets: ['Green', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
+        { filter: 'Gakuen Idolmaster', sets: ['UA27BT'], colorsets: ['Red', 'Blue'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
     ]
-    const triggerStateSet = ["Draw", "Active", "Color", "Blank", "Raid", "Special", "Final"];
+    const triggerStateSet = ["Draw", "Active", "Color", "Blank", "Raid", "Special", "Final","Get"];
     const costSet = ["0","1","2","3","4","5","6","7","8","9","10"]
 
     return (

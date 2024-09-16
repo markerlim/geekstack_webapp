@@ -269,6 +269,12 @@ const ButtonList = () => {
       alt: "the 100 girlfriends who really, really, really, really, really love you",
       imageSrc: "/images/deckimage26.webp",
       imgWidth: "110%",
+    },
+    {
+      pathname: "gim",
+      alt: "Gakuen Idolmaster",
+      imageSrc: "/images/deckimage27.webp",
+      imgWidth: "110%",
     }
   ];
 

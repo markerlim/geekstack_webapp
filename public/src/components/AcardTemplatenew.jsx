@@ -34,7 +34,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
         navigate(-1);
     };
     const getCurrentImage = (document) => {
-        let currentImage = document.image;
+        let currentImage = document.urlimage;
         return currentImage;
     };
     const handleOpenModal = (document) => {
@@ -120,7 +120,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
 
                     // Fetch documents using the currentAnime directly
                     const fetchDocuments = async () => {
-                        const filteredQuery = query(collection(db, "unionarenatcgnew"), where("anime", "==", currentAnime));
+                        const filteredQuery = query(collection(db, "unionarenatcgV2"), where("anime", "==", currentAnime));
                         const querySnapshot = await getDocs(filteredQuery);
                         const documentsArray = [];
                         querySnapshot.forEach((doc) => {
@@ -311,7 +311,7 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
                                 <Box onClick={() => handleOpenModal(document)} sx={{ overflow: "hidden", position: "relative", cursor: "pointer" }} height={imageHeight} width={imageWidth}>
                                     <img
                                         loading="lazy"
-                                        src={document.image}
+                                        src={document.urlimage}
                                         draggable="false"
                                         alt={`Card of ${document.cardName} from ${document.anime}`}
                                         width={imageWidth}

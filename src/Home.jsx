@@ -14,6 +14,8 @@ import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
 import NotificationModal from "./components/HomeNotificationBanner";
+import HorizontalGoogleAd from "./components/AdsComponent/HorizontalAds";
+import GenericGoogleAd from "./components/AdsComponent/GenericAds";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -73,92 +75,60 @@ function SamplePrevArrow(props) {
 const Home = () => {
     const launchdates = [
         {
-            title: "UA15BT Sword Art Online",
-            start: "2024-01-26",
-            end: "2024-01-26",
+            title: "UA28 Kaiju No.8",
+            start: "2024-10-25",
+            end: "2024-10-25",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/icon_kj8.jpg",
+        },
+        {
+            title: "UA29 Kamen Rider",
+            start: "2024-10-25",
+            end: "2024-10-25",
+            backgroundColor: "#bb0504",
+            id: "ruipoUA",
+            icon: "/icons/UAtags/icon_kmr.jpg",
+        },
+	{
+            title: "EX08 Sword Art Online",
+            start: "2024-11-15",
+            end: "2024-11-15",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
             icon: "/icons/UAtags/icon_sao.jpg",
         },
-        {
-            title: "UA16BT SYNDUALITY Noir",
-            start: "2024-02-23",
-            end: "2024-02-23",
+	{
+            title: "UA30 Arknights",
+            start: "2024-11-29",
+            end: "2024-11-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/icon_syn.jpg",
+            icon: "/icons/UAtags/icon_ark.jpg",
         },
-        {
-            title: "UA17BT Toriko",
-            start: "2024-02-23",
-            end: "2024-02-23",
+	{
+            title: "UA31 Puella Magi Madoka Magica",
+            start: "2024-11-29",
+            end: "2024-11-29",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/icon_trk.jpg",
+            icon: "/icons/UAtags/icon_mmm.jpg",
         },
-        {
-            title: "UA18BT Nikke",
-            start: "2024-03-22",
-            end: "2024-03-22",
+	{
+            title: "UA32 Shangri-La Frontier",
+            start: "2024-12-13",
+            end: "2024-12-13",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/icon_nkk.jpg",
+            icon: "/icons/UAtags/icon_snf.jpg",
         },
-        {
-            title: "UA19BT Haikyuu",
-            start: "2024-03-22",
-            end: "2024-03-22",
+	{
+            title: "UA33 2.5-dimensional temptation",
+            start: "2025-01-17",
+            end: "2025-01-17",
             backgroundColor: "#bb0504",
             id: "ruipoUA",
-            icon: "/icons/UAtags/icon_hky.jpg",
-        },
-        {
-            title: "UA20BT Black Clover",
-            start: "2024-04-26",
-            end: "2024-04-26",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/icon_bcv.jpg",
-        },
-        {
-            title: "UA21BT Yu Yu Hakusho",
-            start: "2024-04-26",
-            end: "2024-04-26",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/icon_yyh.jpg",
-        },
-        {
-            title: "UA22BT Gamera Rebirth",
-            start: "2024-05-31",
-            end: "2024-05-31",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/icon_gmr.jpg",
-        },
-        {
-            title: "EX04 Jujutsu No Kaisen",
-            start: "2024-03-22",
-            end: "2024-03-22",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/icon_jjk.jpg",
-        },
-        {
-            title: "EX05 Demon Slayer",
-            start: "2024-05-31",
-            end: "2024-05-31",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/icon_kmy.jpg",
-        },
-        {
-            title: "EX06 My Hero Academia",
-            start: "2024-06-28",
-            end: "2024-06-28",
-            backgroundColor: "#bb0504",
-            id: "ruipoUA",
-            icon: "/icons/UAtags/icon_mha.jpg",
+            icon: "/icons/UAtags/icon_ngr.jpg",
         },
     ];
     const settings = {
@@ -411,6 +381,7 @@ const Home = () => {
                                 </Slider>
                             </Box>
                         </Box>
+                        <GenericGoogleAd/>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingBottom: '30px' }}>
                             <img src="images/COMINGSOON.png" alt="comingsoon" style={{ width: '300px' }} />
                             <Box sx={{ width: { xs: "calc(70vw + 60px)", sm: "calc(60vw + 60px)", md: '800px' } }}>

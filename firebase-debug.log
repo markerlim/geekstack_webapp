@@ -1,0 +1,25 @@
+[debug] [2024-09-16T01:43:09.062Z] ----------------------------------------------------------------------
+[debug] [2024-09-16T01:43:09.063Z] Command:       /usr/local/bin/firebase /Users/markerlim/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase init
+[debug] [2024-09-16T01:43:09.064Z] CLI Version:   13.7.3
+[debug] [2024-09-16T01:43:09.064Z] Platform:      darwin
+[debug] [2024-09-16T01:43:09.064Z] Node Version:  v18.5.0
+[debug] [2024-09-16T01:43:09.068Z] Time:          Mon Sep 16 2024 09:43:09 GMT+0800 (Singapore Standard Time)
+[debug] [2024-09-16T01:43:09.068Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-09-16T01:43:09.150Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-09-16T01:43:09.152Z] > authorizing via signed-in user (markerlim15@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/markerlim/Desktop/GEEKSTACK
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
