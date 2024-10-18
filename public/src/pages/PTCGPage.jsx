@@ -4,7 +4,6 @@ import BottomNav from "../components/BottomNav"
 import { Box } from "@mui/material"
 import { useState } from "react";
 import GSearchBar from "../components/ChipSearchBar";
-import CreateDeckBtn from "../components/ModularCreateDeckButton";
 import PTCGCardlist from "../components/PTCGPageComponent/PTCGCardlist";
 
 const PTCGPage = () => {
@@ -32,10 +31,6 @@ const PTCGPage = () => {
               <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
               <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingTop: '20px', paddingBottom: "150px", justifyContent: "center" }}>
                 <PTCGCardlist filters={filters} />
-                <br />
-              </Box>
-              <Box sx={{ display: 'none' }}>
-                <CreateDeckBtn contentType={"pokemon"} />
               </Box>
             </Box>
           </Box>

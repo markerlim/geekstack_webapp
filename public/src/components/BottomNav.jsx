@@ -163,15 +163,15 @@ const BottomNav = () => {
           />
           <BottomNavigationAction
             disableRipple
-            to="/account"
+            to="/matchlog"
             component={Link}
             icon={
               <img
-                src="/icons/bottomnav/AccSelected.svg"
-                alt="account"
+                src="/icons/bottomnav/MUSelected.svg"
+                alt="match up log"
                 style={{
                   width: "30px",
-                  filter: isActive('/account') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
+                  filter: isActive('/matchlog') ? 'none' : 'grayscale(10)', // Adjust this filter as needed
                   transition: 'filter 0.3s'
                 }}
               />

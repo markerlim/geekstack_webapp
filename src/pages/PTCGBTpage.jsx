@@ -42,9 +42,6 @@ const PTCGBTPage = () => {
             }}
           >
             <PTCGcardFormat searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-            <Box sx={{ display: 'none' }}>
-            <CreateDeckBtn contentType={"pokemon"}/>
-            </Box>
           </Box>
           <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <BottomNav />

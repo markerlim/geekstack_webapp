@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Box, ButtonBase, CircularProgress, IconButton } from "@mui/material";
 import { Star } from "@mui/icons-material";
 
-const HomepageDashboard = ({loginStatus}) => {
+const HomepageDashboard = ({ loginStatus }) => {
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { currentUser } = useAuth();
@@ -97,7 +97,7 @@ const HomepageDashboard = ({loginStatus}) => {
 
   return (
     <>
-      <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", paddingLeft: "15px", paddingRight: "15px",paddingBottom:'20px', gap: "20px", height: { xs: 188, sm: 300 }, }}>
+      <Box ref={boxRef} sx={{ display: "flex", flexwrap: "nowrap", flex: "0 0 auto", flexDirection: "row", overflowX: "auto", overflowY: "hidden", justifyContent: justifyContent, width: "100%", paddingLeft: "15px", paddingRight: "15px", paddingBottom: '20px', gap: "20px", height: { xs: 188, sm: 300 }, }}>
         <Box sx={{ width: '30px' }}></Box>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -105,7 +105,7 @@ const HomepageDashboard = ({loginStatus}) => {
           </Box>
         ) : favorites.length > 0 ? (
           favorites.map((favorite, index) => (
-            <div key={index} style={{position:'relative'}}>
+            <div key={index} style={{ position: 'relative' }}>
               <Link to={{ pathname: `/${favorite.pathname}` }} sx={{ textDecoration: "none" }}>
                 <ButtonBase
                   sx={{
@@ -144,10 +144,14 @@ const HomepageDashboard = ({loginStatus}) => {
             </div>
           ))
         ) : (
-          <Box sx={{ height: { xs: 228, sm: 340 }, alignItems: "center", display: "flex", fontSize: "20px", fontWeight: "900" }}>
-            {loginStatus ? 
-            <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You currently have no favourites. Do star them to add the pages to your favorite.</span>:
-            <span style={{ padding: "30px", backgroundColor: "#240052", borderRadius: "10px" }}>You can login to fully utilise this favorites bar!</span>
+          <Box sx={{
+            height: { xs: 188, sm: 280 },
+            alignItems: "center", display: "flex", background: "linear-gradient(45deg, rgba(230,76,67,1) 0%, rgba(124,79,255,1) 100%)",
+            fontSize: "20px", fontWeight: "900", borderRadius: "10px",marginTop:'10px'
+          }}>
+            {loginStatus ?
+              <span style={{ padding: "30px" }}>You currently have no favourites. Do star them to add the pages to your favorite.</span> :
+              <span style={{ padding: "30px" }}>You can login to fully utilise this favorites bar!</span>
             }
           </Box>
         )}

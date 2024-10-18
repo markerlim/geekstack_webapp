@@ -7,12 +7,15 @@ import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { CardDrawerNF } from "./CardDrawerFormatted";
 import GSearchBarUADB from "./ChipSearchBarUADBCardRef";
+import axios from 'axios';
+
 
 const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClick }) => {
     const [documents, setDocuments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const { filteredCards, setFilteredCards, animeFilter, setAnimeFilter } = useCardState(); // Use useCardState hook
+    const [animeData, setAnimeData] = useState([]);
     const [boosterFilter, setBoosterFilter] = useState("");
     const [colorFilter, setColorFilter] = useState("");
     const [rarityFilter, setRarityFilter] = useState("");
@@ -22,7 +25,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
 
 
     const getCurrentImage = (document) => {
-        let currentImage = document.image;
+        let currentImage = document.urlimage;
         return currentImage;
     };
 
@@ -135,14 +138,33 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
         return boosterFilterMatch && colorFilterMatch && rarityFilterMatch && triggerFilterMatch && costFilterMatch && animeFilterMatch && searchQueryMatch;
     });
 
-
+    useEffect(() => {
+        const fetchAnimeData = async () => {
+          try {
+            const response = await axios.get("https://ap-southeast-1.aws.data.mongodb-api.com/app/data-fwguo/endpoint/getUABoosterDatabase");
+            
+            // Sort the animeData array based on the first element in listofboosters for each entry
+            const sortedData = response.data.sort((a, b) => {
+              // Assuming listofboosters is an array and we are comparing the first element
+              return a.listofboosters[0] > b.listofboosters[0] ? 1 : -1;
+            });
+      
+            setAnimeData(sortedData.reverse());  // Store the sorted data in state
+            console.log(sortedData);
+          } catch (error) {
+            console.error("Error fetching anime data:", error);
+          }
+        };
+      
+        fetchAnimeData(); // Call the function to fetch the data
+      }, []);      
 
     useEffect(() => {
         const fetchDocuments = async () => {
             if (boosterFilter === "" && colorFilter === "" && animeFilter === "") {
                 return;
             }
-            let docRef = collection(db, "unionarenatcgnew");
+            let docRef = collection(db, "unionarenatcgV2");
             const q = query(docRef, where("anime", "==", animeFilter));
 
             const querySnapshot = await getDocs(q);
@@ -178,37 +200,6 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
             });
         });
     }, [filteredCards]);
-
-
-    const animeData = [
-        { filter: 'Code Geass', sets: ['UA01BT', 'UA01ST', 'EX02BT'], colorsets: ['Red', 'Green', 'Blue', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Jujutsu No Kaisen', sets: ['UA02BT', 'UA02ST', 'UA02NC', 'EX04BT'], colorsets: ['Blue', 'Yellow', 'Purple', 'Red'], raritysets: ['ALT', 'SP', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Hunter X Hunter', sets: ['UA03BT', 'UA03ST', 'EX01BT', 'PROMO'], colorsets: ['Blue', 'Green', 'Purple', 'Yellow'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Idolmaster Shiny Colors', sets: ['UA04BT', 'UA04ST', 'EX03BT', 'PROMO'], colorsets: ['Red', 'Blue', 'Yellow', 'Purple'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Demon Slayer', sets: ['UA05BT', 'UA05ST', 'UA01NC', 'EX05BT'], colorsets: ['Red', 'Yellow', 'Purple', 'Blue'], raritysets: ['ALT', 'SP', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Tales of Arise', sets: ['UA06BT', 'UA06ST'], colorsets: ['Red', 'Blue', 'Green'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'That Time I Got Reincarnated as a Slime', sets: ['UA07BT', 'UA07ST', 'PROMO'], colorsets: ['Blue', 'Green', 'Yellow'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Bleach: Thousand-Year Blood War', sets: ['UA08BT', 'UA08ST', 'EX07BT'], colorsets: ['Green', 'Purple', 'Yellow', 'Blue'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Me & Roboco', sets: ['UA09BT', 'UA09ST'], colorsets: ['Green', 'Blue', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'My Hero Academia', sets: ['UA10BT', 'UA10ST', 'EX06BT'], colorsets: ['Red', 'Green', 'Purple', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Gintama', sets: ['UA11BT', 'UA11ST', 'PROMO'], colorsets: ['Red', 'Purple', 'Yellow'], raritysets: ['ALT', 'PR', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Bluelock', sets: ['UA12BT', 'UA12ST','UA03NC'], colorsets: ['Red', 'Blue', 'Yellow'], raritysets: ['ALT','SP','SR', 'C', 'U', 'R'] },
-        { filter: 'Tekken 7', sets: ['UA13BT', 'UA13ST'], colorsets: ['Red', 'Blue', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Dr. Stone', sets: ['UA14BT', 'UA14ST'], colorsets: ['Green', 'Purple', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Sword Art Online', sets: ['UA15BT', 'UA15ST'], colorsets: ['Yellow', 'Blue', 'Green'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Synduality Noir', sets: ['UA16BT', 'UA16ST'], colorsets: ['Red', 'Yellow', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Toriko', sets: ['UA17BT', 'UA17ST'], colorsets: ['Blue', 'Yellow', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Goddess of Victory : Nikke', sets: ['UA18BT', 'UA18ST'], colorsets: ['Green', 'Yellow', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Haikyu!!', sets: ['UA19BT', 'UA19ST'], colorsets: ['Red', 'Blue', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Black Clover', sets: ['UA20BT', 'UA20ST'], colorsets: ['Red', 'Green', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'YuYu Hakusho', sets: ['UA21BT', 'UA21ST'], colorsets: ['Red', 'Green', 'Purple'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'GAMERA -Rebirth-', sets: ['UA22BT'], colorsets: ['Green', 'Blue'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Attack On Titan', sets: ['UA23BT', 'UA23ST'], colorsets: ['Green', 'Blue', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'SHY', sets: ['UA24BT'], colorsets: ['Blue', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Undead Unluck', sets: ['UA25BT'], colorsets: ['Purple', 'Red'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You', sets: ['UA26BT'], colorsets: ['Green', 'Yellow'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-        { filter: 'Gakuen Idolmaster', sets: ['UA27BT'], colorsets: ['Red', 'Blue'], raritysets: ['ALT', 'SR', 'C', 'U', 'R'] },
-    ]
     const triggerStateSet = ["Draw", "Active", "Color", "Blank", "Raid", "Special", "Final","Get"];
     const costSet = ["0","1","2","3","4","5","6","7","8","9","10"]
 
@@ -221,10 +212,10 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                             <br></br>
                             {animeData.map((anime) => (
                                 <Button
-                                    variant={animeFilter === anime.filter ? "contained" : "outlined"}
+                                    variant={animeFilter === anime.currentAnime ? "contained" : "outlined"}
                                     sx={{ backgroundColor: "#222032", color: "#9930f3" }}
-                                    onClick={() => setAnimeFilter(anime.filter)}>
-                                    {anime.filter}
+                                    onClick={() => setAnimeFilter(anime.currentAnime)}>
+                                    {anime.currentAnime}
                                 </Button>
                             ))}
                         </Box>
@@ -253,8 +244,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                         <em>None</em>
                                     </MenuItem>
                                     {animeData
-                                        .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
-                                        .flatMap(anime => anime.sets) // Get the sets for the matched anime and flatten the result
+                                        .filter(anime => anime.currentAnime === animeFilter) // Get the anime that matches the current filter
+                                        .flatMap(anime => anime.listofboosters) // Get the sets for the matched anime and flatten the result
                                         .map(set => (
                                             <MenuItem key={set} value={set}>{set}</MenuItem>
                                         ))
@@ -281,8 +272,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                         <em>None</em>
                                     </MenuItem>
                                     {animeData
-                                        .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
-                                        .flatMap(anime => anime.colorsets) // Get the sets for the matched anime and flatten the result
+                                        .filter(anime => anime.currentAnime === animeFilter) // Get the anime that matches the current filter
+                                        .flatMap(anime => anime.listofcolors) // Get the sets for the matched anime and flatten the result
                                         .map(colorset => (
                                             <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>
                                         ))
@@ -309,8 +300,8 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                         <em>None</em>
                                     </MenuItem>
                                     {animeData
-                                        .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
-                                        .flatMap(anime => anime.raritysets) // Get the sets for the matched anime and flatten the result
+                                        .filter(anime => anime.currentAnime === animeFilter) // Get the anime that matches the current filter
+                                        .flatMap(anime => anime.listofrarities) // Get the sets for the matched anime and flatten the result
                                         .map(rarityset => (
                                             <MenuItem key={rarityset} value={rarityset}>{rarityset}</MenuItem>
                                         ))
@@ -338,7 +329,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                     </MenuItem>
                                     {
                                         animeData
-                                            .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                            .filter(anime => anime.currentAnime === animeFilter) // Get the anime that matches the current filter
                                             .flatMap(() => costSet) // Use flatMap to integrate the costSet
                                             .map(cost => (
                                                 <MenuItem key={cost} value={cost}>{cost}</MenuItem>
@@ -367,7 +358,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                                     </MenuItem>
                                     {
                                         animeData
-                                            .filter(anime => anime.filter === animeFilter) // Get the anime that matches the current filter
+                                            .filter(anime => anime.currentAnime === animeFilter) // Get the anime that matches the current filter
                                             .flatMap(() => triggerStateSet) // Use flatMap to integrate the costSet
                                             .map(triggerState => (
                                                 triggerState === "Blank" ? (
@@ -426,7 +417,7 @@ const DBCardRef = ({ filters, isButtonClicked, setIsButtonClicked, setChangeClic
                         <Box sx={{ position: 'relative' }} >
                             <ResponsiveImage
                                 loading="lazy"
-                                src={document.image}
+                                src={document.urlimage}
                                 draggable="false"
                                 alt="loading..."
                                 onClick={() => handleOpenModal(document)}

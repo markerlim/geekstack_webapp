@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import SingleCardStack from "./SingleCardStack";
-import { onSnapshot, query, collection, orderBy, limit, startAfter, getDocs, where } from 'firebase/firestore';
+import { query, collection, orderBy, limit, startAfter, getDocs, where } from 'firebase/firestore';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../../Firebase";
 import { AuthContext } from "../../context/AuthContext";

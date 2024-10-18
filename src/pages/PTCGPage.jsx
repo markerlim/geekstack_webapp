@@ -32,10 +32,6 @@ const PTCGPage = () => {
               <GSearchBar onFiltersChange={handleFiltersChange} clearAllFilters={clearAllFilters} />
               <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "30px", paddingTop: '20px', paddingBottom: "150px", justifyContent: "center" }}>
                 <PTCGCardlist filters={filters} />
-                <br />
-              </Box>
-              <Box sx={{ display: 'none' }}>
-                <CreateDeckBtn contentType={"pokemon"} />
               </Box>
             </Box>
           </Box>

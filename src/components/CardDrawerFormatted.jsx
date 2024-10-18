@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import ErrorLog from "./UAErrorLog";
 import axios from "axios";
+import PricecheckYYT from "./PriceCheckerJPY/PricecheckYYT";
+import PricecheckDORA from "./PriceCheckerJPY/PricecheckDORA";
 
 
 export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
@@ -11,14 +13,10 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
   const [showFullSize, setShowFullSize] = useState(false);
   const [openErrorLog, setOpenErrorLog] = useState(false);
   const [slidePosition, setSlidePosition] = useState("-100vh");
-  const [yytprice, setYytPrice] = useState(null);
-  const [doraprice, setDoraPrice] = useState(null);
 
   useEffect(() => {
     if (open) {
       setSlidePosition("0");
-      /*fetchYYTCardData('https://yuyu-tei.jp/sell/ua/card/blc2/10024');
-      fetchDORACardData('https://dorasuta.jp/union-arena/product?pid=542095');*/
     } else {
       setSlidePosition("-100vh");
     }
@@ -30,30 +28,6 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
       onClose();
     }, 50);
   };
-
-  /*const fetchYYTCardData = async (url) => {
-    try {
-      const encodedUrl = encodeURIComponent(url); // Encode the URL
-      const response = await axios.get(`http://localhost:4003/api/getYYTCardData`, { params: { url: encodedUrl } });
-      console.log(response.data);
-      console.log(response.data[0].price);
-      setYytPrice(response.data[0].price);
-    } catch (error) {
-      console.error('Error fetching YYT data:', error);
-    }
-  };
-
-  const fetchDORACardData = async (url) => {
-    try {
-      const encodedUrl = encodeURIComponent(url); // Encode the URL
-      const response = await axios.get(`http://localhost:4003/api/getDORACardData`, { params: { url: encodedUrl } });
-      console.log("DORA", response.data);
-      console.log("DORA", response.data[0].price);
-      setDoraPrice(response.data[0].price);
-    } catch (error) {
-      console.error('Error fetching DORA data:', error);
-    }
-  };*/
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: onSwipeLeft,
@@ -186,8 +160,8 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
         <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' } }}><Puller /></Box>
         <Box flexGrow={1} display='flex' flexDirection='column' >
           <Box textAlign={"center"} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center',gap:'10px' }}>
-              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeRight()} /></Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Box sx={{ bgcolor: '#7C4FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '4px' }}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeRight()} /></Box>
               <img
                 loading="lazy"
                 src={selectedCard.currentImage}
@@ -196,7 +170,9 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                 style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
                 onClick={() => setShowFullSize(true)}
               />
-              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}}><ArrowRight sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeLeft()} /></Box>
+              <Box sx={{ bgcolor: '#7C4FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '4px' }}><ArrowRight sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeLeft()} /></Box>
+            </Box>
+            <Box sx={{ color: 'white' }}>
             </Box>
             <Modal
               open={showFullSize}
@@ -210,19 +186,19 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 boxShadow: 24,
-                display:'flex',
-                gap:'5px',
-                alignItems:'center'
+                display: 'flex',
+                gap: '5px',
+                alignItems: 'center'
               }}>
-              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}} onClick={() => onSwipeRight()}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
-              <Box
+                <Box sx={{ bgcolor: '#7C4FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '4px' }} onClick={() => onSwipeRight()}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
+                <Box
                   component='img'
                   src={selectedCard.currentImage}
                   alt="Full Size"
                   sx={{ width: { xs: '80vw', sm: '400px' }, cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}
                 />
-              <Box sx={{bgcolor:'#7C4FFF',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:'4px'}}  onClick={() => onSwipeLeft()}><ArrowRight sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
+                <Box sx={{ bgcolor: '#7C4FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '4px' }} onClick={() => onSwipeLeft()}><ArrowRight sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
               </Box>
             </Modal>
             <span style={{ color: "#f2f3f8" }}>tap card to see full</span>

@@ -275,6 +275,18 @@ const ButtonList = () => {
       alt: "Gakuen Idolmaster",
       imageSrc: "/images/deckimage27.webp",
       imgWidth: "110%",
+    },
+    {
+      pathname: "kj8",
+      alt: "Kaiju No. 8",
+      imageSrc: "/images/deckimage28.webp",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "kmr",
+      alt: "Kamen Rider",
+      imageSrc: "/images/deckimage29.webp",
+      imgWidth: "110%",
     }
   ];
 

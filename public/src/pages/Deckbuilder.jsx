@@ -131,7 +131,6 @@ const Deckbuilder = () => {
                 height: '100%',
                 marginLeft: "100px"
               }}>
-                <UANavBar />
                 <DBCardRef filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                 <br></br>
                 <br></br>

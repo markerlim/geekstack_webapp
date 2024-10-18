@@ -219,7 +219,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     // Create a document for the deck with the new name and deck info
     await setDoc(deckDocRef, deckInfo);
 
-    // Create a placeholder document in the `optcgdeck` collection if it doesn't exist yet
+    // Create a placeholder document in the  collection if it doesn't exist yet
     const placeholderRef = doc(db, `users/${uid}/decks`, "placeholder");
     if (!(await getDoc(placeholderRef)).exists()) {
       await setDoc(placeholderRef, {
@@ -302,6 +302,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
             trigger: card.trigger,
             triggerState: card.triggerState,
             triggerStateLower: card.triggerStateLower,
+            urlimage: card.urlimage,
             count: card.count,
           };
           try {
@@ -575,7 +576,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
                   Save
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={handleExportClick}>
+              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",display:'none', '&:hover': { bgcolor: '#171614' } }} onClick={handleExportClick}>
                 <ImportExport sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
                 <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
                   Export
@@ -598,7 +599,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
               <MenuItem onClick={handleClearClick}>clear</MenuItem>
               <MenuItem onClick={() => setShowImagePickerModal(true)}>save</MenuItem>
               <MenuItem onClick={handleLoadDeckClick}>load</MenuItem>
-              <MenuItem onClick={handleExportClick}>export</MenuItem>
+              <MenuItem sx={{display:'none'}} onClick={handleExportClick}>export</MenuItem>
             </Menu>
             {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />

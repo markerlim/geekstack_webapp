@@ -8,9 +8,7 @@ import { CardStateProvider } from "../context/useCardState";
 import DeckBuilderBar from "../components/DeckBuilderBar";
 import { Hidden } from "@mui/material";
 import { Helmet } from "react-helmet";
-import UANavBar from "../components/UANavBar";
 import NavbarPrompt from "../components/NavbarPromptLogin";
-import GSearchBar from "../components/ChipSearchBar";
 
 const Deckbuilder = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -131,7 +129,6 @@ const Deckbuilder = () => {
                 height: '100%',
                 marginLeft: "100px"
               }}>
-                <UANavBar />
                 <DBCardRef filters={filters} isButtonClicked={isButtonClicked} setIsButtonClicked={setIsButtonClicked} setChangeClick={setChangeClick} />
                 <br></br>
                 <br></br>

@@ -16,6 +16,7 @@ import NavbarHome from "./components/NavbarHome";
 import NotificationModal from "./components/HomeNotificationBanner";
 import HorizontalGoogleAd from "./components/AdsComponent/HorizontalAds";
 import GenericGoogleAd from "./components/AdsComponent/GenericAds";
+import PricecheckYYT from "./components/PriceCheckerJPY/PricecheckYYT";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -464,20 +465,7 @@ const Home = () => {
                                 </div>
                             </Collapse>
                         </Box>
-                        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', marginRight: "15px", gap: { xs: "20px", sm: "50px" }, justifyContent: "center" }}>
-                            <ButtonBase sx={{ padding: "1px", display: "flex", flexDirection: "column", }}
-                                href="https://www.buymeacoffee.com/geekstack">
-                                <img style={{ width: "200px", borderRadius: "10px" }} src="images/donation.png" alt="donation" />
-                                <br />
-                                <span style={{ color: "#f2f3f8" }}>Click or scan to contribute!</span>
-                            </ButtonBase>
-                            <Box sx={{ flexWrap: "wrap", width: { xs: "80vw", sm: "40vw" }, textJustify: "inter-word", textAlign: "justify" }}>
-                                I hope that the experience on this website is enjoyable for you and would kindly appreciate any form of donation and contribution.
-                                All money from this website will be used to run and make this website better
-                                <br />
-                                <a style={{ color: "#10c5a3" }} href="/credits">Read more on how your contribution can help!</a>
-                            </Box>
-                        </Box>
+                        <PricecheckYYT url={'https://yuyu-tei.jp/sell/ua/card/toa1/10122'}/>
                         <Box padding={1}>
                             <div style={{ height: "100px" }}></div>
                         </Box>

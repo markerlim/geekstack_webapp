@@ -34,6 +34,8 @@ import DBZFWDeckbuilder from "./pages/DBZFWDeckbuilder.jsx";
 import PTCGPage from "./pages/PTCGPage.jsx";
 import PTCGBTPage from "./pages/PTCGBTpage.jsx";
 import PTCGDeckbuilder from "./pages/PTCGDeckbuilder.jsx";
+import Deckdiary from "./pages/DeckDiary.jsx";
+import NotificationsPage from "./pages/Notifications.jsx";
 
 smoothscroll.polyfill();
 
@@ -93,8 +95,10 @@ function App() {
             <Route path="deckviewer" element={<Deckviewer />} />
             <Route path="list" element={<Listofcards />} />
             <Route path="news" element={<Listofnews />} />
+            <Route path="noti" element={<NotificationsPage />} />
             <Route path="faq" element={<FAQPage />} />
             <Route path="thisistestsite" element={<TestPage />} />
+            <Route path="matchlog" element={<Deckdiary/>}/>
             <Route path="/deck/:deckId" element={<DeckCardLoader />} />
             <Route path="unionarena" element={<UnionArenaPage />}/>
             <Route path="unionarena/:animecode" element={<AcardFormatpage />} />

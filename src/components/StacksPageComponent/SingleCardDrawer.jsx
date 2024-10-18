@@ -217,7 +217,7 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
             <Box sx={{ position: 'sticky', display: 'flex', flexDirection: 'row', padding: '10px', backgroundColor: '#26252d', justifyContent: 'space-between', width: {sm:'calc(100vw - 20px)',md:'680px'}, alignItems: 'center' }}>
                 <ArrowBack onClick={handleDrawerClose} sx={{ color: '#f2f3f8' }} />
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center' }}>
-                    <Box sx={{ borderRadius: '20px', border: '4px solid #26262d', width: '30px', height: '30px', display: 'flex', alignItems: 'middle', overflow: 'hidden', backgroundColor: '#7C4FFF' }}>
+                    <Box sx={{ borderRadius: '20px', border: '4px solid #26262d', width: '30px', height: '30px', display: 'flex', alignItems: 'middle',justifyContent:'center', overflow: 'hidden', backgroundColor: '#7C4FFF' }}>
                         {data.photoURL ? <img src={data.photoURL} alt={data.photoURL} style={{ width: '40px', height: 'auto' }} /> :
                             <div
                                 style={{
