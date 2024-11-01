@@ -42,15 +42,9 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
   const goBack = () => {
     navigate(-1);
   };
-  const getCurrentImage = (document) => {
-    let currentImage = document.urlimage;
-    return currentImage;
-  };
   const handleOpenModal = (document) => {
-    const currentImage = getCurrentImage(document);
     setSelectedCard({
       ...document,
-      currentImage: currentImage,
     });
     setOpenModal(true);
   };
@@ -60,10 +54,8 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
     );
     let nextIndex = (currentIndex + 1) % filteredDocuments.length;
     let nextDocument = filteredDocuments[nextIndex];
-    const currentImage = getCurrentImage(nextDocument);
     setSelectedCard({
       ...nextDocument,
-      currentImage: currentImage,
     });
   };
   const handleSwipeRight = () => {
@@ -73,10 +65,8 @@ const AcardFormat = ({ searchQuery, setSearchQuery }) => {
     let prevIndex =
       (currentIndex - 1 + filteredDocuments.length) % filteredDocuments.length;
     let prevDocument = filteredDocuments[prevIndex];
-    const currentImage = getCurrentImage(prevDocument);
     setSelectedCard({
       ...prevDocument,
-      currentImage: currentImage,
     });
   };
   const handleCloseModal = () => {

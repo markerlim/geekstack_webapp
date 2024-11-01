@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import BottomNav from "../components/BottomNav"
 import { Helmet } from "react-helmet";
+import CreateDeckBtn from "../components/ModularCreateDeckButton";
 import PTCGcardFormat from "../components/PTCGPageComponent/PTCGcardTemplate";
 
 const PTCGBTPage = () => {

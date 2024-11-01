@@ -12,20 +12,5 @@
         "destination": "/index.html"
       }
     ]
-  },
-  "functions": [
-    {
-      "source": "geekstackapi",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "runtime": "nodejs20",
-      "timeoutSeconds": 540,
-      "codebase": "default"
-    }
-  ]
+  }
 }

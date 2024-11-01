@@ -53,9 +53,9 @@ const UACardlist = ({ filters }) => {
                     let docsRef;
 
                     if (arrayFields.includes(key)) {
-                        docsRef = query(collection(db, "unionarenatcg"), where(key, "array-contains", filter));
+                        docsRef = query(collection(db, "unionarenatcgV2"), where(key, "array-contains", filter));
                     } else {
-                        docsRef = query(collection(db, "unionarenatcg"), where(key, "==", filter));
+                        docsRef = query(collection(db, "unionarenatcgV2"), where(key, "==", filter));
                     }
 
                     const querySnapshot = await getDocs(docsRef);
@@ -74,7 +74,7 @@ const UACardlist = ({ filters }) => {
 
             const matchedDocs = [];
             for (let docId of finalDocSet) {
-                const docData = (await getDocs(query(collection(db, "unionarenatcg"), where("cardId", "==", docId)))).docs[0].data();
+                const docData = (await getDocs(query(collection(db, "unionarenatcgV2"), where("cardId", "==", docId)))).docs[0].data();
                 matchedDocs.push(docData);
             }
 

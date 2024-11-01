@@ -19,8 +19,8 @@ const TestExport = () => {
     };
 
     return (
-        <div>
-            <Box id="TestExport" sx={{ width: '500px', height: '500px', padding: '20px', backgroundColor: 'lightgray' }}>
+        <div style={{display:'flex',flexDirection:'column',justifyContent:'center', alignItems:'center', height:'100vh'}}>
+            <Box id="TestExport" sx={{ width:'calc(100vw - 400px)', padding: '20px', backgroundColor: 'lightgray' }}>
                 <img
                     src="https://storage.googleapis.com/geek-stack.appspot.com/UD/AOT-1-013_ALT.webp"
                     alt="test"

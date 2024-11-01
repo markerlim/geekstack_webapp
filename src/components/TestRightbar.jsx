@@ -6,7 +6,6 @@ import { useCardState } from "../context/useCardState";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Snackbar, Alert } from "@mui/material";
 import { CardDrawerNF } from "./CardDrawerFormatted";
-import { CardDrawerNFV2 } from "./CardDrawerV2";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import { db } from "../Firebase";
 
@@ -180,7 +179,7 @@ const TestRightBar = ({ setChangeClick }) => {
                         </Grid>
                     ))}
                     {chosenCard && (
-                        <CardDrawerNFV2
+                        <CardDrawerNF
                             open={openModal}
                             onClose={handleCloseModal}
                             chosenCard={chosenCard}

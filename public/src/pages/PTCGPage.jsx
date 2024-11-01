@@ -4,6 +4,7 @@ import BottomNav from "../components/BottomNav"
 import { Box } from "@mui/material"
 import { useState } from "react";
 import GSearchBar from "../components/ChipSearchBar";
+import CreateDeckBtn from "../components/ModularCreateDeckButton";
 import PTCGCardlist from "../components/PTCGPageComponent/PTCGCardlist";
 
 const PTCGPage = () => {

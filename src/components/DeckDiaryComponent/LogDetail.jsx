@@ -55,11 +55,11 @@ const CardPickerModal = ({ open, onClose, cards, onCardSelect }) => {
                                 },
                             }}
                             onClick={() => {
-                                onCardSelect(card.image);
+                                onCardSelect(getImageSrc(card));
                                 onClose(); // Close modal after card selection
                             }}
                         >
-                            <img src={card.image} alt={`Card ${index + 1}`} style={{ width: '100%', height: '100%' }} />
+                            <img src={getImageSrc(card)} alt={`Card ${index + 1}`} style={{ width: '100%', height: '100%' }} />
                         </Box>
                     ))}
                 </Box>
@@ -103,6 +103,10 @@ const processImage = (imageSrc, quality = 0.7) => {
     });
 };
 
+const getImageSrc = (card) => {
+    return card.urlimage ? card.urlimage : card.image;
+  };
+
 const LogDetail = ({ log, onClose, cards, currentUser, deck }) => {
     const { eventName, eventDate, eventCaption, country, rounds, selectedCardUrl } = log;
     const [viewType, setViewType] = useState('MATCHUP');
@@ -136,7 +140,7 @@ const LogDetail = ({ log, onClose, cards, currentUser, deck }) => {
     useEffect(() => {
         const processImages = async () => {
             const processed = await Promise.all(cards.map(async (uacard) => {
-                const processedImage = await processImage(uacard.image, 0.7); // Adjust quality as needed
+                const processedImage = await processImage(getImageSrc(uacard), 0.7); // Adjust quality as needed
                 return { ...uacard, image: processedImage };
             }));
             setProcessedCards(processed);
@@ -319,7 +323,7 @@ const LogDetail = ({ log, onClose, cards, currentUser, deck }) => {
                                     >
                                         <img
                                             loading="lazy"
-                                            src={uacard.image}
+                                            src={getImageSrc(uacard)}
                                             draggable="false"
                                             alt={uacard.cardId}
                                             style={{

@@ -112,7 +112,7 @@ function App() {
             <Route path="/pokemon" element ={<PTCGPage/>}/>
             <Route path="/pokemon/:booster" element ={<PTCGBTPage/>}/>
             <Route path="ptcgbuilder" element={<PTCGDeckbuilder/>}/>
-            <Route path="/article01" element={<ArticleUI />} />
+            <Route path="/test" element={<TestPage />} />
           </Routes>
         </BrowserRouter>
       </GlobalContentStyle>
