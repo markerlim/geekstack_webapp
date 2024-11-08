@@ -14,9 +14,7 @@ import "slick-carousel/slick/slick-theme.css";
 import PWAPrompt from 'react-ios-pwa-prompt'
 import NavbarHome from "./components/NavbarHome";
 import NotificationModal from "./components/HomeNotificationBanner";
-import HorizontalGoogleAd from "./components/AdsComponent/HorizontalAds";
 import GenericGoogleAd from "./components/AdsComponent/GenericAds";
-import PricecheckYYT from "./components/PriceCheckerJPY/PricecheckYYT";
 
 function handleEventClick(clickInfo) {
     if (clickInfo.event.url) { // Check if the event has a URL
@@ -465,7 +463,6 @@ const Home = () => {
                                 </div>
                             </Collapse>
                         </Box>
-                        <PricecheckYYT url={'https://yuyu-tei.jp/sell/ua/card/toa1/10122'}/>
                         <Box padding={1}>
                             <div style={{ height: "100px" }}></div>
                         </Box>

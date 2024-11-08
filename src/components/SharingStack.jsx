@@ -145,7 +145,7 @@ const SharingStack = ({
                 handleCardSelection(
                   card.id || card.cardid,
                   card.cardName || card.cardname,
-                  card.image
+                  card.urlimage || card.image
                 )
               }
               sx={{ position: 'relative' }}
@@ -174,7 +174,7 @@ const SharingStack = ({
                     ? "brightness(50%)"
                     : "brightness(100%)",
                 }}
-                src={card.image}
+                src={card.urlimage || card.image}
                 alt={card.id}
               />
             </Box>

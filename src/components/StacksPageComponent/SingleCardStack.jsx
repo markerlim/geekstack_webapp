@@ -84,16 +84,18 @@ const SingleCardStack = ({ grpdata, index, setDrawerOpen, drawerOpen, deleteRefr
                         justifyContent: 'start',
                         flex: 'none',
                         overflow: 'hidden', // Hide overflow
+                        // eslint-disable-next-line no-dupe-keys
                         display: '-webkit-box', // Use flexbox
                         WebkitBoxOrient: 'vertical', // Set orientation
+                        // eslint-disable-next-line no-dupe-keys
                         overflow: 'hidden', // Hide overflow
                         WebkitLineClamp: 3 // Show up to 3 lines, then ellipsis
                     }}
                 >
                     <Box
                         sx={{
-                            height: !data.description ? '16px' : (data.selectedCards[0].imagesrc ? '25px' : '40px'),
-                            overflow: 'hidden', // Hide overflow for this box too
+                            height: !data.description ? '16px' : (data.selectedCards[0].imagesrc ? '30px' : '40px'),
+                            overflow: 'hidden',
                         }}
                     ></Box>
                     {data.description && data.description.split('\n').map((line, i) => (
@@ -103,7 +105,6 @@ const SingleCardStack = ({ grpdata, index, setDrawerOpen, drawerOpen, deleteRefr
                         </React.Fragment>
                     ))}
                 </Box>
-
                 <Box sx={{ color: '#D3D3D3', paddingBottom: '20px' }}>
                     <CardFunctions deck={data} handleDrawerOpen={handleDrawerOpen} inputRef={inputRef}
                         deleteRefresh={deleteRefresh} setDeleteRefresh={setDeleteRefresh} />

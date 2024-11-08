@@ -12,9 +12,7 @@ import { setToLocalStorage } from "./components/LocalStorage/localStorageHelper"
 import Deckviewer from "./pages/Deckviewer";
 import DeckCardLoader from "./pages/DeckCardLoader";
 import smoothscroll from "smoothscroll-polyfill";
-import Articleviewer from "./pages/Articleviewer";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import ArticleUI from "./pages/ArticleUI";
 import TestPage from "./pages/TestPage";
 import UnionArenaPage from "./pages/UnionArenaPage";
 import UADecklistSharingPage from "./pages/UADecklistSharingPage";
@@ -24,7 +22,6 @@ import OnepiecePage from "./pages/OnepiecePage";
 import OPTCGBTpage from "./pages/OPTCGBTpage";
 import OPTCGDeckbuilder from "./pages/OPTCGDeckbuilder";
 import Listofcards from "./pages/Listofcards";
-import Listofnews from "./pages/Listofnews";
 import FAQPage from "./pages/FAQPage";
 import AcardFormatpage from "./pages/AcardFormatpage.jsx";
 import StacksPage from "./pages/StacksPage.jsx";
@@ -90,11 +87,9 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="credits" element={<Community />} />
-            <Route path="articles" element={<Articleviewer />} />
             <Route path="deckbuilder" element={<Deckbuilder />} />
             <Route path="deckviewer" element={<Deckviewer />} />
             <Route path="list" element={<Listofcards />} />
-            <Route path="news" element={<Listofnews />} />
             <Route path="noti" element={<NotificationsPage />} />
             <Route path="faq" element={<FAQPage />} />
             <Route path="thisistestsite" element={<TestPage />} />
@@ -112,7 +107,7 @@ function App() {
             <Route path="/pokemon" element ={<PTCGPage/>}/>
             <Route path="/pokemon/:booster" element ={<PTCGBTPage/>}/>
             <Route path="ptcgbuilder" element={<PTCGDeckbuilder/>}/>
-            <Route path="/article01" element={<ArticleUI />} />
+            <Route path="/test" element={<TestPage />} />
           </Routes>
         </BrowserRouter>
       </GlobalContentStyle>

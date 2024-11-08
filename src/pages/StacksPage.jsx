@@ -24,7 +24,7 @@ const StacksPageNM = () => {
     }, []);
 
     const categorytags = ['ALL', 'UNION-ARENA', 'ONE-PIECE', 'DRAGONBALLZ-FW'];
-    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO', 'SYN', 'TRK', 'NIK', 'HIQ', 'BCV', 'YYH', 'GMR'];
+    const unionarenatags = ['HTR', 'JJK', 'CGH', 'KMY', 'IMS', 'TOA', 'TSK', 'BLC', 'BTR', 'MHA', 'BLK', 'TKN', 'DST', 'SAO', 'SYN', 'TRK', 'NIK', 'HIQ', 'BCV', 'YYH', 'GMR', 'SHY', 'KJ8', 'KMR'];
     const [selectedCategoryTag, setSelectedCategoryTag] = useState('ALL');
     const [selectedUAtag, setSelectedUAtag] = useState(null);
     const [postDrawerOpen, setPostDrawerOpen] = useState(false);

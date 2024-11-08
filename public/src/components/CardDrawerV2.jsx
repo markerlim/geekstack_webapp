@@ -1,9 +1,8 @@
-import { ArrowLeft, ArrowRight, Close, Error, Share, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/material";
+import { ArrowLeft, ArrowRight, Close, Error, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box, Button, Grid, Modal, SwipeableDrawer, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import ErrorLog from "./UAErrorLog";
-import axios from "axios";
 
 
 export const CardDrawerNFV2 = ({ open, onClose, chosenCard, onSwipeLeft, onSwipeRight }) => {
@@ -131,7 +130,6 @@ export const CardDrawerNFV2 = ({ open, onClose, chosenCard, onSwipeLeft, onSwipe
     top: 8,
     left: 'calc(50% - 25px)',
   }));
-
   return (
     <SwipeableDrawer
       anchor="bottom"

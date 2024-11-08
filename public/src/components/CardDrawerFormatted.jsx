@@ -3,9 +3,6 @@ import { Box, Button, Drawer, Grid, Modal, SwipeableDrawer, styled } from "@mui/
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import ErrorLog from "./UAErrorLog";
-import axios from "axios";
-import PricecheckYYT from "./PriceCheckerJPY/PricecheckYYT";
-import PricecheckDORA from "./PriceCheckerJPY/PricecheckDORA";
 
 
 export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipeRight }) => {
@@ -70,7 +67,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
 
   const shareImageToWhatsApp = () => {
     // Replace 'selectedCard.currentImage' with the URL of your webp image
-    const imageUrl = selectedCard.currentImage;
+    const imageUrl = selectedCard.urlimage;
 
     // Check if Web Share API is available
     if (navigator.share) {
@@ -164,7 +161,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
               <Box sx={{ bgcolor: '#7C4FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '4px' }}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '35px' }} onClick={() => onSwipeRight()} /></Box>
               <img
                 loading="lazy"
-                src={selectedCard.currentImage}
+                src={selectedCard.urlimage}
                 draggable="false"
                 alt="test"
                 style={{ width: "100px", height: "140.6175px", borderRadius: "5%", border: "2px solid black", cursor: "pointer" }}
@@ -193,7 +190,7 @@ export const CardDrawerNF = ({ open, onClose, selectedCard, onSwipeLeft, onSwipe
                 <Box sx={{ bgcolor: '#7C4FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '4px' }} onClick={() => onSwipeRight()}><ArrowLeft sx={{ color: '#f2f3f8', fontSize: '30px' }} /></Box>
                 <Box
                   component='img'
-                  src={selectedCard.currentImage}
+                  src={selectedCard.urlimage}
                   alt="Full Size"
                   sx={{ width: { xs: '80vw', sm: '400px' }, cursor: "pointer" }}
                   onClick={() => setShowFullSize(false)}

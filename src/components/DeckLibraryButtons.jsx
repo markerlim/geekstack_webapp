@@ -129,12 +129,7 @@ const Decklibrarybtn = () => {
       if (currentUser) {
         // Create date object in GMT+8 timezone
         const date = new Date();
-        const offset = 8; // Offset for GMT+8
-        const localTime = date.getTime();
-        const localOffset = date.getTimezoneOffset() * 60000;
-        const utc = localTime + localOffset;
-        const timestamp = utc + (3600000 * offset);
-        const finalDate = new Date(timestamp);
+        const finalDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Singapore' }));
 
         const finalDeckName = editedDeckName || deck.name;
 
@@ -153,11 +148,11 @@ const Decklibrarybtn = () => {
           uid: currentUser.uid,
           sharedDate: finalDate,
           deckType: deckType,
-          cards: cards, // use the cards state directly
+          cards: cards,
           animecode: animecode,
         });
         console.log(cards, 'completed')
-        navigate('/uadecklist', { state: { openedDeck: deck.id } });
+        navigate('/stacks', { state: { openedDeck: deck.id } });
       }
     } catch (error) {
       console.error("Error sharing deck: ", error);

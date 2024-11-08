@@ -248,7 +248,7 @@ const SingleCardDrawer = ({ uid, setDrawerOpen, drawerOpen }) => {
                                     <Box sx={{ position: "absolute", bottom: "5px", left: "50%", transform: "translateX(-50%)", zIndex: "2" }}>
                                         <Pentagon sx={{ fontSize: '40px', color: '#11172d' }} />
                                     </Box>
-                                    <ResponsiveImage key={index} src={card.image} alt={card.cardName} />
+                                    <ResponsiveImage key={index} src={card.urlimage || card.image} alt={card.cardName} />
                                 </div>
                             ))}
                         </Box>
