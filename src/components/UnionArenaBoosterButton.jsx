@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { doc, getDoc, setDoc, arrayUnion, } from "firebase/firestore";
 import { Star } from "@mui/icons-material";
+import axios from 'axios';
 
 const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -113,182 +114,26 @@ const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
 };
 
 const ButtonList = () => {
-  const buttonData = [
-    {
-      pathname: "cgh",
-      alt: "code geass",
-      imageSrc: "/images/deckimage1.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "jjk",
-      alt: "jujutsu no kaisen",
-      imageSrc: "/images/deckimage2.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "htr",
-      alt: "hunter x hunter",
-      imageSrc: "/images/deckimage3.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "ims",
-      alt: "idolmaster shiny colors",
-      imageSrc: "/images/deckimage4.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "kmy",
-      alt: "demon slayer",
-      imageSrc: "/images/deckimage5.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "toa",
-      alt: "tales of arise",
-      imageSrc: "/images/deckimage6.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "tsk",
-      alt: "that time I reincarnated as a slime",
-      imageSrc: "/images/deckimage7.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "blc",
-      alt: "bleach: thousand-year blood war",
-      imageSrc: "/images/deckimage8.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "btr",
-      alt: "me & robocco",
-      imageSrc: "/images/deckimage9.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "mha",
-      alt: "my hero academia",
-      imageSrc: "/images/deckimage10.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "gnt",
-      alt: "gintama",
-      imageSrc: "/images/deckimage11.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "blk",
-      alt: "bluelock",
-      imageSrc: "/images/deckimage12.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "tkn",
-      alt: "tekken 7",
-      imageSrc: "/images/deckimage13.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "dst",
-      alt: "dr. stone",
-      imageSrc: "/images/deckimage14.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "sao",
-      alt: "sword art online",
-      imageSrc: "/images/deckimage15.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "syn",
-      alt: "synduality noir",
-      imageSrc: "/images/deckimage16.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "trk",
-      alt: "toriko",
-      imageSrc: "/images/deckimage17.jpg",
-      imgWidth: "110%", 
-    },
-    {
-      pathname: "nik",
-      alt: "goddess of victory : nikke",
-      imageSrc: "/images/deckimage18.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "hiq",
-      alt: "haikyu!!",
-      imageSrc: "/images/deckimage19.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "bcv",
-      alt: "black clover",
-      imageSrc: "/images/deckimage20.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "yyh",
-      alt: "yuyu hakusho",
-      imageSrc: "/images/deckimage21.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "gmr",
-      alt: "gamera -rebirth-",
-      imageSrc: "/images/deckimage22.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "aot",
-      alt: "attack on titan",
-      imageSrc: "/images/deckimage23.jpg",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "shy",
-      alt: "shy",
-      imageSrc: "/images/deckimage24.webp",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "and",
-      alt: "undead unluck",
-      imageSrc: "/images/deckimage25.webp",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "rly",
-      alt: "the 100 girlfriends who really, really, really, really, really love you",
-      imageSrc: "/images/deckimage26.webp",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "gim",
-      alt: "Gakuen Idolmaster",
-      imageSrc: "/images/deckimage27.webp",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "kj8",
-      alt: "Kaiju No. 8",
-      imageSrc: "/images/deckimage28.webp",
-      imgWidth: "110%",
-    },
-    {
-      pathname: "kmr",
-      alt: "Kamen Rider",
-      imageSrc: "/images/deckimage29.webp",
-      imgWidth: "110%",
-    }
-  ];
+  const [buttonData, setButtonData] = useState([]);
+  useEffect(() => {
+    const fetchAnimeData = async () => {
+      try {
+        const response = await axios.get("https://geekstack.up.railway.app/api/boosterlist/unionarena");
+        
+        console.log(response.data[0]);
+        const sortedData = response.data.sort((a, b) => {
+          return a.order[0] > b.order[0] ? 1 : -1;
+        });
+  
+        setButtonData(sortedData.reverse()); 
+        console.log(sortedData);
+      } catch (error) {
+        console.error("Error fetching anime data:", error);
+      }
+    };
+  
+    fetchAnimeData();
+  }, []);  
 
   return (
     <>
@@ -298,7 +143,7 @@ const ButtonList = () => {
           pathname={button.pathname}
           alt={button.alt}
           imageSrc={button.imageSrc}
-          imgWidth={button.imgWidth}
+          imgWidth={button.imgWidth || "110%"}
         />
       ))}
     </>

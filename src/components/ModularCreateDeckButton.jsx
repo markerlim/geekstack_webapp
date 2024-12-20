@@ -16,6 +16,9 @@ const CreateDeckBtn = ({ contentType }) => {
     case "unionarena":
       pathname = "/deckbuilder";
       break;
+    case "cookierunbraverse":
+        pathname = "/cookierunbuilder";
+        break;      
     case "pokemon":
       pathname = "/ptcgbuilder";
       break;

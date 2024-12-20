@@ -1,9 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Collapse, IconButton, Menu, MenuItem, TextField, Typography } from "@mui/material";
-import { Delete, ImportExport, MoreVert, Save, SystemUpdateAlt, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Collapse,
+  IconButton,
+  Menu,
+  MenuItem,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
+import {
+  Close,
+  Delete,
+  ImportExport,
+  MoreVert,
+  Save,
+  SystemUpdateAlt,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import { useCardState } from "../context/useCardState";
 import { setToLocalStorage } from "./LocalStorage/localStorageHelper";
-import { db, } from "../Firebase";
+import { db } from "../Firebase";
 import { useAuth } from "../context/AuthContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -11,17 +31,107 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FullScreenDialog from "./FullScreenDialog";
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import ImagePickerModal from "./ImagePickerModal";
-import { toJpeg } from "html-to-image";
-import UATCGExport from "./UAExportTemplate";
 import { useLocation } from "react-router-dom";
 import html2canvas from "html2canvas";
 
+// Card Picker Modal Component
+const CardPickerModal = ({ open, onClose, filteredCards, onCardSelect }) => {
+  return (
+    <Modal open={open} onClose={onClose}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          bgcolor: "#26262d",
+          color: "#f2f3f8",
+          padding: "20px",
+          borderRadius: "10px",
+          height: "80%",
+          width: "80%",
+          maxWidth: "500px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6" gutterBottom>
+          Pick a Card
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: "10px",
+            width: "100%",
+            height: "100%",
+            overflowY: "auto",
+          }}
+        >
+          {filteredCards &&
+            filteredCards.map((card, index) => (
+              <Box
+                key={index}
+                sx={{
+                  width: "80px",
+                  height: "120px",
+                  cursor: "pointer",
+                  border: "2px solid transparent",
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                  "&:hover": {
+                    borderColor: "#d14a5b",
+                  },
+                }}
+                onClick={() => {
+                  onCardSelect(card.urlimage || card.image);
+                  onClose(); // Close modal after card selection
+                }}
+              >
+                <img
+                  src={card.urlimage || card.image}
+                  alt={`Card ${index + 1}`}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </Box>
+            ))}
+        </Box>
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            color: "#fff",
+          }}
+        >
+          <Close />
+        </IconButton>
+      </Box>
+    </Modal>
+  );
+};
 
-const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) => {
+const DeckBuilderBar = ({
+  changeClick,
+  setChangeClick,
+  setHideDeckbar,
+  style,
+}) => {
   const { currentUser } = useAuth();
   const { filteredCards, setFilteredCards } = useCardState();
   const [deckName, setDeckName] = useState("myDeckId");
@@ -35,16 +145,35 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
   const [showImagePickerModal, setShowImagePickerModal] = useState(false);
   const [shouldSaveDeck, setShouldSaveDeck] = useState(false);
   const [viewDeckbar, setViewDeckbar] = useState(true);
+  const [viewdeckStatus, setViewdeckStatus] = useState(null);
+  const [deckviewMode, setDeckviewMode] = useState(false);
   const [showPadding, setShowPadding] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportImage, setExportImage] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [chosenCardUrl, setChosenCardUrl] = useState(null);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const [deckUidParams, setDeckUidParams] = useState(searchParams.get("deckUid") || "");
+  const [deckUidParams, setDeckUidParams] = useState(
+    searchParams.get("deckUid") || ""
+  );
   const [loadedFromParams, setLoadedFromParams] = useState(false);
-  const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
-  const sorttotalCount = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
+  const sortedCards = [...filteredCards].sort((a, b) => {
+    const categoryOrder = { character: 0, event: 1, field: 2 };
+
+    // Compare categories based on the predefined order
+    const categoryComparison =
+      categoryOrder[a.category] - categoryOrder[b.category];
+    if (categoryComparison !== 0) return categoryComparison;
+
+    // If categories are the same, sort by energycost
+    return a.energycost - b.energycost;
+  });
+
+  const sorttotalCount = sortedCards.reduce(
+    (acc, card) => acc + (card.count || 0),
+    0
+  );
 
   useEffect(() => {
     if (changeClick === true) {
@@ -155,22 +284,28 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     setDeckUidParams("");
     setTotalCount(0);
     const currentPath = window.location.pathname;
-    window.history.pushState({}, '', currentPath);
+    window.history.pushState({}, "", currentPath);
   };
   // Filter the cards based on the triggerState that are color
-  const colorCards = filteredCards.filter(card => card.triggerState.toLowerCase() === "color".toLowerCase());
+  const colorCards = filteredCards.filter(
+    (card) => card.triggerState.toLowerCase() === "color".toLowerCase()
+  );
   const colorCount = colorCards.reduce(
     (accumulator, card) => accumulator + (card.count || 0),
     0
   );
   // Filter the cards based on the triggerState that are special
-  const specialCards = filteredCards.filter(card => card.triggerState.toLowerCase() === "special".toLowerCase());
+  const specialCards = filteredCards.filter(
+    (card) => card.triggerState.toLowerCase() === "special".toLowerCase()
+  );
   const specialCount = specialCards.reduce(
     (accumulator, card) => accumulator + (card.count || 0),
     0
   );
   // Filter the cards based on the triggerState that are final
-  const finalCards = filteredCards.filter(card => card.triggerState.toLowerCase() === "final".toLowerCase());
+  const finalCards = filteredCards.filter(
+    (card) => card.triggerState.toLowerCase() === "final".toLowerCase()
+  );
   const finalCount = finalCards.reduce(
     (accumulator, card) => accumulator + (card.count || 0),
     0
@@ -187,21 +322,23 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
 
   const stats = calculateStats();
   const handleExportClick = () => {
-    const exportElement = document.getElementById('UATCGExport');
+    const exportElement = document.getElementById("UATCGExport");
     if (exportElement) {
-        html2canvas(exportElement, { useCORS: true }).then((canvas) => {
-            // Compress the image by setting the quality parameter (0.0 to 1.0)
-            const imgData = canvas.toDataURL('image/jpeg', 0.5); // Adjust quality parameter as needed (e.g., 0.5 for 50% quality)
-            
-            const link = document.createElement('a');
-            link.href = imgData;
-            link.download = 'exported_image.jpg';
-            link.click();
-        }).catch((error) => {
-            console.error('Error exporting image:', error);
+      html2canvas(exportElement, { useCORS: true })
+        .then((canvas) => {
+          // Compress the image by setting the quality parameter (0.0 to 1.0)
+          const imgData = canvas.toDataURL("image/jpeg", 0.5); // Adjust quality parameter as needed (e.g., 0.5 for 50% quality)
+
+          const link = document.createElement("a");
+          link.href = imgData;
+          link.download = "exported_image.jpg";
+          link.click();
+        })
+        .catch((error) => {
+          console.error("Error exporting image:", error);
         });
     }
-};
+  };
   const createNewDeck = async (uid, specialImage) => {
     const userDocRef = doc(db, "users", uid);
 
@@ -232,7 +369,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     const placeholderRef = doc(db, `users/${uid}/decks`, "placeholder");
     if (!(await getDoc(placeholderRef)).exists()) {
       await setDoc(placeholderRef, {
-        placeholder: true
+        placeholder: true,
         // any other default values you'd like to set
       });
     }
@@ -240,7 +377,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     return deckUid; // return this value so we can use it in handleSaveClick
   };
   const updateExistingDeck = async (uid, deckUid, specialImage) => {
-    console.log('Updating', specialImage)
+    console.log("Updating", specialImage);
     const deckDocRef = doc(db, `users/${uid}/decks`, deckUid);
 
     const deckInfo = {
@@ -255,8 +392,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     // Update the deck name in the existing document
     await updateDoc(deckDocRef, { deckName: deckName, ...deckInfo });
   };
-  
-  const handleSaveClick = async (specialImage, proceed = false ) => {
+  const handleSaveClick = async (specialImage, proceed = false) => {
     if (!proceed && totalCount < 50) {
       setShowConfirmDialog(true);
       return;
@@ -277,9 +413,14 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
         await updateExistingDeck(uid, deckUid, specialImage);
       }
 
-      const cardsCollectionRef = collection(db, `users/${uid}/decks/${deckUid}/cards`);
+      const cardsCollectionRef = collection(
+        db,
+        `users/${uid}/decks/${deckUid}/cards`
+      );
       const existingCardSnapshot = await getDocs(cardsCollectionRef);
-      const existingCards = existingCardSnapshot.docs.map(doc => doc.data().cardUid);
+      const existingCards = existingCardSnapshot.docs.map(
+        (doc) => doc.data().cardUid
+      );
 
       await Promise.all(
         filteredCards.map(async (card) => {
@@ -322,7 +463,7 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
       );
 
       for (const cardUid of existingCards) {
-        if (!filteredCards.some(card => card.cardUid === cardUid)) {
+        if (!filteredCards.some((card) => card.cardUid === cardUid)) {
           const cardToDeleteRef = doc(cardsCollectionRef, cardUid);
           await deleteDoc(cardToDeleteRef);
           console.log("Card deleted:", cardUid);
@@ -351,23 +492,43 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
     setShowDeckLoaderModal(true); // Open the DeckLoader modal
     setDeckUidParams("");
     const currentPath = window.location.pathname;
-    window.history.pushState({}, '', currentPath);
+    window.history.pushState({}, "", currentPath);
     handleMenuClose();
   };
 
-  const handleDeckLoaded = (loadedDeckId, loadedDeckUid, loadedDeckName, loadedDeckImage) => {
+  const handleViewModeClick = () => {
+    if (sortedCards && sortedCards.length > 0) {
+      setDeckviewMode(true);
+      setViewdeckStatus(null);
+    } else {
+      setViewdeckStatus("no cards");
+    }
+    handleMenuClose();
+  };
+
+  const handleViewModeClose = () => {
+    setDeckviewMode(false);
+    setViewdeckStatus(null);
+  };
+
+  const handleDeckLoaded = (
+    loadedDeckId,
+    loadedDeckUid,
+    loadedDeckName,
+    loadedDeckImage
+  ) => {
     setDeckName(loadedDeckName);
     setLoadedDeckUid(loadedDeckUid); // Update the loadedDeckUid
     setExportImage(loadedDeckImage);
     setIsUpdatingExistingDeck(true); //Update the previousDeckName
     setShowDeckLoaderModal(false); // Close the DeckLoader modal
-    setChangeClick(prevState => !prevState);
+    setChangeClick((prevState) => !prevState);
   };
 
   const getImageSrc = (energycost) => {
     switch (energycost) {
       case 0:
-        return "/images/ENERGY0.png"
+        return "/images/ENERGY0.png";
       case 1:
         return "/images/ENERGY1.png";
       case 2:
@@ -429,7 +590,9 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
   };
 
   const loadDeckCards = async (deckId) => {
-    const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/decks/${deckId}/cards`));
+    const querySnapshot = await getDocs(
+      collection(db, `users/${currentUser.uid}/decks/${deckId}/cards`)
+    );
     const cards = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
@@ -448,9 +611,19 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
   };
 
   const handleDeckview = () => {
-    setViewDeckbar(prev => !prev);
-    setHideDeckbar(prev => !prev);
-  }
+    setViewDeckbar((prev) => !prev);
+    setHideDeckbar((prev) => !prev);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handlePickingImage = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCardSelect = (cardUrl) => {
+    setChosenCardUrl(cardUrl);
+  };
 
   useEffect(() => {
     const loadDeckData = async () => {
@@ -474,10 +647,9 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
   useEffect(() => {
     if (saveStatus === "success") {
       handleClearClick();
-      console.log("cleared")
+      console.log("cleared");
     }
   }, [saveStatus]);
-
 
   useEffect(() => {
     if (viewDeckbar) {
@@ -502,14 +674,24 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
         bgcolor: "#f2f3f8",
         color: "#121212",
         zIndex: 1,
-        paddingTop: showPadding ? "10px" : "0px", paddingBottom: showPadding ? "10px" : "0px", paddingLeft: "10px", paddingRight: "10px",
+        paddingTop: showPadding ? "10px" : "0px",
+        paddingBottom: showPadding ? "10px" : "0px",
+        paddingLeft: "10px",
+        paddingRight: "10px",
         ...style,
       }}
     >
       <Collapse in={viewDeckbar}>
         <Box display={"flex"} flexDirection={"row"} gap={2}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center' }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "10px",
+                alignItems: "center",
+              }}
+            >
               <Box>
                 <TextField
                   label="Deck Name"
@@ -517,37 +699,86 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
                   size="small"
                   value={deckName}
                   onChange={(event) => setDeckName(event.target.value)}
-                  inputProps={{ style: { color: '#121212' } }}
-                  sx={{ '& .MuiInputLabel-filled': { color: '#121212' }, '& .MuiFilledInput-input': { color: '#121212' } }}
+                  inputProps={{ style: { color: "#121212" } }}
+                  sx={{
+                    "& .MuiInputLabel-filled": { color: "#121212" },
+                    "& .MuiFilledInput-input": { color: "#121212" },
+                  }}
                 />
               </Box>
               <Box sx={{ fontSize: 11 }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                <Box
+                  sx={{ display: "flex", flexDirection: "column", gap: "5px" }}
+                >
+                  <Box
+                    sx={{ display: "flex", flexDirection: "row", gap: "10px" }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 1,
+                        alignItems: "center",
+                      }}
+                    >
                       <img src="/icons/TTOTAL.png" alt="Total:" />{" "}
-                      <span style={{ color: totalCount > 50 ? "red" : "inherit" }}>
-                        {totalCount}<span className="mobile-hidden">/50</span>
+                      <span
+                        style={{ color: totalCount > 50 ? "red" : "inherit" }}
+                      >
+                        {totalCount}
+                        <span className="mobile-hidden">/50</span>
                       </span>
                     </Box>
-                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 1,
+                        alignItems: "center",
+                      }}
+                    >
                       <img src="/icons/TCOLOR.png" alt="Color:" />{" "}
-                      <span style={{ color: colorCount > 4 ? "red" : "inherit" }}>
-                        {colorCount}<span className="mobile-hidden">/4</span>
+                      <span
+                        style={{ color: colorCount > 4 ? "red" : "inherit" }}
+                      >
+                        {colorCount}
+                        <span className="mobile-hidden">/4</span>
                       </span>
                     </Box>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "row", gap: "10px" }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 1,
+                        alignItems: "center",
+                      }}
+                    >
                       <img src="/icons/TSPECIAL.png" alt="Special:" />{" "}
-                      <span style={{ color: specialCount > 4 ? "red" : "inherit" }}>
-                        {specialCount}<span className="mobile-hidden">/4</span>
+                      <span
+                        style={{ color: specialCount > 4 ? "red" : "inherit" }}
+                      >
+                        {specialCount}
+                        <span className="mobile-hidden">/4</span>
                       </span>
                     </Box>
-                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 1,
+                        alignItems: "center",
+                      }}
+                    >
                       <img src="/icons/TFINAL.png" alt="Final:" />{" "}
-                      <span style={{ color: finalCount > 4 ? "red" : "inherit" }}>
-                        {finalCount}<span className="mobile-hidden">/4</span>
+                      <span
+                        style={{ color: finalCount > 4 ? "red" : "inherit" }}
+                      >
+                        {finalCount}
+                        <span className="mobile-hidden">/4</span>
                       </span>
                     </Box>
                   </Box>
@@ -555,46 +786,123 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
               </Box>
             </Box>
             <Box>
-              <Box style={{ display: "flex", flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 5,
+                  flexWrap: "wrap",
+                }}
+              >
                 {Array.from({ length: 11 }).map((_, index) => (
-                  <Box key={index} style={{ display: "flex", alignItems: "center", fontSize: "16px", }}>
-                    <img src={getImageSrc(index)} alt={`Energy cost ${index}`} width="30px" height="auto" />
+                  <Box
+                    key={index}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "16px",
+                    }}
+                  >
+                    <img
+                      src={getImageSrc(index)}
+                      alt={`Energy cost ${index}`}
+                      width="30px"
+                      height="auto"
+                    />
                     <span>:{stats[index] || 0}</span>
                   </Box>
                 ))}
               </Box>
             </Box>
-            <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: "row", alignItems: "center", gap: '5px' }}>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={handleClearClick}>
-                <Delete sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
+            <Box
+              sx={{
+                display: { xs: "none", sm: "flex" },
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <Button
+                sx={{
+                  backgroundColor: "#171614",
+                  borderRadius: "5px",
+                  "&:hover": { bgcolor: "#171614" },
+                }}
+                onClick={handleClearClick}
+              >
+                <Delete
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                />
+                <Typography
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                  component="div"
+                >
                   Clear
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={handleLoadDeckClick}>
-                <SystemUpdateAlt sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
+              <Button
+                sx={{
+                  backgroundColor: "#171614",
+                  borderRadius: "5px",
+                  "&:hover": { bgcolor: "#171614" },
+                }}
+                onClick={handleLoadDeckClick}
+              >
+                <SystemUpdateAlt
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                />
+                <Typography
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                  component="div"
+                >
                   Load
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px", '&:hover': { bgcolor: '#171614' } }} onClick={() => setShowImagePickerModal(true)}>
-                <Save sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
+              <Button
+                sx={{
+                  backgroundColor: "#171614",
+                  borderRadius: "5px",
+                  "&:hover": { bgcolor: "#171614" },
+                }}
+                onClick={() => setShowImagePickerModal(true)}
+              >
+                <Save
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                />
+                <Typography
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                  component="div"
+                >
                   Save
                 </Typography>
               </Button>
-              <Button sx={{ backgroundColor: "#171614", borderRadius: "5px",display:'none', '&:hover': { bgcolor: '#171614' } }} onClick={handleExportClick}>
-                <ImportExport sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} />
-                <Typography sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }} component="div">
+              <Button
+                sx={{
+                  backgroundColor: "#171614",
+                  borderRadius: "5px",
+                  display: "none",
+                  "&:hover": { bgcolor: "#171614" },
+                }}
+                onClick={handleExportClick}
+              >
+                <ImportExport
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                />
+                <Typography
+                  sx={{ fontSize: "10px", color: "#c8a2c8", fontWeight: "600" }}
+                  component="div"
+                >
                   Export
                 </Typography>
-                {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />
-                </Box>}
+                {isExporting && (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <CircularProgress size={"10px"} sx={{ color: "#7C4FFF" }} />
+                  </Box>
+                )}
               </Button>
             </Box>
           </Box>
-          <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
+          <Box sx={{ display: { xs: "flex", sm: "none" } }}>
             <IconButton onClick={handleMenuOpen}>
               <MoreVert />
             </IconButton>
@@ -604,18 +912,41 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
               onClose={handleMenuClose}
             >
               <MenuItem onClick={handleClearClick}>clear</MenuItem>
-              <MenuItem onClick={() => setShowImagePickerModal(true)}>save</MenuItem>
+              <MenuItem onClick={() => setShowImagePickerModal(true)}>
+                save
+              </MenuItem>
               <MenuItem onClick={handleLoadDeckClick}>load</MenuItem>
-              <MenuItem sx={{display:'none'}} onClick={handleExportClick}>export</MenuItem>
+              <MenuItem onClick={handleViewModeClick}>view mode</MenuItem>
+              <MenuItem sx={{ display: "none" }} onClick={handleExportClick}>
+                export
+              </MenuItem>
             </Menu>
-            {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />
-            </Box>}
+            {isExporting && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <CircularProgress size={"10px"} sx={{ color: "#7C4FFF" }} />
+              </Box>
+            )}
           </Box>
-        </Box >
+        </Box>
       </Collapse>
-      <Button disableRipple sx={{ marginLeft: 'auto', bgcolor: '#f2f3f8', '&:hover': { bgcolor: '#f2f3f8' } }} onClick={handleDeckview}>
-        {viewDeckbar ? <><Visibility /></> : <><VisibilityOff /></>}
+      <Button
+        disableRipple
+        sx={{
+          marginLeft: "auto",
+          bgcolor: "#f2f3f8",
+          "&:hover": { bgcolor: "#f2f3f8" },
+        }}
+        onClick={handleDeckview}
+      >
+        {viewDeckbar ? (
+          <>
+            <Visibility />
+          </>
+        ) : (
+          <>
+            <VisibilityOff />
+          </>
+        )}
       </Button>
       <Dialog
         open={showConfirmDialog}
@@ -639,7 +970,9 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
       <FullScreenDialog
         open={showDeckLoaderModal}
         handleClose={() => setShowDeckLoaderModal(false)}
-        handleDeckLoaded={(deckName, deckUid, loadedDeckName, deckimage) => handleDeckLoaded(deckName, deckUid, loadedDeckName, deckimage)}
+        handleDeckLoaded={(deckName, deckUid, loadedDeckName, deckimage) =>
+          handleDeckLoaded(deckName, deckUid, loadedDeckName, deckimage)
+        }
         loadedFromParams={loadedFromParams}
         setLoadedFromParams={setLoadedFromParams}
         deckDetails={deckDetails}
@@ -650,12 +983,36 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
         onClose={() => setSaveStatus(null)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         sx={{
-          height: "100%"
+          height: "100%",
         }}
       >
-        <Alert onClose={() => setSaveStatus(null)} severity="success" sx={{ width: '100%' }}>
+        <Alert
+          onClose={() => setSaveStatus(null)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Deck saved successfully!
-          <br />Please load your deck to view/edit.
+          <br />
+          Please load your deck to view/edit.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={viewdeckStatus === "no cards"}
+        autoHideDuration={6000}
+        onClose={() => setViewdeckStatus(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        sx={{
+          height: "100%",
+        }}
+      >
+        <Alert
+          onClose={() => setViewdeckStatus(null)}
+          severity="warning"
+          sx={{ width: "100%" }}
+        >
+          There are no cards to view in deck view mode
+          <br />
+          Please load your deck or build a deck to continue.
         </Alert>
       </Snackbar>
       <ImagePickerModal
@@ -664,12 +1021,199 @@ const DeckBuilderBar = ({ changeClick, setChangeClick, setHideDeckbar, style }) 
         images={images}
         handleSaveClick={handleSaveClick}
       />
-      <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
-        <UATCGExport filteredCards={filteredCards} exportImage={exportImage} currentUser={currentUser} />
-      </Box>
+      <Modal open={deckviewMode} onClose={handleViewModeClose}>
+        <Box
+          className="rotated-background"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: "100vw", sm: "100vw" },
+            height: { xs: "100vh", sm: "100vh" },
+            p: 10,
+          }}
+        >
+          {chosenCardUrl ? (
+            <Box
+              sx={{
+                position: "relative",
+                textAlign: "left",
+                height: "300px",
+                width: "100%",
+                borderRadius: "8px",
+                marginTop:'10px',
+                backgroundImage: `url('${chosenCardUrl}')`,
+                backgroundSize: "cover", // Changed to cover for better background scaling
+                backgroundPosition: "0% 0%", // Changed to center for better alignment
+                overflow: "hidden",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  background:
+                    "linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0))",
+                  zIndex: 1, // Ensure overlay is above the background image
+                },
+              }}
+              onClick={handlePickingImage}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  zIndex: 2,
+                  height: "100%",
+                  paddingLeft: "10px",
+                  paddingBottom: "10px",
+                  paddingRight: "10px",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "end",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box
+                  sx={{ position: "absolute", bottom: "15px", right: "10px" }}
+                >
+                  <strong
+                    style={{
+                      fontSize: "22px",
+                      opacity: "0.5",
+                      padding: "5px",
+                      color: "#F2F3F8",
+                      textShadow:
+                        "-1px -1px 0 #7C4FFF,1px -1px 0 #7C4FFF,-1px 1px 0 #7C4FFF,1px 1px 0 #7C4FFF",
+                    }}
+                  >
+                    GEEKSTACK
+                  </strong>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                position: "relative",
+                textAlign: "left",
+                height: "300px",
+                width: "100%",
+                marginTop:'10px',
+                borderRadius: "8px",
+                overflow: "hidden",
+                bgcolor: "#f2f3f8",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  background:
+                    "linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0))",
+                  zIndex: 1, // Ensure overlay is above the background image
+                },
+              }}
+              onClick={handlePickingImage}
+            >
+              <Box
+                sx={{
+                  height: "50px",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                Pick a cover image for
+              </Box>
+              <Box
+                sx={{
+                  position: "relative",
+                  zIndex: 2,
+                  height: "calc(100% - 50px)",
+                  paddingLeft: "10px",
+                  paddingBottom: "10px",
+                  paddingRight: "10px",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "end",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box
+                  sx={{ position: "absolute", bottom: "15px", right: "10px" }}
+                >
+                  <strong
+                    style={{
+                      fontSize: "22px",
+                      opacity: "0.5",
+                      padding: "5px",
+                      color: "#F2F3F8",
+                      textShadow:
+                        "-1px -1px 0 #7C4FFF,1px -1px 0 #7C4FFF,-1px 1px 0 #7C4FFF,1px 1px 0 #7C4FFF",
+                    }}
+                  >
+                    GEEKSTACK
+                  </strong>
+                </Box>
+              </Box>
+            </Box>
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              width: "calc(100% - 20px)",
+              justifyContent: "center",
+              alignItems: "start",
+              padding: "10px",
+            }}
+          >
+            {filteredCards.map((uacard) =>
+              [...Array(uacard.count || 1)].map((_, index) => (
+                <Box
+                  key={uacard.cardId + index + "EXPORT"}
+                  sx={{
+                    flexBasis: "calc(100% / 10)",
+                  }}
+                >
+                  <img
+                    loading="lazy"
+                    src={uacard.urlimage || uacard.image}
+                    draggable="false"
+                    alt={uacard.cardId}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                    }}
+                  />
+                </Box>
+              ))
+            )}
+          </Box>
+          <Box sx={{bottom:'10px',display:'flex',justifyContent:'center',alignItems:'center'}}>
+            <Button
+              variant="contained"
+              onClick={handleViewModeClose}
+              sx={{ mt: 3 }}
+            >
+              Close
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+      <CardPickerModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        filteredCards={filteredCards}
+        onCardSelect={handleCardSelect}
+      />
     </Box>
   );
-
 };
 
 export default DeckBuilderBar;

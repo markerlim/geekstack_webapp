@@ -142,9 +142,7 @@ const Sidebar = () => {
                     alt="Match Up Log"
                     sx={{
                       width: "30px",
-                      filter: isActive("/matchlog")
-                        ? "none"
-                        : "grayscale(10)", // Adjust this filter as needed
+                      filter: isActive("/matchlog") ? "none" : "grayscale(10)", // Adjust this filter as needed
                       transition: "filter 0.3s ease-in-out",
                       padding: 0,
                     }}
@@ -235,6 +233,48 @@ const Sidebar = () => {
                     }}
                   >
                     One Piece
+                  </Box>
+                </Box>
+              </ListItemIcon>
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/cookierunbraverse">
+              <ListItemIcon
+                sx={{ justifyContent: "center", alignItems: "center" }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <Box
+                    component={"img"}
+                    src="/icons/cookierunicon.png"
+                    width="30px"
+                    alt="cookierunbraverse"
+                    sx={{
+                      width: "30px",
+                      filter: isActive("/cookierunbraverse")
+                        ? "none"
+                        : "grayscale(10)", // Adjust this filter as needed
+                      transition: "filter 0.3s ease-in-out",
+                      padding: 0,
+                    }}
+                  />
+                  <Box
+                    component={"span"}
+                    sx={{
+                      color: isActive("/cookierunbraverse")
+                        ? "#7C4FFF"
+                        : "#555555",
+                      fontSize: "10px",
+                    }}
+                  >
+                    Cookie Run
                   </Box>
                 </Box>
               </ListItemIcon>

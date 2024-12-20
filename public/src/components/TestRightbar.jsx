@@ -12,7 +12,7 @@ import { db } from "../Firebase";
 const TestRightBar = ({ setChangeClick }) => {
     const [openModal, setOpenModal] = useState(false);
     const { filteredCards, setFilteredCards, setAnimeFilter } = useCardState(); // Use useCardState hook
-    const [chosenCard, setChosenCard] = useState(null);
+    const [selectedCard, setSelectedCard] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleOpenModal = (document) => {
@@ -21,18 +21,18 @@ const TestRightBar = ({ setChangeClick }) => {
     }
 
     const handleCloseModal = () => {
-        setChosenCard(null);
+        setSelectedCard(null);
         setOpenModal(false);
     };
 
     const handleSwipeLeft = () => {
-        let currentIndex = sortedCards.findIndex((doc) => doc.cardUid === chosenCard.cardUid);
+        let currentIndex = sortedCards.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
         let nextIndex = (currentIndex + 1) % sortedCards.length;
         let nextDocument = sortedCards[nextIndex];
         searchSingleCard(nextDocument.cardUid);
     };
     const handleSwipeRight = () => {
-        let currentIndex = sortedCards.findIndex((doc) => doc.cardUid === chosenCard.cardUid);
+        let currentIndex = sortedCards.findIndex((doc) => doc.cardUid === selectedCard.cardUid);
         let prevIndex = (currentIndex - 1 + sortedCards.length) % sortedCards.length;
         let prevDocument = sortedCards[prevIndex];
         searchSingleCard(prevDocument.cardUid);
@@ -118,7 +118,7 @@ const TestRightBar = ({ setChangeClick }) => {
     // Search function to fetch a single card by cardUid
     const searchSingleCard = async (cardUid) => {
         if (!cardUid) {
-            setChosenCard(null); // Clear the previous search result
+            setSelectedCard(null); // Clear the previous search result
             return;
         }
 
@@ -134,9 +134,9 @@ const TestRightBar = ({ setChangeClick }) => {
             if (!querySnapshot.empty) {
                 const singleCard = querySnapshot.docs[0]?.data(); // Get the first card
                 console.log("searched", singleCard)
-                setChosenCard(singleCard); // Set the single card as the result
+                setSelectedCard(singleCard); // Set the single card as the result
             } else {
-                setChosenCard(null); // No card found
+                setSelectedCard(null); // No card found
             }
         } catch (error) {
             console.error("Error fetching card by cardUid: ", error);
@@ -178,11 +178,11 @@ const TestRightBar = ({ setChangeClick }) => {
                             </Box>
                         </Grid>
                     ))}
-                    {chosenCard && (
+                    {selectedCard && (
                         <CardDrawerNF
                             open={openModal}
                             onClose={handleCloseModal}
-                            chosenCard={chosenCard}
+                            selectedCard={selectedCard}
                             onSwipeLeft={handleSwipeLeft}
                             onSwipeRight={handleSwipeRight}
                         />

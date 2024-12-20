@@ -9,7 +9,7 @@ import { db } from "../../Firebase";
 const MyButton = ({ pathname, alt, imageSrc, imgWidth }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const { currentUser } = useAuth();
-  const game = "unionarena/";
+  const game = "dragonballz/";
 
   useEffect(() => {
     if (currentUser) {
@@ -133,6 +133,12 @@ const DBZFWButtonList = () => {
       imgWidth: "110%",
     },
     {
+      pathname: "fb04",
+      alt: "BOOSTER PACK -ULTRA LIMIT- [FB04]",
+      imageSrc: "/DBZFW/DBZFWCOVER/fb04cover.webp",
+      imgWidth: "110%",
+    },
+    {
       pathname: "fs01",
       alt: "STARTER DECK -SON GOKU- [FS01]",
       imageSrc: "/DBZFW/DBZFWCOVER/fs01cover.webp",
@@ -160,6 +166,24 @@ const DBZFWButtonList = () => {
       pathname: "fs05",
       alt: "STARTER DECK -BARDOCK- [FS05]",
       imageSrc: "/DBZFW/DBZFWCOVER/fs05cover.webp",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "fs06",
+      alt: "STARTER DECK -SON GOKU(MINI)- [FS06]",
+      imageSrc: "/DBZFW/DBZFWCOVER/fs06cover.webp",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "fs07",
+      alt: "STARTER DECK -VEGETA(MINI)- [FS07]",
+      imageSrc: "/DBZFW/DBZFWCOVER/fs07cover.webp",
+      imgWidth: "110%",
+    },
+    {
+      pathname: "promo",
+      alt: "Promo",
+      imageSrc: "/DBZFW/DBZFWCOVER/promocover.webp",
       imgWidth: "110%",
     },
   ];

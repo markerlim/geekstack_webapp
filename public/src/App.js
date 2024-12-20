@@ -33,6 +33,9 @@ import PTCGBTPage from "./pages/PTCGBTpage.jsx";
 import PTCGDeckbuilder from "./pages/PTCGDeckbuilder.jsx";
 import Deckdiary from "./pages/DeckDiary.jsx";
 import NotificationsPage from "./pages/Notifications.jsx";
+import CRBTCGPage from "./pages/CRBTCGPage.jsx";
+import CRBTCGBTpage from "./pages/CRBTCGBTpage.jsx";
+import CRBTCGDeckbuilder from "./pages/CRBTCGDeckbuilder.jsx";
 
 smoothscroll.polyfill();
 
@@ -107,6 +110,9 @@ function App() {
             <Route path="/pokemon" element ={<PTCGPage/>}/>
             <Route path="/pokemon/:booster" element ={<PTCGBTPage/>}/>
             <Route path="ptcgbuilder" element={<PTCGDeckbuilder/>}/>
+            <Route path="cookierunbraverse" element={<CRBTCGPage />} />
+            <Route path="/cookierunbraverse/:booster" element={<CRBTCGBTpage />} />
+            <Route path="/cookierunbuilder" element={<CRBTCGDeckbuilder />} />
             <Route path="/test" element={<TestPage />} />
           </Routes>
         </BrowserRouter>

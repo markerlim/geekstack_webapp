@@ -321,6 +321,27 @@ const Home = () => {
                                     />
                                 </ButtonBase>
                             </Link>
+                            <Link to={{ pathname: '/cookierunbraverse' }} sx={{ textDecoration: "none" }}>
+                                <ButtonBase
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        bgcolor: "#121212",
+                                        borderRadius: 3,
+                                        boxShadow: 5,
+                                        overflow: "hidden",
+                                        width: { xs: 125, sm: 200 },
+                                        height: { xs: 188, sm: 300 },
+                                    }}
+                                >
+                                    <img
+                                        src="/images/homeCRBbtn.jpg"
+                                        alt="cookie run braverse"
+                                        style={{ width: "120%", height: "auto" }}
+                                    />
+                                </ButtonBase>
+                            </Link>
                             <Link to={{ pathname: '/dragonballz' }} sx={{ textDecoration: "none" }}>
                                 <ButtonBase
                                     sx={{

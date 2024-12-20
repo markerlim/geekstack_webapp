@@ -46,7 +46,29 @@
         }
     }
 }
-
+.rotated-background {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .rotated-background::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vh; /* Increase size to ensure it covers the viewport even when rotated */
+    height: 100vw;
+    background-image: url("https://storage.googleapis.com/geek-stack.appspot.com/misc/UATestBG.jpg");
+    background-size: cover;
+    background-position: center;
+    filter:brightness(80%);
+    transform: translate(-50%, -50%) rotate(90deg); /* Center and rotate */
+    z-index: -1;
+  }
+  
+  
 #article01 .css-1evflyk {
     content: "";
     position: fixed;

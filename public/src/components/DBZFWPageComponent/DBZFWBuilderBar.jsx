@@ -8,7 +8,6 @@ import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "
 import { db } from "../../Firebase";
 import { toJpeg } from 'html-to-image';
 import { useLocation } from "react-router-dom";
-import DBZFWExport from "./DragonballzExportTemplate";
 import FullScreenDialogDBZFW from "./FullScreenDialogDBZFW";
 
 const DBZFWBuilderBar = ({ changeClick, setChangeClick }) => {
@@ -28,7 +27,6 @@ const DBZFWBuilderBar = ({ changeClick, setChangeClick }) => {
     const [loadedDeckUid, setLoadedDeckUid] = useState(null);
     const [selectedCardid, setSelectedCardid] = useState(null);
     const [isUpdatingExistingDeck, setIsUpdatingExistingDeck] = useState(false);
-    const [isExporting, setIsExporting] = useState(false);
     const [tooltipOpen, setTooltipOpen] = useState(true);
     const sortedCards = [...filteredCards].sort((a, b) => a.cost_life - b.cost_life);
     const sorttotalCount = sortedCards.reduce((acc, card) => acc + (card.count || 0), 0);
@@ -242,41 +240,6 @@ const DBZFWBuilderBar = ({ changeClick, setChangeClick }) => {
         setDeckName("NewDeck");
         handleMenuClose();
     }
-    const handleExportClick = () => {
-        if (totalCount < 50) {
-            alert("You cannot export a deck with less than 50 cards.");
-            return;
-        }
-
-        setIsExporting(true);
-
-        const componentRef = document.querySelector('#DBZFWExport');
-
-        if (componentRef) {
-            toJpeg(componentRef, { quality: 0.8 })
-                .then((dataUrl) => {
-                    fetch(dataUrl)
-                        .then(res => res.blob())
-                        .then(blob => {
-                            const url = URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = 'decklist.jpg';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                            URL.revokeObjectURL(url);
-                        });
-                })
-                .catch((error) => {
-                    console.error('oops, something went wrong!', error);
-                })
-                .finally(() => {
-                    setIsExporting(false);
-                });
-        }
-        handleMenuClose();
-    };
 
     const handleClipboard = () => {
         const clipboardString = filteredCards.map(card => `${card.count}x${card.cardid}`).join('\n');
@@ -373,20 +336,14 @@ const DBZFWBuilderBar = ({ changeClick, setChangeClick }) => {
                                 <MenuItem onClick={handleClearClick}>clear</MenuItem>
                                 <MenuItem onClick={() => handleSaveClick(false)}>save</MenuItem>
                                 <MenuItem onClick={handleLoadDeckClick}>load</MenuItem>
-                                <MenuItem onClick={handleExportClick}>export</MenuItem>
-                                <MenuItem onClick={handleClipboard}>OPsim</MenuItem>
+                                <MenuItem onClick={handleClipboard}>clipboard</MenuItem>
                             </Menu>
-                            {isExporting && <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <CircularProgress size={'10px'} sx={{ color: '#7C4FFF' }} />
-                            </Box>}
                         </Box>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row', gap: '10px' }}>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClearClick}>clear</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={() => handleSaveClick(false)}>save</Button>
                             <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleLoadDeckClick}>load</Button>
-                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleExportClick}>export
-                                {isExporting && <CircularProgress size={'10px'} sx={{ color: '#FFFFFF' }} />}</Button>
-                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClipboard}>OPsim</Button>
+                            <Button sx={{ fontSize: '10px', bgcolor: '#4a2f99', color: '#f2f3f8', '&:hover': { bgcolor: '#240056', color: '#7C4FFF' } }} onClick={handleClipboard}>clipboard</Button>
                         </Box>
                     </Box>
                 </Box>
@@ -437,9 +394,6 @@ const DBZFWBuilderBar = ({ changeClick, setChangeClick }) => {
                 onClose={handleCloseModal}
                 setSelectedCardid={setSelectedCardid}
                 setSelectedImage={setSelectedImage} />
-            <Box sx={{ position: "absolute", overflow: 'hidden', top: -30000, zIndex: -1000 }}>
-                <DBZFWExport filteredCards={filteredCards} selectedImage={selectedImage} currentUser={currentUser} />
-            </Box>
         </Box>
     )
 }
